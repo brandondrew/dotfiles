@@ -1,0 +1,1617 @@
+Detta är jabber.info, skapad av makeinfo version 4.7 från jabber.texi.
+
+INFO-DIR-SECTION Emacs
+START-INFO-DIR-ENTRY
+* jabber.el: (jabber).             Emacs Jabber client
+END-INFO-DIR-ENTRY
+
+   This manual is for jabber.el, version 0.6.1.
+
+   Copyright (C) 2004 Magnus Henoch, Tom Berger.
+
+     Permission is granted to make and distribute verbatim copies or
+     modified versions of this manual, provided the copyright notice and
+     this permission notice are preserved on all copies.
+
+
+File: jabber.info,  Node: Top,  Next: Introduction,  Prev: (dir),  Up: (dir)
+
+jabber.el manual
+****************
+
+This manual is for jabber.el, version 0.6.1.
+
+   Copyright (C) 2004 Magnus Henoch, Tom Berger.
+
+     Permission is granted to make and distribute verbatim copies or
+     modified versions of this manual, provided the copyright notice and
+     this permission notice are preserved on all copies.
+
+* Menu:
+
+* Introduction::
+* Basic operation::
+* Groupchat::
+* Services::
+* Modeline status::
+* Keepalive::
+* Tracking activity::
+* Watch buddies::
+* Message history::
+* Customization::
+* Hacking and extending::
+* Protocol support::
+* Concept index::
+* Function index::
+* Variable index::
+
+
+File: jabber.info,  Node: Introduction,  Next: Basic operation,  Prev: Top,  Up: Top
+
+1 Introduction
+**************
+
+jabber.el is a Jabber client running under Emacs.  For more information
+on the open-protocol instant messaging network Jabber, please visit
+`http://www.jabber.org'.
+
+   As a Jabber client, jabber.el is mostly just a face in the crowd,
+except that it uses buffers where GUI clients have windows.  There is a
+roster buffer, and to chat with someone you open a chat buffer, and
+there are browse buffers (increasingly inexactly named) for interaction
+with servers and services.  Then again, jabber.el delivers excellent
+console performance and customizable hooks (if you have speech
+synthesizer software, hook it up to your presence alerts).
+
+   jabber.el does not yet support SSL, STARTTLS, GPG, advanced MUC
+features, sending and receiving roster items, and various other things.
+
+* Menu:
+
+* Contact::
+
+
+File: jabber.info,  Node: Contact,  Prev: Introduction,  Up: Introduction
+
+1.1 Contact
+===========
+
+jabber.el is developed by Tom Berger (e-mail
+<object@intellectronica.net>, JID `object@jabber.org.uk') and Magnus
+Henoch (e-mail <mange@freemail.hu>, JID `legoscia@charente.de').  There
+is a web page at `http://intellectronica.net/emacs-jabber/', and a
+Sourceforge project page at
+`http://sourceforge.net/projects/emacs-jabber'.
+
+
+File: jabber.info,  Node: Basic operation,  Next: Groupchat,  Prev: Introduction,  Up: Top
+
+2 Basic operation
+*****************
+
+This chapter is intended as an introduction to basic usage of
+jabber.el.  If you have used Jabber before and are familiar with the
+terminology, you might find it a bit too basic -- in that case, just
+skim it, making sure to pick up the commands mentioned.
+
+* Menu:
+
+* Connecting::
+* Chatting::
+* Presence::
+* Presence subscription::
+* Roster buffer::
+
+
+File: jabber.info,  Node: Connecting,  Next: Chatting,  Prev: Basic operation,  Up: Basic operation
+
+2.1 Connecting
+==============
+
+I'll assume that you have already successfully installed jabber.el; if
+not, consult the `README' file.  Also, make sure you have `(require
+'jabber)' in your `.emacs'.
+
+   Now, type `M-x jabber-customize'.  This brings up a customize buffer
+for jabber.el.  The most important variables to customize are
+`jabber-username' and `jabber-server'.  If for some reason the JID of
+your server is not the same as its network name, change
+`jabber-network-server' also.  Save your changes, and type `M-x
+jabber-connect' to connect.
+
+   If you do not yet have a Jabber account, you can register one.  Enter
+your desired username for `jabber-username' and the server you wish to
+use for `jabber-server', save, and type `C-u M-x jabber-connect'.  If
+the server supports in-band registration, you will be presented with a
+registration form to fill out and send.  There you will have to enter
+your username again.  Enter the same username in both places, otherwise
+jabber.el will be confused.
+
+   If you successfully connect, jabber.el will download your roster and
+display it in a buffer called `*-jabber-*'.
+
+   By default, you will appear as "online" to your contacts.  To change
+this to e.g. "away", type `M-x jabber-send-presence'.  *Note
+Presence::, for more information.
+
+   To disconnect, type `M-x jabber-disconnect'.
+
+
+File: jabber.info,  Node: Chatting,  Next: Presence,  Prev: Connecting,  Up: Basic operation
+
+2.2 Chatting
+============
+
+There are several ways to open a chat buffer.  The shortest way is to
+put point over the person you want to chat with in the roster display
+and hit RET.
+
+   You can also use menus to access commands.  In the roster display,
+you can access several menus through keystrokes or mouse clicks.  You
+can bring one big menu up by pressing the second mouse button, or you
+can bring up the "chat menu" by typing `C-c C-c'.  If you do the latter
+while point is on a roster entry, that entry will be the default value
+when you are asked for whom to chat with.
+
+   You can also use the function `jabber-chat-with', which is what the
+menu item is bound to.
+
+   Now, try opening a chat with someone.  A buffer named
+`*-jabber-chat-:-PERSON-*' will be created and selected.  Type your
+message at the end of the buffer, and hit `RET' to send it.  To include
+a newline in your message, use `C-j'.
+
+
+File: jabber.info,  Node: Presence,  Next: Presence subscription,  Prev: Chatting,  Up: Basic operation
+
+2.3 Presence
+============
+
+"Presence" is the Jabber term for letting other people know that you
+are online, and additionally how "available" you are.  There are three
+elements to presence: availability status (called "show"), status
+message, and priority.
+
+   Your show status may either be empty (meaning simply "online"), or
+one of `away', `xa', `dnd' and `chat', meaning "away", "extended away"
+(i.e. away for an extended period), "do not disturb", and "free for
+chat", respectively.  This information is available to everyone
+subscribing to your presence, but technically it does not restrict
+anyone's actions.  You can chat with people even if you claim to be
+away.
+
+   The status message is a short text complementing your show status,
+such as "at home", "working", "phone", "playing games" or whatever you
+want.  It is sent to everyone subscribing to your presence, but not all
+clients prominently display it to the user.
+
+   The priority is only interesting if you are running more than one
+Jabber client at a time accessing the same account.  In that case,
+messages sent to you without an indication of which client to send to
+are sent to the client with the highest priority.
+
+   To set your presence, use the function `jabber-send-presence'.  It
+can be called both interactively and in Lisp code.  For the latter
+case, use something like `(jabber-send-presence "away" "idle for 10
+minutes" 10)'.
+
+   By default, jabber.el sets your presence when you connect.  If you
+want it not to do that, remove `jabber-send-default-presence' from
+`jabber-post-connect-hook'.  If you want to change the presence that is
+sent, change the variables `jabber-default-show',
+`jabber-default-status' and `jabber-default-priority'.
+
+   With jabber.el, you can set your presence remotely.  *Note Ad-Hoc
+Commands::.
+
+
+File: jabber.info,  Node: Presence subscription,  Next: Roster buffer,  Prev: Presence,  Up: Basic operation
+
+2.4 Presence subscription
+=========================
+
+Having permission to view the presence status of a person is called
+"subscribing to his presence".  Presence subscription between two
+persons can be asymmetric.
+
+   When jabber.el receives a presence subscription request, it will
+present it to you in an alert requiring immediate response, and offer
+you to send a subscription request back to that person.
+
+   To request subscription to someone, type `M-x
+jabber-send-subscription-request'.  You will be prompted for the JID to
+send it to.  This command can also be accessed through the Roster menu,
+by typing `C-c C-r' in the roster buffer.
+
+
+File: jabber.info,  Node: Roster buffer,  Prev: Presence subscription,  Up: Basic operation
+
+2.5 The roster buffer
+=====================
+
+The roster buffer is called `*-jabber-*'.  It simply contains a list of
+the contacts on your roster.
+
+   In the roster buffer, any command which requires a JID will default
+to the JID under point when called.  These commands can be called
+through either keyboard menus or mouse menus.  To open a menu with the
+mouse, simply press the second mouse button over the JID in
+question.(1)  This will bring up a menu with all available actions.
+The keyboard menus are split into categories: Chat, Roster,
+Information, MUC (Multi-User Chat, or groupchat) and Services, opened
+by `C-c C-c', `C-c C-r', `C-c C-i', `C-c C-m' and `C-c C-s',
+respectively.
+
+   You can call `jabber-display-roster' to redisplay your roster
+according to changed preferences (*note Customizing the roster
+buffer::).  This will not refetch your roster from the server.
+Refetching the roster is usually not needed, since updates are pushed
+to clients automatically.
+
+   You can choose not to have the roster updated automatically on
+presence changes (*note Presence alerts::).  In that case, you need to
+call `jabber-display-roster' manually.
+
+   ---------- Footnotes ----------
+
+   (1) For some reason, mouse menus don't work in XEmacs.  Patches
+welcome.
+
+
+File: jabber.info,  Node: Groupchat,  Next: Services,  Prev: Basic operation,  Up: Top
+
+3 Groupchat
+***********
+
+The groupchat menu can be accessed by typing `C-c C-m' in the roster
+buffer.  You can also type the commands directly, as will be shown here.
+
+   To join a groupchat, type `M-x jabber-groupchat-join'.  You will be
+prompted for the groupchat to join, and your nickname in the groupchat.
+This nickname doesn't need to have any correlation to your JID; in
+fact, groupchats are usually (but not always) configured such that only
+moderators can see your JID.
+
+   Groupchat messages will be displayed in a buffer called
+`*-jabber-groupchat-:-GROUPCHAT-*'.  It works much like the chat buffer.
+
+   To leave a groupchat, type `M-x jabber-groupchat-leave'.
+
+   If you are the owner of a groupchat, you can change its configuration
+by typing `M-x jabber-groupchat-get-config'.  A configuration form will
+be rendered in new buffer.
+
+   To see which people are in a groupchat, type `M-x jabber-muc-names'.
+This gives a list of nicknames, "roles", "affiliations", and possibly
+JIDs.  The possible roles are "moderator", "participant" (has voice),
+"visitor" (doesn't have voice), and "none" (not in room).  Affiliations
+are "owner", "admin", "member", "outcast" (banned), and "none".
+
+   If you have moderator privileges, you can change the role of a
+participant with `M-x jabber-muc-set-role'.  Kicking means setting the
+role to "none".  Granting and revoking voice are "participant" and
+"visitor", respectively.  Changing affiliations is not yet supported.
+
+
+File: jabber.info,  Node: Services,  Next: Modeline status,  Prev: Groupchat,  Up: Top
+
+4 Services
+**********
+
+Not every Jabber entity is a physical person.  There are many automatic
+entities, called servers, services, components, agents, transports and
+other names.  The use of these is described here.
+
+   The functions described in this chapter use "browse buffers".
+Browse buffers are named `*-jabber-browse-:-SERVICE-*', sometimes with
+a numerical suffix.  They have the same keybindings as the roster
+buffer, and if you call a function operating on a JID while point is
+over a JID, that JID will be the default value, so you don't have to
+type it or copy it yourself.
+
+* Menu:
+
+* Service discovery and browsing::
+* Registering::
+* Searching::
+* Ad-Hoc Commands::
+
+
+File: jabber.info,  Node: Service discovery and browsing,  Next: Registering,  Prev: Services,  Up: Services
+
+4.1 Service discovery and browsing
+==================================
+
+To find services you want to use, you need to discover them first.
+This can be done with either service discovery or browsing.  Service
+discovery is the newer and preferred protocol, while browsing is still
+used by much software.  The use of both is very similar.
+
+   The most common use of service discovery is to browse your home
+server, to see what services are provided locally.  Note, however, that
+this is no restriction; you can use services from all over the network.
+
+   To start browsing, type `M-x jabber-get-browse' and enter the JID
+you want to browse.  For service discovery there are two commands,
+`jabber-get-disco-items' and `jabber-get-disco-info', depending on
+whether you want information about that specific JID or about services
+related to it, respectively.
+
+   These commands can be accessed from the Info menu, which is opened by
+typing `C-c C-i'.
+
+
+File: jabber.info,  Node: Registering,  Next: Searching,  Prev: Service discovery and browsing,  Up: Services
+
+4.2 Registering
+===============
+
+Some services, in particular user directories and gateways to legacy IM
+systems, require registration.  To register with such a service, either
+type `M-x jabber-get-register' or select it from the Service menu,
+which is opened by typing `C-c C-s'.  You have to know the service's
+JID, possibly from service discovery.  (*note Service discovery and
+browsing::)
+
+   This is also the way to change your registration details, e.g. your
+password -- just ask to register with that service again.  To change
+the password of your Jabber account, ask to register with your Jabber
+server.
+
+   Please note that any passwords sent in this way will be sent in
+cleartext to your Jabber server, as jabber.el doesn't support
+encryption yet, and possibly sent in cleartext from your server to the
+server hosting the service.
+
+   jabber.el will then request a registration form from that service.
+If for some reason the service does not answer (maybe network problems,
+or some services neither support registration nor report errors about
+that) that will be the last thing you saw about it.  jabber.el will not
+report timeout errors, but rather simply wait until you shut it down.
+
+   Once the response arrives, the form will be rendered in a browse
+buffer.  Just fill out the fields, and hit Submit.  You will receive
+confirmation of your registration in the echo area.
+
+   To cancel an existing registration (and also for cancelling your
+Jabber account, if you sent a registration request to your server), hit
+Cancel.  The unregistration will be confirmed in the echo area.
+
+
+File: jabber.info,  Node: Searching,  Next: Ad-Hoc Commands,  Prev: Registering,  Up: Services
+
+4.3 Searching
+=============
+
+Some services, notably user directories and gateways to legacy IM
+systems, allow searching.  Searching in Jabber generally means
+searching for someone's JID, but the protocol is general enough to
+support most databases.
+
+   To search a service, either type `M-x jabber-get-search' or select
+it from the Service menu, which is opened by typing `C-c C-s'.
+
+   Just like with registration, this command sends a request for a
+search form, and displays it if and when the response arrives.  Enter
+your search and submit it.  Search results will be displayed in a
+different browse buffer.
+
+
+File: jabber.info,  Node: Ad-Hoc Commands,  Prev: Searching,  Up: Services
+
+4.4 Ad-Hoc Commands
+===================
+
+jabber.el supports a subset of JEP-0050, the standard for Ad-Hoc
+Commands.  As the name implies, this can be used for just about
+anything.  However, at the time of this writing it seems that jabber.el
+is the only implementation.
+
+   Currently, ad-hoc commands are used for setting presence remotely.
+If you realize that you forgot to set your client to "away" with a low
+priority, you can do it remotely.(1)
+
+   The commands for executing ad-hoc commands are available under the
+Service menu, which is opened by typing `C-c C-s'.
+
+   To find which commands are available, run "Request command-list"
+(`jabber-ahc-get-list').(2)
+
+   To run a command from the list, put point over it and run "Execute
+command" (`jabber-ahc-execute-command'), accepting the defaults for JID
+and node.  (If you already know those, you could of course enter them
+yourself)  The form you get should hopefully be self-explanatory.
+
+   ---------- Footnotes ----------
+
+   (1) Most Jabber servers support kicking a client off the net by
+logging in with another client with exactly the same resource.
+
+   (2) This is the same thing as a disco items request to the node
+`http://jabber.org/protocol/commands'.
+
+
+File: jabber.info,  Node: Modeline status,  Next: Keepalive,  Prev: Services,  Up: Top
+
+5 Modeline status
+*****************
+
+By typing `M-x jabber-mode-line-mode' you toggle display of some status
+in mode lines.  The information is your own presence status, and some
+numbers showing the status of your roster contacts.  By default, there
+are three numbers, for "online" (chatty and online), "away" (away,
+extended away and do not disturb) and offline contacts.
+
+   If you set `jabber-mode-line-compact' to nil, you get a complete
+breakdown of presence status.  That gives you six numbers indicating
+the number of chatty, online, away, extended away, dnd, and offline
+contacts, respectively.
+
+
+File: jabber.info,  Node: Keepalive,  Next: Tracking activity,  Prev: Modeline status,  Up: Top
+
+6 Keepalive
+***********
+
+Sometimes network connections are lost without you noticing.  This is
+especially true with Jabber, as it is quite reasonable to keep the
+connection open for a long time without either sending or receiving any
+data.
+
+   If you want to detect a lost connection earlier, you can use the
+keepalive functions.  Type `M-x jabber-keepalive-start' to start it,
+and `M-x jabber-keepalive-stop' to stop it.
+
+   These functions work by asking your server for the time once in a
+while (by default every ten minutes), and considering the connection
+lost if the server doesn't answer within reasonable time (by default 20
+seconds).
+
+   You can customize the interval and the timeout with the variables
+`jabber-keepalive-interval' and `jabber-keepalive-timeout',
+respectively.
+
+
+File: jabber.info,  Node: Tracking activity,  Next: Watch buddies,  Prev: Keepalive,  Up: Top
+
+7 Tracking activity
+*******************
+
+When you're working on something important you might want to delay
+responding to incoming messages.  However, when you're done working,
+will you remember them?  If you're anything like me, you'll have a lot
+of buffers in your Emacs session, and a jabber chat buffer can easily
+get lost.
+
+   When you type `M-x jabber-activity-mode' Emacs starts keeping track
+of the buddies which have messages you since last you visited their
+buffer, and will display them in mode line.  As soon as you visit their
+buffer they disappear from the mode line, indicating that you've read
+their message.
+
+   If your mode line fills over because of these notifications, you can
+customize `jabber-activity-make-strings' to shorten them to the
+shortest possibly unamiguous form.
+
+   If you try to exit Emacs while you still have unread messages, you
+will be notified and asked about this.  If you don't like that, set
+`jabber-activity-query-unread' to nil.
+
+
+File: jabber.info,  Node: Watch buddies,  Next: Message history,  Prev: Tracking activity,  Up: Top
+
+8 Watch buddies
+***************
+
+Sometimes you might be waiting for a certain person to come online, and
+you don't want that occasion to get lost in the noise.  To get an
+obtrusive message when that happens, type `M-x jabber-watch-add' and
+select the person in question.  You can enter a comment, to remember
+why you added the watch.
+
+   You will get a message whenever that person goes from offline to
+online.  jabber.el will remember this for the rest of your Emacs
+session (it's not saved to disk, though), but if you want to get rid of
+it, type `M-x jabber-watch-remove'.
+
+
+File: jabber.info,  Node: Message history,  Next: Customization,  Prev: Watch buddies,  Up: Top
+
+9 Message history
+*****************
+
+If you want a record of messages sent and received, set
+`jabber-history-enabled' to t.  This will save all messages to the file
+specified by `jabber-history-file', by default
+`~/.jabber_global_message_log'.  There is no facility for reading old
+messages yet, but just reading the file as text should be enough for
+many purposes.
+
+   When you open a new chat buffer and have entries in your history
+file, the last few messages you recently exchanged with the contact in
+question will be inserted.  You can control how many messages with
+`jabber-backlog-number' (by default 10), and how old messages with
+`jabber-backlog-days' (by default 3 days).
+
+
+File: jabber.info,  Node: Customization,  Next: Hacking and extending,  Prev: Message history,  Up: Top
+
+10 Customization
+****************
+
+jabber.el is intended to be customizable for many tastes.  After all,
+this is Emacs.  To open a customization buffer for jabber.el, type `M-x
+jabber-customize'.
+
+* Menu:
+
+* Connection settings::
+* Customizing the roster buffer::
+* Customizing the chat buffer::
+* Customizing alerts::
+* Hooks::
+* Debug options::
+
+
+File: jabber.info,  Node: Connection settings,  Next: Customizing the roster buffer,  Prev: Customization,  Up: Customization
+
+10.1 Connection settings
+========================
+
+`jabber-username' is the username part of your JID.
+
+   `jabber-server' is the JID of your server, i.e. the hostname part of
+your JID.  This is usually, but not necessarily, the same as the
+hostname of the server.
+
+   `jabber-network-server' is the hostname or IP address of your
+server.  If it is set to `nil', jabber.el will use the name in
+`jabber-server'.
+
+   `jabber-port' is the TCP port of the server to connect to.  This is
+5222 in almost all cases.
+
+   `jabber-password' is your password.  You have the option to set it
+here, in which case it will be stored in cleartext in your `.emacs'
+file.  If this is set to `nil', you will be prompted for your password
+every time you connect.
+
+   `jabber-resource' is the resource you want to log in under.  This
+only matters if you are connected to the same account from different
+clients or different computers, since each connection must have a
+unique resource.  You might want to set this to your hostname.
+
+   `jabber-default-priority' is the default priority sent with your
+presence.  Regardless of what you have here, you can change your
+priority during a session with `jabber-send-presence'.  *Note
+Presence::, for more information on priority.
+
+   `jabber-nickname' is your default nickname for groupchats.
+
+
+File: jabber.info,  Node: Customizing the roster buffer,  Next: Customizing the chat buffer,  Prev: Connection settings,  Up: Customization
+
+10.2 Customizing the roster buffer
+==================================
+
+`jabber-sort-order' controls how roster items are sorted by presence.
+It is a list containing strings corresponding to show status (*note
+Presence::) or `nil', which represents offline.
+
+   `jabber-show-resources' controls when your contacts' resources are
+shown in the roster buffer.  The default is to show resources when a
+contact has more than one connected resource.
+
+   `jabber-roster-line-format' specifies how the entry for each contact
+looks.  It is a string where some characters are special if preceded by
+a percent sign:
+
+   `jabber-roster-buffer' specifies the name of the roster buffer.  If
+you change this, the new name will be used the next time you connect.
+
+`%c'
+     "*" if the contact is connected, or " " if not
+
+`%n'
+     Nickname of contact, or JID if no nickname
+
+`%j'
+     Bare JID of contact (without resource)
+
+`%r'
+     Highest-priority resource of contact
+
+`%s'
+     Availability of contact as string ("Online", "Away" etc)
+
+`%S'
+     Status string specified by contact
+
+   `jabber-resource-line-format' is nearly identical, except that the
+values correspond to the values of the resource in question, and that
+the `%p' escape is available, which inserts the priority of the
+resource.
+
+
+File: jabber.info,  Node: Customizing the chat buffer,  Next: Customizing alerts,  Prev: Customizing the roster buffer,  Up: Customization
+
+10.3 Customizing the chat buffer
+================================
+
+You can customize the look of the prompts in the chat buffer.  There
+are separate settings for local (i.e. your own messages) and foreign
+prompts.
+
+   `jabber-chat-prompt-local' and `jabber-chat-prompt-foreign'
+determine the faces used for the prompts.
+
+   `jabber-chat-local-prompt-format' and
+`jabber-chat-foreign-prompt-format' determine what text is displayed in
+the prompts.  They are format strings, with the following special
+sequences defined:
+
+`%t'
+     The time when the message was sent or received
+
+`%n'
+     The nickname of the user.  For the foreign prompt, this is the
+     name of the contact in the roster, or the JID if no name set.  For
+     the local prompt, this is the username part of your JID.
+
+`%j'
+     The bare JID of the user
+
+   `jabber-chat-time-format' defines how `%t' shows time.  Its format
+is identical to that passed to `format-time-string'.  *Note Time
+Conversion: (elisp)Time Conversion.
+
+   You can also customize the header line of chat buffers, by modifying
+the variable `jabber-chat-header-line-format'.  The format of that
+variable is the same as that of `mode-line-format' and
+`header-line-format'.  *Note Mode-Line Format: (elisp)Mode Line Format.
+
+
+File: jabber.info,  Node: Customizing alerts,  Next: Hooks,  Prev: Customizing the chat buffer,  Up: Customization
+
+10.4 Customizing alerts
+=======================
+
+When an event happens (currently including presence changes, incoming
+messages, and completed queries) you will usually want to be notified.
+Since tastes in this area vary wildly, these alerts are implemented as
+hooks, so you can choose which ones you want, or write your own if none
+fit.
+
+   Actually, if you don't want to write your own, stop reading this
+section and just read *Note Standard alerts::.
+
+   Many kinds of alerts consist in displaying a text message through a
+certain mechanism.  This text message is provided by a function which
+you can rewrite or replace.  If this function returns `nil', no message
+is displayed, and non-textual alerts refrain from action.
+
+   The hooks take different arguments depending on category.  However,
+they all have in common that the last argument is the result of the
+message function.  The message function for each category takes the
+same arguments as the corresponding hooks, except for that last
+argument.
+
+   Alert hook contributions are very welcome.  Either submit them to the
+Sourceforge patch tracker, or contact us directly.
+
+   Alert hooks are meant for optional UI things, that are subject to
+varying user tastes, and that can be toggled by simply adding or
+removing the function from/to the hook.  For other things, there are
+corresponding general hooks, that are defvars instead of defcustoms,
+and that are to be managed by Lisp code.  They have the same name as
+the alert hooks minus the `-alert' part.
+
+* Menu:
+
+* Standard alerts::
+* Presence alerts::
+* Message alerts::
+* MUC alerts::
+* Info alerts::
+
+
+File: jabber.info,  Node: Standard alerts,  Next: Presence alerts,  Prev: Customizing alerts,  Up: Customizing alerts
+
+10.4.1 Standard alerts
+----------------------
+
+Six alerts are already written for all three alert categories.  These
+all obey the result from the corresponding message function.
+
+   The `beep' alerts simply sound the terminal bell by calling `ding'.
+They are enabled by default.
+
+   The `echo' alerts display a message in the echo area by calling
+`message'.  They are enabled by default.
+
+   The `switch' alerts switch to the buffer where the event occurred
+(chat buffer for incoming messages, roster buffer for presence changes,
+browse buffer for completed queries).  They are disabled by default.
+Take care when using them, as they may interrupt your editing.
+
+   The `display' alerts display but do not select the buffer in
+question, using the function `display-buffer'.  *Note Choosing a Window
+for Display: (elisp)Choosing Window, for information about customizing
+its behaviour.
+
+   The `wave' alerts play a sound file by calling `play-sound-file'.
+No sound files are provided.  To use this, enter the names of the sound
+files in `jabber-alert-message-wave', `jabber-alert-presence-wave' and
+`jabber-alert-info-wave', respectively.
+
+   The `screen' alerts send a message through the Screen terminal
+manager (see `http://www.gnu.org/software/screen/').  They do no harm
+if called when you don't use Screen.
+
+   The `ratpoison' alerts send a message through the Ratpoison window
+manager (see `http://ratpoison.sourceforge.net/').  They do no harm if
+used when you're not running X, but if you are running X with another
+window manager, the ratpoison processes will never exit.  You can look
+at them with `list-processes'.(1)
+
+   All these functions are in the `jabber-alert.el' file.  You can use
+them as templates or inspiration for your own alerts.
+
+   ---------- Footnotes ----------
+
+   (1) In jabber.el 0.4, ratpoison alerts were sent synchronously,
+which meant that Emacs would stall if ratpoison wasn't there to answer.
+
+
+File: jabber.info,  Node: Presence alerts,  Next: Message alerts,  Prev: Standard alerts,  Up: Customizing alerts
+
+10.4.2 Presence alerts
+----------------------
+
+Set `jabber-alert-presence-message-function' to your desired function.
+This function should look like:
+
+     (FUNCTION WHO OLDSTATUS NEWSTATUS STATUSTEXT)
+
+   WHO is the JID symbol (*note Roster structure::), OLDSTATUS and
+NEWSTATUS are the previous and current stati, respectively, and
+STATUSTEXT is the status message if provided, otherwise nil.
+
+   NEWSTATUS can also be one of `"subscribe"', `"subscribed"',
+`"unsubscribe"' and `"unsubscribed"'.
+
+   The default function, `jabber-presence-default-message', returns
+`nil' if OLDSTATUS and NEWSTATUS are the same, and in other cases
+constructs a message from the given data.
+
+   All presence alert hooks take the same arguments plus the additional
+PROPOSED-ALERT, which is the result of the specified message function.
+This last argument is usually the only one they use.
+
+
+File: jabber.info,  Node: Message alerts,  Next: MUC alerts,  Prev: Presence alerts,  Up: Customizing alerts
+
+10.4.3 Message alerts
+---------------------
+
+If you don't want message alerts when the chat buffer in question is
+already the current buffer, set `jabber-message-alert-same-buffer' to
+nil.  This affects the behaviour of the default message function, so
+you'll have to reimplement this functionality if you create an own
+message function.
+
+   Set `jabber-alert-message-function' to your desired function.(1)
+This function should look like:
+
+     (FUNCTION FROM BUFFER TEXT)
+
+   FROM is the JID symbol (*note Roster structure::), BUFFER is the
+buffer where the message is displayed, and TEXT is the text of the
+message.
+
+   The default function, `jabber-message-default-message', returns
+"Message from PERSON", where PERSON is the name of the person if
+specified in the roster, otherwise the JID.
+
+   All message alert hooks take the same arguments plus the additional
+PROPOSED-ALERT, which is the result of the specified message function.
+
+   ---------- Footnotes ----------
+
+   (1) Logically it should be `jabber-alert-message-message-function',
+but that would be really ugly.
+
+
+File: jabber.info,  Node: MUC alerts,  Next: Info alerts,  Prev: Message alerts,  Up: Customizing alerts
+
+10.4.4 MUC alerts
+-----------------
+
+Set `jabber-alert-muc-function' to your desired function.  This
+function should look like:
+
+     (FUNCTION NICK GROUP BUFFER TEXT)
+
+   NICK is the nickname, GROUP is the JID of the group, BUFFER is the
+buffer where the message is displayed, and TEXT is the text of the
+message.
+
+   The default function, `jabber-muc-default-message', returns "Message
+from NICK in GROUP" or "Message in GROUP", the latter for messages from
+the room itself.
+
+   All MUC alert hooks take the same arguments plus the additional
+PROPOSED-ALERT, which is the result of the specified message function.
+
+
+File: jabber.info,  Node: Info alerts,  Prev: MUC alerts,  Up: Customizing alerts
+
+10.4.5 Info alerts
+------------------
+
+Info alerts are sadly underdeveloped.  The message function,
+`jabber-alert-info-message-function', takes two arguments, INFOTYPE and
+BUFFER.  BUFFER is the buffer where something happened, and INFOTYPE is
+either `'roster' for roster updates, or `'browse' for anything that
+uses the browse buffer (basically anything except chatting).
+
+   The info alert hooks take an extra argument, as could be expected.
+
+
+File: jabber.info,  Node: Hooks,  Next: Debug options,  Prev: Customizing alerts,  Up: Customization
+
+10.5 Hooks
+==========
+
+jabber.el provides various hooks that you can use for whatever purpose.
+
+`jabber-post-connect-hook'
+     This hook is called after successful connection and authentication.
+     By default it contains `jabber-send-default-presence' (*note
+     Presence::).
+
+`jabber-lost-connection-hook'
+     This hook is called when you have been disconnected for unknown
+     reasons.  Usually this isn't noticed for quite a long time.
+
+`jabber-pre-disconnect-hook'
+     This hook is called just before voluntary disconnection.  This
+     might be due to failed authentication, so check
+     `*jabber-authenticated*' if you want to send a stanza.
+
+`jabber-post-disconnect-hook'
+     This hook is called after disconnection of any kind, possibly just
+     after `jabber-lost-connection-hook'.
+
+
+
+File: jabber.info,  Node: Debug options,  Prev: Hooks,  Up: Customization
+
+10.6 Debug options
+==================
+
+These settings provide a lot of information which is usually not very
+interesting, but can be useful for debugging various things.
+
+   `jabber-debug-log-xml' activates XML logging.  All XML stanzas sent
+and received are logged in the buffer `*-jabber-xml-log-*' in list
+format.  *Note XML representation::.
+
+
+File: jabber.info,  Node: Hacking and extending,  Next: Protocol support,  Prev: Customization,  Up: Top
+
+11 Hacking and extending
+************************
+
+This part of the manual is an attempt to explain parts of the source
+code.  It is not meant to discourage you from reading the code yourself
+and trying to figure it out, but as a guide on where to look.
+Knowledge of Jabber protocols is assumed.
+
+* Menu:
+
+* XML representation::
+* Roster structure::
+* Listening for new requests::
+* Sending new requests::
+* Extending service discovery::
+* Stanza chains::
+
+
+File: jabber.info,  Node: XML representation,  Next: Roster structure,  Prev: Hacking and extending,  Up: Hacking and extending
+
+11.1 XML representation
+=======================
+
+The XML representation is the one generated by `xml.el' in Emacs,
+namely the following.  Each tag is a list.  The first element of the
+list is a symbol, the name of which is the name of the tag.  The second
+element is an alist of attributes, where the keys are the attribute
+names in symbol form, and the values are strings.  The remaining
+elements are the tags and data contained within the tag.
+
+   For example,
+     <foo bar='baz'>
+     <frobozz/>Fnord
+     </foo>
+   is represented as
+     (foo ((bar . "baz")) (frobozz nil "") "Fnord
+     ")
+
+   Note the empty string as the third element of the `frobozz' list.
+It is not present in newer (post-21.3) versions of `xml.el', but it's
+probably best to assume it might be there.
+
+
+File: jabber.info,  Node: Roster structure,  Next: Listening for new requests,  Prev: XML representation,  Up: Hacking and extending
+
+11.2 Roster structure
+=====================
+
+Roster entries are contained in the list `*jabber-roster*'.
+
+   A roster entry is a symbol.  Its name is the JID, and it is interned
+in `jabber-jid-obarray'.  A roster entry can have the following
+properties:
+
+`xml'
+     The XML tag received from the server on roster update
+
+`name'
+     The name of the roster item (just like the XML attribute)
+
+`subscription'
+     The subscription state (also copied)
+
+`ask'
+     The ask state (copied)
+
+`groups'
+     A list of strings (possibly empty) containing all the groups the
+     contact is in
+
+`connected'
+     Boolean, true if any resource is connected
+
+`show'
+     Presence show status for highest-priority connected resource
+
+`status'
+     Presence status message for highest-priority connected resource
+
+`resources'
+     Alist.  Keys are strings (resource names), values are plists with
+     properties `connected', `show', `status' and `priority'.
+
+
+   Incoming presence information is inserted in `resources', and the
+information from the resource with the highest priority is inserted in
+`show' and `status' by the function `jabber-prioritize-resources'.
+
+
+File: jabber.info,  Node: Listening for new requests,  Next: Sending new requests,  Prev: Roster structure,  Up: Hacking and extending
+
+11.3 Listening for new requests
+===============================
+
+To listen for new IQ requests, add the appropriate entry in
+`jabber-iq-get-xmlns-alist' or `jabber-iq-set-xmlns-alist'.  The key is
+the namespace of the request, and the value is a function that takes
+one argument, the entire IQ stanza in list format.  `jabber-process-iq'
+reads these alists to determine which function to call on incoming
+packets.
+
+   For example, the Ad-Hoc Commands module contains the following:
+
+     (add-to-list 'jabber-iq-set-xmlns-alist
+     	     (cons "http://jabber.org/protocol/commands" 'jabber-ahc-process))
+
+   To send a response to an IQ request, use `(jabber-send-iq SENDER
+"result" QUERY nil nil nil nil ID)', where QUERY is the query in list
+format.  `jabber-send-iq' will encapsulate the query in an IQ packet
+with the specified id.
+
+   To return an error to the Jabber entity that sent the query, use
+`jabber-signal-error'.  The signal is caught by `jabber-process-iq',
+which takes care of sending the error.
+
+
+File: jabber.info,  Node: Sending new requests,  Next: Extending service discovery,  Prev: Listening for new requests,  Up: Hacking and extending
+
+11.4 Sending new requests
+=========================
+
+To send an IQ request, use `jabber-send-iq'.  It will generate an id,
+and create a mapping for it for use when the response comes.  The
+syntax is:
+
+     (jabber-send-iq TO TYPE QUERY
+                     SUCCESS-CALLBACK SUCCESS-CLOSURE
+                     FAILURE-CALLBACK FAILURE-CLOSURE)
+
+   Both callbacks take two arguments, the IQ stanza returned and the
+closure item mentioned here.
+
+   Two standard callbacks are provided.  `jabber-report-success' takes
+a string as closure item, and reports success or failure in the echo
+area.  `jabber-process-data' prepares a browse buffer.  If its closure
+argument is a function, it calls that function with point in this
+browse buffer.  If it's a string, it prints that string along with the
+error message in the IQ response.  If it's anything else (e.g. `nil'),
+it just dumps the XML in the browse buffer.
+
+   Examples follow.  This is the hypothetical Jabber protocol "frob",
+for which only success report is needed:
+     (jabber-send-iq "someone@somewhere.org" "set"
+                     '(query ((xmlns . "frob")))
+                     'jabber-report-success "Frobbing"
+                     'jabber-report-success "Frobbing")
+   This will print "Frobbing succeeded" or "Frobbing failed: reason",
+respectively, in the echo area.
+
+   The protocol "investigate" needs to parse results and show them in a
+browse buffer:
+     (jabber-send-iq "someone@somewhere.org" "get"
+                     '(query ((xmlns . "investigate")))
+                     'jabber-process-data 'jabber-process-investigate
+                     'jabber-process-data "Investigation failed")
+   Of course, the previous example could have used
+`jabber-report-success' for the error message.  It's a matter of UI
+taste.
+
+
+File: jabber.info,  Node: Extending service discovery,  Next: Stanza chains,  Prev: Sending new requests,  Up: Hacking and extending
+
+11.5 Service discovery
+======================
+
+Your new handlers will likely want to advertise their existence through
+service discovery.
+
+   To have an additional feature reported in response to disco info
+requests, add a string to `jabber-advertised-features'.
+
+   By default, the service discovery functions reject all requests
+containing a node identifier with an "Item not found" error.  To make
+them respond, add the appropriate entries to `jabber-disco-items-nodes'
+and `jabber-disco-info-nodes'.  Both variables work in the same way.
+They are alists, where the keys are the node names, and the values are
+lists of two items.
+
+   The first item is the data to return -- either a list or a function
+taking the entire IQ stanza and returning a list, this list containing
+the XML nodes to include in the `<query/>' node in the response.
+
+   The second item is the access control function.  An access control
+function receives the JID as its only argument, and returns non-nil if
+access is to be granted.  If nil is specified instead of a function,
+access is always granted.  One such function is provided,
+`jabber-my-jid-p', which grants access for JIDs where the username and
+server (not necessarily resource) are equal to those of the user.
+
+
+File: jabber.info,  Node: Stanza chains,  Prev: Extending service discovery,  Up: Hacking and extending
+
+11.6 Stanza chains
+==================
+
+If you really need to get under the skin of jabber.el, you can add
+functions to the lists `jabber-message-chain', `jabber-iq-chain' and
+`jabber-presence-chain'.  Normally those lists contain only the
+functions jabber.el needs to do its job, i.e. `jabber-process-message',
+`jabber-process-iq' and `jabber-process-presence', respectively.
+
+   The functions in these lists will be called in order when an XML
+stanza of the corresponding type arrives, with the entire XML stanza
+passed as the only argument.  Earlier functions can modify the stanza
+to change the behaviour of downstream functions.
+
+
+File: jabber.info,  Node: Protocol support,  Next: Concept index,  Prev: Hacking and extending,  Up: Top
+
+Appendix A Protocol support
+***************************
+
+These are the protocols currently supported (in full or partially) by
+jabber.el.
+
+* Menu:
+
+* RFC 3920 (XMPP-CORE)::
+* RFC 3921 (XMPP-IM)::
+* JEP-0004 (Data Forms)::
+* JEP-0020 (Feature Negotiation)::
+* JEP-0030 (Service Discovery)::
+* JEP-0045 (Multi-User Chat)::
+* JEP-0050 (Ad-Hoc Commands)::
+* JEP-0055 (Jabber Search)::
+* JEP-0065 (SOCKS5 Bytestreams)::
+* JEP-0068 (Field Standardization for Data Forms)::
+* JEP-0077 (In-Band Registration)::
+* JEP-0078 (Non-SASL Authentication)::
+* JEP-0082 (Jabber Date and Time Profiles)::
+* JEP-0086 (Error Condition Mappings)::
+* JEP-0091 (Delayed Delivery)::
+* JEP-0092 (Software Version)::
+* JEP-0095 (Stream Initiation)::
+* JEP-0096 (File Transfer)::
+
+
+File: jabber.info,  Node: RFC 3920 (XMPP-CORE),  Next: RFC 3921 (XMPP-IM),  Prev: Protocol support,  Up: Protocol support
+
+A.1 RFC 3920 (XMPP-CORE)
+========================
+
+Most of RFC 3920 is supported, with the following exceptions.
+
+   The STARTTLS feature is not supported.
+
+   SASL is supported only when an external SASL library from FLIM or
+Gnus is present.  As SASL is an essential part to XMPP, jabber.el will
+send pre-XMPP stream headers if it is not available.
+
+   None of the stringprep profiles are implemented.  jabber.el changes
+JIDs to lowercase internally; that's all.
+
+   jabber.el doesn't interpret namespace prefixes.
+
+   The `xml:lang' attribute is neither interpreted nor generated.
+
+   SRV records are not used.
+
+
+File: jabber.info,  Node: RFC 3921 (XMPP-IM),  Next: JEP-0004 (Data Forms),  Prev: RFC 3920 (XMPP-CORE),  Up: Protocol support
+
+A.2 RFC 3921 (XMPP-IM)
+======================
+
+Most of RFC 3921 is supported, with the following exceptions.
+
+   Messages of type "headline" are not treated in any special way.
+
+   The subject of a received message is not displayed.
+
+   The `<thread/>' element is not used or generated.
+
+   Neither sending nor receiving "directed presence" is supported.
+
+   Privacy lists are not supported at all.
+
+   jabber.el doesn't support XMPP-E2E or "im:" CPIM URIs.
+
+
+File: jabber.info,  Node: JEP-0004 (Data Forms),  Next: JEP-0020 (Feature Negotiation),  Prev: RFC 3921 (XMPP-IM),  Up: Protocol support
+
+A.3 JEP-0004 (Data Forms)
+=========================
+
+JEP-0004 support is good enough for many purposes.  Limitations are the
+following.
+
+   Forms in incoming messages are not interpreted.  See each specific
+protocol for whether forms are accepted in that context.
+
+   "Cancel" messages are probably not consistently generated when they
+should be.  This is partly a paradigm clash, as jabber.el doesn't use
+modal dialog boxes but buffers which can easily be buried.
+
+   `<required/>' elements are not enforced.
+
+   The field types "jid-single", "jid-multi" and "list-multi" are not
+implemented, due to programmer laziness.  Let us know if you need them.
+
+
+File: jabber.info,  Node: JEP-0020 (Feature Negotiation),  Next: JEP-0030 (Service Discovery),  Prev: JEP-0004 (Data Forms),  Up: Protocol support
+
+A.4 JEP-0020 (Feature Negotiation)
+==================================
+
+There are no known limitations or bugs in JEP-0020 support.
+
+
+File: jabber.info,  Node: JEP-0030 (Service Discovery),  Next: JEP-0045 (Multi-User Chat),  Prev: JEP-0020 (Feature Negotiation),  Up: Protocol support
+
+A.5 JEP-0030 (Service Discovery)
+================================
+
+Service discovery is supported, both as client and server, with the
+following limitations.  Currently, the client part is not used by any
+code, but is provided only as a user tool.  The user interface is not
+appealing.
+
+   Publishing items is not supported.
+
+
+File: jabber.info,  Node: JEP-0045 (Multi-User Chat),  Next: JEP-0050 (Ad-Hoc Commands),  Prev: JEP-0030 (Service Discovery),  Up: Protocol support
+
+A.6 JEP-0045 (Multi-User Chat)
+==============================
+
+jabber.el supports parts of JEP-0045.  Entering, leaving and chatting
+work.  Invitations don't.  Private messages are handled quite
+unintuitively.  Changing roles of participants (basic moderation) is
+implemented, but changing affiliations is not.  Room configuration is
+supported.
+
+
+File: jabber.info,  Node: JEP-0050 (Ad-Hoc Commands),  Next: JEP-0055 (Jabber Search),  Prev: JEP-0045 (Multi-User Chat),  Up: Protocol support
+
+A.7 JEP-0050 (Ad-Hoc Commands)
+==============================
+
+jabber.el is probably the first implementation of JEP-0050 (see post on
+jdev from 2004-03-10
+(http://article.gmane.org/gmane.network.jabber.devel/21413)).  Both the
+client and server parts are supported.
+
+
+File: jabber.info,  Node: JEP-0055 (Jabber Search),  Next: JEP-0065 (SOCKS5 Bytestreams),  Prev: JEP-0050 (Ad-Hoc Commands),  Up: Protocol support
+
+A.8 JEP-0055 (Jabber Search)
+============================
+
+JEP-0055 is supported, both with traditional fields and with Data Forms
+(*note JEP-0004 (Data Forms)::).  As the traditional fields specified
+by the JEP is a subset of those allowed in JEP-0077, handling of those
+two form types are merged.  *Note JEP-0077 (In-Band Registration)::.
+
+
+File: jabber.info,  Node: JEP-0065 (SOCKS5 Bytestreams),  Next: JEP-0068 (Field Standardization for Data Forms),  Prev: JEP-0055 (Jabber Search),  Up: Protocol support
+
+A.9 JEP-0065 (SOCKS5 Bytestreams)
+=================================
+
+JEP-0065 support seems to work, but it is not yet enabled by default.
+
+   Currently jabber.el cannot act as a server, not even on on Emacsen
+that support server sockets (GNU Emacs 21.4 and up).  Therefore it
+relies on proxies.  Proxies have to be entered and queried manually.
+
+   Psi's "fast mode" (`http://delta.affinix.com/specs/stream.html'),
+which gives greater flexibility with regards to NAT, is not implemented.
+
+
+File: jabber.info,  Node: JEP-0068 (Field Standardization for Data Forms),  Next: JEP-0077 (In-Band Registration),  Prev: JEP-0065 (SOCKS5 Bytestreams),  Up: Protocol support
+
+A.10 JEP-0068 (Field Standardization for Data Forms)
+====================================================
+
+JEP-0068 is only used in the context of creating a new Jabber account,
+to prefill the username field of the registration form.
+
+
+File: jabber.info,  Node: JEP-0077 (In-Band Registration),  Next: JEP-0078 (Non-SASL Authentication),  Prev: JEP-0068 (Field Standardization for Data Forms),  Up: Protocol support
+
+A.11 JEP-0077 (In-Band Registration)
+====================================
+
+In-band registration is supported for all purposes.  That means
+registering a new Jabber account, changing Jabber password, removing a
+Jabber account, registering with a service, and cancelling registration
+to a service.  Data forms are supported as well.  URL redirections are
+not.
+
+   jabber.el will not prevent or alert a user trying to change a
+password over an unencrypted connection.
+
+
+File: jabber.info,  Node: JEP-0078 (Non-SASL Authentication),  Next: JEP-0082 (Jabber Date and Time Profiles),  Prev: JEP-0077 (In-Band Registration),  Up: Protocol support
+
+A.12 JEP-0078 (Non-SASL Authentication)
+=======================================
+
+Non-SASL authentication is supported, both plaintext and digest.
+Digest is preferred, and a warning is displayed to the user if only
+plaintext is available.
+
+
+File: jabber.info,  Node: JEP-0082 (Jabber Date and Time Profiles),  Next: JEP-0086 (Error Condition Mappings),  Prev: JEP-0078 (Non-SASL Authentication),  Up: Protocol support
+
+A.13 JEP-0082 (Jabber Date and Time Profiles)
+=============================================
+
+The DateTime profile of JEP-0082 is supported.  Currently this is only
+used for file transfer.
+
+
+File: jabber.info,  Node: JEP-0086 (Error Condition Mappings),  Next: JEP-0091 (Delayed Delivery),  Prev: JEP-0082 (Jabber Date and Time Profiles),  Up: Protocol support
+
+A.14 JEP-0086 (Error Condition Mappings)
+========================================
+
+Legacy errors are interpreted, but never generated.  XMPP style error
+messages take precedence when errors are reported to the user.
+
+
+File: jabber.info,  Node: JEP-0091 (Delayed Delivery),  Next: JEP-0092 (Software Version),  Prev: JEP-0086 (Error Condition Mappings),  Up: Protocol support
+
+A.15 JEP-0091 (Delayed Delivery)
+================================
+
+The time specified on delayed incoming messages is interpreted, and
+displayed in chat buffers instead of the current time.
+
+
+File: jabber.info,  Node: JEP-0092 (Software Version),  Next: JEP-0095 (Stream Initiation),  Prev: JEP-0091 (Delayed Delivery),  Up: Protocol support
+
+A.16 JEP-0092 (Software Version)
+================================
+
+The user can request the version of any entity.  jabber.el answers
+version requests to anyone, giving "jabber.el" as name, and the Emacs
+version as OS.
+
+
+File: jabber.info,  Node: JEP-0095 (Stream Initiation),  Next: JEP-0096 (File Transfer),  Prev: JEP-0092 (Software Version),  Up: Protocol support
+
+A.17 JEP-0095 (Stream Initiation)
+=================================
+
+JEP-0095 is supported, both incoming and outgoing, with the following
+exceptions.  It is not enabled by default, as it hasn't received much
+testing.
+
+   jabber.el doesn't check service discovery results before sending a
+stream initiation request.
+
+
+File: jabber.info,  Node: JEP-0096 (File Transfer),  Prev: JEP-0095 (Stream Initiation),  Up: Protocol support
+
+A.18 JEP-0096 (File Transfer)
+=============================
+
+Both sending and receiving files is supported, though not enabled by
+default.  The following limitations apply.
+
+   The hash of a file being sent is not calculated and sent in the
+request.
+
+   Ranged transfers are not supported.
+
+   In-band bytestreams are not yet supported, even though JEP-0096
+requires them.
+
+
+File: jabber.info,  Node: Concept index,  Next: Function index,  Prev: Protocol support,  Up: Top
+
+Concept index
+*************
+
+ [index ]
+* Menu:
+
+* Activity:                              Tracking activity.     (line 6)
+* Ad-Hoc Commands:                       Ad-Hoc Commands.       (line 6)
+* Alert hooks:                           Customizing alerts.    (line 6)
+* backlog:                               Message history.       (line 6)
+* Browse buffers:                        Services.              (line 6)
+* Browsing:                              Service discovery and browsing.
+                                                                (line 6)
+* Cancelling registration:               Registering.           (line 6)
+* Changing password:                     Registering.           (line 6)
+* Chatting:                              Chatting.              (line 6)
+* Connecting:                            Connecting.            (line 6)
+* Customization:                         Customization.         (line 6)
+* Gateway registration:                  Registering.           (line 6)
+* Groupchat:                             Groupchat.             (line 6)
+* history:                               Message history.       (line 6)
+* keepalive:                             Keepalive.             (line 6)
+* Key bindings:                          Roster buffer.         (line 6)
+* Menus:                                 Roster buffer.         (line 6)
+* modeline:                              Modeline status.       (line 6)
+* MUC:                                   Groupchat.             (line 6)
+* Password change:                       Registering.           (line 6)
+* Presence:                              Presence.              (line 6)
+* Presence subscription:                 Presence subscription. (line 6)
+* Registering an account:                Connecting.            (line 6)
+* Registration:                          Registering.           (line 6)
+* Roster buffer:                         Roster buffer.         (line 6)
+* Searching:                             Searching.             (line 6)
+* Sending presence:                      Presence.              (line 6)
+* Service discovery:                     Service discovery and browsing.
+                                                                (line 6)
+* watch:                                 Watch buddies.         (line 6)
+* XML representation:                    XML representation.    (line 6)
+
+
+File: jabber.info,  Node: Function index,  Next: Variable index,  Prev: Concept index,  Up: Top
+
+Function index
+**************
+
+ [index ]
+* Menu:
+
+* jabber-activity-mode:                  Tracking activity.     (line 6)
+* jabber-ahc-execute-command:            Ad-Hoc Commands.       (line 6)
+* jabber-ahc-get-list:                   Ad-Hoc Commands.       (line 6)
+* jabber-chat-with:                      Chatting.              (line 6)
+* jabber-connect:                        Connecting.            (line 6)
+* jabber-customize:                      Customization.         (line 6)
+* jabber-disconnect:                     Connecting.            (line 6)
+* jabber-display-roster:                 Roster buffer.         (line 6)
+* jabber-get-browse:                     Service discovery and browsing.
+                                                                (line 6)
+* jabber-get-disco-info:                 Service discovery and browsing.
+                                                                (line 6)
+* jabber-get-disco-items:                Service discovery and browsing.
+                                                                (line 6)
+* jabber-get-register:                   Registering.           (line 6)
+* jabber-get-search:                     Searching.             (line 6)
+* jabber-groupchat-get-config:           Groupchat.             (line 6)
+* jabber-groupchat-join:                 Groupchat.             (line 6)
+* jabber-groupchat-leave:                Groupchat.             (line 6)
+* jabber-info-default-message:           Info alerts.           (line 6)
+* jabber-keepalive-start:                Keepalive.             (line 6)
+* jabber-keepalive-stop:                 Keepalive.             (line 6)
+* jabber-message-default-message:        Message alerts.        (line 6)
+* jabber-mode-line-mode:                 Modeline status.       (line 6)
+* jabber-muc-default-message:            MUC alerts.            (line 6)
+* jabber-muc-names:                      Groupchat.             (line 6)
+* jabber-muc-set-role:                   Groupchat.             (line 6)
+* jabber-my-jid-p:                       Extending service discovery.
+                                                                (line 6)
+* jabber-presence-default-message:       Presence alerts.       (line 6)
+* jabber-process-data:                   Sending new requests.  (line 6)
+* jabber-process-iq <1>:                 Sending new requests.  (line 6)
+* jabber-process-iq:                     Listening for new requests.
+                                                                (line 6)
+* jabber-report-success:                 Sending new requests.  (line 6)
+* jabber-send-default-presence:          Presence.              (line 6)
+* jabber-send-iq <1>:                    Sending new requests.  (line 6)
+* jabber-send-iq:                        Listening for new requests.
+                                                                (line 6)
+* jabber-send-presence:                  Presence.              (line 6)
+* jabber-send-subscription-request:      Presence subscription. (line 6)
+* jabber-signal-error:                   Listening for new requests.
+                                                                (line 6)
+* jabber-watch-add:                      Watch buddies.         (line 6)
+* jabber-watch-remove:                   Watch buddies.         (line 6)
+
+
+File: jabber.info,  Node: Variable index,  Prev: Function index,  Up: Top
+
+Variable index
+**************
+
+ [index ]
+* Menu:
+
+* *jabber-roster*:                       Roster structure.      (line 6)
+* jabber-activity-make-strings:          Tracking activity.     (line 6)
+* jabber-activity-query-unread:          Tracking activity.     (line 6)
+* jabber-advertised-features:            Extending service discovery.
+                                                                (line 6)
+* jabber-alert-info-message-function:    Info alerts.           (line 6)
+* jabber-alert-message-function:         Message alerts.        (line 6)
+* jabber-alert-muc-function:             MUC alerts.            (line 6)
+* jabber-alert-presence-message-function: Presence alerts.      (line 6)
+* jabber-chat-foreign-prompt-format:     Customizing the chat buffer.
+                                                                (line 6)
+* jabber-chat-header-line-format:        Customizing the chat buffer.
+                                                                (line 6)
+* jabber-chat-local-prompt-format:       Customizing the chat buffer.
+                                                                (line 6)
+* jabber-chat-prompt-foreign:            Customizing the chat buffer.
+                                                                (line 6)
+* jabber-chat-prompt-local:              Customizing the chat buffer.
+                                                                (line 6)
+* jabber-chat-time-format:               Customizing the chat buffer.
+                                                                (line 6)
+* jabber-debug-log-xml:                  Debug options.         (line 6)
+* jabber-default-priority <1>:           Connection settings.   (line 6)
+* jabber-default-priority:               Presence.              (line 6)
+* jabber-default-show:                   Presence.              (line 6)
+* jabber-default-status:                 Presence.              (line 6)
+* jabber-disco-info-nodes:               Extending service discovery.
+                                                                (line 6)
+* jabber-disco-items-nodes:              Extending service discovery.
+                                                                (line 6)
+* jabber-history-enabled:                Message history.       (line 6)
+* jabber-history-file:                   Message history.       (line 6)
+* jabber-iq-chain:                       Stanza chains.         (line 6)
+* jabber-iq-get-xmlns-alist:             Listening for new requests.
+                                                                (line 6)
+* jabber-iq-set-xmlns-alist:             Listening for new requests.
+                                                                (line 6)
+* jabber-jid-obarray:                    Roster structure.      (line 6)
+* jabber-keepalive-interval:             Keepalive.             (line 6)
+* jabber-keepalive-timeout:              Keepalive.             (line 6)
+* jabber-lost-connection-hook:           Hooks.                 (line 6)
+* jabber-message-alert-same-buffer:      Message alerts.        (line 6)
+* jabber-message-chain:                  Stanza chains.         (line 6)
+* jabber-mode-line-compact:              Modeline status.       (line 6)
+* jabber-mode-line-mode:                 Modeline status.       (line 6)
+* jabber-network-server:                 Connection settings.   (line 6)
+* jabber-nickname:                       Connection settings.   (line 6)
+* jabber-password:                       Connection settings.   (line 6)
+* jabber-port:                           Connection settings.   (line 6)
+* jabber-post-connect-hook:              Hooks.                 (line 6)
+* jabber-post-disconnect-hook:           Hooks.                 (line 6)
+* jabber-pre-disconnect-hook:            Hooks.                 (line 6)
+* jabber-presence-chain:                 Stanza chains.         (line 6)
+* jabber-resource:                       Connection settings.   (line 6)
+* jabber-resource-line-format:           Customizing the roster buffer.
+                                                                (line 6)
+* jabber-roster-buffer:                  Customizing the roster buffer.
+                                                                (line 6)
+* jabber-roster-line-format:             Customizing the roster buffer.
+                                                                (line 6)
+* jabber-server:                         Connection settings.   (line 6)
+* jabber-show-resources:                 Customizing the roster buffer.
+                                                                (line 6)
+* jabber-sort-order:                     Customizing the roster buffer.
+                                                                (line 6)
+* jabber-username:                       Connection settings.   (line 6)
+
+
+
+Tag Table:
+Node: Top492
+Node: Introduction1192
+Node: Contact2112
+Node: Basic operation2544
+Node: Connecting3027
+Node: Chatting4472
+Node: Presence5476
+Node: Presence subscription7388
+Node: Roster buffer8146
+Ref: Roster buffer-Footnote-19431
+Node: Groupchat9508
+Node: Services11069
+Node: Service discovery and browsing11841
+Node: Registering12897
+Node: Searching14602
+Node: Ad-Hoc Commands15313
+Ref: Ad-Hoc Commands-Footnote-116375
+Ref: Ad-Hoc Commands-Footnote-216506
+Node: Modeline status16613
+Node: Keepalive17307
+Node: Tracking activity18194
+Node: Watch buddies19267
+Node: Message history19947
+Node: Customization20730
+Node: Connection settings21185
+Node: Customizing the roster buffer22631
+Node: Customizing the chat buffer24060
+Node: Customizing alerts25463
+Node: Standard alerts27198
+Ref: Standard alerts-Footnote-129111
+Node: Presence alerts29251
+Node: Message alerts30240
+Ref: Message alerts-Footnote-131327
+Node: MUC alerts31430
+Node: Info alerts32155
+Node: Hooks32685
+Node: Debug options33592
+Node: Hacking and extending34016
+Node: XML representation34581
+Node: Roster structure35492
+Node: Listening for new requests36781
+Node: Sending new requests37933
+Node: Extending service discovery39873
+Node: Stanza chains41257
+Node: Protocol support41998
+Node: RFC 3920 (XMPP-CORE)42860
+Node: RFC 3921 (XMPP-IM)43599
+Node: JEP-0004 (Data Forms)44188
+Node: JEP-0020 (Feature Negotiation)44982
+Node: JEP-0030 (Service Discovery)45264
+Node: JEP-0045 (Multi-User Chat)45745
+Node: JEP-0050 (Ad-Hoc Commands)46242
+Node: JEP-0055 (Jabber Search)46657
+Node: JEP-0065 (SOCKS5 Bytestreams)47149
+Node: JEP-0068 (Field Standardization for Data Forms)47810
+Node: JEP-0077 (In-Band Registration)48223
+Node: JEP-0078 (Non-SASL Authentication)48872
+Node: JEP-0082 (Jabber Date and Time Profiles)49287
+Node: JEP-0086 (Error Condition Mappings)49656
+Node: JEP-0091 (Delayed Delivery)50046
+Node: JEP-0092 (Software Version)50397
+Node: JEP-0095 (Stream Initiation)50770
+Node: JEP-0096 (File Transfer)51237
+Node: Concept index51725
+Node: Function index54213
+Node: Variable index57635
+
+End Tag Table
