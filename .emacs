@@ -41,7 +41,6 @@
 
 ; Chat modes
 (require 'jabber)
-(require 'erc)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
