@@ -6,39 +6,42 @@
 ;
 ; Much thanks to emacswiki.org and RMS.
 ;
-; Last Modified 13 May 2005
-;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+; Load Path
+(setq load-path (append (list 
+			 "~/.emacs.d" 
+			 "~/.emacs.d/jabber" 
+			 "~/.emacs.d/erc")
+			 load-path))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;     loading modes
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
-; tabbar.el if in X
-(when window-system
-  (load "~/.emacs.d/tabbar.el")
-  (tabbar-mode))
-
+; tabbar
+(load "tabbar")
 
 ; PHP mode
-(load "~/.emacs.d/php-mode.el")
-(autoload 'php-mode "php-mode" "Mode for editing PHP files")
-; .inc files load PHP-mode
- (add-to-list 'auto-mode-alist '("\\.inc$" . php-mode))
+(autoload 'php-mode "php-mode")
 
 ; .js (javascript) loads C mode (until I find something better)
  (add-to-list 'auto-mode-alist '("\\.js$" . c-mode))
 
-; .rhtml loads ruby
- (add-to-list 'auto-mode-alist '("\\.rhtml$" . ruby-mode))
+; .rhtml loads html
+ (add-to-list 'auto-mode-alist '("\\.rhtml$" . html-mode))
 
 ; CSS-mode
-(load "~/.emacs.d/css-mode.el")
 (autoload 'css-mode "css-mode")
  (setq auto-mode-alist       
       (cons '("\\.css\\'" . css-mode) auto-mode-alist))
+
+; Chat modes
+(require 'jabber)
+(require 'erc)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -80,7 +83,6 @@
 ;     misc things
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-
 ; quit yer yappin'
   (setq sgml-warn-about-undefined-entities nil)
 ; load .gz's automatically
@@ -110,7 +112,9 @@
 (setq frame-title-format '(buffer-file-name "%f" ("%b")))
 
 ; don't clutter directories!
-'(backup-directory-alist (quote (("." . "~/.emacs.baks"))))
+(setq backup-directory-alist `(("." . ,(expand-file-name "~/.emacs.baks"))))
+(setq auto-save-directory (expand-file-name "~/.emacs.baks"))
+
 
 ; all buffer tabs on main or misc groups
 (defun tabbar-buffer-groups (buffer)
@@ -170,19 +174,6 @@ Return only one group for each buffer."
 	      (concat "gcc -O2 -Wall -o " (file-name-sans-extension file)
 		      " " file))))))
 
-
-(defun symposium ()
-  "Open the files needed for editing the Symposium via tramp"
-  (interactive)
-  (when t
-    (find-file "/phil@philisha.net:/var/www/symposium/app/todo")
-    (find-file "/phil@philisha.net:/var/www/symposium/app/")
-    (find-file "/phil@philisha.net:/var/www/symposium/app/controllers")
-    (find-file "/phil@philisha.net:/var/www/symposium/app/models")
-    (find-file "/phil@philisha.net:/var/www/symposium/app/views")
-    (find-file "/phil@philisha.net:/var/www/symposium/app/views/layouts/application.rhtml")
-  )
-)
 
 (defun academy ()
   "Open a connection to theacademysite.org via tramp"
