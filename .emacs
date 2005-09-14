@@ -12,7 +12,6 @@
 ; Load Path
 (setq load-path (append (list 
 			 "~/.emacs.d" 
-			 "~/.emacs.d/jabber" 
 			 "~/.emacs.d/erc")
 			 load-path))
 
@@ -24,6 +23,7 @@
 
 ; tabbar
 (load "tabbar")
+(tabbar-mode 1)
 
 ; PHP mode
 (autoload 'php-mode "php-mode")
@@ -39,8 +39,10 @@
  (setq auto-mode-alist       
       (cons '("\\.css\\'" . css-mode) auto-mode-alist))
 
-; Chat modes
-(require 'jabber)
+; Slime (for LISP interaction)
+(add-to-list 'load-path "/home/phil/.emacs.d/slime")
+(require 'slime)
+(slime-setup)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -100,9 +102,6 @@
 ; hide toolbar/menubar by default
 (tool-bar-mode -1)
 (menu-bar-mode -1)
-
-; move the mouse when typing approaches it.
-(mouse-avoidance-mode 'exile)
 
 ; use a real clipboard!
 (setq x-select-enable-clipboard t)
@@ -185,6 +184,16 @@ Return only one group for each buffer."
     )
 )
 
+(defun paxtel ()
+  "Open a connection to paxtel via tramp"
+  (interactive)
+  (when t
+    (find-file "/philhag@hagelb.org:apps/web-demo2/app")
+    (find-file "/philhag@hagelb.org:apps/web-demo2/app/controllers")
+    (find-file "/philhag@hagelb.org:apps/web-demo2/app/models")
+    (find-file "/philhag@hagelb.org:apps/web-demo2/app/views")
+    )
+)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
