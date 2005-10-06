@@ -22,11 +22,19 @@
 
 
 ; tabbar
-(load "tabbar")
-(tabbar-mode 1)
+;(load "tabbar")
+;(tabbar-mode 1)
+
+; help for finding files and switching buffers
+(require 'ido)
+(ido-mode t)
+
+; integrated subversion
+(require 'psvn)
 
 ; PHP mode
-(autoload 'php-mode "php-mode")
+;(autoload 'php-mode "php-mode")
+ (add-to-list 'auto-mode-alist '("\\.php$" . html-mode))
 
 ; .js (javascript) loads C mode (until I find something better)
  (add-to-list 'auto-mode-alist '("\\.js$" . c-mode))
@@ -38,6 +46,9 @@
 (autoload 'css-mode "css-mode")
  (setq auto-mode-alist       
       (cons '("\\.css\\'" . css-mode) auto-mode-alist))
+
+; Ruby help
+(require 'ruby-electric)
 
 ; Slime (for LISP interaction)
 (add-to-list 'load-path "/home/phil/.emacs.d/slime")
@@ -177,10 +188,7 @@ Return only one group for each buffer."
   "Open a connection to theacademysite.org via tramp"
   (interactive)
   (when t
-    (find-file "/academyadmin@theacademysite.org:theacademysite.org")
-    (find-file "/academyadmin@theacademysite.org:theacademysite.org/ta")
-    (find-file "/academyadmin@theacademysite.org:phil.timecard")
-    (find-file "/academyadmin@theacademysite.org:theacademysite.org/project.schedule")
+    (find-file "/academyadmin@wheatstoneacademy.com:wheatstone")
     )
 )
 
@@ -217,3 +225,12 @@ Return only one group for each buffer."
 ; C-m C-s to stop
 ; C-m C-p to play
 
+(custom-set-variables
+  ;; custom-set-variables was added by Custom -- don't edit or cut/paste it!
+  ;; Your init file should contain only one such instance.
+ '(ecb-options-version "2.27")
+ '(ecb-source-path (quote ("/home/phil/mjolnir/apps/paxtel/www/app"))))
+(custom-set-faces
+  ;; custom-set-faces was added by Custom -- don't edit or cut/paste it!
+  ;; Your init file should contain only one such instance.
+ )
