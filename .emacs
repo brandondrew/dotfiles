@@ -34,12 +34,13 @@
 
 ; PHP mode
 ;(autoload 'php-mode "php-mode")
- (add-to-list 'auto-mode-alist '("\\.php$" . html-mode))
+; (add-to-list 'auto-mode-alist '("\\.php$" . html-mode))
 
 ; .js (javascript) loads C mode (until I find something better)
  (add-to-list 'auto-mode-alist '("\\.js$" . c-mode))
 
 ; .rhtml loads html
+; todo: add mmm mode to view erb
  (add-to-list 'auto-mode-alist '("\\.rhtml$" . html-mode))
 
 ; CSS-mode
@@ -188,9 +189,8 @@ Return only one group for each buffer."
   "Open a connection to theacademysite.org via tramp"
   (interactive)
   (when t
-    (find-file "/academyadmin@wheatstoneacademy.com:wheatstone")
-    )
-)
+    (find-file "/academyadmin@wheatstoneacademy.com:wheatstone")))
+
 
 (defun paxtel ()
   "Open a connection to paxtel via tramp"
@@ -199,10 +199,13 @@ Return only one group for each buffer."
     (find-file "/philhag@hagelb.org:apps/web-demo2/app")
     (find-file "/philhag@hagelb.org:apps/web-demo2/app/controllers")
     (find-file "/philhag@hagelb.org:apps/web-demo2/app/models")
-    (find-file "/philhag@hagelb.org:apps/web-demo2/app/views")
-    )
-)
+    (find-file "/philhag@hagelb.org:apps/web-demo2/app/views")))
 
+
+(defun www2 ()
+  "Open a tunneled connection to www2 via jacob"
+  (interactive)
+  (find-file "/multi:ssh:rozinant@jacob.biola.edu:ssh:d1103784@www2.biola.edu:"))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;    Nifty things to remember and hopefully use
