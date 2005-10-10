@@ -12,7 +12,8 @@
 ; Load Path
 (setq load-path (append (list 
 			 "~/.emacs.d" 
-			 "~/.emacs.d/erc")
+			 "~/.emacs.d/erc"
+			 "~/.emacs.d/slime")
 			 load-path))
 
 
@@ -52,7 +53,6 @@
 (require 'ruby-electric)
 
 ; Slime (for LISP interaction)
-(add-to-list 'load-path "/home/phil/.emacs.d/slime")
 (require 'slime)
 (slime-setup)
 
