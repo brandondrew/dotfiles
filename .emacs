@@ -12,8 +12,6 @@
 ; Load Path
 (setq load-path (append (list 
 			 "~/.emacs.d" 
-			 "~/.emacs.d/erc"
-			 "~/.emacs.d/slime")
 			 load-path))
 
 
@@ -23,38 +21,28 @@
 
 
 ; tabbar
-;(load "tabbar")
-;(tabbar-mode 1)
-
-; help for finding files and switching buffers
-(require 'ido)
-(ido-mode t)
+(load "tabbar")
 
 ; integrated subversion
 (require 'psvn)
 
 ; PHP mode
-;(autoload 'php-mode "php-mode")
-; (add-to-list 'auto-mode-alist '("\\.php$" . html-mode))
+(autoload 'php-mode "php-mode")
+(add-to-list 'auto-mode-alist '("\\.php$" . php-mode))
 
 ; .js (javascript) loads C mode (until I find something better)
- (add-to-list 'auto-mode-alist '("\\.js$" . c-mode))
+(add-to-list 'auto-mode-alist '("\\.js$" . c-mode))
 
 ; .rhtml loads html
 ; todo: add mmm mode to view erb
- (add-to-list 'auto-mode-alist '("\\.rhtml$" . html-mode))
+(add-to-list 'auto-mode-alist '("\\.rhtml$" . html-mode))
 
 ; CSS-mode
 (autoload 'css-mode "css-mode")
- (setq auto-mode-alist       
-      (cons '("\\.css\\'" . css-mode) auto-mode-alist))
+(add-to-list 'auto-mode-alist '("\\.css$" . css-mode))
 
 ; Ruby help
 (require 'ruby-electric)
-
-; Slime (for LISP interaction)
-(require 'slime)
-(slime-setup)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -74,20 +62,12 @@
   (global-set-key [(control shift down)] 'tabbar-forward-group)
   (global-set-key [(control shift left)] 'tabbar-backward)
   (global-set-key [(control shift right)] 'tabbar-forward)
-; console-friendly way
-(global-set-key (kbd "C-:") 'tabbar-backward)
-(global-set-key [(control shift q)] 'tabbar-forward)
-(global-set-key (kbd "C-\"") 'tabbar-backward-group)
-(global-set-key [(control shift a)] 'tabbar-forward-group)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;     registers
 ; to load, C-x r j <register-name>
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-; remote .emacs
-(set-register ?. '(file . "/phil@philisha.net:.emacs"))
 
 ; local .emacs
 (set-register ?l '(file . "~/.emacs"))
@@ -116,7 +96,8 @@
 (menu-bar-mode -1)
 
 ; use a real clipboard!
-(setq x-select-enable-clipboard t)
+;(setq x-select-enable-clipboard t)
+; this disables copy-on-select--boo!
 
 ; window title
 (setq frame-title-format '(buffer-file-name "%f" ("%b")))
@@ -184,22 +165,14 @@ Return only one group for each buffer."
 	      (concat "gcc -O2 -Wall -o " (file-name-sans-extension file)
 		      " " file))))))
 
-
-(defun academy ()
-  "Open a connection to theacademysite.org via tramp"
-  (interactive)
-  (when t
-    (find-file "/academyadmin@wheatstoneacademy.com:wheatstone")))
-
-
 (defun paxtel ()
   "Open a connection to paxtel via tramp"
   (interactive)
   (when t
-    (find-file "/philhag@hagelb.org:apps/web-demo2/app")
-    (find-file "/philhag@hagelb.org:apps/web-demo2/app/controllers")
-    (find-file "/philhag@hagelb.org:apps/web-demo2/app/models")
-    (find-file "/philhag@hagelb.org:apps/web-demo2/app/views")))
+    (find-file "/phil@paxtel.com:/var/www/app/app")
+    (find-file "/phil@paxtel.com:/var/www/app/app/controllers")
+    (find-file "/phil@paxtel.com:/var/www/app/app/models")
+    (find-file "/phil@paxtel.com:/var/www/app/app/views")))
 
 
 (defun www2 ()
@@ -228,12 +201,5 @@ Return only one group for each buffer."
 ; C-m C-s to stop
 ; C-m C-p to play
 
-(custom-set-variables
-  ;; custom-set-variables was added by Custom -- don't edit or cut/paste it!
-  ;; Your init file should contain only one such instance.
- '(ecb-options-version "2.27")
- '(ecb-source-path (quote ("/home/phil/mjolnir/apps/paxtel/www/app"))))
-(custom-set-faces
-  ;; custom-set-faces was added by Custom -- don't edit or cut/paste it!
-  ;; Your init file should contain only one such instance.
- )
+
+

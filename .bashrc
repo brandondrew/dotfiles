@@ -6,6 +6,8 @@
 
 alias ll="ls -l"
 alias la="ls -a"
+alias less="less -R"
+alias l="ls -la"
 
 PATH=$PATH:/sbin:/usr/sbin:~/bin:/bin:/usr/bin:/usr/local/bin:/usr/local/sbin
 export PATH
@@ -23,5 +25,3 @@ if [ -f /etc/bashrc ]; then
 	. /etc/bashrc
 fi
 
-# don't put stuff emacs don't understand!
-#[ "$EMACS" == "t" ] && PS1="[\u@\h \w] \\$ "
