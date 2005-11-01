@@ -11,7 +11,7 @@
 
 ; Load Path
 (setq load-path (append (list 
-			 "~/.emacs.d" 
+			 "~/.emacs.d")
 			 load-path))
 
 
@@ -21,10 +21,10 @@
 
 
 ; tabbar
-(load "tabbar")
+(autoload 'tabbar-mode "tabbar")
 
 ; integrated subversion
-(require 'psvn)
+(autoload 'psvn "psvn")
 
 ; PHP mode
 (autoload 'php-mode "php-mode")
@@ -43,7 +43,6 @@
 
 ; Ruby help
 (require 'ruby-electric)
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;     key bindings
