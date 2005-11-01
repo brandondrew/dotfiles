@@ -21,10 +21,10 @@
 
 
 ; tabbar
-(autoload 'tabbar-mode "tabbar")
+(load "tabbar")
 
 ; integrated subversion
-(autoload 'psvn "psvn")
+(require 'psvn)
 
 ; PHP mode
 (autoload 'php-mode "php-mode")
@@ -43,6 +43,19 @@
 
 ; Ruby help
 (require 'ruby-electric)
+
+; Wanderlust email
+(autoload 'wl-user-agent-compose "wl-draft" nil t)
+(if (boundp 'mail-user-agent)
+    (setq mail-user-agent 'wl-user-agent))
+(if (fboundp 'define-mail-user-agent)
+    (define-mail-user-agent
+      'wl-user-agent
+      'wl-user-agent-compose
+      'wl-draft-send
+      'wl-draft-kill
+      'mail-send-hook))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;     key bindings
@@ -70,7 +83,7 @@
 
 ; local .emacs
 (set-register ?l '(file . "~/.emacs"))
-
+      
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;     misc things
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
