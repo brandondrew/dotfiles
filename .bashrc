@@ -8,6 +8,7 @@ alias ll="ls -l"
 alias la="ls -a"
 alias less="less -R"
 alias l="ls -la"
+alias grep="grep --color=auto"
 
 PATH=$PATH:/sbin:/usr/sbin:~/bin:/bin:/usr/bin:/usr/local/bin:/usr/local/sbin
 export PATH

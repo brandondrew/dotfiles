@@ -9,6 +9,9 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+; some stuff I install through apt-get rather than
+; manually: tramp, ruby-elisp, ecb, mmm-mode
+
 ; Load Path
 (setq load-path (append (list 
 			 "~/.emacs.d")
@@ -20,12 +23,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
-; tabbar
-(load "tabbar")
-
-; integrated subversion
-(require 'psvn)
-
 ; PHP mode
 (autoload 'php-mode "php-mode")
 (add-to-list 'auto-mode-alist '("\\.php$" . php-mode))
@@ -34,10 +31,10 @@
 (add-to-list 'auto-mode-alist '("\\.js$" . c-mode))
 
 ; .rhtml loads html
-; todo: add mmm mode to view erb
 (add-to-list 'auto-mode-alist '("\\.rhtml$" . html-mode))
 
 ; html helper
+(autoload 'html-helper-mode "html-helper-mode")
 (add-to-list 'auto-mode-alist '("\\.html$" . html-helper-mode))
 
 ; CSS-mode
@@ -46,7 +43,103 @@
 
 ; Ruby help
 (require 'ruby-electric)
+(add-to-list 'auto-mode-alist '("\\.rb$" . ruby-electric))
 
+; integrated subversion
+(require 'psvn)
+
+; predictive abbreviation
+(require 'pabbrev)
+
+(require 'ido)
+(ido-mode)
+(setq ido-enable-tramp-completion nil)
+
+
+
+; tabbar
+(load "tabbar")
+(tabbar-mode)
+
+; all buffer tabs on main or misc groups
+(defun tabbar-buffer-groups (buffer)
+  "Return the list of group names BUFFER belongs to.
+Return only one group for each buffer."
+  (with-current-buffer (get-buffer buffer)
+    (cond
+     ((or (get-buffer-process (current-buffer))
+          (memq major-mode
+                '(comint-mode compilation-mode)))
+      '("Misc"))
+     ((member (buffer-name)
+              '("*scratch*"))
+      '("Misc"))
+     ((member (buffer-name)
+              '("*Completions*"))
+      '("Misc"))
+     ((member (buffer-name)
+              '("*tramp output*"))
+      '("Misc"))
+     ((member (buffer-name)
+              '("*Messages*"))
+      '("Misc"))
+     ((member (buffer-name)
+              '("*Compile-Log*"))
+      '("Misc"))
+     ((eq major-mode 'dired-mode)
+      '("Dired"))
+     ((memq major-mode
+            '(help-mode apropos-mode Info-mode Man-mode))
+      '("Misc"))
+     ((memq major-mode
+            '(tex-mode latex-mode text-mode xml-mode php-mode ruby-mode term))
+      '("Main"))
+     (t
+      '("Main"))
+     )))
+
+; mmm-mode
+(require 'mmm-mode)
+(setq mmm-global-mode 'maybe)
+(setq mmm-submode-decoration-level 2)
+(mmm-add-classes
+ '((embedded-ruby
+    :submode ruby-mode
+    :front "<%[=#]?"
+    :back "%>"
+    :insert ((?r eruby-directive nil @ "<%" @ " " _ " " @ "%>" @)
+             (?= eruby-directive nil @ "<%=" @ " " _ " " @ "%>" @)))))
+(mmm-add-classes
+ '((embedded-css
+    :submode css-mode
+    :face mmm-declaration-submode-face
+    :front "style=\""
+    :back "\"")))
+(mmm-add-classes
+ '((embedded-javascript
+    :submode javascript-mode ;; javascript-generic-mode
+    :face mmm-declaration-submode-face
+    :front "<script\[^>\]*>"
+    :back "</script>")))
+(mmm-add-classes
+ '((embedded-javascript-attribute
+    :submode javascript-mode ;; javascript-generic-mode
+    :face mmm-declaration-submode-face
+    :front "\\bon\\w+=\\s-*\""
+    :back "\"")))
+
+
+;; What features should be turned on in this html-mode?
+(add-to-list 'mmm-mode-ext-classes-alist
+         '(html-mode nil embedded-css))
+(add-to-list 'mmm-mode-ext-classes-alist
+         '(html-mode nil embedded-ruby))
+(add-to-list 'mmm-mode-ext-classes-alist
+         '(html-mode nil embedded-javascript))
+(add-to-list 'mmm-mode-ext-classes-alist
+         '(html-mode nil embedded-javascript-attribute))
+
+(global-set-key [f8] 'mmm-parse-buffer)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;     key bindings
@@ -105,53 +198,17 @@
 ; window title
 (setq frame-title-format '(buffer-file-name "%f" ("%b")))
 
+; don't autosave on tramp
+     (add-to-list 'backup-directory-alist
+                  (cons tramp-file-name-regexp nil))
+
 ; don't clutter directories!
 (setq backup-directory-alist `(("." . ,(expand-file-name "~/.emacs.baks"))))
 (setq auto-save-directory (expand-file-name "~/.emacs.baks"))
+(setq semanticdb-default-save-directory (expand-file-name "~/.emacs.baks"))
 
 
-; all buffer tabs on main or misc groups
-(defun tabbar-buffer-groups (buffer)
-  "Return the list of group names BUFFER belongs to.
-Return only one group for each buffer."
-  (with-current-buffer (get-buffer buffer)
-    (cond
-     ((or (get-buffer-process (current-buffer))
-          (memq major-mode
-                '(comint-mode compilation-mode)))
-      '("Misc")
-      )
-     ((member (buffer-name)
-              '("*scratch*"))
-      '("Misc")
-      )
-     ((member (buffer-name)
-              '("*Completions*"))
-      '("Misc")
-      )
-     ((member (buffer-name)
-              '("*tramp output*"))
-      '("Misc")
-      )
-     ((member (buffer-name)
-              '("*Messages*"))
-      '("Misc")
-      )
-     ((eq major-mode 'dired-mode)
-      '("Dired")
-      )
-     ((memq major-mode
-            '(help-mode apropos-mode Info-mode Man-mode))
-      '("Misc")
-      )
-     ((memq major-mode
-            '(tex-mode latex-mode text-mode xml-mode php-mode ruby-mode term))
-      '("Main")
-      )
-     (t
-      '("Main")
-      )
-     )))
+
 
 ; cursor at the beginning of searches instead of the end!
     (add-hook 'isearch-mode-end-hook 'my-goto-match-beginning)
@@ -167,6 +224,9 @@ Return only one group for each buffer."
 	    (let ((file (file-name-nondirectory buffer-file-name)))
 	      (concat "gcc -O2 -Wall -o " (file-name-sans-extension file)
 		      " " file))))))
+
+
+(server-start)
 
 (defun paxtel ()
   "Open a connection to paxtel via tramp"
@@ -204,6 +264,4 @@ Return only one group for each buffer."
 ; C-m C-m to start recording
 ; C-m C-s to stop
 ; C-m C-p to play
-
-
 
