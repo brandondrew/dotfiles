@@ -43,7 +43,10 @@
 
 ; Ruby help
 (require 'ruby-electric)
-(add-to-list 'auto-mode-alist '("\\.rb$" . ruby-electric))
+(add-to-list 'auto-mode-alist '("\\.rb$" . ruby-mode))
+(defun my-ruby-mode-hook ()
+  (ruby-electric-mode))
+(add-hook 'ruby-mode-hook 'my-ruby-mode-hook)
 
 ; integrated subversion
 (require 'psvn)
@@ -51,9 +54,9 @@
 ; predictive abbreviation
 (require 'pabbrev)
 
-(require 'ido)
-(ido-mode)
-(setq ido-enable-tramp-completion nil)
+;(require 'ido)
+;(ido-mode)
+;(setq ido-enable-tramp-completion nil)
 
 
 
@@ -102,9 +105,14 @@ Return only one group for each buffer."
 (require 'mmm-mode)
 (setq mmm-global-mode 'maybe)
 (setq mmm-submode-decoration-level 2)
+(set-face-background 'mmm-code-submode-face  "lavender")
+(set-face-background 'mmm-output-submode-face  "honeydew")
+(set-face-background 'mmm-comment-submode-face  "tomato") ;delicious colours
+
 (mmm-add-classes
  '((embedded-ruby
     :submode ruby-mode
+    :face mmm-code-submode-face
     :front "<%[=#]?"
     :back "%>"
     :insert ((?r eruby-directive nil @ "<%" @ " " _ " " @ "%>" @)
@@ -117,13 +125,13 @@ Return only one group for each buffer."
     :back "\"")))
 (mmm-add-classes
  '((embedded-javascript
-    :submode javascript-mode ;; javascript-generic-mode
+    :submode c-mode ;; javascript-generic-mode
     :face mmm-declaration-submode-face
     :front "<script\[^>\]*>"
     :back "</script>")))
 (mmm-add-classes
  '((embedded-javascript-attribute
-    :submode javascript-mode ;; javascript-generic-mode
+    :submode c-mode ;; javascript-generic-mode
     :face mmm-declaration-submode-face
     :front "\\bon\\w+=\\s-*\""
     :back "\"")))
@@ -140,6 +148,7 @@ Return only one group for each buffer."
          '(html-mode nil embedded-javascript-attribute))
 
 (global-set-key [f8] 'mmm-parse-buffer)
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;     key bindings
