@@ -10,12 +10,11 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ; some stuff I install through apt-get rather than
-; manually: tramp, ruby-elisp, ecb, mmm-mode
+; manually: tramp, ruby-elisp, mmm-mode
+; (won't be fun to get on a mac...)
 
 ; Load Path
-(setq load-path (append (list 
-			 "~/.emacs.d")
-			 load-path))
+(setq load-path (append '("~/.emacs.d") load-path))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -41,6 +40,9 @@
 (autoload 'css-mode "css-mode")
 (add-to-list 'auto-mode-alist '("\\.css$" . css-mode))
 
+; syntax highlighting by default (needs to be done before ruby-electric)
+(global-font-lock-mode)
+
 ; Ruby help
 (require 'ruby-electric)
 (add-to-list 'auto-mode-alist '("\\.rb$" . ruby-mode))
@@ -53,11 +55,12 @@
 
 ; predictive abbreviation
 (require 'pabbrev)
+(global-pabbrev-mode) 
 
-;(require 'ido)
-;(ido-mode)
-;(setq ido-enable-tramp-completion nil)
-
+; make pretty!
+(require 'color-theme)
+(require 'zenburn)
+(color-theme-zenburn)
 
 
 ; tabbar
@@ -181,18 +184,18 @@ Return only one group for each buffer."
 ;     misc things
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-; quit yer yappin'
-  (setq sgml-warn-about-undefined-entities nil)
+
+(setq font-lock-maximum-decoration t)
+(blink-cursor-mode -1)
 ; load .gz's automatically
   (auto-compression-mode 1)
 ; display images inline
   (auto-image-file-mode 1)
-; syntax highlighting by default
-  (global-font-lock-mode)
 
   (setq inhibit-startup-message t)
   (setq transient-mark-mode t)
   (setq show-paren-mode t)
+
 ; duh! this should be default.
   (mouse-wheel-mode 1)
 
@@ -214,10 +217,9 @@ Return only one group for each buffer."
 ; don't clutter directories!
 (setq backup-directory-alist `(("." . ,(expand-file-name "~/.emacs.baks"))))
 (setq auto-save-directory (expand-file-name "~/.emacs.baks"))
-(setq semanticdb-default-save-directory (expand-file-name "~/.emacs.baks"))
 
-
-
+; if your file is a script, make it executable
+(add-hook 'after-save-hook 'executable-make-buffer-file-executable-if-script-p)
 
 ; cursor at the beginning of searches instead of the end!
     (add-hook 'isearch-mode-end-hook 'my-goto-match-beginning)
@@ -234,18 +236,7 @@ Return only one group for each buffer."
 	      (concat "gcc -O2 -Wall -o " (file-name-sans-extension file)
 		      " " file))))))
 
-
-(server-start)
-
-(defun paxtel ()
-  "Open a connection to paxtel via tramp"
-  (interactive)
-  (when t
-    (find-file "/phil@paxtel.com:/var/www/app/app")
-    (find-file "/phil@paxtel.com:/var/www/app/app/controllers")
-    (find-file "/phil@paxtel.com:/var/www/app/app/models")
-    (find-file "/phil@paxtel.com:/var/www/app/app/views")))
-
+;(server-start)
 
 (defun www2 ()
   "Open a tunneled connection to www2 via jacob"

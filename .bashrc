@@ -5,6 +5,8 @@
 [ "$EMACS" == "t" ] || alias ls="ls --color"
 
 alias emac="emacs -nw -q --no-site-file"
+alias ri="ri -f ansi"
+
 alias ll="ls -l"
 alias la="ls -a"
 alias less="less -R"
@@ -14,10 +16,16 @@ alias grep="grep --color=auto"
 PATH=$PATH:/sbin:/usr/sbin:~/bin:/bin:/usr/bin:/usr/local/bin:/usr/local/sbin
 export PATH
 
-export SVN_EDITOR=zile
+export SVN_EDITOR="emacs -nw -q --no-site-file"
 
 PS1='\e[0;36m[\u@\h \w]\\$ \[\e[0;39m\]'
 
+# mjolnir has a green prompt
+if [ `hostname` = "mjolnir" ] ; then
+  PS1='\e[32m[\u@\h \w]# \[\e[0;39m\]'
+fi
+
+# root has a red prompt
 if [ `/usr/bin/whoami` = "root" ] ; then
   PS1='\e[31m[\u@\h \w]# \[\e[0;39m\]'
 fi
