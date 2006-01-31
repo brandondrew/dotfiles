@@ -7,3 +7,49 @@ defscrollback 1024
 escape ^Tt
 
 bindkey -d -k kb stuff "\010"
+
+##   Screen Options   ##
+#shell bash				# Tell screen your default shell
+#startup_message off 	# Turn off start message
+#shelltitle '$ |bash'	# Dynamic window titled for running program
+#msgwait 1				# Set messages timeout to one second
+#nethack on				# Turn on nethack error messages
+3backtick 0 0 0 whoami			# Set "%0`" to equal the output of "whoami"
+
+# Last line is status: green hostname, window list in cyan, and time and date right aligned:
+#hardstatus alwayslastline "%{=b}%{G}%H: %{C}%w %=%{G}%D, %m/%d %C%a"
+
+# This status is the same as the above, except it puts "<username>@" in front of the hostname
+#hardstatus alwayslastline "%{=b}%{G}%0`@%H: %{C}%w %=%{G}%D, %m/%d %C%a"
+
+#autodetach off		# Kill screen on terminal or ssh termination
+# This is useful if you want a separate screen in every running terminal window
+# but not if you have 'exec screen -XRR' in your .profile
+
+
+##   Keybindings   ##
+# F7='k7', F8='k8', F9='k9', F10='k;', F11='F1', F12='F2'
+# Good things to bind to hotkeys:
+#  prev (go to previous screen)
+#  next (go to next screen)
+#  kill (kill this window)
+#  screen (create a new window)
+#  title (rename the current window)
+#  detach (detatch this session from this terminal)
+#bindkey -k k8 prev
+#bindkey -k k9 next
+#bindkey -k k; kill
+#bindkey -k F1 next
+
+#bindkey -k kP copy
+
+##   Initial Windows   ##
+# You end up at the last window to be opened
+# Windows open to bash by default
+#screen 0 emacs -nw
+#screen 5
+#screen 4
+#screen 3
+#screen 2
+#screen 1
+#screen 0

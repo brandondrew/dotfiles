@@ -9,168 +9,77 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-; some stuff I install through apt-get rather than
-; manually: tramp, ruby-elisp, mmm-mode
-; (won't be fun to get on a mac...)
-
-; Load Path
 (setq load-path (append '("~/.emacs.d") load-path))
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;     loading modes
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-
-; PHP mode
+;; PHP mode
 (autoload 'php-mode "php-mode")
 (add-to-list 'auto-mode-alist '("\\.php$" . php-mode))
 
-; .js (javascript) loads C mode (until I find something better)
+;; .js (javascript) loads C mode (until I find something better)
 (add-to-list 'auto-mode-alist '("\\.js$" . c-mode))
 
-; .rhtml loads html
+;; .rhtml loads html
 (add-to-list 'auto-mode-alist '("\\.rhtml$" . html-mode))
 
-; html helper
+;; html helper
 (autoload 'html-helper-mode "html-helper-mode")
 (add-to-list 'auto-mode-alist '("\\.html$" . html-helper-mode))
 
-; CSS-mode
+;; CSS-mode
 (autoload 'css-mode "css-mode")
 (add-to-list 'auto-mode-alist '("\\.css$" . css-mode))
 
-; syntax highlighting by default (needs to be done before ruby-electric)
+;; syntax highlighting by default (needs to be done before ruby-electric)
 (global-font-lock-mode)
 
-; Ruby help
+;; Ruby help
 (require 'ruby-electric)
 (add-to-list 'auto-mode-alist '("\\.rb$" . ruby-mode))
 (defun my-ruby-mode-hook ()
   (ruby-electric-mode))
 (add-hook 'ruby-mode-hook 'my-ruby-mode-hook)
 
-; integrated subversion
+;; integrated subversion
 (require 'psvn)
 
-; predictive abbreviation
-(require 'pabbrev)
-(global-pabbrev-mode) 
-
-; make pretty!
+;; make pretty!
 (require 'color-theme)
 (require 'zenburn)
 (color-theme-zenburn)
 
-
-; tabbar
-(load "tabbar")
+(require 'tabbar)
 (tabbar-mode)
 
-; all buffer tabs on main or misc groups
-(defun tabbar-buffer-groups (buffer)
-  "Return the list of group names BUFFER belongs to.
-Return only one group for each buffer."
-  (with-current-buffer (get-buffer buffer)
-    (cond
-     ((or (get-buffer-process (current-buffer))
-          (memq major-mode
-                '(comint-mode compilation-mode)))
-      '("Misc"))
-     ((member (buffer-name)
-              '("*scratch*"))
-      '("Misc"))
-     ((member (buffer-name)
-              '("*Completions*"))
-      '("Misc"))
-     ((member (buffer-name)
-              '("*tramp output*"))
-      '("Misc"))
-     ((member (buffer-name)
-              '("*Messages*"))
-      '("Misc"))
-     ((member (buffer-name)
-              '("*Compile-Log*"))
-      '("Misc"))
-     ((eq major-mode 'dired-mode)
-      '("Dired"))
-     ((memq major-mode
-            '(help-mode apropos-mode Info-mode Man-mode))
-      '("Misc"))
-     ((memq major-mode
-            '(tex-mode latex-mode text-mode xml-mode php-mode ruby-mode term))
-      '("Main"))
-     (t
-      '("Main"))
-     )))
 
-; mmm-mode
-(require 'mmm-mode)
-(setq mmm-global-mode 'maybe)
-(setq mmm-submode-decoration-level 2)
-(set-face-background 'mmm-code-submode-face  "lavender")
-(set-face-background 'mmm-output-submode-face  "honeydew")
-(set-face-background 'mmm-comment-submode-face  "tomato") ;delicious colours
+;; wait for emacs22 for these:
+;; Errors to emacs
+;(load 'ete)
 
-(mmm-add-classes
- '((embedded-ruby
-    :submode ruby-mode
-    :face mmm-code-submode-face
-    :front "<%[=#]?"
-    :back "%>"
-    :insert ((?r eruby-directive nil @ "<%" @ " " _ " " @ "%>" @)
-             (?= eruby-directive nil @ "<%=" @ " " _ " " @ "%>" @)))))
-(mmm-add-classes
- '((embedded-css
-    :submode css-mode
-    :face mmm-declaration-submode-face
-    :front "style=\""
-    :back "\"")))
-(mmm-add-classes
- '((embedded-javascript
-    :submode c-mode ;; javascript-generic-mode
-    :face mmm-declaration-submode-face
-    :front "<script\[^>\]*>"
-    :back "</script>")))
-(mmm-add-classes
- '((embedded-javascript-attribute
-    :submode c-mode ;; javascript-generic-mode
-    :face mmm-declaration-submode-face
-    :front "\\bon\\w+=\\s-*\""
-    :back "\"")))
-
-
-;; What features should be turned on in this html-mode?
-(add-to-list 'mmm-mode-ext-classes-alist
-         '(html-mode nil embedded-css))
-(add-to-list 'mmm-mode-ext-classes-alist
-         '(html-mode nil embedded-ruby))
-(add-to-list 'mmm-mode-ext-classes-alist
-         '(html-mode nil embedded-javascript))
-(add-to-list 'mmm-mode-ext-classes-alist
-         '(html-mode nil embedded-javascript-attribute))
-
-(global-set-key [f8] 'mmm-parse-buffer)
-
+;; Make ruby-mode usable for hs-minor-mode.
+;(add-to-list 'hs-special-modes-alist
+;         (list 'ruby-mode
+;           (concat ruby-block-beg-re "\|{")
+;           (concat ruby-block-end-re "\|}")
+;           "#"
+;           'ruby-forward-sexp nil))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;     key bindings
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-; help (so C-h is delete)
-   (global-set-key "\C-x\C-h" 'help-command)
-; delete
-   (global-set-key "\C-h" 'backward-delete-char)
-; go to line
-   (global-set-key "\M-g" 'goto-line)
-; C-x C-m is compile
-  (global-set-key "\C-x\C-m" 'compile)
-; tabbar switching
-  (global-set-key [(control shift up)] 'tabbar-backward-group)
-  (global-set-key [(control shift down)] 'tabbar-forward-group)
-  (global-set-key [(control shift left)] 'tabbar-backward)
-  (global-set-key [(control shift right)] 'tabbar-forward)
+(global-set-key "\C-x\C-h" 'help-command)
+(global-set-key "\C-h" 'backward-delete-char)
+(global-set-key "\M-g" 'goto-line)
 
+; back to tabbar
+(global-set-key [(control shift up)] 'tabbar-backward-group)
+(global-set-key [(control shift down)] 'tabbar-forward-group)
+(global-set-key [(control shift left)] 'tabbar-backward)
+(global-set-key [(control shift right)] 'tabbar-forward)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;     registers
@@ -184,64 +93,32 @@ Return only one group for each buffer."
 ;     misc things
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-
 (setq font-lock-maximum-decoration t)
 (blink-cursor-mode -1)
-; load .gz's automatically
-  (auto-compression-mode 1)
-; display images inline
-  (auto-image-file-mode 1)
-
-  (setq inhibit-startup-message t)
-  (setq transient-mark-mode t)
-  (setq show-paren-mode t)
-
-; duh! this should be default.
-  (mouse-wheel-mode 1)
-
-; hide toolbar/menubar by default
+(auto-compression-mode 1) ; load .gz's automatically
+(auto-image-file-mode 1) ; display images inline
+(setq inhibit-startup-message t)
+(setq transient-mark-mode t)
+(setq show-paren-mode t)
+(mouse-wheel-mode 1) ; duh! this should be default.
 (tool-bar-mode -1)
 (menu-bar-mode -1)
-
-; use a real clipboard!
-;(setq x-select-enable-clipboard t)
-; this disables copy-on-select--boo!
-
-; window title
 (setq frame-title-format '(buffer-file-name "%f" ("%b")))
 
-; don't autosave on tramp
-     (add-to-list 'backup-directory-alist
-                  (cons tramp-file-name-regexp nil))
-
-; don't clutter directories!
+;; don't clutter directories!
 (setq backup-directory-alist `(("." . ,(expand-file-name "~/.emacs.baks"))))
 (setq auto-save-directory (expand-file-name "~/.emacs.baks"))
 
-; if your file is a script, make it executable
+;; if your file is a script, make it executable
 (add-hook 'after-save-hook 'executable-make-buffer-file-executable-if-script-p)
-
-; cursor at the beginning of searches instead of the end!
-    (add-hook 'isearch-mode-end-hook 'my-goto-match-beginning)
-    (defun my-goto-match-beginning ()
-      (when isearch-forward (goto-char isearch-other-end)))
-
-; compile works w/o a Makefile!
- (require 'compile)
- (add-hook 'c-mode-hook
-   (lambda ()
-     (unless (file-exists-p "Makefile")
-       (set (make-local-variable 'compile-command)
-	    (let ((file (file-name-nondirectory buffer-file-name)))
-	      (concat "gcc -O2 -Wall -o " (file-name-sans-extension file)
-		      " " file))))))
 
 ;(server-start)
 
 (defun www2 ()
   "Open a tunneled connection to www2 via jacob"
   (interactive)
-  (find-file "/multi:ssh:rozinant@jacob.biola.edu:ssh:d1103784@www2.biola.edu:"))
+  (find-file "/multi:ssh:phil@leela.gotdns.com:ssh:d1103784@www2.biola.edu:"))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;    Nifty things to remember and hopefully use
@@ -254,6 +131,9 @@ Return only one group for each buffer."
 ; M-| replace region with shell output
 ; M-x thumbs
 ; C-r-k Rectangle kill
+
+; C-x h select all
+; C-M-\ indent
 
 ; Macros
 ; C-m C-r to begin
