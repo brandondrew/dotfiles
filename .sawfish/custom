@@ -1,0 +1,11 @@
+;; sawfish user customization -- do not edit by hand!
+;; sawfish version 1.3, written Tue Feb  7 22:40:40 2006
+
+(custom-set-typed-variable (quote default-frame-style) (quote Bluecurve-Prion) (quote frame-style))
+(custom-set-keymap (quote global-keymap) (quote (keymap (cycle-windows . "W-TAB") ((activate-workspace 1) . "C-1") ((activate-workspace 2) . "C-2") ((activate-workspace 3) . "C-3") ((activate-workspace 4) . "C-4") ((activate-workspace 5) . "C-5") ((activate-workspace 6) . "C-6") (next-workspace . "W-Right") (previous-workspace . "W-Left"))))
+(custom-set-keymap (quote window-keymap) (quote (keymap (raise-and-pass-through-click . "Button1-Click") (move-window-interactively . "W-Button1-Move") (resize-window-interactively . "W-Button2-Click") (popup-window-menu . "W-Button3-Click") (lower-window . "W-Down") (raise-window . "W-Up"))))
+(custom-set-typed-variable (quote move-show-position) (quote ()) (quote boolean))
+(custom-set-typed-variable (quote cycle-all-viewports) (quote t) (quote boolean))
+(custom-set-typed-variable (quote simple:normal-color) (quote "#d778e9a2ffff") (quote color))
+(custom-set-typed-variable (quote default-font) (quote ("Pango" . "Mukti Narrow 9")) (quote font))
+(custom-set-typed-variable (quote workspace-names) (quote ("One" "Two" "Three" "Four" "Five" "Six")) (quote (list string "Workspace names")))

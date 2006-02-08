@@ -54,6 +54,8 @@
 (require 'tabbar)
 (tabbar-mode)
 
+(iswitchb-mode 1)
+(setq iswitchb-buffer-ignore '("^\\*"))
 
 ;; wait for emacs22 for these:
 ;; Errors to emacs
@@ -81,6 +83,20 @@
 (global-set-key [(control shift left)] 'tabbar-backward)
 (global-set-key [(control shift right)] 'tabbar-forward)
 
+(defvar ys-eshell-wins nil)
+(global-set-key "\C-cs" (lambda (win-num)
+			  (interactive "p")
+			  (message "win-num %s" win-num)
+			  (let ((assoc-buffer (cdr (assoc win-num ys-eshell-wins))))
+			    (if (not (buffer-live-p assoc-buffer))
+				(progn ; the requested buffer not there 
+				  (setq assoc-buffer (eshell t))
+				  (setq ys-eshell-wins (assq-delete-all win-num ys-eshell-wins))
+				  (add-to-list 'ys-eshell-wins (cons win-num assoc-buffer))))
+			    (switch-to-buffer assoc-buffer)
+			    (rename-buffer (concat "*eshell-" (int-to-string win-num) "*"))
+			    assoc-buffer)))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;     registers
 ; to load, C-x r j <register-name>
@@ -92,6 +108,9 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;     misc things
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+; don't tell ME the file's changed cos it HASN'T!
+(defun ask-user-about-supersession-threat (fn) t)
 
 (setq font-lock-maximum-decoration t)
 (blink-cursor-mode -1)
