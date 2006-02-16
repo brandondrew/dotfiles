@@ -41,13 +41,13 @@
 (add-to-list 'auto-mode-alist '("\\.rb$" . ruby-mode))
 
 ;; Rails stuff
-;(defun try-complete-abbrev (old)
-;  (if (expand-abbrev) t nil))
+(defun try-complete-abbrev (old)
+  (if (expand-abbrev) t nil))
 
-;(setq hippie-expand-try-functions-list
-;      '(try-complete-abbrev
-;        try-complete-file-name
-;        try-expand-dabbrev))
+(setq hippie-expand-try-functions-list
+      '(try-complete-abbrev
+        try-complete-file-name
+        try-expand-dabbrev))
 
 ;(require 'rails)
 
