@@ -1,0 +1,1 @@
+(if (contains (window_class) "Evolution") (set_workspace 3))

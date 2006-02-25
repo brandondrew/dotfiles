@@ -76,4 +76,11 @@ class Float; make_inspect :to_s end
 class TrueClass; make_inspect :to_s end
 class FalseClass; make_inspect :to_s end
 class NilClass; make_inspect end
+
+# non _why stuff
+
+def ri(obj)
+  puts `ri #{obj}`
+end
+
 require 'irb/completion'

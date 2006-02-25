@@ -52,7 +52,9 @@
 ;(require 'rails)
 
 (defun my-ruby-mode-hook ()
-  (ruby-electric-mode))
+  (ruby-electric-mode)
+  (hs-minor-mode)
+  (reveal-mode))
 (add-hook 'ruby-mode-hook 'my-ruby-mode-hook)
 
 ;; integrated subversion
@@ -63,23 +65,23 @@
 (require 'zenburn)
 (color-theme-zenburn)
 
+(hl-line-mode 1)
+
 (require 'tabbar)
 (tabbar-mode)
 
 (iswitchb-mode 1)
 (setq iswitchb-buffer-ignore '("^\\*"))
 
-;; wait for emacs22 for these:
-;; Errors to emacs
-;(load 'ete)
 
+;(if (contains (emacs-version) "22.0") )
 ;; Make ruby-mode usable for hs-minor-mode.
-;(add-to-list 'hs-special-modes-alist
-;         (list 'ruby-mode
-;           (concat ruby-block-beg-re "\|{")
-;           (concat ruby-block-end-re "\|}")
-;           "#"
-;           'ruby-forward-sexp nil))
+(add-to-list 'hs-special-modes-alist
+         (list 'ruby-mode
+           (concat ruby-block-beg-re "\|{")
+           (concat ruby-block-end-re "\|}")
+           "#"
+           'ruby-forward-sexp nil))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;     key bindings
@@ -94,6 +96,11 @@
 (global-set-key [(control shift down)] 'tabbar-forward-group)
 (global-set-key [(control shift left)] 'tabbar-backward)
 (global-set-key [(control shift right)] 'tabbar-forward)
+
+(global-set-key [(control shift p)] 'tabbar-backward-group)
+(global-set-key [(control shift n)] 'tabbar-forward-group)
+(global-set-key [(control shift b)] 'tabbar-backward)
+(global-set-key [(control shift f)] 'tabbar-forward)
 
 (defvar ys-eshell-wins nil)
 (global-set-key "\C-cs" (lambda (win-num)
@@ -133,7 +140,7 @@
 (setq show-paren-mode t)
 (mouse-wheel-mode 1) ; duh! this should be default.
 (tool-bar-mode -1)
-(menu-bar-mode -1)
+;(menu-bar-mode -1)
 (setq frame-title-format '(buffer-file-name "%f" ("%b")))
 
 ;; don't clutter directories!
@@ -146,7 +153,7 @@
 ;(server-start)
 
 (defun www2 ()
-  "Open a tunneled connection to www2 via jacob"
+  "Open a tunneled connection to www2 via leela"
   (interactive)
   (find-file "/multi:ssh:phil@leela.gotdns.com:ssh:d1103784@www2.biola.edu:"))
 
@@ -161,7 +168,7 @@
 ; M-! insert output of shell command
 ; M-| replace region with shell output
 ; M-x thumbs
-; C-r-k Rectangle kill
+; C-r k Rectangle kill
 
 ; C-x h select all
 ; C-M-\ indent
@@ -176,3 +183,7 @@
 ; C-m C-s to stop
 ; C-m C-p to play
 
+; M-C-p, M-C-n back and forward blocks
+; C-c C-s irb
+
+(global-font-lock-mode)
