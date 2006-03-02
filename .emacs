@@ -1,12 +1,13 @@
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;
-; My .emacs file
-; by Phil Hagelberg
-;
-; Much thanks to emacswiki.org and RMS.
-;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;; My .emacs file
+
+;; by Phil Hagelberg
+;; Much thanks to emacswiki.org and RMS.
+
+;; Note: this relies on files found in my .emacs.d:
+;; http://dev.technomancy.us/phil/browser/dotfiles/.emacs.d
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (setq load-path (append '("~/.emacs.d") load-path))
@@ -43,15 +44,11 @@
 ;; make pretty!
 (require 'color-theme)
 (require 'zenburn)
+(require 'tabbar)
 (color-theme-zenburn)
 
-(require 'tabbar)
-(tabbar-mode)
-
-(file-name-shadow-mode)
-
 ;; syntax highlighting by default (needs to be done before ruby-electric)
-(global-font-lock-mode)
+(global-font-lock-mode t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Ruby help
@@ -81,7 +78,6 @@
   (ruby-electric-mode)
   (hs-minor-mode)
   (reveal-mode)
-  (hl-line-mode)
   (local-set-key (kbd "RET") 'ruby-newline-and-indent))
 (add-hook 'ruby-mode-hook 'my-ruby-mode-hook)
 
@@ -142,23 +138,15 @@
 (show-paren-mode)
 (mouse-wheel-mode 1) ; duh! this should be default.
 (tool-bar-mode -1)
-;(menu-bar-mode -1)
+(tabbar-mode)
+(global-hl-line-mode)
+(file-name-shadow-mode)
+
 (setq frame-title-format '(buffer-file-name "%f" ("%b")))
 
 ;; don't clutter directories!
 (setq backup-directory-alist `(("." . ,(expand-file-name "~/.emacs.baks"))))
 (setq auto-save-directory (expand-file-name "~/.emacs.baks"))
-
-;; if your file is a script, make it executable
-(add-hook 'after-save-hook 'executable-make-buffer-file-executable-if-script-p)
-
-;(server-start)
-
-(defun www2 ()
-  "Open a tunneled connection to www2 via leela"
-  (interactive)
-  (find-file "/multi:ssh:phil@leela.gotdns.com:ssh:d1103784@www2.biola.edu:"))
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;    Nifty things to remember and hopefully use
