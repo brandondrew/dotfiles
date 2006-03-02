@@ -221,7 +221,7 @@ static char *gnus-pointer[] = {
      '(zenburn-highlight-damp
        ((t (:foreground "#88b090" :background "#2e3330"))))
      '(zenburn-highlight-alerting
-       ((t (:foreground "#e37170" :background "#332323"))))
+       ((t (:background "#2e3330"))))
      '(zenburn-highlight-subtle
        ((t (:background "#464646"))))
 

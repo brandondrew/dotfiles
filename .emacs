@@ -33,29 +33,9 @@
 (autoload 'css-mode "css-mode")
 (add-to-list 'auto-mode-alist '("\\.css$" . css-mode))
 
-;; syntax highlighting by default (needs to be done before ruby-electric)
-(global-font-lock-mode)
-
-;; Ruby help
-(require 'ruby-electric)
-(add-to-list 'auto-mode-alist '("\\.rb$" . ruby-mode))
-
-;; Rails stuff
-(defun try-complete-abbrev (old)
-  (if (expand-abbrev) t nil))
-
-(setq hippie-expand-try-functions-list
-      '(try-complete-abbrev
-        try-complete-file-name
-        try-expand-dabbrev))
-
-;(require 'rails)
-
-(defun my-ruby-mode-hook ()
-  (ruby-electric-mode)
-  (hs-minor-mode)
-  (reveal-mode))
-(add-hook 'ruby-mode-hook 'my-ruby-mode-hook)
+;; YAML-mode
+(autoload 'yaml-mode "yaml-mode")
+(add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
 
 ;; integrated subversion
 (require 'psvn)
@@ -65,23 +45,45 @@
 (require 'zenburn)
 (color-theme-zenburn)
 
-(hl-line-mode 1)
-
 (require 'tabbar)
 (tabbar-mode)
 
-(iswitchb-mode 1)
-(setq iswitchb-buffer-ignore '("^\\*"))
+(file-name-shadow-mode)
 
+;; syntax highlighting by default (needs to be done before ruby-electric)
+(global-font-lock-mode)
 
-;(if (contains (emacs-version) "22.0") )
-;; Make ruby-mode usable for hs-minor-mode.
-(add-to-list 'hs-special-modes-alist
-         (list 'ruby-mode
-           (concat ruby-block-beg-re "\|{")
-           (concat ruby-block-end-re "\|}")
-           "#"
-           'ruby-forward-sexp nil))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Ruby help
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(require 'ruby-electric)
+(add-to-list 'auto-mode-alist '("\\.rb$" . ruby-mode))
+
+(require 'altrails)
+
+(defun ruby-newline-and-indent ()
+  (interactive)
+  (newline)
+  (ruby-indent-command))
+
+(if (= emacs-major-version 22)
+    (add-to-list 'hs-special-modes-alist
+		 (list 'ruby-mode
+		       (concat ruby-block-beg-re "\|{")
+		       (concat ruby-block-end-re "\|}")
+		       "#"
+		       'ruby-forward-sexp nil))
+  ; so reveal-mode in my-ruby-mode-hook doesn't barf
+  (defun reveal-mode() (t)))
+
+(defun my-ruby-mode-hook ()
+  (ruby-electric-mode)
+  (hs-minor-mode)
+  (reveal-mode)
+  (hl-line-mode)
+  (local-set-key (kbd "RET") 'ruby-newline-and-indent))
+(add-hook 'ruby-mode-hook 'my-ruby-mode-hook)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;     key bindings
@@ -137,7 +139,7 @@
 (auto-image-file-mode 1) ; display images inline
 (setq inhibit-startup-message t)
 (setq transient-mark-mode t)
-(setq show-paren-mode t)
+(show-paren-mode)
 (mouse-wheel-mode 1) ; duh! this should be default.
 (tool-bar-mode -1)
 ;(menu-bar-mode -1)
@@ -186,4 +188,4 @@
 ; M-C-p, M-C-n back and forward blocks
 ; C-c C-s irb
 
-(global-font-lock-mode)
+(global-font-lock-mode t)
