@@ -65,12 +65,14 @@
   (ruby-indent-command))
 
 (if (= emacs-major-version 22)
-    (add-to-list 'hs-special-modes-alist
-		 (list 'ruby-mode
-		       (concat ruby-block-beg-re "\|{")
-		       (concat ruby-block-end-re "\|}")
-		       "#"
-		       'ruby-forward-sexp nil))
+    (progn
+      (file-name-shadow-mode)
+      (add-to-list 'hs-special-modes-alist
+		   (list 'ruby-mode
+			 (concat ruby-block-beg-re "\|{")
+			 (concat ruby-block-end-re "\|}")
+			 "#"
+			 'ruby-forward-sexp nil)))
   ; so reveal-mode in my-ruby-mode-hook doesn't barf
   (defun reveal-mode() (t)))
 
@@ -116,7 +118,7 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;     registers
-; to load, C-x r j <register-name>
+; to load, C-x r j register-name
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ; local .emacs
@@ -140,7 +142,6 @@
 (tool-bar-mode -1)
 (tabbar-mode)
 (global-hl-line-mode)
-(file-name-shadow-mode)
 
 (setq frame-title-format '(buffer-file-name "%f" ("%b")))
 
