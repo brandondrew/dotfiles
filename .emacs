@@ -89,6 +89,7 @@
 
 (global-set-key "\C-x\C-h" 'help-command)
 (global-set-key "\C-h" 'backward-delete-char)
+(global-set-key "\M-h" 'backward-kill-word)
 (global-set-key "\M-g" 'goto-line)
 
 ; back to tabbar
@@ -137,9 +138,11 @@
 (auto-image-file-mode 1) ; display images inline
 (setq inhibit-startup-message t)
 (setq transient-mark-mode t)
-(show-paren-mode)
+(show-paren-mode 1)
 (mouse-wheel-mode 1) ; duh! this should be default.
+(set-scroll-bar-mode 'right)
 (tool-bar-mode -1)
+(menu-bar-mode -1)
 (tabbar-mode)
 (global-hl-line-mode)
 
