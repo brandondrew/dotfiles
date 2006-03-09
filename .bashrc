@@ -5,13 +5,14 @@
 [ "$EMACS" == "t" ] || alias ls="ls --color"
 
 alias emac="emacs -nw -q --no-site-file"
-alias ri="ri -f ansi"
+alias ri="ri -f ansi -T"
 
 alias ll="ls -l"
 alias la="ls -a"
 alias less="less -R"
 alias l="ls -la"
 alias grep="grep --color=auto"
+alias svnci="rake test && svn ci"
 
 PATH=$PATH:/sbin:/usr/sbin:~/bin:/bin:/usr/bin:/usr/local/bin:/usr/local/sbin
 export PATH

@@ -57,7 +57,15 @@
 (require 'ruby-electric)
 (add-to-list 'auto-mode-alist '("\\.rb$" . ruby-mode))
 
-(require 'altrails)
+(defun try-complete-abbrev (old)
+  (if (expand-abbrev) t nil))
+
+(setq hippie-expand-try-functions-list
+      '(try-complete-abbrev
+	try-complete-file-name
+	try-expand-dabbrev))
+
+(require 'rails)
 
 (defun ruby-newline-and-indent ()
   (interactive)
