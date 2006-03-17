@@ -72,6 +72,7 @@
 (if (= emacs-major-version 22)
     (progn
       (file-name-shadow-mode)
+      (load "irc-colors")
       (add-to-list 'hs-special-modes-alist
 		   (list 'ruby-mode
 			 (concat ruby-block-beg-re "\|{")
