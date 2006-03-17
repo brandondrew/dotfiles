@@ -158,6 +158,8 @@
 (setq backup-directory-alist `(("." . ,(expand-file-name "~/.emacs.baks"))))
 (setq auto-save-directory (expand-file-name "~/.emacs.baks"))
 
+(setq browse-url-browser-function 'browse-url-epiphany)
+(setq browse-url-epiphany-new-window-is-tab t)          ; for tab instead of new window.
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;    Nifty things to remember and hopefully use
