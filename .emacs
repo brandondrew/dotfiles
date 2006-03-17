@@ -45,7 +45,7 @@
 (require 'color-theme)
 (require 'zenburn)
 (require 'tabbar)
-(color-theme-zenburn)
+;(color-theme-zenburn)
 
 ;; syntax highlighting by default (needs to be done before ruby-electric)
 (global-font-lock-mode t)
@@ -56,9 +56,6 @@
 
 (require 'ruby-electric)
 (add-to-list 'auto-mode-alist '("\\.rb$" . ruby-mode))
-
-(defun try-complete-abbrev (old)
-  (if (expand-abbrev) t nil))
 
 (setq hippie-expand-try-functions-list
       '(try-complete-abbrev
