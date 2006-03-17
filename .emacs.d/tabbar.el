@@ -1196,7 +1196,7 @@ Return only one group for each buffer."
       '("Process")
       )
      ((member (buffer-name)
-              '("*scratch*" "*Messages*"))
+              '("*scratch*" "*Messages*" "*Completions*"))
       '("Common")
       )
      ((eq major-mode 'dired-mode)
@@ -1204,7 +1204,7 @@ Return only one group for each buffer."
       )
      ((memq major-mode
             '(help-mode apropos-mode Info-mode Man-mode))
-      '("Help")
+      '("Common")
       )
      ((memq major-mode
             '(rmail-mode

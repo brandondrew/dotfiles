@@ -72,7 +72,7 @@
 (if (= emacs-major-version 22)
     (progn
       (file-name-shadow-mode)
-      (load "irc-colors")
+      (load "irc-stuff")
       (add-to-list 'hs-special-modes-alist
 		   (list 'ruby-mode
 			 (concat ruby-block-beg-re "\|{")
@@ -157,6 +157,7 @@
 ;; don't clutter directories!
 (setq backup-directory-alist `(("." . ,(expand-file-name "~/.emacs.baks"))))
 (setq auto-save-directory (expand-file-name "~/.emacs.baks"))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;    Nifty things to remember and hopefully use
