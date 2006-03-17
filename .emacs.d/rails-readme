@@ -1,0 +1,138 @@
+
+;; Keywords: ruby rails languages oop
+;; X-URL:    https://opensvn.csie.org/mvision/emacs/.emacs.d/rails.el
+;; $Id$
+
+;;; License
+
+;; This program is free software; you can redistribute it and/or
+;; modify it under the terms of the GNU General Public License
+;; as published by the Free Software Foundation; either version 2
+;; of the License, or (at your option) any later version.
+
+;; This program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+
+;; You should have received a copy of the GNU General Public License
+;; along with this program; if not, write to the Free Software
+;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+
+;;; Features
+
+;; * Managment WEBrick/Mongrel
+;; * Display color log file
+;; * Switch beetwin Action/View
+;; * TextMate like snippets (snippets.el)
+;; * Automatic generate TAGS in RAILS_ROOT directory
+;; * Quick access to configuration files
+;; * Search in documentation using ri or chm file
+;; * Quick start svn-status in RAILS_ROOT
+
+;;; Install
+
+;; Download
+;;  * http://www.kazmier.com/computer/snippet.el
+;;  * http://www.webweavertech.com/ovidiu/emacs/find-recursive.txt
+;; and place into directory where emacs can find it.
+;;
+;; Add to your .emacs file:
+;;
+;; (defun try-complete-abbrev (old)
+;;   (if (expand-abbrev) t nil))
+;;
+;; (setq hippie-expand-try-functions-list
+;;       '(try-complete-abbrev
+;;         try-complete-file-name
+;;         try-expand-dabbrev))
+;;
+;; (require 'rails)
+;;
+;; If you want to use Mongrel instead of WEBrick, add this to you .emacs file:
+;; (setq rails-use-mongrel t)
+;;
+
+;;; For Windows users only:
+
+;;  If you want to use CHM file for help (by default used ri), add this to your .emacs file:
+;;    (setq rails-chm-file "<full_path_to_rails_chm_manual>")
+;;  Download and install KeyHH.exe from http://www.keyworks.net/keyhh.htm
+;;
+;;  Howto using Textmate Backtracer
+;;   1. Place info you .emacs file:
+;;
+;;   (require 'gnuserv)
+;;   (setq gnuserv-frame (selected-frame))
+;;   (gnuserv-start)
+
+;;   2. Create into you emacs bin directory txmt.js and place into it:
+;;
+;;   var wsh = WScript.CreateObject("WScript.Shell");
+;;   url = WScript.Arguments(0);
+;;   if (url) {
+;;     var req = /file:\/\/([^&]+).*&line=([0-9]+)/;
+;;     var file = req.exec(url);
+;;     if (file[1] && file[2]) {
+;;       wsh.Run("<path_to_emacs_bin_directory>/gnuclientw.exe +" + file[2] + " " + file[1]);
+;;     }
+;;   }
+
+;;   3. Create registry key structure:
+;;   HKEY_CLASSES_ROOT
+;;   -- *txmt*
+;;   ---- (Default) = "URL:TXMT Protocol"
+;;   ---- URL Protocol = ""
+;;   ---- *shell*
+;;   ------ *open*
+;;   -------- *command*
+;;   ---------- (Default) = "cscript /H:WScript /nologo <path_to_emacs_bin_direcory>\txmt.js %1"
+
+;;; BUGS:
+
+;; Do not use automatic snippent expand, be various problem in mmm-mode.
+;; Snippets now bind in <TAB>
+
+;; More howtos, see
+;;   * http://scott.elitists.net/users/scott/posts/rails-on-emacs
+;;   * http://www.emacswiki.org/cgi-bin/wiki/RubyMode
+
+;;; Changelog:
+
+;; HEAD
+;;   * add macro def-snip and replace all snippets (Rezikov Peter)
+;;   * Automatic check of availability posn-at-point
+;;   * rails-switch-view-action: create [action].rhtml if view not exists
+;;   * Remove function rails-ri-at-point and rename rails-ri-start to rails-search-doc
+;;   * Check rails-chm-file exists before start keyhh
+;;   * Fix not match def, if cursor position at begin of line in rails-switch-to-action
+;;   * Remove etags support
+
+;; 2006/02/09 (version 0.3)
+;;   * Minor fixes in snippets, add extra "-" (Sanford Barr)
+;;   * Fix problem at using TAB key
+;;   * Display help using CHM manual
+;;   * Fix undefined variable html-mode-abbrev-table in older emacs versions
+;;   * Add variable rails-use-another-define-key
+;;   * Fix void function indent-or-complete
+;;   * Add Mongrel support
+;;   * Fix compitation warnings
+;;   * Display popup menu at point
+
+;; 2006/02/07 (version 0.2)
+;;   * Display color logs using ansi-color
+;;   * Revert to using snippet.el
+;;   * Automatic create TAGS file in RAILS_ROOT
+;;   * add variable rails-use-ctags
+;;   * fix problem in rails-create-tags (thanks Sanford Barr)
+;;   * lazy load TAGS file
+
+;; 2006/02/06 (version 0.1):
+;;   * Cleanup code
+;;   * Add menu item "SVN status"
+;;   * Add menu item "Search documentation"
+;;   * If one action associated to multiple views,
+;;     display popup menu to a choice view
+;;   * More TextMate snippets
+;;   * Using ri to search documentation
+;;   * Apply patch from Maiha Ishimura
