@@ -32,16 +32,16 @@
 ;; along with this program; if not, write to the Free Software
 ;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-(add-hook 'ruby-mode-hook
-          (lambda()
-	    (if (rails-root)
-		(arorem t))))
+
 
 (define-derived-mode arorem
   ruby-mode "arorem"
   "Another Ruby on Rails Emacs Mode"
-  (interactive)
   (abbrev-mode))
+
+(require 'snippet)
+(require 'arorem-rhtml)
+(load "arorem-abbrevs")
 
 (define-key arorem-map
   "\C-x\C-t" 'arorem-switch-test)
@@ -144,8 +144,8 @@
 (provide 'arorem)
 
 ;;; TODO:
-;; define-abbrev arorem-abbrev-table
 ;; set up rails-specific highlighting?
 
-
-
+;;; To consider:
+;; extract helpers and partials
+;; arorem-switch-helper?
