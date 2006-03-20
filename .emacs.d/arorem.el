@@ -32,12 +32,17 @@
 ;; along with this program; if not, write to the Free Software
 ;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-
-
 (define-derived-mode arorem
   ruby-mode "arorem"
   "Another Ruby on Rails Emacs Mode"
   (abbrev-mode))
+
+(defun plain-ruby-check ()
+  (if (not (rails-root))
+      (ruby-mode)))
+
+(add-to-list 'auto-mode-alist '("\\.rb$" . arorem))
+(add-hook 'arorem-hook 'plain-ruby-check)
 
 (require 'snippet)
 (require 'arorem-rhtml)
