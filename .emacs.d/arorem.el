@@ -2,7 +2,10 @@
 ;;;  arorem.el -
 ;;;
 ;;;  Another Ruby on Rails Emacs Mode
-;;;  (C) 2006 Phil Hagelberg
+;;;  (C) 2006 Phil Hagelberg (http://technomancy.us)
+;;;  
+;;;  Latest version may be found at
+;;;  http://dev.technomancy.us/phil/wiki/arorem
 ;;;
 
 ;;; Motivation
@@ -11,10 +14,15 @@
 ;; a very comprehensive Rails mode that handles webrick/mongrel,
 ;; searches documentation, and other things, you might want to look at
 ;; rails.el--https://opensvn.csie.org/mvision/emacs/.emacs.d/rails.el
+;;
 ;; Arorem is opinionated against mmm-mode, which seems to be more
 ;; trouble than it's worth. Rather than try to mix major modes on the
 ;; fly, it comes with an rhtml mode that is derived from html-mode and
-;; includes ruby syntax rules. (heh--not yet implemented!)
+;; includes ruby syntax rules. (heh--not yet finished!)
+;;
+;; Please note that this is my first nontrivial elisp. I have tried to
+;; follow examples set in other modes, but I am learning, and my style
+;; has yet to mature. Suggestions are welcomed with open arms.
 
 ;;; License
 
@@ -32,6 +40,16 @@
 ;; along with this program; if not, write to the Free Software
 ;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
+;;; TODO
+
+;; set up rails-specific highlighting?
+;; extract helpers and partials?
+;; switch-to-helper?
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defvar arorem-version "0.1")
+
 (define-derived-mode arorem
   ruby-mode "arorem"
   "Another Ruby on Rails Emacs Mode"
@@ -40,6 +58,11 @@
 (defun plain-ruby-check ()
   (if (not (rails-root))
       (ruby-mode)))
+
+;; As you may have noticed, it would make more sense to do it the
+;; other way around and have ruby-mode-hook activate arorem if
+;; (rails-mode) is true. However, this causes an infinite loop, since
+;; activating arorem activates all the ruby-mode hooks. So it's backwards
 
 (add-to-list 'auto-mode-alist '("\\.rb$" . arorem))
 (add-hook 'arorem-hook 'plain-ruby-check)
@@ -53,8 +76,9 @@
 (define-key arorem-map
   "\C-x\C-v" 'arorem-switch-view)
 
+;;; action/view switching functions
+
 (defun arorem-switch-view ()
-  (interactive)
   (cond ((arorem-controller-p (buffer-file-name)) (arorem-controller-to-view))
 	((arorem-view-p (buffer-file-name)) (arorem-view-to-controller))))
 
@@ -101,10 +125,10 @@
 	   (file-name-nondirectory 
 	    (expand-file-name (concat view "/..")))
 	  "_controller.rb"))
-  
+
+;;; test-switching functions
 
 (defun arorem-switch-test ()
-  (interactive)
   (cond ((arorem-controller-p (buffer-file-name)) (arorem-controller-to-functional))
 	((arorem-model-p (buffer-file-name)) (arorem-model-to-unit))
 	((arorem-functional-p (buffer-file-name)) (arorem-functional-to-controller))
@@ -134,6 +158,7 @@
 		     (substring (file-name-base (buffer-file-name)) 0 -5)
 		     ".rb")))
 
+;;; Misc functions
 
 (defun rails-root (&optional dir)
   (or dir (setq dir default-directory))
@@ -147,10 +172,3 @@
   (file-name-sans-extension (file-name-nondirectory file-name)))
 
 (provide 'arorem)
-
-;;; TODO:
-;; set up rails-specific highlighting?
-
-;;; To consider:
-;; extract helpers and partials
-;; arorem-switch-helper?
