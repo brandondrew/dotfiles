@@ -4,7 +4,7 @@
 ;; Uses snippet.el to set up auto-expanded abbreviations
 ;; Thanks to TextMate, Pete Kazmier, and Galinsky Dmitry
 
-(snippet-with-abbrev-table arorem-abbrev-table
+(snippet-with-abbrev-table 'arorem-abbrev-table
     ;; model
     ("bt" . "belongs_to")
     ("hm" . "has_many")
@@ -59,7 +59,7 @@
     ("par" . "params[:$${id}]")
     ("ses" . "session[:$${user}]"))
 
-(snippet-with-abbrev-table arorem-rhtml-abbrev-table
+(snippet-with-abbrev-table 'arorem-rhtml-abbrev-table
     ;; view
     ("ft" . "<%= form_tag :action => \"$${update}\" %>\n$.\n<%= end_form_tag %>")
     ("lia" . "<%= link_to \"$${title}\", :action => \"$${index}\" %>")

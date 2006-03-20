@@ -26,10 +26,6 @@
 ;; .rhtml loads html
 (add-to-list 'auto-mode-alist '("\\.rhtml$" . html-mode))
 
-;; html helper
-(autoload 'html-helper-mode "html-helper-mode")
-(add-to-list 'auto-mode-alist '("\\.html$" . html-helper-mode))
-
 ;; CSS-mode
 (autoload 'css-mode "css-mode")
 (add-to-list 'auto-mode-alist '("\\.css$" . css-mode))
