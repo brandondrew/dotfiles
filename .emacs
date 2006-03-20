@@ -56,13 +56,9 @@
 
 (require 'ruby-electric)
 (add-to-list 'auto-mode-alist '("\\.rb$" . ruby-mode))
+(add-to-list 'auto-mode-alist '("\\.rake$" . ruby-mode))
 
-(setq hippie-expand-try-functions-list
-      '(try-complete-abbrev
-	try-complete-file-name
-	try-expand-dabbrev))
-
-(require 'rails)
+(require 'arorem)
 
 (defun ruby-newline-and-indent ()
   (interactive)
@@ -135,7 +131,7 @@
 ;     misc things
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-; don't tell ME the file's changed cos it HASN'T!
+; don't tell ME the file's changed cos it HASN'T! (sshfs error)
 (defun ask-user-about-supersession-threat (fn) t)
 
 (setq font-lock-maximum-decoration t)
