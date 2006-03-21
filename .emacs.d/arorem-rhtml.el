@@ -22,7 +22,7 @@
   (setq font-lock-defaults '((rhtml-font-lock-keywords))))
 
 (define-key arorem-rhtml-map
-  "\C-x\C-v" 'arorem-switch-view)
+  "\C-c\C-v" 'arorem-switch-view)
 
 (provide 'arorem-rhtml)
 

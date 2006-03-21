@@ -69,9 +69,9 @@
 (load "arorem-abbrevs")
 
 (define-key arorem-map
-  "\C-x\C-t" 'arorem-switch-test)
+  "\C-c\C-t" 'arorem-switch-test)
 (define-key arorem-map
-  "\C-x\C-v" 'arorem-switch-view)
+  "\C-c\C-v" 'arorem-switch-view)
 
 ;;; action/view switching functions
 
