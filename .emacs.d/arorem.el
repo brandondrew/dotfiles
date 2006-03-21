@@ -76,6 +76,7 @@
 ;;; action/view switching functions
 
 (defun arorem-switch-view ()
+  (interactive)
   (cond ((arorem-controller-p (buffer-file-name)) (arorem-controller-to-view))
 	((arorem-view-p (buffer-file-name)) (arorem-view-to-controller))))
 
@@ -126,6 +127,7 @@
 ;;; test-switching functions
 
 (defun arorem-switch-test ()
+  (interactive)
   (cond ((arorem-controller-p (buffer-file-name)) (arorem-controller-to-functional))
 	((arorem-model-p (buffer-file-name)) (arorem-model-to-unit))
 	((arorem-functional-p (buffer-file-name)) (arorem-functional-to-controller))
