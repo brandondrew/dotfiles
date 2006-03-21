@@ -53,9 +53,7 @@
 (define-derived-mode arorem
   ruby-mode "arorem"
   "Another Ruby on Rails Emacs Mode"
-  (abbrev-mode))
-
-(defun plain-ruby-check ()
+  (abbrev-mode)
   (if (not (rails-root))
       (ruby-mode)))
 
@@ -65,7 +63,6 @@
 ;; activating arorem activates all the ruby-mode hooks. So it's backwards
 
 (add-to-list 'auto-mode-alist '("\\.rb$" . arorem))
-(add-hook 'arorem-hook 'plain-ruby-check)
 
 (require 'snippet)
 (require 'arorem-rhtml)

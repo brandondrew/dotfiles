@@ -40,8 +40,8 @@
 ;; make pretty!
 (require 'color-theme)
 (require 'zenburn)
+
 (require 'tabbar)
-;(color-theme-zenburn)
 
 ;; syntax highlighting by default (needs to be done before ruby-electric)
 (global-font-lock-mode t)
@@ -72,13 +72,15 @@
 			 "#"
 			 'ruby-forward-sexp nil)))
   ; so reveal-mode in my-ruby-mode-hook doesn't barf
-  (defun reveal-mode() (t)))
+  (defun reveal-mode() t))
 
 (defun my-ruby-mode-hook ()
   (ruby-electric-mode)
   (hs-minor-mode)
   (reveal-mode)
+  (color-theme-zenburn)
   (local-set-key (kbd "RET") 'ruby-newline-and-indent))
+
 (add-hook 'ruby-mode-hook 'my-ruby-mode-hook)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
