@@ -10,6 +10,7 @@
   (append
    '(("<%[=]?" . font-lock-preprocessor-face)
      ("%>" . font-lock-preprocessor-face)
+     ("link_to" . font-lock-keyword-face)
      ("<\\(/?[[:alnum:]][-_.:[:alnum:]]*\\)" 1 font-lock-function-name-face))
    ruby-font-lock-keywords))
 

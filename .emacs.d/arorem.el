@@ -50,10 +50,25 @@
 
 (defvar arorem-version "0.1")
 
+(defconst arorem-font-lock-keywords
+  (append
+   '(("render" . font-lock-keyword-face)
+     ("redirect_to" . font-lock-keyword-face)
+     ("belongs_to" . font-lock-keyword-face)
+     ("has_one" . font-lock-keyword-face)
+     ("has_many" . font-lock-keyword-face)
+     ("flash" . font-lock-negation-builtin-face)
+     ("session" . font-lock-builtin-face)
+     ("request" . font-lock-builtin-face)
+     ("params" . font-lock-builtin-face))
+   ruby-font-lock-keywords))
+
 (define-derived-mode arorem
   ruby-mode "arorem"
   "Another Ruby on Rails Emacs Mode"
   (abbrev-mode)
+  (make-local-variable 'font-lock-defaults)
+  (setq font-lock-defaults '((arorem-font-lock-keywords)))
   (if (not (rails-root))
       (ruby-mode)))
 
