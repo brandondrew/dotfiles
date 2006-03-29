@@ -10,8 +10,7 @@
   (append
    '(("<%[=]?" . font-lock-preprocessor-face)
      ("%>" . font-lock-preprocessor-face)
-     ("<\\(/?[[:alnum:]][-_.:[:alnum:]]*\\)" 1 font-lock-function-name-face)
-     ("[&%][[:alpha:]][-_.:[:alnum:]]*;?" . font-lock-variable-name-face))
+     ("<\\(/?[[:alnum:]][-_.:[:alnum:]]*\\)" 1 font-lock-function-name-face))
    ruby-font-lock-keywords))
 
 (define-derived-mode arorem-rhtml

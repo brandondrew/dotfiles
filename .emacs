@@ -43,6 +43,10 @@
 
 (require 'tabbar)
 
+(require 'syntax-highlight)
+
+(require 'two-mode-mode)
+
 ;; syntax highlighting by default (needs to be done before ruby-electric)
 (global-font-lock-mode t)
 
@@ -78,8 +82,7 @@
   (ruby-electric-mode)
   (hs-minor-mode)
   (reveal-mode)
-  (color-theme-zenburn)
-  (local-set-key (kbd "RET") 'ruby-newline-and-indent))
+  (local-set-key (kbd "RET") 'ruby-reindent-then-newline-and-indent))
 
 (add-hook 'ruby-mode-hook 'my-ruby-mode-hook)
 
