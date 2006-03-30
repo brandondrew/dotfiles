@@ -5,6 +5,7 @@
 [ "$EMACS" == "t" ] || alias ls="ls --color"
 
 alias emac="emacs -nw -q --no-site-file"
+alias vm="emacs --vm"
 alias ri="ri -f ansi -T"
 
 alias ll="ls -l"

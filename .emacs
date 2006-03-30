@@ -34,16 +34,14 @@
 (autoload 'yaml-mode "yaml-mode")
 (add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
 
-;; integrated subversion
 (require 'psvn)
 
-;; make pretty!
 (require 'color-theme)
 (require 'zenburn)
 
 (require 'tabbar)
 
-(require 'syntax-highlight)
+(require 'htmlize)
 
 (require 'two-mode-mode)
 
@@ -106,19 +104,27 @@
 (global-set-key [(control shift b)] 'tabbar-backward)
 (global-set-key [(control shift f)] 'tabbar-forward)
 
+(global-set-key [f1] 'menu-bar-mode)
+(global-set-key [f9] '(lambda () 
+			(interactive) 
+			(ansi-term "/bin/bash")))
+
+(global-set-key [f2] 'color-theme-zenburn)
+(global-set-key [(shift f2)] 'color-theme-snapshot)
+
 (defvar ys-eshell-wins nil)
-(global-set-key "\C-cs" (lambda (win-num)
-			  (interactive "p")
-			  (message "win-num %s" win-num)
-			  (let ((assoc-buffer (cdr (assoc win-num ys-eshell-wins))))
-			    (if (not (buffer-live-p assoc-buffer))
-				(progn ; the requested buffer not there 
-				  (setq assoc-buffer (eshell t))
-				  (setq ys-eshell-wins (assq-delete-all win-num ys-eshell-wins))
-				  (add-to-list 'ys-eshell-wins (cons win-num assoc-buffer))))
-			    (switch-to-buffer assoc-buffer)
-			    (rename-buffer (concat "*eshell-" (int-to-string win-num) "*"))
-			    assoc-buffer)))
+(global-set-key [f8] (lambda (win-num)
+		       (interactive "p")
+		       (message "win-num %s" win-num)
+		       (let ((assoc-buffer (cdr (assoc win-num ys-eshell-wins))))
+			 (if (not (buffer-live-p assoc-buffer))
+			     (progn ; the requested buffer not there 
+			       (setq assoc-buffer (eshell t))
+			       (setq ys-eshell-wins (assq-delete-all win-num ys-eshell-wins))
+			       (add-to-list 'ys-eshell-wins (cons win-num assoc-buffer))))
+			 (switch-to-buffer assoc-buffer)
+			 (rename-buffer (concat "*eshell-" (int-to-string win-num) "*"))
+			 assoc-buffer)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;     registers
@@ -131,9 +137,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;     misc things
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-; don't tell ME the file's changed cos it HASN'T! (sshfs error)
-(defun ask-user-about-supersession-threat (fn) t)
 
 (setq font-lock-maximum-decoration t)
 (blink-cursor-mode -1)
