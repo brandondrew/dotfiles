@@ -17,6 +17,7 @@
 (define-derived-mode arorem-rhtml
   html-mode "RHTML"
   "Another Ruby on Rails Emacs Mode (RHTML)"
+  (interactive)
   (abbrev-mode)
   (make-local-variable 'font-lock-defaults)
   (setq font-lock-defaults '((rhtml-font-lock-keywords))))

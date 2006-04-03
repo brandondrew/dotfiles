@@ -66,6 +66,7 @@
 (define-derived-mode arorem
   ruby-mode "arorem"
   "Another Ruby on Rails Emacs Mode"
+  (interactive)
   (abbrev-mode)
   (make-local-variable 'font-lock-defaults)
   (setq font-lock-defaults '((arorem-font-lock-keywords)))

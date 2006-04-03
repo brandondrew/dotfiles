@@ -11,9 +11,11 @@
 (setq smtpmail-auth-credentials '(("mail.hagelb.org" "587" "m7139145" "testyy")))
 
 (setq nnmail-split-methods
-      '(("work" "^From:.*paxtel")
-	("other" "")
-	("trash" "Cron Daemon")))
+      '(("work" "From:.*paxtel|From:.*tmornini|From:.*paxgrid")
+	("alisha" "From:.*lisha.*agelberg")
+	("family" "From:.*agelberg")
+	("trash" "From:.*Cron Daemon")
+	("other" "")))
 
 (setq mail-sources
       '((maildir :path "~/mjolnir/Maildir"
