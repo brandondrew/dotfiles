@@ -109,8 +109,10 @@
 			(interactive) 
 			(ansi-term "/bin/bash")))
 
+(global-set-key [f10] 'w3m)
+
 (global-set-key [f2] 'color-theme-zenburn)
-(global-set-key [(shift f2)] 'color-theme-snapshot)
+(global-set-key [(shift f2)] 'color-theme-standard)
 
 (defvar ys-eshell-wins nil)
 (global-set-key [f8] (lambda (win-num)
