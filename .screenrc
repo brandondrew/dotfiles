@@ -14,7 +14,7 @@ bindkey -d -k kb stuff "\010"
 #shelltitle '$ |bash'	# Dynamic window titled for running program
 #msgwait 1				# Set messages timeout to one second
 #nethack on				# Turn on nethack error messages
-3backtick 0 0 0 whoami			# Set "%0`" to equal the output of "whoami"
+backtick 0 0 0 whoami			# Set "%0`" to equal the output of "whoami"
 
 # Last line is status: green hostname, window list in cyan, and time and date right aligned:
 #hardstatus alwayslastline "%{=b}%{G}%H: %{C}%w %=%{G}%D, %m/%d %C%a"

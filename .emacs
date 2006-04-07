@@ -88,7 +88,6 @@
 ;     key bindings
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(global-set-key "\C-x\C-h" 'help-command)
 (global-set-key "\C-h" 'backward-delete-char)
 (global-set-key "\M-h" 'backward-kill-word)
 (global-set-key "\M-g" 'goto-line)

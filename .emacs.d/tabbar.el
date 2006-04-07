@@ -1199,6 +1199,10 @@ Return only one group for each buffer."
               '("*scratch*" "*Messages*" "*Completions*"))
       '("Common")
       )
+     ((memq major-mode
+              '(gnus-article-mode message-mode))
+      '("Gnus-lower")
+      )
      ((eq major-mode 'dired-mode)
       '("Dired")
       )
@@ -1210,8 +1214,8 @@ Return only one group for each buffer."
             '(rmail-mode
               rmail-edit-mode vm-summary-mode vm-mode mail-mode
               mh-letter-mode mh-show-mode mh-folder-mode
-              gnus-summary-mode message-mode gnus-group-mode
-              gnus-article-mode score-mode gnus-browse-killed-mode))
+              gnus-summary-mode gnus-group-mode
+              score-mode gnus-browse-killed-mode))
       '("Mail")
       )
      (t
