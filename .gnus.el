@@ -34,7 +34,6 @@
 	  ("any" "Benjamin Bryan" "friends")
 	  ("any" "Arko" "friends")
 	  ("any" "Joel Watson" "friends")
-;	  ("from" "Cron Daemon" junk)
 	  "inbox"))
 
 (setq mail-sources '((imap 

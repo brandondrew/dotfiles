@@ -84,6 +84,9 @@
 
 (add-hook 'ruby-mode-hook 'my-ruby-mode-hook)
 
+(setq ri-ruby-script (expand-file-name "~/.emacs.d/ri-emacs.rb"))
+(require 'ri-ruby)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;     key bindings
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -109,6 +112,7 @@
 			(ansi-term "/bin/bash")))
 
 (global-set-key [f10] 'w3m)
+(global-set-key [f11] 'ri)
 
 (global-set-key [f2] 'color-theme-zenburn)
 (global-set-key [(shift f2)] 'color-theme-standard)
@@ -126,6 +130,9 @@
 			 (switch-to-buffer assoc-buffer)
 			 (rename-buffer (concat "*eshell-" (int-to-string win-num) "*"))
 			 assoc-buffer)))
+
+(global-set-key "\M-p" 'bs-cycle-next)
+(global-set-key "\M-n" 'bs-cycle-previous)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;     registers

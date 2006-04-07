@@ -42,7 +42,7 @@
     ("ae" . "assert_equal $${expected}, $${actual}")
     ("ann" . "assert_not_nil $${object}")
     ("ako" . "assert_kind_of $${class}, $${object}")
-    ("are" . "assert_response :$${success}")
+    ("ars" . "assert_response :$${success}")
     ("ar" . "assert_raises $${Exception} { $. }")
     ("art" . "assert_redirected_to :controller => \"$${controller}\"")
     ;; validations
