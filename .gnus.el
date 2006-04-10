@@ -11,29 +11,31 @@
 (setq smtpmail-auth-credentials '(("mail.hagelb.org" 25 "m7139145" "testyy")))
 
 (setq nnmail-split-methods 'nnmail-split-fancy)
+(setq nnmail-crosspost nil)
 
 (setq nnmail-split-fancy
-      '(| ("any" "tmornini" "work")
-	  ("any" "Martin Nathanson" "work")
-	  ("from" "dev.paxtel.com" "checkins")
-	  ("any" "paxtel.com" "work")
+      '(| (any "tmornini@.*" "work")
+	  (any "paxgrid@rogers\\.com" "work")
+	  (from "dev\\.paxtel\\.com" "checkins")
+	  (any ".*@paxtel\\.com" "work")
 
-	  ("any" "Alisha Hagelberg" "alisha")
-	  ("any" "Hagelberg" - "Alisha" "family")
+	  (any "alisha\\.e\\.hagelberg@biola\\.edu" "alisha")
+	  (any "Hagelberg" - "Alisha" "family")
 
-	  ("any" "conkeror" "conkeror")
+	  (any "conkeror" "conkeror")
+	  (to "ruby-talk@ruby-lang\\.org" "ruby-talk")
 
-	  ("any" "hackelford" "friends")
-	  ("any" "Peckham" "friends")
-	  ("any" "Carroll" "friends")
-	  ("any" "Dustin Guenther" "friends")
-	  ("any" "Rowley" "friends")
-	  ("any" "Malabuyo" "friends")
-	  ("any" "Eric Holloway" "friends")
+	  (any ".*hackelford.*" "friends")
+	  (any ".*peckham.*" "friends")
+	  (any ".*carroll.*" "friends")
+	  (any ".*guenther.*" "friends")
+	  (any ".*rowley.*" "friends")
+	  (any ".*malabuyo.*" "friends")
+	  (any ".*holloway.*" "friends")
 
-	  ("any" "Benjamin Bryan" "friends")
-	  ("any" "Arko" "friends")
-	  ("any" "Joel Watson" "friends")
+	  (any "Benjamin Bryan" "friends")
+	  (any "Arko" "friends")
+	  (any "Joel Watson" "friends")
 	  "inbox"))
 
 (setq mail-sources '((imap 
@@ -49,22 +51,4 @@
 (gnus-demon-add-handler 'gnus-group-get-new-news 10 t)
 (gnus-demon-init)
 
-
-;; formatting stuff below:
-
-(dolist (c '((?\207 . ?q) (?\216 . ?x) (?\212 . ?t) (?\203 . ?m)))
-  (aset standard-display-table (car c)
-	(vector (create-glyph (concat "\e(0" "\e[35m" ; magenta
-				      (char-to-string (cdr c))
-				      "\e[0m" "\e(B")))))
-
-(setq gnus-sum-thread-tree-vertical "\216"
-      gnus-sum-thread-tree-root ""
-      gnus-sum-thread-tree-false-root ""
-      gnus-sum-thread-tree-indent " "
-      gnus-sum-thread-tree-single-indent ""
-      gnus-sum-thread-tree-leaf-with-other "\212\207>"
-      gnus-sum-thread-tree-single-leaf "\203\207>")
-
-(defun gnus-user-format-function-thread (dummy)
-  (propertize gnus-tmp-thread-tree-header-string 'gnus-face t))
+(add-hook 'message-mode-hook 'turn-on-auto-fill)
