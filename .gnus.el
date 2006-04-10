@@ -51,4 +51,15 @@
 (gnus-demon-add-handler 'gnus-group-get-new-news 10 t)
 (gnus-demon-init)
 
-(add-hook 'message-mode-hook 'turn-on-auto-fill)
+(add-hook 'message-mode-hook 'auto-fill-mode)
+
+ (setq gnus-topic-line-format "%i[ %u&topic-line; ] %v\n")
+    
+
+(defun gnus-user-format-function-topic-line (dummy)
+  (let ((topic-face (if (zerop total-number-of-articles)
+			'gnus-group-mail-2-empty
+		      'gnus-group-mail-2)))
+    (propertize
+     (format "%s %d" name total-number-of-articles)
+     'face topic-face)))

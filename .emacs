@@ -117,6 +117,14 @@
 ; useful for ansi-terms
 (global-set-key [f3] 'rename-buffer)
 
+; poor man's emms
+(global-set-key [f4] '(lambda ()
+			(interactive)
+			(shell-command "MPD_HOST=\"mjolnir\" mpc toggle")))
+(global-set-key [(shift f4)] '(lambda ()
+			(interactive)
+			(shell-command "MPD_HOST=\"mjolnir\" mpc next")))
+
 ; i think zenspider wrote this
 (defvar ys-eshell-wins nil)
 (global-set-key [f8] (lambda (win-num)
@@ -141,6 +149,7 @@
 (global-set-key [f10] 'w3m)
 
 (global-set-key [f11] 'ri)
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;     registers (C-x C-r)
@@ -201,5 +210,5 @@
 ; C-m C-p to play
 
 ; M-C-p, M-C-n back and forward blocks
-; C-c C-s irb
+; C-c C-s irb when in ruby-mode
 

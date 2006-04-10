@@ -15,9 +15,6 @@ alias l="ls -la"
 alias grep="grep --color=auto"
 alias svnci="rake test && svn ci"
 
-PATH=$PATH:/sbin:/usr/sbin:~/bin:/bin:/usr/bin:/usr/local/bin:/usr/local/sbin
-export PATH
-
 export SVN_EDITOR="emacs -nw -q --no-site-file"
 
 PS1='\e[0;36m[\u@\h \w]\\$ \[\e[0;39m\]'
