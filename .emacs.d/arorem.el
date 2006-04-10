@@ -18,7 +18,7 @@
 ;; Arorem is opinionated against mmm-mode, which seems to be more
 ;; trouble than it's worth. Rather than try to mix major modes on the
 ;; fly, it comes with an rhtml mode that is derived from html-mode and
-;; includes ruby syntax rules. (heh--not yet finished!)
+;; includes ruby syntax rules.
 ;;
 ;; Please note that this is my first nontrivial elisp. I have tried to
 ;; follow examples set in other modes, but I am learning, and my style
@@ -42,7 +42,6 @@
 
 ;;; TODO
 
-;; set up rails-specific highlighting?
 ;; extract helpers and partials?
 ;; switch-to-helper?
 
