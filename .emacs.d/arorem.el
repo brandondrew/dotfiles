@@ -44,10 +44,13 @@
 
 ;; extract helpers and partials?
 ;; switch-to-helper?
+;; launch script/console in inf-ruby mode
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defvar arorem-version "0.1")
+(require 'ruby-mode)
+(require 'inf-ruby)
 
 (defconst arorem-font-lock-keywords
   (append
@@ -87,6 +90,8 @@
   "\C-c\C-t" 'arorem-switch-test)
 (define-key arorem-map
   "\C-c\C-v" 'arorem-switch-view)
+(define-key arorem-map
+  "\C-c\C-s" 'arorem-console)
 
 ;;; action/view switching functions
 
@@ -184,5 +189,10 @@
 
 (defun file-name-base (file-name)
   (file-name-sans-extension (file-name-nondirectory file-name)))
+
+(defun arorem-console 
+  (interactive)
+  (run-ruby (concat (rails-root) "/script/console")))
+
 
 (provide 'arorem)

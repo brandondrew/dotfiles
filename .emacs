@@ -47,6 +47,9 @@
 (global-font-lock-mode t)
 
 (require 'ruby-electric)
+(require 'inf-ruby)
+(require 'ruby-mode)
+
 (add-to-list 'auto-mode-alist '("\\.rb$" . ruby-mode))
 (add-to-list 'auto-mode-alist '("\\.rake$" . ruby-mode)) ; d'oh!
 

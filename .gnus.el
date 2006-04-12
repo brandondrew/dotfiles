@@ -10,6 +10,8 @@
 (setq smtpmail-default-smtp-server "mail.hagelb.org")
 (setq smtpmail-auth-credentials '(("mail.hagelb.org" 25 "m7139145" "testyy")))
 
+(setq gnus-message-archive-group "sent")
+
 (setq nnmail-split-methods 'nnmail-split-fancy)
 (setq nnmail-crosspost nil)
 
@@ -20,7 +22,7 @@
 	  (any ".*@paxtel\\.com" "work")
 
 	  (any "alisha\\.e\\.hagelberg@biola\\.edu" "alisha")
-	  (any "Hagelberg" - "Alisha" "family")
+	  (from "Hagelberg" - "Alisha" "family")
 
 	  (any "conkeror" "conkeror")
 	  (to "ruby-talk@ruby-lang\\.org" "ruby-talk")
