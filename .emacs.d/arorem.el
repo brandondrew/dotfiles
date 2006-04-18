@@ -120,7 +120,7 @@
 					       (save-excursion
 						 (search-backward "def ")
 						 (forward-char 5)
-						 (thing-at-point 'word)))))
+						 (thing-at-point 'filename)))))
 
 (defun arorem-view-name-from-controller (controller action)
   (concat (rails-root)

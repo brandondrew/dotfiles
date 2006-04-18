@@ -21,7 +21,6 @@
 (require 'zenburn)
 (require 'tabbar)
 (require 'htmlize)
-(require 'two-mode-mode)
 
 ;; PHP mode
 (autoload 'php-mode "php-mode")
