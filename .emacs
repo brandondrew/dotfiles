@@ -133,6 +133,17 @@
 		       (shell-command (concat "display " 
 					      (thing-at-point 'filename)))))
 
+(global-set-key [(shift f5)] 'flickr-grab)
+
+(defun flickr-grab ()
+  "Extract the image URI from the HTML"
+  (interactive)
+  (w3m-browse-url
+   (with-current-buffer (url-retrieve-synchronously (thing-at-point 'filename))
+     (save-excursion
+       (re-search-backward "src=\"\\(http://static\\.flickr\\.com/[[:digit:]]*/[[:digit:]]*\_[[:alnum:]]*\\.jpg\\)")
+       (match-string 1)))))
+
 ; i think zenspider wrote this
 (defvar ys-eshell-wins nil)
 (global-set-key [f8] (lambda (win-num)
@@ -185,12 +196,18 @@
 (tabbar-mode)
 (global-hl-line-mode) ; especially nice in w3m
 (global-font-lock-mode t)
-
+(setq color-theme-is-global nil)
+(tooltip-mode -1)
 (setq frame-title-format '(buffer-file-name "%f" ("%b")))
+(ido-mode)
 
 ;; don't clutter directories!
 (setq backup-directory-alist `(("." . ,(expand-file-name "~/.emacs.baks"))))
-(setq auto-save-directory (expand-file-name "~/.emacs.baks"))
+(setq auto-save-directory (expand-file-name "~/.emacs.d/backups"))
+
+;; browsing
+(setq browse-url-browser-function 'browse-url-firefox)
+(setq browse-url-firefox-new-window-is-tab t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;    Nifty things to remember and hopefully use

@@ -4,11 +4,13 @@
 
 (setq user-mail-address "phil@hagelb.org")
 (setq user-full-name "Phil Hagelberg")
+(setq gnus-ignored-from-addresses "Phil Hagelberg")
 
 (setq send-mail-function 'smtpmail-send-it)
 (setq message-send-mail-function 'smtpmail-send-it)
 (setq smtpmail-default-smtp-server "mail.hagelb.org")
 (setq smtpmail-auth-credentials '(("mail.hagelb.org" 25 "m7139145" "testyy")))
+(setq message-kill-buffer-on-exit t)
 
 (setq gnus-message-archive-group "sent")
 
@@ -18,14 +20,16 @@
 (setq nnmail-split-fancy
       '(| (any "tmornini@.*" "work")
 	  (any "paxgrid@rogers\\.com" "work")
-	  (from "dev\\.paxtel\\.com" "checkins")
+	  (any "dallas\\.reedy@gmail\\.com" "work")
+	  (from ".*@dev\\.paxtel\\.com" "checkins")
 	  (any ".*@paxtel\\.com" "work")
+
+	  (to "ruby-talk@ruby-lang\\.org" "ruby-talk")
 
 	  (any "alisha\\.e\\.hagelberg@biola\\.edu" "alisha")
 	  (from "Hagelberg" - "Alisha" "family")
 
 	  (any "conkeror" "conkeror")
-	  (to "ruby-talk@ruby-lang\\.org" "ruby-talk")
 
 	  (any ".*hackelford.*" "friends")
 	  (any ".*peckham.*" "friends")
@@ -54,14 +58,8 @@
 (gnus-demon-init)
 
 (add-hook 'message-mode-hook 'auto-fill-mode)
+(add-hook 'message-mode-hook 'flyspell-mode)
 
- (setq gnus-topic-line-format "%i[ %u&topic-line; ] %v\n")
-    
-
-(defun gnus-user-format-function-topic-line (dummy)
-  (let ((topic-face (if (zerop total-number-of-articles)
-			'gnus-group-mail-2-empty
-		      'gnus-group-mail-2)))
-    (propertize
-     (format "%s %d" name total-number-of-articles)
-     'face topic-face)))
+(setq gnus-sum-thread-tree-leaf-with-other "+-> ")
+(setq gnus-sum-thread-tree-vertical "|")
+(setq gnus-sum-thread-tree-single-leaf "`-> ")
