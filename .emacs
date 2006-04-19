@@ -127,6 +127,12 @@
 			(interactive)
 			(shell-command "MPD_HOST=\"mjolnir\" mpc next")))
 
+; display images using imagemagick
+(global-set-key [f5] (lambda () 
+		       (interactive) 
+		       (shell-command (concat "display " 
+					      (thing-at-point 'filename)))))
+
 ; i think zenspider wrote this
 (defvar ys-eshell-wins nil)
 (global-set-key [f8] (lambda (win-num)
