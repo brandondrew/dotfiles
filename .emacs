@@ -119,14 +119,6 @@
 ; useful for ansi-terms
 (global-set-key [f3] 'rename-buffer)
 
-; poor man's emms
-(global-set-key [f4] '(lambda ()
-			(interactive)
-			(shell-command "MPD_HOST=\"mjolnir\" mpc toggle")))
-(global-set-key [(shift f4)] '(lambda ()
-			(interactive)
-			(shell-command "MPD_HOST=\"mjolnir\" mpc next")))
-
 ; display images using imagemagick
 (global-set-key [f5] (lambda () 
 		       (interactive) 
@@ -136,13 +128,21 @@
 (global-set-key [(shift f5)] 'flickr-grab)
 
 (defun flickr-grab ()
-  "Extract the image URI from the HTML"
+  "Display only the photo from a flickr url"
   (interactive)
   (w3m-browse-url
    (with-current-buffer (url-retrieve-synchronously (thing-at-point 'filename))
      (save-excursion
        (re-search-backward "src=\"\\(http://static\\.flickr\\.com/[[:digit:]]*/[[:digit:]]*\_[[:alnum:]]*\\.jpg\\)")
        (match-string 1)))))
+
+(global-set-key [f6] (lambda (lat lng)
+		       (interactive "BLatitude: \nBLongitude")
+		       (w3m-browse-url (concat "http://maps.yahoo.com/maps_result?mag=12&lat="
+					       lat
+					       "&lon="
+					       lng))))
+
 
 ; i think zenspider wrote this
 (defvar ys-eshell-wins nil)
@@ -200,6 +200,7 @@
 (tooltip-mode -1)
 (setq frame-title-format '(buffer-file-name "%f" ("%b")))
 (ido-mode)
+(set-default-font "terminus-16") ; apt-get install xfonts-terminus
 
 ;; don't clutter directories!
 (setq backup-directory-alist `(("." . ,(expand-file-name "~/.emacs.baks"))))
@@ -237,3 +238,15 @@
 ; M-C-p, M-C-n back and forward blocks
 ; C-c C-s irb when in ruby-mode
 
+(custom-set-variables
+  ;; custom-set-variables was added by Custom.
+  ;; If you edit it by hand, you could mess it up, so be careful.
+  ;; Your init file should contain only one such instance.
+  ;; If there is more than one, they won't work right.
+ '(weblogger-config-alist (quote (("philisha" ("user" . "phil") ("server-url" . "http://philisha.net/backend/xmlrpc") ("weblog" . "1"))))))
+(custom-set-faces
+  ;; custom-set-faces was added by Custom.
+  ;; If you edit it by hand, you could mess it up, so be careful.
+  ;; Your init file should contain only one such instance.
+  ;; If there is more than one, they won't work right.
+ )
