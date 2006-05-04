@@ -19,6 +19,12 @@
 ;; Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 ;; Boston, MA 02110-1301, USA.
 
+;; TODO
+
+;; write case-string macro
+;; quit using setq!
+;; more... (search for TODO below)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Init
 
@@ -104,17 +110,22 @@
 (defun eobby-subscribe (author document)
   (eobby-send-string (concat "obby_document:" (get-document-id document) ":subscribe:" *user-id*)))
 
+(defun eobby-unsubscribe (doc-id)
+  ;; TODO
+)
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; General Handlers
 
 (defun eobby-welcome (protocol-version &rest args)
-  ;; should throw an error if the protocol version is wrong
+  ;; TODO: should throw an error if the protocol version is wrong
   )
 
 (defun eobby-client-join (net6-user-id name obby-user-id color)
   ;; add client to client-table
   (if (equal name *user-name*)
-      (setq *user-id* obby-user-id))
+      (setq *user-id* obby-user-id)) ; only chance at getting our own user ID
   (puthash net6-user-id '(:net6-id net6-user-id :name name :obby-id obby-user-id :color color) client-table))
 
 (defun eobby-client-part (net6-user-id)
@@ -135,26 +146,31 @@
     ((equal command "sync_init") (apply 'eobby-document-sync-init doc-id args))
     ((equal command "sync_line") (apply 'eobby-document-sync-line doc-id args))
     ((equal command "subscribe") (apply 'eobby-document-subscribe doc-id))
-    ((equal command "record") (apply 'eobby-document-record doc-id args))))
+    ((equal command "record") (apply 'eobby-document-record doc-id args))
+    ;; TODO determine complete list of commands, write case-string
+))
 
 (defun eobby-document-sync-init (&rest args)
+  ;; TODO write? do we care about this at all?
 )
 
 (defun eobby-document-sync-line (&rest args)
+  ;; TODO write
+  ;; necessary for subscribing to documents that already have content.
 )
 
 (defun eobby-document-create (doc-owner-id doc-count doc-name)
-  ;; add document to document-table
-  (setq blah (concat doc-owner-id " " doc-count)) ; key
+  "Add document to document-table"
   (puthash (concat doc-owner-id " " doc-count) ; key
 	   '(:owner doc-owner-id :index doc-count :name doc-name :users ())
 	   document-table))
 
 (defun eobby-document-subscribe (doc-id)
-  (setq document (gethash "1 1" document-table)
-;doc-owner-id doc-count doc-name)
+  (setq document (gethash "1 1" document-table))
+
   (switch-to-buffer (concat "eobby-" (getf document :name)))
 
+  ;; not sure what we do with these, but it's good to store them, i guess
   (make-local-variable 'owner-id)
   (setq owner-id (getf document :name))
 
@@ -162,7 +178,7 @@
   (setq doc-index (getf document :index))
 
   (make-local-variable 'subscribed-users)
-  (setq subscribed-users ())
+
   (message (concat "Subscribed to " doc-name)))
 
 
@@ -172,10 +188,11 @@
 (defun eobby-document-record (doc-id user-id version zero command &rest args)
   (cond
     ((equal "ins" command) (apply 'eobby-document-record-ins doc-id args))
-    ((equal "del" command) (apply 'eobby-document-record-del doc-id args))))
+    ((equal "del" command) (apply 'eobby-document-record-del doc-id args))
+    ;; TODO: determine if there are more functions
+    ))
 
 (defun eobby-document-record-ins (doc-id position char)
-  ;; need to unescape newlines, colons, and something else
   (save-excursion
     (set-buffer (doc-id-to-buffer doc-id))
     (goto-char (+ (string-to-number position 16) 1)) ; obby starts at zero
@@ -191,11 +208,12 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Document function
 
-(defun get-document-id (document))
+(defun get-document-id (doc-name)
+  ;; TODO write if needed
+  )
 
 (defun doc-id-to-buffer (doc-id)
-  (getf (gethash doc-id document-table) :name)
-  "eobby-first") ; for now...
+  (getf (gethash doc-id document-table) :name))
 
 (defun eobby-unescape (char)
   (cond ((equal char "\\n") "\n")
