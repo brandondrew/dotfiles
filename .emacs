@@ -7,6 +7,7 @@
 ;; Note: this relies on files found in my .emacs.d:
 ;; http://dev.technomancy.us/phil/browser/dotfiles/.emacs.d
 
+(setq user-full-name "Phil Hagelberg")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -159,7 +160,6 @@
 			 (rename-buffer (concat "*eshell-" (int-to-string win-num) "*"))
 			 assoc-buffer)))
 
-; waaaay faster to start than eshell!
 (global-set-key [f9] '(lambda () 
 			(interactive) 
 			(ansi-term "/bin/bash")))
@@ -175,6 +175,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (set-register ?e '(file . "~/.emacs"))
+(set-register ?d '(file . "~/.emacs.d"))
 (set-register ?g '(file . "~/.gnus.el"))
 (set-register ?b '(file . "~/.bashrc"))
 (set-register ?s '(file . "~/.screenrc"))
@@ -209,6 +210,32 @@
 ;; browsing
 (setq browse-url-browser-function 'browse-url-firefox)
 (setq browse-url-firefox-new-window-is-tab t)
+
+;; w3m
+(setq w3m-use-cookies t)
+(setq w3m-default-save-directory "~/")
+
+(setq w3m-search-engine-alist
+      '(("C2" "http://c2.com/cgi-bin/wiki?%s")
+        ("EmacsWiki" "http://emacswiki.org/cgi-bin/wiki/%s")
+        ("GDict" "http://google.com.au/search?q=define:%s")
+        ("GGroups" "http://google.es/groups?q=%s")
+        ("GIS" "http://google.com.au/images?q=%s")
+        ("Google" "http://www.google.com.au/search?q=%s")
+        ("ISBN" "http://www.amazon.com/exec/obidos/ASIN/%s")
+        ("RFC" "http://www.faqs.org/rfc/rfc%s")
+        ("Sourceforge" "http://sf.net/projects/%s")
+        ("Thesaurus"
+         "http://thesaurus.reference.com/search?db=roget&q=%s")
+        ("Wikipedia"
+         "http://en.wikipedia.org/wiki/Special:Search?search=%s")))
+
+(mapc (lambda (v) (set v nil))
+      '(w3m-show-graphic-icons-in-header-line
+        w3m-show-graphic-icons-in-mode-line
+        w3m-track-mouse
+        w3m-use-favicon
+        w3m-use-toolbar))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;    Nifty things to remember and hopefully use

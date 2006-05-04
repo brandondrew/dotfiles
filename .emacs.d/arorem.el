@@ -144,6 +144,15 @@
 	    (expand-file-name (concat view "/..")))
 	  "_controller.rb"))
 
+;; > (defun ruby-find-view ()
+;; >   "Test the current ruby function (must be runable via ruby <buffer> --name <test>)."
+;; >   (interactive)
+;; >   (let* ((funname (which-function))
+;; > 	 (cls (and (string-match "\\(.*\\)Controller#" funname) (downcase (match-string 1 funname))))
+;; > 	 (fn (and (string-match "#\\(.*\\)" funname) (match-string 1 funname)))
+;; > 	 (appdir (file-name-directory (directory-file-name (file-name-directory (buffer-file-name))))))
+;; >     (find-file (concat appdir "views/" cls "/" fn ".rhtml"))))
+
 ;;; test-switching functions
 
 (defun arorem-switch-test ()

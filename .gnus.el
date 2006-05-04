@@ -29,6 +29,7 @@
 	  (any ".*@paxtel\\.com" "work")
 
 	  (to "ruby-talk@ruby-lang\\.org" "ruby-talk")
+	  (to "obby-users@list.0x539.de" "obby-users")
 
 	  (any "alisha\\.e\\.hagelberg@biola\\.edu" "alisha")
 	  (from "Hagelberg" - "Alisha" "family")
