@@ -19,11 +19,39 @@
 ;; Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 ;; Boston, MA 02110-1301, USA.
 
-;; TODO
+;;; Description:
 
-;; write case-string macro
-;; quit using setq!
+;; Obby is a protocol that allows for collaborative editing. (See
+;; http://darcs.0x539.de/trac/obby/cgi-bin/trac.cgi) Currently the
+;; only editor that supports Obby is Gobby, a multiplatform GTK
+;; client. Ebby is meant to bring Obby client support to Emacs.
+
+;;; To do
+
+;; Style issues
+;;  * Write case-string macro
+;;  * Quit using setq!
+
+;; Minor features
+;;  * Unsubscribe on buffer kill
+;;  * Keep point where it should be on insertion/deletion
+;;  * Allow color changing for self and other users?
+
+;; Major features
+;;  * Transmit edit information (high priority)
+;;  * Color text based on user
+;;  * Multiple buffers
+;;  * Port to Obby 0.4, TLS (later)
+
 ;; more... (search for TODO below)
+
+;;; Not to do
+
+;;  * Become a server (unless someone else wants to write it) 
+;;  * Chatting? (don't see the point) 
+
+;; If someone else wants these features, they can implement them; I
+;; just don't feel the need to do them myself
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Init
@@ -72,7 +100,7 @@
       (set-process-coding-system process 'raw-text 'raw-text)
       (set-process-filter process 'ebby-filter)
 
-      ;; associate with a buffer?
+      ;; associate with a buffer
       (switch-to-buffer "ebby")
       (set-process-buffer process (current-buffer))
 
@@ -96,9 +124,7 @@
     ((equal (car tokens) "net6_client_part") (apply 'ebby-client-part (cdr tokens)))
     ((equal (car tokens) "obby_sync_doclist_document") (apply 'ebby-synch-doclist-document (cdr tokens)))
     ((equal (car tokens) "obby_document_create") (apply 'ebby-document-create (cdr tokens)))
-    ((equal (car tokens) "obby_document") (apply 'ebby-document-handler (cdr tokens)))
-    ;; more functions here
-    ))
+    ((equal (car tokens) "obby_document") (apply 'ebby-document-handler (cdr tokens)))))
 
 (defun ebby-send-string (string &optional process)
   (unless process (setq process (get-buffer-process "ebby")))
@@ -107,11 +133,11 @@
 	   (process-name process)))
   (process-send-string process (concat string "\n")))
 
-(defun ebby-subscribe (author document)
-  (ebby-send-string (concat "obby_document:" (get-document-id document) ":subscribe:" *user-id*)))
+(defun ebby-subscribe (doc-id)
+  (ebby-send-string (concat "obby_document:" doc-id ":subscribe:" *user-id*)))
 
 (defun ebby-unsubscribe (doc-id)
-  ;; TODO
+  ;; TODO tell the server and kill the buffer
 )
 
 
@@ -126,7 +152,7 @@
   ;; add client to client-table
   (if (equal name *user-name*)
       (setq *user-id* obby-user-id)) ; only chance at getting our own user ID
-  (puthash net6-user-id '(:net6-id net6-user-id :name name :obby-id obby-user-id :color color) client-table))
+  (puthash net6-user-id (list :net6-id net6-user-id :name name :obby-id obby-user-id :color color) client-table))
 
 (defun ebby-client-part (net6-user-id)
   ;; drop client from client-table
@@ -145,28 +171,11 @@
   (cond
     ((equal command "sync_init") (apply 'ebby-document-sync-init doc-id args))
     ((equal command "sync_line") (apply 'ebby-document-sync-line doc-id args))
-    ((equal command "subscribe") (apply 'ebby-document-subscribe doc-id))
-    ((equal command "record") (apply 'ebby-document-record doc-id args))
-    ;; TODO determine complete list of commands, write case-string
-))
+    ((equal command "subscribe") (ebby-document-subscribe doc-id))
+    ((equal command "record") (apply 'ebby-document-record doc-id args))))
 
 (defun ebby-document-sync-init (&rest args)
-  ;; TODO write? do we care about this at all?
-)
-
-(defun ebby-document-sync-line (&rest args)
-  ;; TODO write
-  ;; necessary for subscribing to documents that already have content.
-)
-
-(defun ebby-document-create (doc-owner-id doc-count doc-name)
-  "Add document to document-table"
-  (puthash (concat doc-owner-id " " doc-count) ; key
-	   '(:owner doc-owner-id :index doc-count :name doc-name :users ())
-	   document-table))
-
-(defun ebby-document-subscribe (doc-id)
-  (setq document (gethash "1 1" document-table))
+  (setq document (gethash doc-id document-table))
 
   (switch-to-buffer (concat "ebby-" (getf document :name)))
 
@@ -177,9 +186,20 @@
   (make-local-variable 'doc-index)
   (setq doc-index (getf document :index))
 
-  (make-local-variable 'subscribed-users)
+  (make-local-variable 'subscribed-users))
 
-  (message (concat "Subscribed to " doc-name)))
+(defun ebby-document-sync-line (doc-id &optional line zero user-id)
+  (if line
+      (ebby-document-record-ins doc-id nil line)))
+
+(defun ebby-document-create (doc-owner-id doc-count doc-name)
+  "Add document to document-table"
+  (puthash (concat doc-owner-id " " doc-count) ; key
+	   (list :owner doc-owner-id :index doc-count :name doc-name :users ())
+	   document-table))
+
+(defun ebby-document-subscribe (doc-id)
+  (message "Subscribed to %s" (ebby-doc-id-to-name doc-id)))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -188,31 +208,26 @@
 (defun ebby-document-record (doc-id user-id version zero command &rest args)
   (cond
     ((equal "ins" command) (apply 'ebby-document-record-ins doc-id args))
-    ((equal "del" command) (apply 'ebby-document-record-del doc-id args))
-    ;; TODO: determine if there are more functions
-    ))
+    ((equal "del" command) (apply 'ebby-document-record-del doc-id args))))    ))
 
-(defun ebby-document-record-ins (doc-id position char)
+(defun ebby-document-record-ins (doc-id position string)
   (save-excursion
-    (set-buffer (doc-id-to-buffer doc-id))
-    (goto-char (+ (string-to-number position 16) 1)) ; obby starts at zero
-    (insert (ebby-unescape char))))
+    (set-buffer (concat "ebby-" (ebby-doc-id-to-name doc-id)))
+    (if position
+	(goto-char (+ (string-to-number position 16) 1))) ; obby starts at zero
+    (insert (ebby-unescape string))))
 
 (defun ebby-document-record-del (doc-id position char-count)
   (save-excursion
-    (set-buffer (doc-id-to-buffer doc-id))
+    (set-buffer (concat "ebby-" (ebby-doc-id-to-name doc-id)))
     (goto-char (+ (string-to-number position 16) 1)) ; obby starts at zero
     (delete-char (string-to-number char-count 16))))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; Document function
+;;; Document functions
 
-(defun get-document-id (doc-name)
-  ;; TODO write if needed
-  )
-
-(defun doc-id-to-buffer (doc-id)
+(defun ebby-doc-id-to-name (doc-id)
   (getf (gethash doc-id document-table) :name))
 
 (defun ebby-unescape (char)
@@ -222,5 +237,7 @@
 
 (provide 'ebby)
 
-;(ebby-connect "192.168.1.44" "ebby-test" "ff0000" 6524)
-;(ebby-send-string "obby_document:1 1:subscribe:2")
+; To use:
+;(ebby-connect "localhost" "ebby-test" "ff0000" 6522)
+;(ebby-subscribe "1 1")
+
