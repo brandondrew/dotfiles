@@ -237,16 +237,3 @@
 
 ; M-C-p, M-C-n back and forward blocks
 ; C-c C-s irb when in ruby-mode
-
-(custom-set-variables
-  ;; custom-set-variables was added by Custom.
-  ;; If you edit it by hand, you could mess it up, so be careful.
-  ;; Your init file should contain only one such instance.
-  ;; If there is more than one, they won't work right.
- '(weblogger-config-alist (quote (("philisha" ("user" . "phil") ("server-url" . "http://philisha.net/backend/xmlrpc") ("weblog" . "1"))))))
-(custom-set-faces
-  ;; custom-set-faces was added by Custom.
-  ;; If you edit it by hand, you could mess it up, so be careful.
-  ;; Your init file should contain only one such instance.
-  ;; If there is more than one, they won't work right.
- )
