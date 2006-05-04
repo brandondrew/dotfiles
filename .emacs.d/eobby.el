@@ -23,7 +23,7 @@
 
 (defgroup eobby nil
   "Implementation of the obby collaborative editing protocol"
-  :version "22.1"
+  :version "22.1" ; not sure what to put here...
   :prefix "eobby-"
   :group 'applications)
 
@@ -41,8 +41,6 @@
 
 (defvar document-table nil)
 
-(defvar *process* nil)
-
 (defun eobby-connect (server name color &optional port)
   (save-excursion
     (message "Connecting to %s..." server)
@@ -53,6 +51,8 @@
 			  eobby-default-port))
 	   (name (or name eobby-default-name))
            (process (open-network-stream server nil server port-number)))
+
+      (message "Connected.")
       
       ;; set up process
       (set-process-coding-system process 'raw-text 'raw-text)
@@ -63,7 +63,7 @@
       (set-process-buffer process (current-buffer))
 
       ;; log in
-      (eobby-send-string (concat "net6_client_login:" name ":" color) process))))
+      (eobby-send-string (concat "net6_client_login:" name ":" color)))))
 
 
 ;;; Input!
@@ -97,7 +97,7 @@
   )
 
 (defun eobby-client-part (net6-user-id)
-  ;; add client to client-table
+  ;; drop client from client-table
   )
 
 (defun eobby-synch-doclist-document (obby-user-id doc-count doc-name (users that are connected))
@@ -136,6 +136,7 @@
 
 (defun eobby-send-string (string &optional process)
   "Send PROCESS a STRING plus a newline."
+  (unless process (setq process (get-buffer-process "eobby")))
   (unless (eq (process-status process) 'open)
     (error "Network connection to %s is not open"
 	   (process-name process)))
@@ -146,4 +147,4 @@
 
 (provide 'eobby)
 
-;(eobby-connect "192.168.1.44" "phile" "00ff00")
+;(eobby-connect "127.0.0.1" "eobby-test" "00ff00")
