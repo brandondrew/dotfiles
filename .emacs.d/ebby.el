@@ -25,21 +25,23 @@
 ;; http://darcs.0x539.de/trac/obby/cgi-bin/trac.cgi) Currently the
 ;; only editor that supports Obby is Gobby, a multiplatform GTK
 ;; client. Ebby is meant to bring Obby client support to Emacs.
+;; Note that Ebby currently supports version 0.3 of the protocol.
 
 ;;; To do
 
 ;; Style issues
 ;;  * Write case-string macro
 ;;  * Quit using setq!
+;;  * Store more in buffer-local variables than document-table?
 
 ;; Minor features
+;;  * Sync-line inserts lines backwards
 ;;  * Unsubscribe on buffer kill
 ;;  * Keep point where it should be on insertion/deletion
 ;;  * Allow color changing for self and other users?
 ;;  * Chatting (not too interesting, but REALLY easy to implement)
 
 ;; Major features
-;;  * Transmit edit information (high priority)
 ;;  * Color text based on user
 ;;  * Port to Obby 0.4, TLS (later)
 
@@ -79,6 +81,8 @@
 (defvar *user-id* nil)
 (defvar *user-name* nil)
 
+(defvar ebby-incoming-change nil)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Connection:
 
@@ -108,10 +112,9 @@
       (ebby-send-string (concat "net6_client_login:" name ":" color)))))
 
 (defun ebby-filter (process output)
-  (setq lines (split-string output "\n"))
   (set-buffer "*ebby*")
   (insert output)
-  (dolist (line lines)
+  (dolist (line (split-string output "\n"))
     (ebby-filter-line process line)))
 
 (defun ebby-filter-line (process line)
@@ -167,15 +170,14 @@
 ;;; Document Handlers
 
 (defun ebby-document-handler (doc-id command &rest args)
-  (setq blah args)
   (cond
     ((equal command "sync_init") (apply 'ebby-document-sync-init doc-id args))
     ((equal command "sync_line") (apply 'ebby-document-sync-line doc-id args))
     ((equal command "subscribe") (ebby-document-subscribe doc-id))
     ((equal command "record") (apply 'ebby-document-record doc-id args))))
 
-(defun ebby-document-sync-init (&rest args)
-  (setq document (gethash doc-id document-table))
+(defun ebby-document-sync-init (document-id &rest args)
+  (setq document (gethash document-id document-table))
 
   (switch-to-buffer (concat "ebby-" (getf document :name)))
 
@@ -186,19 +188,24 @@
   (make-local-variable 'doc-index)
   (setq doc-index (getf document :index))
 
-  (make-local-hook 'after-change-functions)
+  (make-local-variable 'doc-id)
+  (setq doc-id document-id)
+
+;  (make-local-hook 'after-change-functions)
   (add-hook 'after-change-functions 'ebby-change-hook nil t)
 
   (make-local-variable 'subscribed-users))
 
-(defun ebby-document-sync-line (doc-id &optional line zero user-id)
-  (if line
-      (ebby-document-record-ins doc-id nil line)))
+(defun ebby-document-sync-line (doc-id &optional line &rest args)
+  (when line
+      (setq ebby-incoming-change t)
+      (ebby-document-record-ins doc-id nil (concat line "\n"))
+      (setq ebby-incoming-change nil)))
 
 (defun ebby-document-create (doc-owner-id doc-count doc-name)
   "Add document to document-table"
   (puthash (concat doc-owner-id " " doc-count) ; key
-	   (list :owner doc-owner-id :index doc-count :name doc-name :users () :version 0)
+	   (list :owner doc-owner-id :index doc-count :name doc-name :users () :remote-count 0 :local-count 0)
 	   document-table))
 
 (defun ebby-document-subscribe (doc-id)
@@ -208,11 +215,13 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Document Record Handlers
 
-(defun ebby-document-record (doc-id user-id version zero command &rest args)
-  (ebby-set-doc-version doc-id version)
+(defun ebby-document-record (doc-id user-id remote-count local-count command &rest args)
+  (ebby-set-doc-remote-count doc-id (string-to-number remote-count 16))
+  (setq ebby-incoming-change t)
   (cond
     ((equal "ins" command) (apply 'ebby-document-record-ins doc-id args))
-    ((equal "del" command) (apply 'ebby-document-record-del doc-id args))))
+    ((equal "del" command) (apply 'ebby-document-record-del doc-id args)))
+  (setq ebby-incoming-change nil))
 
 (defun ebby-document-record-ins (doc-id position string)
   (save-excursion
@@ -239,52 +248,68 @@
 	((equal char "\\d") ":")
 	(t char)))
 
-(defun ebby-get-doc-version (doc-id)
-  (getf (gethash doc-id document-table) :version))
+(defun ebby-get-doc-local-count (doc-id)
+  (getf (gethash doc-id document-table) :local-count))
 
-(defun ebby-set-doc-version (doc-id version)
-  (setf (getf (gethash doc-id document-table) :version) version))
+(defun ebby-set-doc-local-count (doc-id local-count)
+  (setf (getf (gethash doc-id document-table) :local-count) local-count))
 
-(defun ebby-inc-doc-version (doc-id)
-  (ebby-set-doc-version doc-id (+ (ebby-get-doc-version doc-id) 1)))
+(defun ebby-inc-doc-local-count (doc-id)
+  (ebby-set-doc-local-count doc-id (+ (ebby-get-doc-local-count doc-id) 1)))
+
+(defun ebby-get-doc-remote-count (doc-id)
+  (getf (gethash doc-id document-table) :remote-count))
+
+(defun ebby-set-doc-remote-count (doc-id remote-count)
+  (setf (getf (gethash doc-id document-table) :remote-count) remote-count))
+
+(defun ebby-inc-doc-remote-count (doc-id)
+  (ebby-set-doc-remote-count doc-id (+ (ebby-get-doc-remote-count doc-id) 1)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Sending
 
 (defun ebby-send-ins (doc-id string position)
   (ebby-send-string (concat "obby_document:" doc-id ":record:" 
-			    (number-to-string (ebby-get-doc-version doc-id)) 
-			    ":0:ins:" (number-to-string position) ":" 
+			    (format "%x" (ebby-get-doc-local-count doc-id)) 
+			    ":" (format "%x" (ebby-get-doc-remote-count doc-id)) 
+			    ":ins:" (format "%x" position) ":" 
 			    string))
-  (message "Send version %s" (ebby-get-doc-version doc-id))
-  (ebby-inc-doc-version doc-id))
+  (message "local: %s remote: %s" (ebby-get-doc-local-count doc-id) (ebby-get-doc-remote-count doc-id)) 
+  (ebby-inc-doc-local-count doc-id))
 
 (defun ebby-send-del (doc-id position &optional length)
   (ebby-send-string (concat "obby_document:" doc-id ":record:" 
-			    (number-to-string (ebby-get-doc-version doc-id)) 
-			    "0:del:" (number-to-string position) ":" (number-to-string (or length 1))))
-  (ebby-inc-doc-version doc-id))
+			    (format "%x" (ebby-get-doc-local-count doc-id)) 
+			    ":" (format "%x" (ebby-get-doc-remote-count doc-id)) 
+			    ":del:" (format "%x" position) ":" (format "%x" (or length 1))))
+  (ebby-inc-doc-local-count doc-id))
 
 (defun ebby-change-hook (begin end length)
   (setq change (list begin end length))
-  (if (< 0 length)
-      ;; deletion
-      (message "del %s %s" begin length)
-;      (ebby-send-del "1 1" begin length) ; doesn't quite work yet
-    ;; insertion (single chars only, so far
-    (message "ins %s" (buffer-substring begin end))))
+  (unless ebby-incoming-change
+    (if (< 0 length)
+	;; deletion
+	;(message "del %s %s" begin length) ; 
+	(ebby-send-del "1 1" (- begin 1) length) ; doesn't quite work yet
+      ;; insertion
+      (ebby-send-ins doc-id (buffer-substring begin end) (- begin 1)))))
 
 (provide 'ebby)
-
+(setq doc-id "1 1")
 ; To use:
 ;(ebby-connect "localhost" "ebby-test" "ff0000" 6522)
+;(ebby-connect "localhost" "ebby-test" "ff0000" 6523)
 ;(ebby-subscribe "1 1")
 ;(ebby-send-ins "1 1" "d" 0)
 ;(ebby-send-del "1 1" 2)
 ; change
 
-; (setq after-change-functions '(ebby-change-hook))
-
-;(ebby-get-doc-version "1 1")
+;(ebby-get-doc-local-count "1 1")
+;(ebby-get-doc-remote-count "1 1")
+;(ebby-inc-doc-local-count "1 1")
 ;(gethash "1 1" document-table)
-;(ebby-send-string (concat "obby_document:1 1:record:" (number-to-string (ebby-get-doc-version "1 1")) ":0:del:1:1"))
+;(ebby-send-string (concat "obby_document:1 1:record:" (format "%x" (ebby-get-doc-local-count "1 1")) ":" (format "%x" (ebby-get-doc-remote-count "1 1")) ":del:1:1"))
+
+;(ebby-send-string (concat "obby_document:1 1:record:2:9:ins:1:1"))
+
