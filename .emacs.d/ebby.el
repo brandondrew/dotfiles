@@ -40,7 +40,6 @@
 ;; Major features
 ;;  * Transmit edit information (high priority)
 ;;  * Color text based on user
-;;  * Multiple buffers
 ;;  * Port to Obby 0.4, TLS (later)
 
 ;; more... (search for TODO below)
@@ -48,7 +47,8 @@
 ;;; Not to do
 
 ;;  * Become a server (unless someone else wants to write it) 
-;;  * Chatting? (don't see the point) 
+;;  * Chatting (don't see the point) 
+;;  * Multiple Obby servers (Even Gobby doesn't do this)
 
 ;; If someone else wants these features, they can implement them; I
 ;; just don't feel the need to do them myself
@@ -83,6 +83,7 @@
 ;;; Connection:
 
 (defun ebby-connect (server name color &optional port)
+  (interactive "BConnect to: \nBName: \nBColor (hexadecimal):")
   (save-excursion
     (message "Connecting to %s..." server)
     (let* ((port-number (if port
