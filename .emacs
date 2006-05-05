@@ -7,41 +7,35 @@
 ;; Note: this relies on files found in my .emacs.d:
 ;; http://dev.technomancy.us/phil/browser/dotfiles/.emacs.d
 
-(setq user-full-name "Phil Hagelberg")
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (setq load-path (append '("~/.emacs.d") load-path))
 
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;     loading modes
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; loading modes
 
 (require 'psvn)
 (require 'color-theme)
 (require 'zenburn)
 (require 'tabbar)
-(require 'htmlize)
 
-;; PHP mode
-(autoload 'php-mode "php-mode")
-(add-to-list 'auto-mode-alist '("\\.php$" . php-mode))
-; luckily I don't find much use for this anymore. =D
-
-;; .js (javascript) loads C mode (until I find something better)
 (add-to-list 'auto-mode-alist '("\\.js$" . c-mode))
-
-;; CSS-mode
-(autoload 'css-mode "css-mode")
+(add-to-list 'auto-mode-alist '("\\.php$" . php-mode))
 (add-to-list 'auto-mode-alist '("\\.css$" . css-mode))
-
-;; YAML-mode
-(autoload 'yaml-mode "yaml-mode")
 (add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
+
+(autoload 'php-mode "php-mode")
+(autoload 'yaml-mode "yaml-mode")
+(autoload 'css-mode "css-mode")
+
+(autoload 'lisppaste-paste-region "lisppaste" "" t)
+(autoload 'ebby "ebby" "" t)
+(autoload 'htmlize-region "htmlize" "" t)
+(autoload 'htmlize-buffer "htmlize" "" t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Ruby help
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; syntax highlighting needs to be done before ruby-electric
 (global-font-lock-mode t)
@@ -49,41 +43,31 @@
 (require 'ruby-electric)
 (require 'inf-ruby)
 (require 'ruby-mode)
+(require 'arorem)
+(require 'ri-ruby)
 
 (add-to-list 'auto-mode-alist '("\\.rb$" . ruby-mode))
 (add-to-list 'auto-mode-alist '("\\.rake$" . ruby-mode)) ; d'oh!
 
-(require 'arorem)
-
-(defun ruby-newline-and-indent ()
-  (interactive)
-  (newline)
-  (ruby-indent-command))
-
-; some times i have to use emacs21! sad but true
-(if (= emacs-major-version 22)
-    (progn
-      (file-name-shadow-mode)
-      (load "irc-stuff")
-      (add-to-list 'hs-special-modes-alist
-		   (list 'ruby-mode
-			 (concat ruby-block-beg-re "\|{")
-			 (concat ruby-block-end-re "\|}")
-			 "#"
-			 'ruby-forward-sexp nil)))
-  ; so reveal-mode in my-ruby-mode-hook doesn't barf
-  (defun reveal-mode() t))
+(add-hook 'ruby-mode-hook 'my-ruby-mode-hook)
 
 (defun my-ruby-mode-hook ()
   (ruby-electric-mode)
   (hs-minor-mode)
-  (reveal-mode)
+  (if (= emacs-major-version 22) (reveal-mode))
   (local-set-key (kbd "RET") 'ruby-reindent-then-newline-and-indent))
 
-(add-hook 'ruby-mode-hook 'my-ruby-mode-hook)
-
 (setq ri-ruby-script (expand-file-name "~/.emacs.d/ri-emacs.rb"))
-(require 'ri-ruby)
+
+(when (= emacs-major-version 22)
+  (file-name-shadow-mode)
+  (load "irc-stuff")
+  (add-to-list 'hs-special-modes-alist
+	       (list 'ruby-mode
+		     (concat ruby-block-beg-re "\|{")
+		     (concat ruby-block-end-re "\|}")
+		     "#"
+		     'ruby-forward-sexp nil)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Use libnotify to tell us when our name happens
@@ -93,6 +77,7 @@
 (defun notify-if-nick (process command sender args line)
   (if (string-match rcirc-nick line)
       (shell-command (concat "notify-send \"" sender " said\" \"" line "\""))))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;     key bindings
@@ -185,10 +170,13 @@
 
 (set-register ?e '(file . "~/.emacs"))
 (set-register ?d '(file . "~/.emacs.d"))
+(set-register ?a '(file . "~/.emacs.d/arorem.el"))
+(set-register ?y '(file . "~/.emacs.d/ebby.el"))
 (set-register ?g '(file . "~/.gnus.el"))
 (set-register ?b '(file . "~/.bashrc"))
 (set-register ?s '(file . "~/.screenrc"))
-      
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;     misc things
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -213,7 +201,7 @@
 (set-default-font "terminus-16") ; apt-get install xfonts-terminus
 
 ;; don't clutter directories!
-(setq backup-directory-alist `(("." . ,(expand-file-name "~/.emacs.baks"))))
+(setq backup-directory-alist `(("." . ,(expand-file-name "~/.emacs.d/backups"))))
 (setq auto-save-directory (expand-file-name "~/.emacs.d/backups"))
 
 ;; browsing

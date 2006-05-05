@@ -4,6 +4,8 @@
 ;; Author: Phil Hagelberg
 ;; URL: http://dev.technomancy.us/phil/wiki/ebby
 
+;;; License:
+
 ;; This file is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
 ;; the Free Software Foundation; either version 2, or (at your option)
@@ -23,9 +25,9 @@
 
 ;; Obby is a protocol that allows for collaborative editing. (See
 ;; http://darcs.0x539.de/trac/obby/cgi-bin/trac.cgi) Currently the
-;; only editor that supports Obby is Gobby, a multiplatform GTK
-;; client. Ebby is meant to bring Obby client support to Emacs.
-;; Note that Ebby currently supports version 0.3 of the protocol.
+;; only other editor that supports Obby is Gobby, a multiplatform GTK
+;; client. Ebby is meant to bring Obby client support to Emacs.  Note
+;; that Ebby currently supports version 0.3 of the protocol.
 
 ;;; Usage
 
@@ -40,10 +42,7 @@
 ;;  * Store more in buffer-local variables than document-table?
 
 ;; Bugs
-;;  * Sync-line inserts lines backwards
-;;  * Sync-line leaves ebby with one too many newlines
-;;    This is a problem because Gobby can crash if Ebby's buffer is
-;;    longer than Gobby's.
+;;  * Gobby crashes randomly... (sigh)
 
 ;; See http://dev.technomancy.us/phil/report/13 for a ticket list
 
@@ -54,6 +53,8 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Init
+
+;(global-set-key [f7] (lambda () (interactive) (message "%s" (point))))
 
 (defgroup ebby nil
   "Implementation of the obby collaborative editing protocol"
@@ -88,6 +89,7 @@
 (defvar *user-id* nil)
 (defvar *user-name* nil)
 
+;; This is a flag so that incoming changes are not transmitted as local changes
 (defvar ebby-incoming-change nil)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -132,8 +134,7 @@
   (setq tokens (split-string line ":"))
   (cond
     ((equal (car tokens) "obby_welcome") (apply 'ebby-welcome (cdr tokens)))
-;    ((equal (car tokens) "obby_sync_init")) ; well? what's it for?
-;    ((equal (car tokens) "obby_sync_final")) ; right...
+    ((equal (car tokens) "obby_sync_final") (message "Logged in."))
     ((equal (car tokens) "net6_client_join") (apply 'ebby-client-join (cdr tokens)))
     ((equal (car tokens) "net6_client_part") (apply 'ebby-client-part (cdr tokens)))
     ((equal (car tokens) "obby_sync_doclist_document") (apply 'ebby-synch-doclist-document (cdr tokens)))
@@ -150,20 +151,30 @@
 (defun ebby-subscribe (&optional doc-id)
   (interactive)
   (let ((doc-id (or doc-id (read-string "Document id: " "1 1"))))
+    (ebby-set-doc-remote-count doc-id 0)
+    (ebby-set-doc-local-count doc-id 0)
     (ebby-send-string (concat "obby_document:" doc-id ":subscribe:" *user-id*))))
 
 (defun ebby-unsubscribe (&optional doc-id)
   (interactive)
   (setq doc-id (or doc-id this-doc-id))
-  (ebby-send-string (concat "obby_document:" doc-id ":unsubscribe")))
+  (if (get-buffer-process "*ebby*")
+      (ebby-send-string (concat "obby_document:" doc-id ":unsubscribe"))))
 
+(defun ebby-resubscribe (&optional doc-id)
+  (interactive "MDocument id: ")
+  (setq doc-id (or doc-id this-doc-id))
+  (kill-buffer (concat "ebby-" (ebby-doc-id-to-name doc-id)))
+  (ebby-subscribe doc-id))
+  
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; General Handlers
 
 (defun ebby-welcome (protocol-version &rest args)
-  ;; TODO: should throw an error if the protocol version is wrong
-  )
+  (unless (equal "5" protocol-version) 
+    (message "Warning: incompatible version of obby protocol: %s" protocol-version)))
+
 
 (defun ebby-client-join (net6-user-id name obby-user-id color)
   ;; add client to client-table
@@ -189,39 +200,39 @@
     ((equal command "subscribe") (ebby-document-subscribe doc-id))
     ((equal command "record") (apply 'ebby-document-record doc-id args))))
 
-(defun ebby-document-sync-init (document-id &rest args)
-  (setq document (gethash document-id document-table))
+(defun ebby-document-sync-init (document-id total-line-count)
+  (let ((document (gethash document-id document-table)))
 
-  (switch-to-buffer (concat "ebby-" (getf document :name)))
+    (switch-to-buffer (concat "ebby-" (getf document :name)))
 
-  ;; not sure what we do with these, but it's good to store them, i guess
-  (make-local-variable 'owner-id)
-  (setq owner-id (getf document :name))
+    (make-local-variable 'this-doc-id)
+    (setq this-doc-id document-id)
 
-  (make-local-variable 'doc-index)
-  (setq doc-index (getf document :index))
+    (setq line-count 0) ; for sync-line below
+    (setq total-lines (string-to-number total-line-count 16))
 
-  (make-local-variable 'this-doc-id)
-  (setq this-doc-id document-id)
+    (add-hook 'after-change-functions 'ebby-change-hook nil t)
+    (add-hook 'kill-buffer-hook 'ebby-unsubscribe nil t)
 
-  (add-hook 'after-change-functions 'ebby-change-hook nil t)
-  (add-hook 'kill-buffer-hook 'ebby-unsubscribe nil t)
-
-  (make-local-variable 'subscribed-users))
+    (make-local-variable 'subscribed-users)))
 
 (defun ebby-document-sync-line (doc-id &optional line &rest args)
   (when line
       (setq ebby-incoming-change t)
-      (ebby-document-record-ins doc-id nil (concat line "\n"))
+      (end-of-buffer)
+      (incf line-count)
+      (ebby-document-record-ins doc-id nil (concat line (unless (= line-count total-lines) "\n")))
       (setq ebby-incoming-change nil)))
 
 (defun ebby-document-create (doc-owner-id doc-count doc-name)
   "Add document to document-table"
   (puthash (concat doc-owner-id " " doc-count) ; key
-	   (list :owner doc-owner-id :index doc-count :name doc-name :users () :remote-count 0 :local-count 0)
+	   (list :owner doc-owner-id :index doc-count :name doc-name :users () 
+		 :remote-count 0 :local-count 0)
 	   document-table))
 
 (defun ebby-document-subscribe (doc-id)
+  (beginning-of-buffer)
   (message "Subscribed to %s" (ebby-doc-id-to-name doc-id)))
 
 
@@ -306,7 +317,7 @@
 (defun ebby-change-hook (begin end length)
   (setq change (list begin end length))
   (setq text (ebby-escape (buffer-substring begin end)))
-  (unless ebby-incoming-change
+  (unless ebby-incoming-change ; mutex
     (if (< 0 length)
 	;; deletion
 	(ebby-send-del this-doc-id (- begin 1) length)
@@ -314,4 +325,3 @@
       (ebby-send-ins this-doc-id (ebby-escape (buffer-substring begin end)) (- begin 1)))))
 
 (provide 'ebby)
-
