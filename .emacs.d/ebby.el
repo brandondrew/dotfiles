@@ -27,6 +27,11 @@
 ;; client. Ebby is meant to bring Obby client support to Emacs.
 ;; Note that Ebby currently supports version 0.3 of the protocol.
 
+;;; Usage
+
+;; M-x ebby           - connects you to the server
+;; M-x ebby-subscribe - subscribes to a document
+
 ;;; To do
 
 ;; Style issues
@@ -34,26 +39,18 @@
 ;;  * Quit using setq!
 ;;  * Store more in buffer-local variables than document-table?
 
-;; Minor features
+;; Bugs
 ;;  * Sync-line inserts lines backwards
-;;  * Unsubscribe on buffer kill
-;;  * Keep point where it should be on insertion/deletion
-;;  * Allow color changing for self and other users?
-;;  * Chatting (not too interesting, but REALLY easy to implement)
+;;  * Sync-line leaves ebby with one too many newlines
+;;    This is a problem because Gobby can crash if Ebby's buffer is
+;;    longer than Gobby's.
 
-;; Major features
-;;  * Color text based on user
-;;  * Port to Obby 0.4, TLS (later)
-
-;; more... (search for TODO below)
+;; See http://dev.technomancy.us/phil/report/13 for a ticket list
 
 ;;; Not to do
 
 ;;  * Become a server (unless someone else wants to write it) 
 ;;  * Multiple Obby servers (Even Gobby doesn't do this)
-
-;; If someone else wants these features, they can implement them; I
-;; just don't feel the need to do them myself
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Init
@@ -64,14 +61,24 @@
   :prefix "ebby-"
   :group 'applications)
 
+(defcustom ebby-default-server "localhost"
+  "Server to connect to."
+  :type 'string
+  :group 'ebby)
+
+(defcustom ebby-default-name user-login-name
+  "Your user name."
+  :type 'string
+  :group 'ebby)
+
+(defcustom ebby-default-color "88ff44"
+  "Hexadecimal color to distinguish your text."
+  :type 'string
+  :group 'ebby)
+
 (defcustom ebby-default-port 6522
   "Default port to connect to."
   :type 'integer
-  :group 'ebby)
-
-(defcustom ebby-default-name (user-login-name)
-  "Your user name."
-  :type 'string
   :group 'ebby)
 
 (setq client-table (make-hash-table :test 'equal)) ; clients referenced by net6-user-id
@@ -86,19 +93,23 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Connection:
 
-(defun ebby-connect (server name color &optional port)
+(defalias 'ebby 'ebby-connect)
+
+(defun ebby-connect (&optional server name color port)
+  (interactive "P")
   (save-excursion
-    (message "Connecting to %s..." server)
-    (let* ((port-number (if port
+    (let* ((server (or server (read-string "Server: " "localhost")))
+	   (name (or name (read-string "Name: " ebby-default-name)))
+	   (color (or color (read-string "Hexadecimal Color: " ebby-default-color)))
+	   (port-number (if port
 			    (if (stringp port)
 				(string-to-number port)
 			      port)
-			  ebby-default-port))
-	   (name (or name ebby-default-name))
+			  (string-to-number (read-string "Port: " (number-to-string ebby-default-port)))))
            (process (open-network-stream server nil server port-number)))
 
       (setq *user-name* name)
-      (message "Connected.")
+      (message "Connecting to %s..." server)
       
       ;; set up process
       (set-process-coding-system process 'raw-text 'raw-text)
@@ -136,8 +147,10 @@
 	   (process-name process)))
   (process-send-string process (concat string "\n")))
 
-(defun ebby-subscribe (doc-id)
-  (ebby-send-string (concat "obby_document:" doc-id ":subscribe:" *user-id*)))
+(defun ebby-subscribe (&optional doc-id)
+  (interactive)
+  (let ((doc-id (or doc-id (read-string "Document id: " "1 1"))))
+  (ebby-send-string (concat "obby_document:" doc-id ":subscribe:" *user-id*))))
 
 (defun ebby-unsubscribe (doc-id)
   ;; TODO tell the server and kill the buffer
@@ -188,10 +201,9 @@
   (make-local-variable 'doc-index)
   (setq doc-index (getf document :index))
 
-  (make-local-variable 'doc-id)
-  (setq doc-id document-id)
+  (make-local-variable 'this-doc-id)
+  (setq this-doc-id document-id)
 
-;  (make-local-hook 'after-change-functions)
   (add-hook 'after-change-functions 'ebby-change-hook nil t)
 
   (make-local-variable 'subscribed-users))
@@ -248,6 +260,11 @@
 	((equal char "\\d") ":")
 	(t char)))
 
+(defun ebby-escape (char)
+  (cond ((equal char "\n") "\\n")
+	((equal char ":") "\\d")
+	(t char)))
+
 (defun ebby-get-doc-local-count (doc-id)
   (getf (gethash doc-id document-table) :local-count))
 
@@ -287,29 +304,14 @@
 
 (defun ebby-change-hook (begin end length)
   (setq change (list begin end length))
+  (setq text (ebby-escape (buffer-substring begin end)))
   (unless ebby-incoming-change
     (if (< 0 length)
 	;; deletion
 	;(message "del %s %s" begin length) ; 
-	(ebby-send-del "1 1" (- begin 1) length) ; doesn't quite work yet
+	(ebby-send-del this-doc-id (- begin 1) length) ; doesn't quite work yet
       ;; insertion
-      (ebby-send-ins doc-id (buffer-substring begin end) (- begin 1)))))
+      (ebby-send-ins this-doc-id (ebby-escape (buffer-substring begin end)) (- begin 1)))))
 
 (provide 'ebby)
-(setq doc-id "1 1")
-; To use:
-;(ebby-connect "localhost" "ebby-test" "ff0000" 6522)
-;(ebby-connect "localhost" "ebby-test" "ff0000" 6523)
-;(ebby-subscribe "1 1")
-;(ebby-send-ins "1 1" "d" 0)
-;(ebby-send-del "1 1" 2)
-; change
-
-;(ebby-get-doc-local-count "1 1")
-;(ebby-get-doc-remote-count "1 1")
-;(ebby-inc-doc-local-count "1 1")
-;(gethash "1 1" document-table)
-;(ebby-send-string (concat "obby_document:1 1:record:" (format "%x" (ebby-get-doc-local-count "1 1")) ":" (format "%x" (ebby-get-doc-remote-count "1 1")) ":del:1:1"))
-
-;(ebby-send-string (concat "obby_document:1 1:record:2:9:ins:1:1"))
 
