@@ -35,7 +35,7 @@
 ;;; To do
 
 ;; Style issues
-;;  * Write case-string macro
+;;  * Write case-string macro (to replace ugly conds)
 ;;  * Quit using setq!
 ;;  * Store more in buffer-local variables than document-table?
 
@@ -96,7 +96,7 @@
 (defalias 'ebby 'ebby-connect)
 
 (defun ebby-connect (&optional server name color port)
-  (interactive "P")
+  (interactive)
   (save-excursion
     (let* ((server (or server (read-string "Server: " "localhost")))
 	   (name (or name (read-string "Name: " ebby-default-name)))
@@ -150,11 +150,12 @@
 (defun ebby-subscribe (&optional doc-id)
   (interactive)
   (let ((doc-id (or doc-id (read-string "Document id: " "1 1"))))
-  (ebby-send-string (concat "obby_document:" doc-id ":subscribe:" *user-id*))))
+    (ebby-send-string (concat "obby_document:" doc-id ":subscribe:" *user-id*))))
 
-(defun ebby-unsubscribe (doc-id)
-  ;; TODO tell the server and kill the buffer
-)
+(defun ebby-unsubscribe (&optional doc-id)
+  (interactive)
+  (setq doc-id (or doc-id this-doc-id))
+  (ebby-send-string (concat "obby_document:" doc-id ":unsubscribe")))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -176,7 +177,6 @@
 
 (defun ebby-synch-doclist-document (obby-user-id doc-index doc-name &rest users)
   ;; add document to document-table
-  ;; TODO: add users to document
   (ebby-document-create obby-user-id doc-index doc-name))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -205,6 +205,7 @@
   (setq this-doc-id document-id)
 
   (add-hook 'after-change-functions 'ebby-change-hook nil t)
+  (add-hook 'kill-buffer-hook 'ebby-unsubscribe nil t)
 
   (make-local-variable 'subscribed-users))
 
@@ -236,15 +237,15 @@
   (setq ebby-incoming-change nil))
 
 (defun ebby-document-record-ins (doc-id position string)
+  (set-buffer (concat "ebby-" (ebby-doc-id-to-name doc-id)))
   (save-excursion
-    (set-buffer (concat "ebby-" (ebby-doc-id-to-name doc-id)))
     (if position
 	(goto-char (+ (string-to-number position 16) 1))) ; obby starts at zero
     (insert (ebby-unescape string))))
 
 (defun ebby-document-record-del (doc-id position char-count)
+  (set-buffer (concat "ebby-" (ebby-doc-id-to-name doc-id)))
   (save-excursion
-    (set-buffer (concat "ebby-" (ebby-doc-id-to-name doc-id)))
     (goto-char (+ (string-to-number position 16) 1))
     (delete-char (string-to-number char-count 16))))
 
@@ -308,8 +309,7 @@
   (unless ebby-incoming-change
     (if (< 0 length)
 	;; deletion
-	;(message "del %s %s" begin length) ; 
-	(ebby-send-del this-doc-id (- begin 1) length) ; doesn't quite work yet
+	(ebby-send-del this-doc-id (- begin 1) length)
       ;; insertion
       (ebby-send-ins this-doc-id (ebby-escape (buffer-substring begin end)) (- begin 1)))))
 
