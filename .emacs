@@ -86,6 +86,15 @@
 (require 'ri-ruby)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Use libnotify to tell us when our name happens
+
+(add-hook 'rcirc-receive-message-hooks 'notify-if-nick)
+
+(defun notify-if-nick (process command sender args line)
+  (if (string-match rcirc-nick line)
+      (shell-command (concat "notify-send \"" sender " said\" \"" line "\""))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;     key bindings
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
