@@ -82,9 +82,11 @@
   :type 'integer
   :group 'ebby)
 
-(setq client-table (make-hash-table :test 'equal)) ; clients referenced by net6-user-id
+;; clients referenced by net6-user-id
+(setq client-table (make-hash-table :test 'equal))
 
-(setq document-table (make-hash-table :test 'equal)) ; documents referenced by doc-id string (owner id + index)
+;; documents referenced by doc-id string (owner id + index)
+(setq document-table (make-hash-table :test 'equal))
 
 (defvar *user-id* nil)
 (defvar *user-name* nil)
@@ -107,7 +109,9 @@
 			    (if (stringp port)
 				(string-to-number port)
 			      port)
-			  (string-to-number (read-string "Port: " (number-to-string ebby-default-port)))))
+			  (string-to-number 
+			   (read-string "Port: " 
+					(number-to-string ebby-default-port)))))
            (process (open-network-stream server nil server port-number)))
 
       (setq *user-name* name)
@@ -133,13 +137,20 @@
 (defun ebby-filter-line (process line)
   (setq tokens (split-string line ":"))
   (cond
-    ((equal (car tokens) "obby_welcome") (apply 'ebby-welcome (cdr tokens)))
-    ((equal (car tokens) "obby_sync_final") (message "Logged in."))
-    ((equal (car tokens) "net6_client_join") (apply 'ebby-client-join (cdr tokens)))
-    ((equal (car tokens) "net6_client_part") (apply 'ebby-client-part (cdr tokens)))
-    ((equal (car tokens) "obby_sync_doclist_document") (apply 'ebby-synch-doclist-document (cdr tokens)))
-    ((equal (car tokens) "obby_document_create") (apply 'ebby-document-create (cdr tokens)))
-    ((equal (car tokens) "obby_document") (apply 'ebby-document-handler (cdr tokens)))))
+    ((equal (car tokens) "obby_welcome") 
+     (apply 'ebby-welcome (cdr tokens)))
+    ((equal (car tokens) "obby_sync_final") 
+     (message "Logged in."))
+    ((equal (car tokens) "net6_client_join") 
+     (apply 'ebby-client-join (cdr tokens)))
+    ((equal (car tokens) "net6_client_part") 
+     (apply 'ebby-client-part (cdr tokens)))
+    ((equal (car tokens) "obby_sync_doclist_document") 
+     (apply 'ebby-synch-doclist-document (cdr tokens)))
+    ((equal (car tokens) "obby_document_create") 
+     (apply 'ebby-document-create (cdr tokens)))
+    ((equal (car tokens) "obby_document") 
+     (apply 'ebby-document-handler (cdr tokens)))))
 
 (defun ebby-send-string (string &optional process)
   (unless process (setq process (get-buffer-process "*ebby*")))
@@ -173,14 +184,16 @@
 
 (defun ebby-welcome (protocol-version &rest args)
   (unless (equal "5" protocol-version) 
-    (message "Warning: incompatible version of obby protocol: %s" protocol-version)))
+    (message "Warning: incompatible version of obby protocol: %s" 
+	     protocol-version)))
 
 
 (defun ebby-client-join (net6-user-id name obby-user-id color)
   ;; add client to client-table
   (if (equal name *user-name*)
       (setq *user-id* obby-user-id)) ; only chance at getting our own user ID
-  (puthash net6-user-id (list :net6-id net6-user-id :name name :obby-id obby-user-id :color color) client-table))
+  (puthash net6-user-id (list :net6-id net6-user-id :name name 
+			      :obby-id obby-user-id :color color) client-table))
 
 (defun ebby-client-part (net6-user-id)
   ;; drop client from client-table
@@ -221,7 +234,9 @@
       (setq ebby-incoming-change t)
       (end-of-buffer)
       (incf line-count)
-      (ebby-document-record-ins doc-id nil (concat line (unless (= line-count total-lines) "\n")))
+      (ebby-document-record-ins doc-id nil 
+				(concat line (unless 
+						 (= line-count total-lines) "\n")))
       (setq ebby-incoming-change nil)))
 
 (defun ebby-document-create (doc-owner-id doc-count doc-name)
@@ -239,8 +254,9 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Document Record Handlers
 
-(defun ebby-document-record (doc-id user-id remote-count local-count command &rest args)
-  (ebby-set-doc-remote-count doc-id (string-to-number remote-count 16))
+(defun ebby-document-record (doc-id user-id remote-count local-count 
+				    command &rest args)
+  (ebby-set-doc-remote-count doc-id (+ 1 (string-to-number remote-count 16)))
   (setq ebby-incoming-change t)
   (cond
     ((equal "ins" command) (apply 'ebby-document-record-ins doc-id args))
@@ -304,14 +320,17 @@
 			    ":" (format "%x" (ebby-get-doc-remote-count doc-id)) 
 			    ":ins:" (format "%x" position) ":" 
 			    string))
-  (message "local: %s remote: %s" (ebby-get-doc-local-count doc-id) (ebby-get-doc-remote-count doc-id)) 
+  (message "local: %s remote: %s" 
+	   (ebby-get-doc-local-count doc-id) 
+	   (ebby-get-doc-remote-count doc-id)) 
   (ebby-inc-doc-local-count doc-id))
 
 (defun ebby-send-del (doc-id position &optional length)
   (ebby-send-string (concat "obby_document:" doc-id ":record:" 
 			    (format "%x" (ebby-get-doc-local-count doc-id)) 
 			    ":" (format "%x" (ebby-get-doc-remote-count doc-id)) 
-			    ":del:" (format "%x" position) ":" (format "%x" (or length 1))))
+			    ":del:" (format "%x" position) ":" 
+			    (format "%x" (or length 1))))
   (ebby-inc-doc-local-count doc-id))
 
 (defun ebby-change-hook (begin end length)
@@ -322,6 +341,8 @@
 	;; deletion
 	(ebby-send-del this-doc-id (- begin 1) length)
       ;; insertion
-      (ebby-send-ins this-doc-id (ebby-escape (buffer-substring begin end)) (- begin 1)))))
+      (ebby-send-ins this-doc-id (ebby-escape 
+				  (buffer-substring begin end)) 
+		     (- begin 1)))))
 
 (provide 'ebby)
