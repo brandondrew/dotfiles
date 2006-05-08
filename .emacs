@@ -60,6 +60,7 @@
 (setq ri-ruby-script (expand-file-name "~/.emacs.d/ri-emacs.rb"))
 
 (when (= emacs-major-version 22)
+  (ido-mode)
   (file-name-shadow-mode)
   (load "irc-stuff")
   (add-to-list 'hs-special-modes-alist
@@ -84,8 +85,6 @@
 ;     key bindings
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-; for when the terminal is misbehaving (not the best way to fix)
-;(global-set-key "\C-h" 'backward-delete-char)
 (global-set-key "\M-h" 'backward-kill-word)
 (global-set-key "\M-g" 'goto-line)
 (global-set-key "\C-x\C-r" 'jump-to-register)
@@ -182,51 +181,36 @@
 ;     misc things
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(when window-system
+  (global-set-key "\C-h" 'backward-delete-char)
+  (tabbar-mode)
+  (mouse-wheel-mode 1)
+  (set-scroll-bar-mode 'right) ; mostly for seeing how far down we are, not for clicking
+  (tooltip-mode -1)
+  (tool-bar-mode -1)
+  (setq frame-title-format '(buffer-file-name "%f" ("%b")))
+  (set-default-font "terminus-16") ; apt-get install xfonts-terminus
+  (setq browse-url-browser-function 'browse-url-firefox)
+  (setq browse-url-firefox-new-window-is-tab t)
+  (blink-cursor-mode -1)
+  (global-hl-line-mode))
+
 (setq font-lock-maximum-decoration t)
-(blink-cursor-mode -1)
 (auto-compression-mode 1) ; load .gz's automatically
 (setq inhibit-startup-message t)
 (setq transient-mark-mode t)
-(show-paren-mode 1)
-(mouse-wheel-mode 1) ; duh! this should be default.
-(set-scroll-bar-mode 'right) ; mostly for seeing how far down we are, not for clicking
-(tool-bar-mode -1)
 (menu-bar-mode -1) ; toggled by F1
-(tabbar-mode)
-(global-hl-line-mode) ; especially nice in w3m
+(show-paren-mode 1)
 (global-font-lock-mode t)
 (setq color-theme-is-global nil)
-(tooltip-mode -1)
-(setq frame-title-format '(buffer-file-name "%f" ("%b")))
-(ido-mode)
-(set-default-font "terminus-16") ; apt-get install xfonts-terminus
 
 ;; don't clutter directories!
 (setq backup-directory-alist `(("." . ,(expand-file-name "~/.emacs.d/backups"))))
 (setq auto-save-directory (expand-file-name "~/.emacs.d/backups"))
 
-;; browsing
-(setq browse-url-browser-function 'browse-url-firefox)
-(setq browse-url-firefox-new-window-is-tab t)
-
 ;; w3m
 (setq w3m-use-cookies t)
 (setq w3m-default-save-directory "~/")
-
-(setq w3m-search-engine-alist
-      '(("C2" "http://c2.com/cgi-bin/wiki?%s")
-        ("EmacsWiki" "http://emacswiki.org/cgi-bin/wiki/%s")
-        ("GDict" "http://google.com.au/search?q=define:%s")
-        ("GGroups" "http://google.es/groups?q=%s")
-        ("GIS" "http://google.com.au/images?q=%s")
-        ("Google" "http://www.google.com.au/search?q=%s")
-        ("ISBN" "http://www.amazon.com/exec/obidos/ASIN/%s")
-        ("RFC" "http://www.faqs.org/rfc/rfc%s")
-        ("Sourceforge" "http://sf.net/projects/%s")
-        ("Thesaurus"
-         "http://thesaurus.reference.com/search?db=roget&q=%s")
-        ("Wikipedia"
-         "http://en.wikipedia.org/wiki/Special:Search?search=%s")))
 
 (mapc (lambda (v) (set v nil))
       '(w3m-show-graphic-icons-in-header-line
