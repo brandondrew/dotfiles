@@ -15,24 +15,23 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; loading modes
 
-(require 'psvn)
-(require 'color-theme)
-(require 'zenburn)
-(require 'tabbar)
+(autoload 'php-mode "php-mode")
+(autoload 'yaml-mode "yaml-mode")
+(autoload 'css-mode "css-mode")
 
 (add-to-list 'auto-mode-alist '("\\.js$" . c-mode))
 (add-to-list 'auto-mode-alist '("\\.php$" . php-mode))
 (add-to-list 'auto-mode-alist '("\\.css$" . css-mode))
 (add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
 
-(autoload 'php-mode "php-mode")
-(autoload 'yaml-mode "yaml-mode")
-(autoload 'css-mode "css-mode")
-
+(autoload 'tabbar-mode "tabbar")
 (autoload 'lisppaste-paste-region "lisppaste" "" t)
 (autoload 'ebby "ebby" "" t)
 (autoload 'htmlize-region "htmlize" "" t)
 (autoload 'htmlize-buffer "htmlize" "" t)
+(autoload 'color-theme-zenburn "zenburn")
+
+(require 'psvn)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Ruby help
@@ -76,6 +75,8 @@
 
 ;(add-hook 'rcirc-receive-message-hooks 'notify-if-nick)
 
+; problem: connection and pong messages show up!
+
 (defun notify-if-nick (process command sender args line)
   (if (string-match rcirc-nick line)
       (shell-command (concat "notify-send \"" sender " said\" \"" line "\""))))
@@ -83,7 +84,6 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;     key bindings
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (global-set-key "\M-h" 'backward-kill-word)
 (global-set-key "\M-g" 'goto-line)
@@ -138,6 +138,8 @@
 					       "&lon="
 					       lng))))
 
+;; For Ebby debugging, mostly
+(global-set-key [f7] (lambda () (interactive) (message "%s" (point))))
 
 ; i think zenspider wrote this
 (defvar ys-eshell-wins nil)
@@ -184,24 +186,24 @@
 (when window-system
   (global-set-key "\C-h" 'backward-delete-char)
   (tabbar-mode)
-  (mouse-wheel-mode 1)
+  (mouse-wheel-mode)
+  (global-hl-line-mode)
   (set-scroll-bar-mode 'right) ; mostly for seeing how far down we are, not for clicking
-  (tooltip-mode -1)
-  (tool-bar-mode -1)
   (setq frame-title-format '(buffer-file-name "%f" ("%b")))
   (set-default-font "terminus-16") ; apt-get install xfonts-terminus
   (setq browse-url-browser-function 'browse-url-firefox)
   (setq browse-url-firefox-new-window-is-tab t)
-  (blink-cursor-mode -1)
-  (global-hl-line-mode))
+  (tooltip-mode -1)
+  (tool-bar-mode -1)
+  (blink-cursor-mode -1))
 
 (setq font-lock-maximum-decoration t)
-(auto-compression-mode 1) ; load .gz's automatically
 (setq inhibit-startup-message t)
 (setq transient-mark-mode t)
+(auto-compression-mode) ; load .gz's automatically
+(global-font-lock-mode t)
 (menu-bar-mode -1) ; toggled by F1
 (show-paren-mode 1)
-(global-font-lock-mode t)
 (setq color-theme-is-global nil)
 
 ;; don't clutter directories!

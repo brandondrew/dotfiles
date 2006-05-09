@@ -67,7 +67,7 @@
   :type 'string
   :group 'ebby)
 
-(defcustom ebby-default-name user-login-name
+(defcustom ebby-default-name (user-login-name)
   "Your user name."
   :type 'string
   :group 'ebby)
@@ -99,6 +99,9 @@
 (defvar ebby-dont-transmit-changes nil
   "A flag so that incoming changes are not transmitted as local changes.
 Use the without-transmitting-changes macro to set this.")
+
+;; So we can use setf
+(require 'cl) 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Utilities (my first two macros!)
@@ -178,6 +181,9 @@ Use the without-transmitting-changes macro to set this.")
 (defun ebby-send-string (string)
   (unless (eq (process-status (get-buffer-process "*ebby*")) 'open)
     (error "Network connection is not open."))
+  (when ebby-debug
+    (set-buffer "*ebby*")
+    (insert "sent: " string "\n"))
   (process-send-string (get-buffer-process "*ebby*") (concat string "\n")))
 
 (defun ebby-subscribe (&optional doc-id)

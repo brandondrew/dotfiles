@@ -44,7 +44,6 @@
 
 ;; extract helpers and partials?
 ;; switch-to-helper?
-;; launch script/console in inf-ruby mode
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
