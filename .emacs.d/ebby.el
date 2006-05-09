@@ -37,10 +37,14 @@
 ;;; To do
 
 ;; Style issues
-;;  * Write case-string macro (to replace ugly conds)
 ;;  * Not totally happy with document-sync stuff, but it works
-;;  * Replace ebby-dont-transmit-changes flag with a macro
 ;;  * Store more in buffer-local variables than document-table?
+;;  * Poor error handling
+
+;; Major items
+;;  * Color text based on author
+;;  * Allow compatibility with language major-modes (for higlighting)
+;;  * Subscribe based on document name rather than ID
 
 ;; See http://dev.technomancy.us/phil/report/13 for a ticket list
 
@@ -93,7 +97,25 @@
 (defvar ebby-user-name)
 
 (defvar ebby-dont-transmit-changes nil
-  "A flag so that incoming changes are not transmitted as local changes.")
+  "A flag so that incoming changes are not transmitted as local changes.
+Use the without-transmitting-changes macro to set this.")
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Utilities (my first two macros!)
+
+(defmacro without-transmitting-changes (&rest body)
+  "Allow execute BODY without notifying server of any changes."
+  `(progn
+     (setq ebby-dont-transmit-changes t)
+     ,@body
+     (setq ebby-dont-transmit-changes nil)))
+
+(defmacro case-string (expr &rest choices)
+  "A variation on the case macro that uses equal rather than eql, and is thus suitable for strings."
+  `(cond ,@(mapcar (lambda (c)
+		    `((equal ,expr ,(car c)) ,@(cdr c)))
+		    choices)))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Connection:
@@ -101,6 +123,7 @@
 (defalias 'ebby 'ebby-connect)
 
 (defun ebby-connect (&optional server name color port)
+  "Begin an Ebby session by connecting to the server."
   (interactive)
   (save-excursion
     (let* ((server (or server (read-string "Server: " "localhost")))
@@ -136,20 +159,20 @@
 
 (defun ebby-filter-line (process line)
   (let ((tokens (split-string line ":")))
-    (cond
-     ((equal (car tokens) "obby_welcome") 
+    (case-string (car tokens)
+     ("obby_welcome" 
       (apply 'ebby-welcome (cdr tokens)))
-     ((equal (car tokens) "obby_sync_final") 
+     ("obby_sync_final"
       (message "Logged in."))
-     ((equal (car tokens) "net6_client_join") 
+     ("net6_client_join"
       (apply 'ebby-client-join (cdr tokens)))
-     ((equal (car tokens) "net6_client_part") 
+     ("net6_client_part"
       (apply 'ebby-client-part (cdr tokens)))
-     ((equal (car tokens) "obby_sync_doclist_document") 
+     ("obby_sync_doclist_document"
       (apply 'ebby-synch-doclist-document (cdr tokens)))
-     ((equal (car tokens) "obby_document_create") 
+     ("obby_document_create"
       (apply 'ebby-document-create (cdr tokens)))
-     ((equal (car tokens) "obby_document") 
+     ("obby_document"
       (apply 'ebby-document-handler (cdr tokens))))))
 
 (defun ebby-send-string (string)
@@ -166,8 +189,8 @@
 
 (defun ebby-unsubscribe (&optional doc-id)
   (interactive)
-  (let ((doc-id (or doc-id this-doc-id)))
-    (if (get-buffer-process "*ebby*")
+  (if (and (get-buffer-process "*ebby*") this-doc-id)
+      (let ((doc-id (or doc-id this-doc-id)))
 	(ebby-send-string (concat "obby_document:" doc-id ":unsubscribe")))))
 
 (defun ebby-resubscribe (&optional doc-id)
@@ -187,35 +210,37 @@
 
 
 (defun ebby-client-join (net6-user-id name obby-user-id color)
-  ;; add client to client-table
+  "Add client to the client-table."
   (if (equal name ebby-user-name)
       (setq ebby-user-id obby-user-id)) ; only chance at getting our own user ID
   (puthash net6-user-id (list :net6-id net6-user-id :name name 
 			      :obby-id obby-user-id :color color) client-table))
 
 (defun ebby-client-part (net6-user-id)
-  ;; drop client from client-table
+  "Drop client from client-table."
   (remhash net6-user-id client-table))
 
 (defun ebby-synch-doclist-document (obby-user-id doc-index doc-name &rest users)
-  ;; add document to document-table
+  "Create document."
   (ebby-document-create obby-user-id doc-index doc-name))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Document Handlers
 
 (defun ebby-document-handler (doc-id command &rest args)
-  (cond
-    ((equal command "sync_init") 
+  "Handle document-related commands."
+  (case-string command
+    ("sync_init"
      (apply 'ebby-document-sync-init doc-id args))
-    ((equal command "sync_line") 
+    ("sync_line"
      (apply 'ebby-document-sync-line doc-id args))
-    ((equal command "subscribe") 
+    ("subscribe"
      (ebby-document-subscribe doc-id))
-    ((equal command "record") 
+    ("record"
      (apply 'ebby-document-record doc-id args))))
 
 (defun ebby-document-sync-init (document-id total-line-count)
+  "Set up buffer for subscribed document."
   (let ((document (gethash document-id document-table)))
 
     (switch-to-buffer (concat "ebby-" (getf document :name)))
@@ -233,22 +258,23 @@
 
 (defun ebby-document-sync-line (doc-id &optional line &rest args)
   (when line
-    (setq ebby-dont-transmit-changes t)
-    (end-of-buffer)
-    (incf line-count)
-    (ebby-document-record-ins doc-id nil 
-			      (concat line (unless 
-					       (= line-count total-lines) "\n")))
-    (setq ebby-dont-transmit-changes nil)))
+    (without-transmitting-changes
+     (end-of-buffer)
+     (incf line-count)
+     (ebby-document-record-ins doc-id nil 
+			       (concat line (unless 
+						(= line-count total-lines) "\n"))))))
+
 
 (defun ebby-document-create (doc-owner-id doc-count doc-name)
-  "Add document to document-table"
+  "Add document to document-table."
   (puthash (concat doc-owner-id " " doc-count) ; key
 	   (list :owner doc-owner-id :index doc-count :name doc-name :users () 
 		 :remote-count 0 :local-count 0)
 	   document-table))
 
 (defun ebby-document-subscribe (doc-id)
+  "Subscribe to an Obby document."
   (beginning-of-buffer)
   (message "Subscribed to %s" (ebby-doc-id-to-name doc-id)))
 
@@ -258,14 +284,16 @@
 
 (defun ebby-document-record (doc-id user-id remote-count local-count 
 				    command &rest args)
+  "Handle record commands."
   (ebby-set-doc-remote-count doc-id (+ 1 (string-to-number remote-count 16)))
-  (setq ebby-dont-transmit-changes t)
-  (cond
-    ((equal "ins" command) (apply 'ebby-document-record-ins doc-id args))
-    ((equal "del" command) (apply 'ebby-document-record-del doc-id args)))
-  (setq ebby-dont-transmit-changes nil))
+  (without-transmitting-changes
+   (case-string command
+    ("ins" (apply 'ebby-document-record-ins doc-id args))
+    ("del" (apply 'ebby-document-record-del doc-id args)))))
+
 
 (defun ebby-document-record-ins (doc-id position string)
+  "Insert a character."
   (set-buffer (concat "ebby-" (ebby-doc-id-to-name doc-id)))
   (save-excursion
     (if position
@@ -273,6 +301,7 @@
     (insert (ebby-unescape string))))
 
 (defun ebby-document-record-del (doc-id position char-count)
+  "Delete a region."
   (set-buffer (concat "ebby-" (ebby-doc-id-to-name doc-id)))
   (save-excursion
     (goto-char (+ (string-to-number position 16) 1))
@@ -317,6 +346,7 @@
 ;;; Sending
 
 (defun ebby-send-ins (doc-id string position)
+  "Transmit an insertion of characters to the buffer."
   (ebby-send-string (concat "obby_document:" doc-id ":record:" 
 			    (format "%x" (ebby-get-doc-local-count doc-id)) 
 			    ":" (format "%x" (ebby-get-doc-remote-count doc-id)) 
@@ -328,6 +358,7 @@
   (ebby-inc-doc-local-count doc-id))
 
 (defun ebby-send-del (doc-id position &optional length)
+  "Transmit a deletion."
   (ebby-send-string (concat "obby_document:" doc-id ":record:" 
 			    (format "%x" (ebby-get-doc-local-count doc-id)) 
 			    ":" (format "%x" (ebby-get-doc-remote-count doc-id)) 
@@ -336,6 +367,7 @@
   (ebby-inc-doc-local-count doc-id))
 
 (defun ebby-change-hook (begin end length)
+  "Watch the buffer and send messages depending on the change."
   (unless ebby-dont-transmit-changes
     (if (< 0 length)
 	;; deletion
