@@ -184,7 +184,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (when window-system
-  (global-set-key "\C-h" 'backward-delete-char)
   (tabbar-mode)
   (mouse-wheel-mode)
   (global-hl-line-mode)
@@ -196,6 +195,9 @@
   (tooltip-mode -1)
   (tool-bar-mode -1)
   (blink-cursor-mode -1))
+
+(when (not window-system)
+  (global-set-key "\C-h" 'backward-delete-char))
 
 (setq font-lock-maximum-decoration t)
 (setq inhibit-startup-message t)
