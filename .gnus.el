@@ -25,7 +25,7 @@
       '(| (any "tmornini@.*" "work")
 	  (any "paxgrid@rogers\\.com" "work")
 	  (any "dallas\\.reedy@gmail\\.com" "work")
-	  (from ".*@dev\\.paxtel\\.com" "checkins")
+	  (any ".*@dev\\.paxtel\\.com" "checkins")
 	  (any ".*@paxtel\\.com" "work")
 
 	  (to "ruby-talk@ruby-lang\\.org" "ruby-talk")

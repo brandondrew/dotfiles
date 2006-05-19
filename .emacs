@@ -60,6 +60,7 @@
 
 (when (= emacs-major-version 22)
   (ido-mode)
+  (ido-toggle-prefix)
   (file-name-shadow-mode)
   (load "irc-stuff")
   (add-to-list 'hs-special-modes-alist
@@ -177,6 +178,7 @@
 (set-register ?g '(file . "~/.gnus.el"))
 (set-register ?b '(file . "~/.bashrc"))
 (set-register ?s '(file . "~/.screenrc"))
+(set-register ?t '(file . "~/mjolnir/paxtel_timecard.2006"))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -185,8 +187,8 @@
 
 (when window-system
   (tabbar-mode)
-  (mouse-wheel-mode)
-  (global-hl-line-mode)
+  (mouse-wheel-mode t)
+  (global-hl-line-mode t)
   (set-scroll-bar-mode 'right) ; mostly for seeing how far down we are, not for clicking
   (setq frame-title-format '(buffer-file-name "%f" ("%b")))
   (set-default-font "terminus-16") ; apt-get install xfonts-terminus
@@ -222,6 +224,12 @@
         w3m-track-mouse
         w3m-use-favicon
         w3m-use-toolbar))
+
+(defun smallish (&optional font-size)
+  (interactive)
+  (set-default-font (concat "terminus-" (or font-size "12")))
+  (tabbar-mode -1)
+  (scroll-bar-mode -1))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;    Nifty things to remember and hopefully use

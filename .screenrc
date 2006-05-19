@@ -8,7 +8,7 @@ escape ^Tt
 
 bindkey -d -k kb stuff "\010"
 # on Debian backspace should send char `177':
-bindkey -k kb stuff "177"
+#bindkey -k kb stuff "177"
 
 ##   Screen Options   ##
 #shell bash				# Tell screen your default shell
