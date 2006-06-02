@@ -10,6 +10,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (setq load-path (append '("~/.emacs.d") load-path))
+(setq load-path (append '("~/.emacs.d/arorem") load-path))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -54,6 +55,7 @@
   (ruby-electric-mode)
   (hs-minor-mode)
   (if (= emacs-major-version 22) (reveal-mode))
+  (define-key ruby-mode-map "\C-\M-h" 'backward-kill-word) ; ruby-mode redefines this badly
   (local-set-key (kbd "RET") 'ruby-reindent-then-newline-and-indent))
 
 (setq ri-ruby-script (expand-file-name "~/.emacs.d/ri-emacs.rb"))
@@ -86,7 +88,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;     key bindings
 
-(global-set-key "\M-h" 'backward-kill-word)
+(global-set-key "\C-\M-h" 'backward-kill-word)
 (global-set-key "\M-g" 'goto-line)
 (global-set-key "\C-x\C-r" 'jump-to-register)
 
@@ -179,6 +181,7 @@
 (set-register ?b '(file . "~/.bashrc"))
 (set-register ?s '(file . "~/.screenrc"))
 (set-register ?t '(file . "~/mjolnir/paxtel_timecard.2006"))
+(set-register ?c '(file . "~/.contacts"))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -192,14 +195,13 @@
   (set-scroll-bar-mode 'right) ; mostly for seeing how far down we are, not for clicking
   (setq frame-title-format '(buffer-file-name "%f" ("%b")))
   (set-default-font "terminus-16") ; apt-get install xfonts-terminus
-  (setq browse-url-browser-function 'browse-url-firefox)
-  (setq browse-url-firefox-new-window-is-tab t)
+  (setq browse-url-browser-function 'browse-url-epiphany)
   (tooltip-mode -1)
   (tool-bar-mode -1)
   (blink-cursor-mode -1))
 
 (when (not window-system)
-  (global-set-key "\C-h" 'backward-delete-char))
+  (keyboard-translate ?\C-h ?\C-?))
 
 (setq font-lock-maximum-decoration t)
 (setq inhibit-startup-message t)
@@ -258,3 +260,8 @@
 
 ; M-C-p, M-C-n back and forward blocks
 ; C-c C-s irb when in ruby-mode
+
+; C-x n n narrow visibility of buffer to selection
+; C-x n w widen to full buffer
+
+(put 'narrow-to-region 'disabled nil)

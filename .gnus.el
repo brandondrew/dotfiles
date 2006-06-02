@@ -1,10 +1,6 @@
 (setq gnus-select-method '(nnnil ""))
 (setq gnus-secondary-select-methods '((nnml ""
-					    (nnml-directory "~/mjolnir/Mail"))))
-
-(setq mail-source-directory "~/mjolnir/Mail"
-      message-directory "~/mjolnir/Mail"
-      gnus-directory "~/mjolnir/Mail")
+					    (nnml-directory "~/Mail"))))
 
 (setq user-mail-address "phil@hagelb.org")
 (setq user-full-name "Phil Hagelberg")
@@ -31,6 +27,9 @@
 	  (to "ruby-talk@ruby-lang\\.org" "ruby-talk")
 	  (to "obby-users@list.0x539.de" "obby-users")
 
+	  (any "zacchaeus.*" "friends")
+
+	  (any ".*kleist.*" "grace-group")
 	  (any "alisha\\.e\\.hagelberg@biola\\.edu" "alisha")
 	  (from "Hagelberg" - "Alisha" "family")
 

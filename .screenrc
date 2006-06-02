@@ -4,7 +4,7 @@ defscrollback 1024
 #hardstatus alwaystaglastline
 #hardstatus string "%{.bW}%-w%{.rW}%n %t%{-}%+w %=%{..G} %H %{..Y} %m/%d %C%a "
 
-escape ^Tt
+escape ^Zz
 
 bindkey -d -k kb stuff "\010"
 # on Debian backspace should send char `177':
