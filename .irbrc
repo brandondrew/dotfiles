@@ -7,7 +7,7 @@ require 'irb/completion'
 
 # rails-specific
 
-if RAILS_ROOT
+if false # how to determine if it's rails if rails hasn't been initialized yet? hmmm.
 class ActiveRecord::Base
   # Write a fixture file for testing
   def self.to_fixture

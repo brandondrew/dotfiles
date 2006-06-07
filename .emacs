@@ -7,6 +7,11 @@
 ;; Note: this relies on files found in my .emacs.d:
 ;; http://dev.technomancy.us/phil/browser/dotfiles/.emacs.d
 
+;; "Emacs outshines all other editing software in approximately the
+;; same way that the noonday sun does the stars. It is not just bigger
+;; and brighter; it simply makes everything else vanish."
+;; -Neal Stephenson
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (setq load-path (append '("~/.emacs.d") load-path))
@@ -33,6 +38,7 @@
 (autoload 'color-theme-zenburn "zenburn")
 
 (require 'psvn)
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Ruby help
@@ -71,6 +77,7 @@
 		     (concat ruby-block-end-re "\|}")
 		     "#"
 		     'ruby-forward-sexp nil)))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Use libnotify to tell us when our name happens
@@ -116,6 +123,23 @@
 
 ; useful for ansi-terms
 (global-set-key [f3] 'rename-buffer)
+
+
+; music management
+(global-set-key [f4] (lambda ()
+		       (interactive)
+		       (shell-command "ssh philisha.net mpc toggle")))
+
+(global-set-key [(shift f4)] (lambda ()
+			       (interactive)
+			       (shell-command "ssh philisha.net mpc next")))
+
+(global-set-key [(control f4)] (lambda (dir)
+				 (interactive "sPlay directory: ")
+				 (shell-command (concat 
+						 "ssh philisha.net mpc clear; "
+						 "ssh philisha.net mpc add " dir
+						 "; ssh philisha.net mpc play"))))
 
 ; display images using imagemagick
 (global-set-key [f5] (lambda () 
