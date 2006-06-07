@@ -70,7 +70,6 @@
   (ido-mode)
   (ido-toggle-prefix)
   (file-name-shadow-mode)
-  (load "irc-stuff")
   (add-to-list 'hs-special-modes-alist
 	       (list 'ruby-mode
 		     (concat ruby-block-beg-re "\|{")
@@ -80,16 +79,21 @@
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Use libnotify to tell us when our name happens
-;; requires libnotify-bin
+;; IRC
+;; 
 
-;(add-hook 'rcirc-receive-message-hooks 'notify-if-nick)
+(require 'erc-nick-colors)
 
-; problem: connection and pong messages show up!
+(setq pcomplete-cycle-completions nil)
+(setq erc-nick ("technomancy" "teXnomancy"))
+(setq erc-input-line-position -1)
+(setq erc-autojoin-channels-alist (quote (("freenode.net" "#caboose" "#emacs" "#ruby-lang"))))
+(setq erc-prompt ">")
+(setq erc-current-nick-highlight-type 'keyword)
 
-(defun notify-if-nick (process command sender args line)
-  (if (string-match rcirc-nick line)
-      (shell-command (concat "notify-send \"" sender " said\" \"" line "\""))))
+(defun erc-notify-keyword (match-type nick message)
+  (if (eq match-type keyword)
+      (shell-command (concat "notify-send \"" nick " said \" \"" message "\""))))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -98,6 +102,8 @@
 (global-set-key "\C-\M-h" 'backward-kill-word)
 (global-set-key "\M-g" 'goto-line)
 (global-set-key "\C-x\C-r" 'jump-to-register)
+(global-set-key "\C-x-" 'shrink-window)
+(global-set-key "\C-x+" 'enlarge-window)
 
 ; linear buffer-switching
 (global-set-key "\M-p" 'bs-cycle-next)
@@ -213,7 +219,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (when window-system
-  (tabbar-mode)
+;  (tabbar-mode t)
   (mouse-wheel-mode t)
   (global-hl-line-mode t)
   (set-scroll-bar-mode 'right) ; mostly for seeing how far down we are, not for clicking
@@ -222,7 +228,8 @@
   (setq browse-url-browser-function 'browse-url-epiphany)
   (tooltip-mode -1)
   (tool-bar-mode -1)
-  (blink-cursor-mode -1))
+  (blink-cursor-mode -1)
+  (add-hook 'erc-text-matched-hook 'erc-notify-keyword))
 
 (when (not window-system)
   (keyboard-translate ?\C-h ?\C-?))
