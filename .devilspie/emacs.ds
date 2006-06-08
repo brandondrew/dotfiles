@@ -1,5 +1,0 @@
-;(if (contains (window_class) "Emacs") 
-;	(begin
-;	(geometry "+1+1")
-;	(maximize)
-;	(set_workspace 2)))

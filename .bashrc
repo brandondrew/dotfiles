@@ -20,6 +20,7 @@ alias saptr="sudo apt-get remove"
 alias saptu="sudo apt-get upgrade"
 alias saptd="sudo apt-get update"
 alias saptc="apt-cache search"
+alias sapts="apt-cache show"
 
 
 export SVN_EDITOR="emacs -nw -q --no-site-file"

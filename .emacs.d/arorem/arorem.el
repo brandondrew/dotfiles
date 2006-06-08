@@ -198,7 +198,7 @@
 (defun file-name-base (file-name)
   (file-name-sans-extension (file-name-nondirectory file-name)))
 
-(defun arorem-console 
+(defun arorem-console ()
   (interactive)
   (run-ruby (concat (rails-root) "/script/console")))
 

@@ -85,7 +85,7 @@
 (require 'erc-nick-colors)
 
 (setq pcomplete-cycle-completions nil)
-(setq erc-nick ("technomancy" "teXnomancy"))
+(setq erc-nick '("technomancy" "teXnomancy"))
 (setq erc-input-line-position -1)
 (setq erc-autojoin-channels-alist (quote (("freenode.net" "#caboose" "#emacs" "#ruby-lang"))))
 (setq erc-prompt ">")
@@ -108,6 +108,9 @@
 ; linear buffer-switching
 (global-set-key "\M-p" 'bs-cycle-next)
 (global-set-key "\M-n" 'bs-cycle-previous)
+(global-set-key [XF86Back] 'bs-cycle-next)
+(global-set-key [XF86Forward] 'bs-cycle-previous)
+(setq bs-cycle-configuration-name "files")
 
 ; 2D spatial buffer-switching
 (global-set-key [(control shift p)] 'tabbar-backward-group)
