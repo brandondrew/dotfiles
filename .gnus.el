@@ -26,6 +26,7 @@
 
 	  (to "ruby-talk@ruby-lang\\.org" "ruby-talk")
 	  (to "obby-users@list.0x539.de" "obby-users")
+	  (to "feeds@hagelb.org" "feeds")
 
 	  (any "zacchaeus.*" "friends")
 
@@ -53,7 +54,14 @@
 		      :user "philhag"
 		      :stream ssl
 		      :predicate "UNSEEN"
-		      :fetchflag "\\Seen")))
+		      :fetchflag "\\Seen")
+		     (imap 
+		      :server "mail.hagelb.org"
+		      :user "m1824678"
+		      :stream ssl
+		      :predicate "UNSEEN"
+		      :fetchflag "\\Seen")
+))
 
 (setq imap-ssl-program "/usr/bin/openssl s_client -ssl3 -connect %s:%p")
 (setq gnus-agent-expire-days 0)

@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<opml version="1.1">
+  <head>
+    <title>Phil Hagelberg's Feeds</title>
+    <ownerName>Phil Hagelberg</ownerName>
+    <ownerEmail>techncomancy@gmail.com</ownerEmail>
+  </head>
+  <body>
+
+    <outline text="Tech Folks">
+      <outline text="dive into mark"
+               description="A lot of effort went into making this effortless."
+               htmlUrl="http://diveintomark.org"
+               xmlUrl="http://diveintomark.org/xml/atom.xml" />
+      <outline text="Boing Boing Blog"
+               description="The Blog of Wonderful things"
+               htmlUrl="http://boingboing.net"
+               xmlUrl="http://boingboing.net/rss.xml" />
+      <outline text="ongoing"
+               description="Ongoing fragmented essay by Tim Bray."
+               htmlUrl="http://www.tbray.org/ongoing/"
+               xmlUrl="http://www.tbray.org/ongoing/ongoing.rss" />
+      <outline text="Bruce Schneier"
+	       description="Schneier on Security"
+	       htmlUrl="http://www.schneier.com/blog/"
+	       xmlUrl="http://www.schneier.com/blog/index.rdf" />
+      <outline text="Martin Fowler"
+	       description="Bliki"
+	       htmlUrl="http://martinfowler.com/bliki/"
+	       xmlUrl="http://martinfowler.com/bliki/bliki.rss" />
+      <outline text="Planet GNOME"
+	       htmlUrl="http://planet.gnome.org/"
+	       xmlUrl="http://planet.gnome.org/rss20.xml" />
+      <outline text="Projectionist"
+	       description="A tumblelog"
+	       htmlUrl="http://project.ioni.st/"
+	       xmlUrl="http://project.ioni.st/syndicate/rss.xml" />
+      <outline text="Planet Lisp"
+	       htmlUrl="http://planet.lisp.org/"
+	       xmlUrl="http://planet.lisp.org/rss20.xml" />
+      <outline text="Signal vs Noise"
+	       description="37signals"
+	       htmlUrl="http://www.37signals.com/svn/"
+	       xmlUrl="http://feeds.feedburner.com/37signals/beMH" />
+      <outline text="Creating Passionate Users"
+	       description="Scoble says blogging will make us richer and improve our sex life..."
+	       htmlUrl="http://headrush.typepad.com/creating_passionate_users/"
+	       xmlUrl="http://headrush.typepad.com/creating_passionate_users/index.rdf" />
+      <outline text="O'Reily Radar"
+	       htmlUrl="http://radar.oreilly.com/"
+	       xmlUrl="http://radar.oreilly.com/atom.xml" />
+
+    </outline>
+
+    <outline text="Friends">
+      <outline text="Andre Arko"
+	       description="nothingness incarnate"
+	       htmlUrl="http://arko.net/"
+	       xmlUrl="http://arko.net/xml/rss/feed.xml" />
+      <outline text="Joel Watson"
+	       description="bitwise"
+	       htmlUrl="http://www.joelmwatson.com/blog/"
+	       xmlUrl="http://www.joelmwatson.com/blog/xml/rss20/feed.xml" />
+<!--      <outline text="Ben Bryan"
+	       description=""
+	       htmlUrl=""
+	       xmlUrl="" />
+-->
+      <outline text="Tim Malabuyo"
+	       description="Intelligent Design"
+	       htmlUrl="http://webdesign.timches.com/"
+	       xmlUrl="http://feeds.feedburner.com/IntelligentDesign/" />
+      <outline text="Dave Bourgeois"
+	       description="Lessons from Babel"
+	       htmlUrl="http://lessonsfrombabel.blogspot.com/"
+	       xmlUrl="http://lessonsfrombabel.blogspot.com/atom.xml" />
+      <outline text="Planet Zacchaeus"
+	       description="We like to climb trees"
+	       htmlUrl="http://planet.philisha.net/"
+	       xmlUrl="http://planet.philisha.net/rss.xml" />
+    </outline>
+
+    <outline text="Caboose">
+    </outline>
+
+    <outline text="Ruby Luminaries">
+      <outline text="Dave Thomas"
+	       description="PragDave"
+	       htmlUrl="http://blogs.pragprog.com/cgi-bin/pragdave.cgi"
+	       xmlUrl="http://blogs.pragprog.com/cgi-bin/pragdave.cgi?rss" />
+      <outline text="RedHanded"
+	       description="Sneaking Ruby through the System"
+	       htmlUrl="http://redhanded.hobix.com/"
+	       xmlUrl="http://redhanded.hobix.com/index.xml" />
+      <outline text="Jim Weirich"
+	       description="{| one, step, back|}"
+	       htmlUrl="http://onestepback.org/"
+	       xmlUrl="http://onestepback.org/index.cgi/index.rss" />
+      <outline text="David Heinemeier Hannson"
+	       description="Loud Thinking"
+	       htmlUrl="http://www.loudthinking.com/"
+	       xmlUrl="http://feeds.feedburner.com/LoudThinking" />
+      <outline text="O'Reily Ruby"
+	       htmlUrl="http://www.oreillynet.com/ruby"
+	       xmlUrl="http://www.oreillynet.com/ruby/blog/index.xml" />
+    </outline>
+
+    <outline text="Misc">
+      <outline text="Scriptorium"
+	       htmlUrl="http://www.scriptoriumdaily.com/"
+	       xmlUrl="http://www.scriptoriumdaily.com/feed/" />
+      <outline text="Middlebrow"
+	       description="Where Big Ideas Undergo the Digital Martyrdom"
+	       htmlUrl="http://www.scriptoriumdaily.com/middlebrow/"
+	       xmlUrl="http://www.scriptoriumdaily.com/middlebrow/feed/" />
+      <outline text="Doug TenNapel"
+	       htmlUrl="http://www.tennapel.com/"
+	       xmlUrl="http://www.tennapel.com/rss/blog.xml" />
+      <outline text="Achewood"
+	       description="No, Philippe, too soon!"
+	       htmlUrl="http://www.achewood.com/"
+	       xmlUrl="http://www.achewood.com/rss.php" />
+    </outline>
+
+    <outline text="Plain text emails" textonly="1">
+      <outline text="FSF News"
+	       description="Free software is a matter of liberty not price."
+	       htmlUrl="http://www.fsf.org/"
+	       xmlUrl="http://www.fsf.org/news/RSS" />
+      <outline text="Wired News"
+	       description="Wired News"
+	       htmlUrl="http://www.wired.com"
+	       xmlUrl="http://www.wired.com/news/feeds/rss2/0,2610,,00.xml" />
+    </outline>
+  </body>
+</opml>
+
+<!--
+      <outline text=""
+	       description=""
+	       htmlUrl=""
+	       xmlUrl="" />
+
+    -->

@@ -105,6 +105,12 @@
 (global-set-key "\C-x-" 'shrink-window)
 (global-set-key "\C-x+" 'enlarge-window)
 
+; hide-show
+(global-set-key "\M-[" 'hs-hide-block)
+(global-set-key "\M-]" 'hs-show-block)
+(global-set-key "\M-{" 'hs-hide-level)
+(global-set-key "\M-}" 'hs-show-level)
+
 ; linear buffer-switching
 (global-set-key "\M-p" 'bs-cycle-next)
 (global-set-key "\M-n" 'bs-cycle-previous)
