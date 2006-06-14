@@ -1,0 +1,44 @@
+(in-package :stumpwm)
+
+;; Tagging windows
+
+(defvar *window-tags*
+  (make-hash-table :test 'equal)
+  "Tags to list of windows hash table")
+
+(defun show-tag (tag screen)
+  (mapcar #'(lambda (window)
+	      (if (and (tagged window tag)
+			(xlib:window-p window))
+		  (hide-window window)))
+   (screen-mapped-windows screen)))
+
+(defun tag (window tag)
+  (setf (gethash tag *window-tags*)
+	(list* (xlib:window-id window) (gethash tag *window-tags*))))
+
+(defun tagged (window tag)
+  (find (xlib:window-id window) 
+	(gethash tag *window-tags*)))
+
+;; Defining commands
+
+(define-stumpwm-command "tag-window" (screen (tag :rest "Tag: "))
+  (tag (screen-current-window screen) tag))
+
+(define-stumpwm-command "show-tag" (screen (tag :rest "Show Tag: "))
+  (show-tag tag screen))
+
+(define-key *root-map* (kbd "g") "tag-window")
+(define-key *root-map* (kbd "C-g") "show-tag")
+
+
+;; test
+(if nil
+    (progn
+      (setf window (screen-current-window (current-screen))
+	    tag "one")
+      (tag window tag)
+      (gethash tag *window-tags*)
+      (gethash "two" *window-tags*)
+      (show-tag "one" (current-screen))))

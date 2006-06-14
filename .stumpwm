@@ -1,0 +1,18 @@
+ ;; load SLIME
+ (load #p"/home/phil/.emacs.d/slime-2.0/swank-loader.lisp") ; possibly needed for newer versions of SLIME
+ (load #p"/home/phil/.slime/fasl/2006-04-20/cmu-cvs_release-19a_19a-release-20040728_+_minimal_debian_patches-linux-x86/nregex.x86f")
+ (load #p"/home/phil/.slime/fasl/2006-04-20/cmu-cvs_release-19a_19a-release-20040728_+_minimal_debian_patches-linux-x86/swank-backend.x86f")
+ (load #p"/home/phil/.slime/fasl/2006-04-20/cmu-cvs_release-19a_19a-release-20040728_+_minimal_debian_patches-linux-x86/swank.x86f")
+ (load #p"/home/phil/.slime/fasl/2006-04-20/cmu-cvs_release-19a_19a-release-20040728_+_minimal_debian_patches-linux-x86/swank-cmucl.x86f")
+ (load #p"/home/phil/.slime/fasl/2006-04-20/cmu-cvs_release-19a_19a-release-20040728_+_minimal_debian_patches-linux-x86/swank-source-path-parser.x86f")
+
+ (swank:create-swank-server 4005 :spawn)
+
+ ;; load stumpwm
+ (load #p"/home/phil/src/stumpwm/stumpwm.asd")
+ (asdf:oos 'asdf:compile-op 'stumpwm-system::stumpwm)
+ (asdf:oos 'asdf:load-op 'stumpwm-system::stumpwm)
+
+ ;; start stumpwm
+ (stumpwm:stumpwm)
+
