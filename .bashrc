@@ -49,3 +49,8 @@ if [ -f /etc/bashrc ]; then
 	. /etc/bashrc
 fi
 
+if [ $TERM = "eterm-color" ] ; then
+    TERM=xterm
+fi
+
+#exec screen -xRR

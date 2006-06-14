@@ -10,7 +10,7 @@
 ;; "Emacs outshines all other editing software in approximately the
 ;; same way that the noonday sun does the stars. It is not just bigger
 ;; and brighter; it simply makes everything else vanish."
-;; -Neal Stephenson
+;; -Neal Stephenson, "In the Beginning was the Command Line"
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -77,6 +77,15 @@
 		     "#"
 		     'ruby-forward-sexp nil)))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Lisp
+;;
+
+(add-to-list 'load-path "~/.emacs.d/slime-2.0/")
+(setq inferior-lisp-program "/usr/local/bin/lisp")
+(require 'slime)
+(slime-setup)
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; IRC
@@ -87,9 +96,10 @@
 (setq pcomplete-cycle-completions nil)
 (setq erc-nick '("technomancy" "teXnomancy"))
 (setq erc-input-line-position -1)
-(setq erc-autojoin-channels-alist (quote (("freenode.net" "#caboose" "#emacs" "#ruby-lang"))))
+(setq erc-autojoin-channels-alist (quote (("freenode.net" "#emacs" "#ruby-lang"))))
 (setq erc-prompt ">")
 (setq erc-current-nick-highlight-type 'keyword)
+(setq erc-auto-query 'buffer)
 
 (defun erc-notify-keyword (match-type nick message)
   (if (eq match-type keyword)
@@ -103,7 +113,8 @@
 (global-set-key "\M-g" 'goto-line)
 (global-set-key "\C-x\C-r" 'jump-to-register)
 (global-set-key "\C-x-" 'shrink-window)
-(global-set-key "\C-x+" 'enlarge-window)
+(global-set-key "\C-x=" 'enlarge-window)
+(global-set-key "\C-xO" (lambda () (interactive) (other-window -1)))
 
 ; hide-show
 (global-set-key "\M-[" 'hs-hide-block)
@@ -200,7 +211,9 @@
 
 (global-set-key [f9] '(lambda () 
 			(interactive) 
-			(ansi-term "/bin/bash")))
+			(if (get-buffer "*ansi-term*")
+			    (switch-to-buffer "*ansi-term*")
+			  (ansi-term "/bin/bash"))))
 
 ; great for quick googles
 (global-set-key [f10] 'w3m)

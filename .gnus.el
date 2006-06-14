@@ -26,7 +26,7 @@
 
 	  (to "ruby-talk@ruby-lang\\.org" "ruby-talk")
 	  (to "obby-users@list.0x539.de" "obby-users")
-	  (to "feeds@hagelb.org" "feeds")
+	  (to "phil@localhost" "feeds")
 
 	  (any "zacchaeus.*" "friends")
 
@@ -55,12 +55,8 @@
 		      :stream ssl
 		      :predicate "UNSEEN"
 		      :fetchflag "\\Seen")
-		     (imap 
-		      :server "mail.hagelb.org"
-		      :user "m1824678"
-		      :stream ssl
-		      :predicate "UNSEEN"
-		      :fetchflag "\\Seen")
+		     (file
+		      :path "/var/mail/phil")
 ))
 
 (setq imap-ssl-program "/usr/bin/openssl s_client -ssl3 -connect %s:%p")
@@ -71,6 +67,12 @@
 
 (add-hook 'message-mode-hook 'auto-fill-mode)
 (add-hook 'message-mode-hook 'flyspell-mode)
+
+(setq gnus-buffer-configuration 
+      '((group (vertical 1.0 (group 1.0 point)))
+	(summary (vertical 1.0 (summary 1.0 point)))
+	(article (horizontal 1.0 (summary 1.0 point)
+			   (article 80)))))
 
 (setq gnus-sum-thread-tree-leaf-with-other "+-> ")
 (setq gnus-sum-thread-tree-vertical "|")

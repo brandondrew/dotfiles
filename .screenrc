@@ -1,5 +1,5 @@
 startup_message off
-defscrollback 1024
+defscrollback 3000
 #hardstatus on
 #hardstatus alwaystaglastline
 #hardstatus string "%{.bW}%-w%{.rW}%n %t%{-}%+w %=%{..G} %H %{..Y} %m/%d %C%a "
@@ -44,14 +44,3 @@ bindkey -d -k kb stuff "\010"
 #bindkey -k F1 next
 
 #bindkey -k kP copy
-
-##   Initial Windows   ##
-# You end up at the last window to be opened
-# Windows open to bash by default
-#screen 0 emacs -nw
-#screen 5
-#screen 4
-#screen 3
-#screen 2
-#screen 1
-#screen 0
