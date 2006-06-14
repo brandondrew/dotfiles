@@ -70,8 +70,9 @@
 	       xmlUrl="http://planet.philisha.net/rss.xml" />
     </outline>
 
-    <outline text="Caboose">
+<!--    <outline text="Caboose">
     </outline>
+-->
 
     <outline text="Ruby Luminaries">
       <outline text="Dave Thomas"

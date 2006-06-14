@@ -1,25 +1,38 @@
 (in-package :stumpwm)
 
-;; Tagging windows
 
-(defvar *window-tags*
-  (make-hash-table :test 'equal)
-  "Tags to list of windows hash table")
+;; Custom key bindings
+
+(define-key *root-map* (kbd "`")
+  "exec rxvt +sb -fn terminus-16 -bg white -e screen -xRR")
+
+
+;; Custom functions
+
+(defun current-window ()
+  (screen-current-window (current-screen)))
+
+;; Tagging windows
 
 (defun show-tag (tag screen)
   (mapcar #'(lambda (window)
-	      (if (and (tagged window tag)
+	      (if (and (not (tagged window tag))
 			(xlib:window-p window))
 		  (hide-window window)))
    (screen-mapped-windows screen)))
 
-(defun tag (window tag)
-  (setf (gethash tag *window-tags*)
-	(list* (xlib:window-id window) (gethash tag *window-tags*))))
+(defun window-tags (window)
+  (gethash :tags (gethash window (screen-window-hash (window-screen window)))))
 
 (defun tagged (window tag)
-  (find (xlib:window-id window) 
-	(gethash tag *window-tags*)))
+  (find tag (window-tags window) :test 'equal))
+
+(defun tag (window tag)
+  (setf (gethash :tags (gethash window (screen-window-hash (window-screen window))))
+	(if (tagged window tag)
+	    () ; already tagged
+	  (append (list tag) (window-tags window)))))
+
 
 ;; Defining commands
 
@@ -29,16 +42,11 @@
 (define-stumpwm-command "show-tag" (screen (tag :rest "Show Tag: "))
   (show-tag tag screen))
 
+(define-stumpwm-command "windows-tags" (screen)
+  (window-tags (screen-current-window screen)))
+
 (define-key *root-map* (kbd "g") "tag-window")
 (define-key *root-map* (kbd "C-g") "show-tag")
+(define-key *root-map* (kbd "C-d") "windows-tags")
 
 
-;; test
-(if nil
-    (progn
-      (setf window (screen-current-window (current-screen))
-	    tag "one")
-      (tag window tag)
-      (gethash tag *window-tags*)
-      (gethash "two" *window-tags*)
-      (show-tag "one" (current-screen))))
