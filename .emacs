@@ -89,7 +89,6 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; IRC
-;; 
 
 (require 'erc-nick-colors)
 
@@ -107,7 +106,7 @@
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;     key bindings
+;;     key bindings
 
 (global-set-key "\C-\M-h" 'backward-kill-word)
 (global-set-key "\M-g" 'goto-line)
@@ -115,6 +114,8 @@
 (global-set-key "\C-x-" 'shrink-window)
 (global-set-key "\C-x=" 'enlarge-window)
 (global-set-key "\C-xO" (lambda () (interactive) (other-window -1)))
+(global-set-key "\C-x." (lambda () (interactive) (enlarge-window 1 t)))
+(global-set-key "\C-x," (lambda () (interactive) (shrink-window 1 t)))
 
 ; hide-show
 (global-set-key "\M-[" 'hs-hide-block)
@@ -147,9 +148,7 @@
 (global-set-key [f2] 'color-theme-zenburn)
 (global-set-key [(shift f2)] 'color-theme-standard)
 
-; useful for ansi-terms
 (global-set-key [f3] 'rename-buffer)
-
 
 ; music management
 (global-set-key [f4] (lambda ()
@@ -174,15 +173,6 @@
 					      (thing-at-point 'filename)))))
 
 (global-set-key [(shift f5)] 'flickr-grab)
-
-(defun flickr-grab ()
-  "Display only the photo from a flickr url"
-  (interactive)
-  (w3m-browse-url
-   (with-current-buffer (url-retrieve-synchronously (thing-at-point 'filename))
-     (save-excursion
-       (re-search-backward "src=\"\\(http://static\\.flickr\\.com/[[:digit:]]*/[[:digit:]]*\_[[:alnum:]]*\\.jpg\\)")
-       (match-string 1)))))
 
 (global-set-key [f6] (lambda (lat lng)
 		       (interactive "BLatitude: \nBLongitude")
@@ -222,8 +212,37 @@
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;     registers (C-x C-r)
+;; defuns
+
+(defun lorem ()
+  "Insert a lorem ipsum."
+  (interactive)
+  (insert "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do "
+          "eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad "
+          "minim veniam, quis nostrud exercitation ullamco laboris nisi ut "
+          "aliquip ex ea commodo consequat. Duis aute irure dolor in "
+          "reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla "
+          "pariatur. Excepteur sint occaecat cupidatat non proident, sunt in "
+          "culpa qui officia deserunt mollit anim id est laborum."))
+
+(defun flickr-grab ()
+  "Display only the photo from a flickr url"
+  (interactive)
+  (w3m-browse-url
+   (with-current-buffer (url-retrieve-synchronously (thing-at-point 'filename))
+     (save-excursion
+       (re-search-backward "src=\"\\(http://static\\.flickr\\.com/[[:digit:]]*/[[:digit:]]*\_[[:alnum:]]*\\.jpg\\)")
+       (match-string 1)))))
+
+(defun smallish (&optional font-size)
+  (interactive)
+  (set-default-font (concat "terminus-" (or font-size "12")))
+  (tabbar-mode -1)
+  (scroll-bar-mode -1))
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;     registers (C-x C-r)
 
 (set-register ?e '(file . "~/.emacs"))
 (set-register ?d '(file . "~/.emacs.d"))
@@ -237,11 +256,9 @@
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;     misc things
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;     misc things
 
 (when window-system
-;  (tabbar-mode t)
   (mouse-wheel-mode t)
   (global-hl-line-mode t)
   (set-scroll-bar-mode 'right) ; mostly for seeing how far down we are, not for clicking
@@ -264,6 +281,8 @@
 (menu-bar-mode -1) ; toggled by F1
 (show-paren-mode 1)
 (setq color-theme-is-global nil)
+(put 'narrow-to-region 'disabled nil)
+(defalias 'yes-or-no-p 'y-or-n-p)
 
 ;; don't clutter directories!
 (setq backup-directory-alist `(("." . ,(expand-file-name "~/.emacs.d/backups"))))
@@ -280,15 +299,9 @@
         w3m-use-favicon
         w3m-use-toolbar))
 
-(defun smallish (&optional font-size)
-  (interactive)
-  (set-default-font (concat "terminus-" (or font-size "12")))
-  (tabbar-mode -1)
-  (scroll-bar-mode -1))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;    Nifty things to remember and hopefully use
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;    Nifty things to remember and hopefully use
 
 ; M-z zap to char
 ; C-u C-SPC jump to previous edit
@@ -317,4 +330,3 @@
 ; C-x n n narrow visibility of buffer to selection
 ; C-x n w widen to full buffer
 
-(put 'narrow-to-region 'disabled nil)
