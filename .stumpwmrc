@@ -18,7 +18,8 @@
   (mapcar #'(lambda (window)
 	      (if (and (not (tagged window tag))
 			(xlib:window-p window))
-		  (hide-window window)))
+		  (hide-window window)
+		  (unhide-window window)))
    (screen-mapped-windows screen)))
 
 (defun window-tags (window)
