@@ -1,5 +1,10 @@
 (in-package :stumpwm)
 
+;; TODO
+
+;; Untag
+;; allow multiple tags: "mail, emacs, browser" etc
+
 
 ;; Custom key bindings
 

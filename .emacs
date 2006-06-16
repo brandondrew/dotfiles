@@ -253,6 +253,7 @@
 (set-register ?s '(file . "~/.screenrc"))
 (set-register ?t '(file . "~/mjolnir/paxtel_timecard.2006"))
 (set-register ?c '(file . "~/.contacts"))
+(set-register ?w '(file . "~/.emacs.d/wmii.el"))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -282,6 +283,7 @@
 (show-paren-mode 1)
 (setq color-theme-is-global nil)
 (put 'narrow-to-region 'disabled nil)
+(display-time)
 (defalias 'yes-or-no-p 'y-or-n-p)
 
 ;; don't clutter directories!
