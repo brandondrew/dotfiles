@@ -10,7 +10,7 @@
 ;; ~/.emacs.d/wmii.el" and get rid of the stuff it has in there by
 ;; default.
 
-;;; Useful defuns
+;;; Useful defun
 
 (defun xwrite (where what)
   (shell-command (concat "echo -n " what " | wmiir write " where)))
@@ -41,24 +41,24 @@
 
 ;;; Keyboard shortcuts
 (setq wmii-map
-;; Window selection
+   ;; Window selection
   '(("b" . ("/view/ctl" "select prev"))
     ("f" . ("/view/ctl" "select next"))
     ("n" . ("/view/sel/ctl" "select prev"))
     ("p" . ("/view/sel/ctl" "select next"))
 
-;; Managed vs unmanaged
+   ;; Managed vs unmanaged
     ("space" . ("/view/ctl" "select toggle"))
     ("Shift-space" . ("/view/sel/sel/ctl" "sendto toggle"))
 
-;; Moving Windows
+   ;; Moving Windows
     ("Shift-f" . ("/view/sel/sel/ctl" "sendto next"))
     ("Shift-b" . ("/view/sel/sel/ctl" "sendto prev"))
 
-;; misc
+   ;; misc
     (":" . (shell-command "PATH=$HOME/.wmii-3:/usr/local/etc/wmii-3:$PATH `proglist /usr/local/etc/wmii-3 $HOME/.wmii-3 | wmiimenu` &;;"))
     ("!" . (shell-command "wmiisetsid `wmiimenu <$PROGS_FILE` &;;")) ; programs
-;    ("`" . (shell-command "~/bin/myrxvt")) ; shell
+;    ("\`" . (shell-command "~/bin/myrxvt")) ; shell
     ("k" . ("/view/sel/sel/ctl" "kill"))
 
 ;; TODO
@@ -78,18 +78,21 @@
 
 (defun wmii-filter (proc string)
   (setf string (subseq string 0 -1))
-  (let* ((event (car (split-string string " ")))
-	(command (assoc (cadr (split-string (cadr (split-string string " ")) "-")) wmii-map)))
-    (if (equal event "Key")
-	(progn
-	  (if (stringp (cadr command))
-;		(message (concat (cadr command) " " (caddr command)))
-		(xwrite (cadr command) (caddr command))
-	    (message (cadr command)))
-))))
-;; handle barclicks!
+  (let ((event (car (split-string string " ")))
+	(arg (cadr (split-string string " "))))
+    (cond ((equal event "Key")
+	   (let* ((key (cadr (split-string arg "-")))
+		  (command (cdr (assoc key wmii-map))))
+	     (if (stringp (car command))
+					;		(message (concat (cadr command) " " (caddr command)))
+		 (xwrite (car command) (cadr command))
+	       (message (cdr command)))))
+	  ((equal event "BarClick")
+	   (xwrite "/ctl" (concat "view " command))))))
 
 (set-process-filter 
  (start-process "wmii" "*wmii*" "wmiir" "read" "/event") 
  'wmii-filter)
 
+;; send current window to left column
+; (xwrite "/view/sel/sel/ctl" "sendto prev")
