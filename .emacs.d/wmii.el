@@ -17,7 +17,7 @@
 
 ;;; Init
 
-(defvar mod-key "Mod4" ; super key
+(defvar mod-key "Control-t,"
   "Modifier key to use for wmii commands")
 
 (xwrite "/def/grabmod" mod-key)
@@ -44,16 +44,21 @@
    ;; Window selection
   '(("b" . ("/view/ctl" "select prev"))
     ("f" . ("/view/ctl" "select next"))
-    ("n" . ("/view/sel/ctl" "select prev"))
-    ("p" . ("/view/sel/ctl" "select next"))
+    ("p" . ("/view/sel/ctl" "select prev"))
+    ("n" . ("/view/sel/ctl" "select next"))
 
    ;; Managed vs unmanaged
     ("space" . ("/view/ctl" "select toggle"))
     ("Shift-space" . ("/view/sel/sel/ctl" "sendto toggle"))
 
    ;; Moving Windows
-    ("Shift-f" . ("/view/sel/sel/ctl" "sendto next"))
-    ("Shift-b" . ("/view/sel/sel/ctl" "sendto prev"))
+    ("e" . ("/view/sel/sel/ctl" "sendto next"))
+    ("a" . ("/view/sel/sel/ctl" "sendto prev"))
+
+   ;; Modes
+    ("s" . (xwrite "/view/sel/mode" "stack"))
+    ("d" . (xwrite "/view/sel/mode" "default"))
+    ("m" . (xwrite "/view/sel/mode" "max"))
 
    ;; misc
     (":" . (shell-command "PATH=$HOME/.wmii-3:/usr/local/etc/wmii-3:$PATH `proglist /usr/local/etc/wmii-3 $HOME/.wmii-3 | wmiimenu` &;;"))
@@ -62,7 +67,6 @@
     ("k" . ("/view/sel/sel/ctl" "kill"))
 
 ;; TODO
-; Modes (default, stack, max)
 ; tag window
 ; show tags
 ; switch to tag
@@ -77,14 +81,14 @@
 (setq process-connection-type nil) ; use a pipe
 
 (defun wmii-filter (proc string)
-  (setf string (subseq string 0 -1))
-  (let ((event (car (split-string string " ")))
+  (setf string (subseq string 0 -1)) ; get rid of newline
+  (let ((event (car (split-string string " "))) ; "Key" or "BarClick"
 	(arg (cadr (split-string string " "))))
     (cond ((equal event "Key")
-	   (let* ((key (cadr (split-string arg "-")))
+	   (let* ((key (cadr (split-string arg ",-"))) ; must change this to allow for non C-t prefixed things
 		  (command (cdr (assoc key wmii-map))))
 	     (if (stringp (car command))
-					;		(message (concat (cadr command) " " (caddr command)))
+;		 (message (concat (cadr command) " " (caddr command)))
 		 (xwrite (car command) (cadr command))
 	       (message (cdr command)))))
 	  ((equal event "BarClick")
@@ -95,4 +99,5 @@
  'wmii-filter)
 
 ;; send current window to left column
-; (xwrite "/view/sel/sel/ctl" "sendto prev")
+(xwrite "/view/sel/sel/ctl" "sendto prev")
+

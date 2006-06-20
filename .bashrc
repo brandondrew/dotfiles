@@ -22,6 +22,7 @@ alias saptd="sudo apt-get update"
 alias saptc="apt-cache search"
 alias sapts="apt-cache show"
 
+alias ml="ls ~/music"
 
 export SVN_EDITOR="emacs -nw -q --no-site-file"
 
