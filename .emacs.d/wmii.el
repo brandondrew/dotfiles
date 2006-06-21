@@ -13,7 +13,7 @@
 ;;; Useful defun
 
 (defun xwrite (where what)
-  (shell-command (concat "echo -n " what " | wmiir write " where)))
+  (shell-command (concat "echo -n " what " | wmiir write " where) "*wmii*"))
 
 ;;; Init
 
@@ -22,25 +22,10 @@
 
 (xwrite "/def/grabmod" mod-key)
 
-(mapc (lambda (command) (xwrite (car command) (cadr command)))
-      '(("/def/border" "2")
-	("/def/font" "fixed")
-	("/def/selcolors" "#ffffff #285577 #4c7899")
-	("/def/normcolors" "#222222 #eeeeee #666666")
-	("/def/colmode" "default")
-	("/def/colwidth" "0")))
-
-;; Tagging rules
-
-(xwrite "/def/rules" 
-"/XMMS.*/ -> ~
-/Gimp.*/ -> ~
-/MPlayer.*/ -> ~
-/.*/ -> !
-/.*/ -> 1")
-
 ;;; Keyboard shortcuts
 (setq wmii-map
+      ;; Stuff gets evaled by default, unless it's a string, in which case it's sent to xwrite
+
    ;; Window selection
   '(("b" . ("/view/ctl" "select prev"))
     ("f" . ("/view/ctl" "select next"))
@@ -55,21 +40,50 @@
     ("e" . ("/view/sel/sel/ctl" "sendto next"))
     ("a" . ("/view/sel/sel/ctl" "sendto prev"))
 
+   ;; Resizing
+    ("minus" . ("/view/sel/sel/geom" "+0 +0 +0 -48"))
+    ("equal" . ("/view/sel/sel/geom" "+0 +0 +0 +48"))
+    ("comma" . ("/view/sel/sel/geom" "+0 +0 -48 +0"))
+    ("period" . ("/view/sel/sel/geom" "+0 +0 +48 +0"))
+
    ;; Modes
     ("s" . (xwrite "/view/sel/mode" "stack"))
     ("d" . (xwrite "/view/sel/mode" "default"))
-    ("m" . (xwrite "/view/sel/mode" "max"))
+    ("f" . (xwrite "/view/sel/mode" "max"))
+
+   ;; MPD
+    ("Next" . (shell-command "mpc next"))
+    ("Prior" . (shell-command "mpc prev"))
+    ("Home" . (shell-command "mpc seek -5"))
+    ("End" . (shell-command "mpc seek +5"))
+    ("Insert" . (shell-command "mpc toggle"))
 
    ;; misc
-    (":" . (shell-command "PATH=$HOME/.wmii-3:/usr/local/etc/wmii-3:$PATH `proglist /usr/local/etc/wmii-3 $HOME/.wmii-3 | wmiimenu` &;;"))
-    ("!" . (shell-command "wmiisetsid `wmiimenu <$PROGS_FILE` &;;")) ; programs
-;    ("\`" . (shell-command "~/bin/myrxvt")) ; shell
-    ("k" . ("/view/sel/sel/ctl" "kill"))
+    ; do we care about actions? (not really)
+;    ("shift-colon" . (shell-command "PATH=$HOME/.wmii-3:/usr/local/etc/wmii-3:$PATH `proglist /usr/local/etc/wmii-3 $HOME/.wmii-3 | wmiimenu` &;;"))
 
-;; TODO
-; tag window
-; show tags
-; switch to tag
+    ("Return" . (shell-command "wmiisetsid `wmiimenu < $PROGS_FILE` &")) ; programs
+    ("grave" . (shell-command "wmiisetsid myrxvt"))
+    ("k" . ("/view/sel/sel/ctl" "kill"))
+    ("m" . (shell-command "wmiiwarp 100 1020"))
+
+   ;; google search
+    ("Shift-g" . (shell-command "epiphany --new-tab http://google.com/search?q=`echo -n \"\" | wmiimenu`"))
+   ;; google define
+    ("Shift-d" . (shell-command "epiphany --new-tab http://google.com/search?q=define:`echo -n \"\" | wmiimenu`"))
+   ;; wikipedia search
+    ("Shift-w" . (shell-command "epiphany --new-tab http://en.wikipedia.org/wiki/Special:Search?search=`echo -n \"\" | wmiimenu`"))
+
+   ;; tagging
+    ("t" . (shell-command "wmiir read /tags | wmiimenu | wmiir write /view/sel/sel/tags"))
+    ("1" . (xwrite "/ctl" "view 1"))
+    ("2" . (xwrite "/ctl" "view 2"))
+    ("3" . (xwrite "/ctl" "view 3"))
+    ("Shift-1" . (xwrite "/view/sel/sel/tags" "1"))
+    ("Shift-2" . (xwrite "/view/sel/sel/tags" "2"))
+    ("Shift-3" . (xwrite "/view/sel/sel/tags" "3"))
+
+
 ))
 
 ;; tell wmii to watch for these keys
@@ -79,6 +93,9 @@
 		       "\nEOF"))
 
 (setq process-connection-type nil) ; use a pipe
+
+
+;; todo - refactor this so it groks keys not prefixed, if possible
 
 (defun wmii-filter (proc string)
   (setf string (subseq string 0 -1)) ; get rid of newline
@@ -90,7 +107,7 @@
 	     (if (stringp (car command))
 ;		 (message (concat (cadr command) " " (caddr command)))
 		 (xwrite (car command) (cadr command))
-	       (message (cdr command)))))
+	       (eval command))))
 	  ((equal event "BarClick")
 	   (xwrite "/ctl" (concat "view " command))))))
 
@@ -98,6 +115,5 @@
  (start-process "wmii" "*wmii*" "wmiir" "read" "/event") 
  'wmii-filter)
 
-;; send current window to left column
-(xwrite "/view/sel/sel/ctl" "sendto prev")
+
 

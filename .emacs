@@ -254,6 +254,7 @@
 (set-register ?t '(file . "~/mjolnir/paxtel_timecard.2006"))
 (set-register ?c '(file . "~/.contacts"))
 (set-register ?w '(file . "~/.emacs.d/wmii.el"))
+(set-register ?W '(file . "~/.wmii-3/wmiirc"))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
