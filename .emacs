@@ -39,6 +39,9 @@
 
 (require 'psvn)
 
+;; Find-file-at-point
+(require 'ffap)
+(ffap-bindings)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Ruby help
@@ -67,7 +70,7 @@
 (setq ri-ruby-script (expand-file-name "~/.emacs.d/ri-emacs.rb"))
 
 (when (= emacs-major-version 22)
-  (ido-mode)
+  (ido-mode t)
   (ido-toggle-prefix)
   (file-name-shadow-mode)
   (add-to-list 'hs-special-modes-alist

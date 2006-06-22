@@ -7,8 +7,13 @@
 
 ;; Launch wmii your normal way through .xinitrc, .Xsession, or
 ;; whatever.  Then set your wmiirc to just do "emacs -l
-;; ~/.emacs.d/wmii.el" and get rid of the stuff it has in there by
-;; default.
+;; ~/.emacs.d/wmii.el" after it's done all the config stuff you
+;; want. I have wmiirc set up stuff like shell variables ($PROGS_FILE)
+;; so they can be exported, and then have it launch emacs.
+
+;; see also:
+;; http://dev.technomancy.us/phil/browser/dotfiles/.wmii-3/wmiirc
+
 
 ;;; Useful defun
 
@@ -63,7 +68,7 @@
 ;    ("shift-colon" . (shell-command "PATH=$HOME/.wmii-3:/usr/local/etc/wmii-3:$PATH `proglist /usr/local/etc/wmii-3 $HOME/.wmii-3 | wmiimenu` &;;"))
 
     ("Return" . (shell-command "wmiisetsid `wmiimenu < $PROGS_FILE` &")) ; programs
-    ("grave" . (shell-command "wmiisetsid myrxvt"))
+    ("grave" . (shell-command "wmiisetsid myrxvt &"))
     ("k" . ("/view/sel/sel/ctl" "kill"))
     ("m" . (shell-command "wmiiwarp 100 1020"))
 

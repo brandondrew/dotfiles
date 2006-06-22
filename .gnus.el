@@ -61,6 +61,7 @@
 
 (setq imap-ssl-program "/usr/bin/openssl s_client -ssl3 -connect %s:%p")
 (setq gnus-agent-expire-days 0)
+(setq gnus-agent-enable-expiration 'DISABLE)
 
 (gnus-demon-add-handler 'gnus-group-get-new-news 10 t)
 (gnus-demon-init)
