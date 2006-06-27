@@ -188,4 +188,13 @@
   (run-ruby (concat (rails-root) "/script/console")))
 
 
+(defun extract-partial (begin end partial-name)
+  (interactive "r\nsName your partial: ")
+  (kill-region begin end)
+  (find-file (concat "_" partial-name ".rhtml"))
+  (yank)
+  (pop-to-buffer nil)
+  (insert (concat "<%= render :partial => '" partial-name "' %>\n")))
+
+
 (provide 'arorem)

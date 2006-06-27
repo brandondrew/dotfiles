@@ -69,8 +69,10 @@
 
     ("Return" . (shell-command "wmiisetsid `wmiimenu < $PROGS_FILE` &")) ; programs
     ("grave" . (shell-command "wmiisetsid myrxvt &"))
+    ("Shift-grave" . (shell-command "wmiisetsid ~/bin/rxvt &"))
     ("k" . ("/view/sel/sel/ctl" "kill"))
     ("m" . (shell-command "wmiiwarp 100 1020"))
+    ("Delete" . (shell-command "gdmflexiserver &"))
 
    ;; google search
     ("Shift-g" . (shell-command "epiphany --new-tab http://google.com/search?q=`echo -n \"\" | wmiimenu`"))
@@ -84,10 +86,11 @@
     ("1" . (xwrite "/ctl" "view 1"))
     ("2" . (xwrite "/ctl" "view 2"))
     ("3" . (xwrite "/ctl" "view 3"))
+    ("4" . (xwrite "/ctl" "view 4"))
     ("Shift-1" . (xwrite "/view/sel/sel/tags" "1"))
     ("Shift-2" . (xwrite "/view/sel/sel/tags" "2"))
     ("Shift-3" . (xwrite "/view/sel/sel/tags" "3"))
-
+    ("Shift-4" . (xwrite "/view/sel/sel/tags" "4"))
 
 ))
 

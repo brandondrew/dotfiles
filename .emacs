@@ -36,12 +36,13 @@
 (autoload 'htmlize-region "htmlize" "" t)
 (autoload 'htmlize-buffer "htmlize" "" t)
 (autoload 'color-theme-zenburn "zenburn")
+(autoload 'textile-to-html-region "textilize")
 
 (require 'psvn)
 
 ;; Find-file-at-point
-(require 'ffap)
-(ffap-bindings)
+;(require 'ffap)
+;(ffap-bindings)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Ruby help
@@ -95,6 +96,7 @@
 
 (require 'erc-nick-colors)
 
+(defalias 'irc 'erc-select)
 (setq pcomplete-cycle-completions nil)
 (setq erc-nick '("technomancy" "teXnomancy"))
 (setq erc-input-line-position -1)
@@ -106,6 +108,16 @@
 (defun erc-notify-keyword (match-type nick message)
   (if (eq match-type keyword)
       (shell-command (concat "notify-send \"" nick " said \" \"" message "\""))))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Jabber
+
+(setq jabber-nickname "")
+(setq jabber-password nil)
+(setq jabber-resource "emacs-memex")
+(setq jabber-server "hagelb.org")
+(setq jabber-username "phil")
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -335,4 +347,3 @@
 
 ; C-x n n narrow visibility of buffer to selection
 ; C-x n w widen to full buffer
-

@@ -1,121 +1,908 @@
-#!/bin/sh
-# configure wmii
+#!/usr/bin/env ruby
+# Copyright (c) 2006 Mauricio Fernandez <mfp@acm.org> 
+#      http://eigenclass.org/hiki.rb?wmii+ruby
+# Licensed under the same terms as Ruby (see LICENSE).
 
+WMIIRC_VERSION = "0.2.1"
+WMIIRC_HOME = ENV["HOME"] + "/.wmii-3/"
+eval(DATA.read, binding, __FILE__, 
+     DATA.rewind && DATA.readlines.index("__END__\n") + 2)
 
-xwrite() {
-	file="$1"; shift
-	echo -n "$@" | wmiir write "$file"
-}
+# {{{ ======== CONFIGURATION BEGINS HERE ==============
 
-proglist() {
-	ls -lL "$@" 2>/dev/null | awk 'NF>2 && $1 ~ /^[^d].*x/ {print $NF}' | sort -u
-}
+# programs to run when wmiirc starts
+# one per line, they're run sequentially right before the main loop begins
+START_PROGS = <<EOF
+xsetroot -solid '#333333'
+EOF
 
-# Tagging
-wmiir write /def/rules <<EOF
-/Ekiga.*/ -> ~
-/Gaim.*/ -> ~
+# {{{ WM CONFIGURATION
+config = WMII::Configuration.new do |e|
+  border      1
+  font        "fixed"
+  selcolors   '#FFFFFF #248047 #147027'
+  normcolors  '#4D4E4F #DDDDAA #FFFFCC'
+  colmode     'default'
+  colwidth    0
+  grabmod     (ENV['WMII_MODKEY'] || 'Mod1')
+  rules <<EOF
+/Kdict.*/ -> dict
+/XMMS.*/ -> ~
 /Gimp.*/ -> ~
 /MPlayer.*/ -> ~
+/XForm.*/ -> ~
+/XSane.*/ -> ~
+/Nautilus.*/ -> ~
+/fontforge.*/ -> ~
 /.*/ -> !
 /.*/ -> 1
 EOF
 
+  # Translate the following names in the on_key definitions.
+  key_subs  :MODKEY  => (ENV['WMII_MODKEY'] || "Mod1")
+  key_subs  :MODKEY2 => (ENV['WMII_MODKEY2'] || "Mod4")
 
-# MISC
-xsetroot -solid '#333333'
-PROGS_FILE=/tmp/.wmiimenu.$USER.proglist
-proglist `echo "$PATH" | tr : ' '` >$PROGS_FILE &
+  # Constant used by the intellisort tag selection mechanism
+  # set it to   0.0 <= value <= 1.0
+  # Lower values make recent choices more likely (modified first order
+  # markovian process with exponential decay):
+  # 0.0 means that only the last transition counts (all others forgotten)
+  # 1.0 means that the probabilities aren't biased to make recent choices more
+  #     likely
+  view_history_decay 0.8
 
-WMII_FONT='-artwiz-glispbold-*-*-*-*-*-*-*-*-*-*-*-*'
-WMII_SELCOLORS='#FFFFFF #248047 #147027'
-WMII_NORMCOLORS='#4D4E4F #DDDDAA #FFFFCC'
-# dark background
-#WMII_NORMCOLORS='#e0e0e0 #0a0a0a #202020'
+  # Favor the view we came from in intellisort.
+  # 1.0: that view is the first choice
+  # 0.0: that view comes after all views with non-zero transition probability,
+  #      but before all views we haven't yet jumped to from the current one
+  view_history_prev_bias 0.4
 
-unset SSH_AUTH_SOCK # necessary for rake deploy to work
+# {{{ Plugin config
+  plugin_config[:actions][:history_size] = 3  # set to 0 to disable
+  plugin_config[:actions][:internal] = {
+    "browser" => lambda do |*selection|
+      selection = selection[0]
+      selection ||= `wmiipsel`.strip
+      case browser = ENV["BROWSER"]
+      when nil: system "/etc/alternatives/x-www-browser '#{selection}' &"
+      else system "#{browser} '#{selection}' &"
+      end
+    end,
+    "google" => lambda do |*selection|
+      require 'cgi'
+      if selection && !selection.empty?
+        selection = CGI.escape(selection.join(" "))
+      else
+        selection = CGI.escape(%!#{`wmiipsel`.strip}!)
+      end
+      url = "http://www.google.com/search?q=#{selection}"
+      case browser = ENV["BROWSER"]
+      when nil: system "/etc/alternatives/x-www-browser '#{url}' &"
+      else system "#{browser} '#{url}' &"
+      end
+    end,
+    "screenshot" => lambda do |*base|
+      fname = (base[0] || "screenshot") + "000"
+      fname.succ! while File.exist?(File.join(ENV["HOME"], "tmp", "fname.png"))
+      system("import -window root ~/tmp/#{fname}.png &")
+    end,
+    "rename-view" => lambda do |*args|
+      unless /./ =~ (new_name = args[0].to_s)
+        new_name = wmiimenu([]).value  # blocking, OK
+      end
+      old = curr_view
+      read("/client").each do |line|
+        cid = line.split(/\s+/).last
+        write("/client/#{cid}/tags", 
+              read("/client/#{cid}/tags").gsub(/\b#{Regexp.escape(old)}\b/, new_name))
+      end
+      view new_name
+    end
+  }
+  plugin_config[:programs][:history_size] = 5 # set to 0 to disable
 
-export WMII_FONT WMII_NORMCOLORS WMII_SELCOLORS PROGS_FILE
-export MPD_HOST=philisha.net
+#{{{ Modal keybindings: raw/normal modes.
+  setup_bar("98_mode") do |bar|
+    raw_mode = false
+    saved_keys = nil
+    h = on_key("MODKEY2-space") do
+      case raw_mode
+      when true
+        write("/def/keys", saved_keys)
+        raw_mode = false
+        bar.data = "-NORMAL-"
+        LOGGER.info "Entering NORMAL mode."
+      when false
+        saved_keys = read("/def/keys")
+        write("/def/keys", h.key)
+        raw_mode = true
+        bar.data = "- RAW  -"
+        LOGGER.info "Entering RAW mode."
+      end
+    end
+    bar.data = "-NORMAL-"
+  end
+  
+# {{{ Volume control
+  setup_bar("99_volume") do |bar|
+    update_volume = lambda do |increment|
+      sign = increment < 0 ? "-" : "+"
+      volume = `amixer set PCM,0 #{increment.abs}#{sign}`[/\[(\d+%)\]/]
+      bar.data = "VOL #{volume}"
+    end
+    Thread.new{ loop { update_volume[0]; sleep 10 } }
 
-# WM CONFIGURATION
-xwrite /def/border 1
-xwrite /def/font $WMII_FONT
-xwrite /def/selcolors $WMII_SELCOLORS
-xwrite /def/normcolors $WMII_NORMCOLORS
-xwrite /def/colmode stack
-xwrite /def/colwidth 0
+    bar.on_click(MOUSE_SCROLL_UP){ update_volume[+1] }
+    bar.on_click(MOUSE_SCROLL_DOWN){ update_volume[-1] }
+  end
+
+# {{{ Dictionary
+  setup_bar("80_dict", normcolors, "DICT") do |bar|
+    dict_ask_and_define = lambda do
+      Thread.new do
+        wmiimenu([]) do |phrase|
+          system "dcop kdict KDictIface definePhrase '#{phrase}'"
+        end.value  # block until we get the word
+        set_curr_view "dict"
+      end
+    end
+    on_key("MODKEY-Control-d"){ dict_ask_and_define.call }
+    bar.on_click(MOUSE_BUTTON_LEFT){ dict_ask_and_define.call }
+    bar.on_click(MOUSE_BUTTON_RIGHT){ set_curr_view "dict" }
+  end
+
+# {{{ Status bar
+  setup_bar("00_status", normcolors, "STATUS BAR --- init") do |bar|
+    Thread.new do
+      loop do
+        currload = `uptime`.sub(/.*: /,"").gsub(/,/,"")
+        text= "#{Time.new.strftime("%d/%m/%Y %X %Z")} #{currload}"
+        bar.data = text.chomp
+        sleep 1
+      end
+    end
+
+    xmessagebox = "xmessage -center -buttons quit:0 -default quit -file -"
+    bar.on_click do |name, button|
+      fl = lambda{ write "/view/ctl", "select 0" }
+      toggle_fl = lambda{ sleep 2; write "/view/ctl", "select toggle" }
+      current = curr_view_index
+      case button.to_i
+      when MOUSE_BUTTON_LEFT:   fl[]; system "tzwatch | #{xmessagebox} &"; toggle_fl[]
+      when MOUSE_BUTTON_MIDDLE: fl[]; system "x-terminal-emulator -C top &"; toggle_fl[]
+      when MOUSE_BUTTON_RIGHT:  fl[]; system "ncal -y | #{xmessagebox} &"; toggle_fl[]
+      when MOUSE_SCROLL_UP:     set_curr_view(views[curr_view_index-1] || views[-1])
+      when MOUSE_SCROLL_DOWN:   set_curr_view(views[curr_view_index+1] || views[0])
+      end
+    end
+  end
+
+  # {{{ Click on view bars
+  on_barclick(/./, MOUSE_BUTTON_LEFT){|name,| view name}
+  on_barclick(/./, MOUSE_BUTTON_RIGHT){|name,| view name}
+
+  # {{{ Tag all browser instances as 'web' in addition to the current tag
+  browsers = %w[Firefox Konqueror Epiphany Galeon Conkeror Dillo]
+  browser_re = /^#{browsers.join("|")}/
+  e.on_createclient(condition{|c| browser_re =~ read("/client/#{c}/class")}) do |cid|
+    write("/client/#{cid}/tags", normalize(read("/client/#{cid}/tags") + "+web"))
+  end
+
+# {{{ Run program with given tag
+  on_key "MODKEY-Control-y" do
+    result = wmiimenu(views) do |tag|
+      if /^\s*$/ !~ tag
+        result = wmiimenu(program_list) do |prog|
+          if /^\s*$/ !~ prog
+            system("#{prog} &")
+          else
+            unregister handler
+          end
+        end
+      end
+    end
+    # using result.value to perform the view switch in the current process so
+    # that the transition table can be updated
+    Thread.new do 
+      tag = result.value
+      if /^\s*$/ !~ tag
+        handler = on_createclient do |cid|
+          write("/client/#{cid}/tags", tag)
+          unregister handler
+          view tag
+        end
+      end
+    end
+  end
+
+#{{{ actions (internal and WMIIRC_HOME/*) (w/ history)
+  on_key("MODKEY-a") do
+    plugin_config[:actions][:internal] ||= {}
+    history_size = (plugin_config[:actions][:history_size] ||= 5)
+    remembered = (plugin_config[:actions][:history] ||= [])
+    actions = (action_list + @plugin_config[:actions][:internal].keys.map{|x| x.to_s}).sort
+    list = remembered + actions
+    result = wmiimenu(list) do |choice|
+      choices = choice.split(/\s+/)
+      cmd = choices.first
+      if plugin_config[:actions][:internal][cmd]
+        plugin_config[:actions][:internal][cmd].call(*choices[1..-1])
+      else
+        system("#{WMIIRC_HOME}/#{choice} &") if /^\s*$/ !~ choice
+      end
+    end
+    # use result.value to record the choice in the current process
+    Thread.new do
+      if cmd = result.value.split(/\s+/).first
+        remembered.delete cmd
+        remembered.unshift cmd
+        LOGGER.debug "plugin/actions: history #{remembered.inspect}"
+        remembered.replace remembered[0, history_size]
+      end
+    end
+  end
+
+#{{{ programs (w/ history)
+  on_key("MODKEY-Shift-a") do
+    remembered = (plugin_config[:programs][:history] ||= [])
+    history_size = (plugin_config[:programs][:history_size] ||= 5)
+    list = remembered + program_list
+    result = wmiimenu(list) do |prog|
+      if /^\s*$/ !~ prog
+        LOGGER.info "Executing #{prog}"
+        system("wmiisetsid #{prog} &") 
+      end
+    end
+    # use result.value to record the choice in the current process
+    Thread.new do
+      cmd = result.value.split(/\s+/).first
+      break if !cmd
+      remembered.delete cmd
+      remembered.unshift cmd
+      LOGGER.debug "plugin/programs: history #{remembered.inspect}"
+      remembered.replace remembered[0, history_size]
+    end
+  end
+#{{{ Either move to the given numeric tag, if it exists, or to the 
+# (N-last_numeric_tag)th non-numeric tag.
+# e.g.   views  1 3 4 mail web
+#    ALT-1  => 1
+#    ALT-3  => 3
+#    ALT-5 => mail
+#    ALT-6 => web
+  (0..9).each do |key|
+    on_key("MODKEY-#{key}") do 
+      all_views = views
+      num_tags = all_views.grep(/^\d+$/)
+      if num_tags.include?(key.to_s)
+        view(key)
+      elsif key > num_tags.last.to_i
+        view(all_views[all_views.index(num_tags.last) + (key - 1 % 10) + 1 - num_tags.last.to_i])
+      end
+    end
+  end
+
+#{{{ Move to given view, with intelligent history
+  on_key("MODKEY-t") do
+    Thread.new do
+      # do it this way so the current process can update the transition table
+      view wmiimenu(views_intellisort - [curr_view]).value
+    end
+  end
+#{{{ Simpler key bindings
+  on_key("MODKEY-LEFT"){ write "/view/ctl", "select prev" }
+  on_key("MODKEY-RIGHT"){ write "/view/ctl", "select next" }
+  on_key("MODKEY-DOWN"){ write "/view/sel/ctl", "select next" }
+  on_key("MODKEY-UP"){ write "/view/sel/ctl", "select prev" }
+  on_key("MODKEY-space"){ write "/view/ctl", "select toggle" }
+  on_key("MODKEY-d"){ write "/view/sel/mode", "default" }
+  on_key("MODKEY-s"){ write "/view/sel/mode", "stack" }
+  on_key("MODKEY-m"){ write "/view/sel/mode", "max" }
+  on_key("MODKEY-f"){ write "/view/0/sel/geom", "0 0 east south" }
+  on_key("MODKEY-i"){ write "/view/sel/sel/geom", "+0 +0 +0 +48" }
+  on_key("MODKEY-Shift-i"){ write "/view/sel/sel/geom", "+0 +0 +0 -48" }
+  on_key("MODKEY-Return"){ system "x-terminal-emulator &" }
+  on_key("MODKEY-Shift-LEFT"){ write "/view/sel/sel/ctl", "sendto prev" }
+  on_key("MODKEY-Shift-RIGHT"){ write "/view/sel/sel/ctl", "sendto next" }
+  on_key("MODKEY-Shift-DOWN"){ write "/view/sel/sel/ctl", "swap down" }
+  on_key("MODKEY-Shift-UP"){ write "/view/sel/sel/ctl", "swap up" }
+  on_key("MODKEY-Shift-space"){ write "/view/sel/sel/ctl", "sendto toggle" }
+  on_key("MODKEY-Shift-c"){ write "/view/sel/sel/ctl", "kill" }
+  on_key("MODKEY-r"){ view prev_view }
+  on_key("MODKEY-Shift-t") do
+    wmiimenu(views){|new_tag| retag_curr_client(new_tag) }
+  end
+  on_key("MODKEY-Shift-r") do
+    wmiimenu(views) do |new_tag|
+      retag_curr_client(new_tag)
+      view new_tag[/(?![+-]).*/]
+    end
+  end
+
+  on_key("MODKEY2-Shift-t") do
+    wmiimenu(views){|new_tag| retag_curr_client_ns(new_tag) }
+  end
+  on_key("MODKEY2-Shift-r") do
+    wmiimenu(views) do |new_tag|
+      retag_curr_client_ns(new_tag)
+      # will not do anything if the view doesn't exist anymore
+      view "#{curr_view[/[^:]+/]}:#{new_tag[/(?![+-]).*/]}"
+    end
+  end
+
+  ('a'..'z').each do |key|
+    on_key("MODKEY2-#{key}") do
+      unless curr_view[0,1] == key
+        view views_intellisort.find{|x| x[0,1] == key }
+      end
+    end
+  end
+# Retag as specified numeric tag if it exists, or 
+# (N-last_numeric_tag)th non-numeric tag.
+  (0..9).each do |key|
+    on_key("MODKEY-Shift-#{key}") do
+      all_views = views
+      num_tags = all_views.grep(/^\d+$/)
+      curr_tags = curr_client_tags
+      if num_tags.include? key.to_s
+        new_tags =  curr_tags.reject{|x| /^\d+$/=~x } + [key]
+      elsif key > num_tags.last.to_i
+        new_tags = all_views[all_views.index(num_tags.last) + 
+                             (key - 1) % 10 + 1 - num_tags.last.to_i]
+      else
+        break
+      end
+      LOGGER.info "Retagging #{curr_tags.inspect} => #{new_tags.inspect}"
+      set_curr_client_tags(new_tags)
+    end
+  end
+  on_key("MODKEY-Control-LEFT") { write "/view/sel/sel/ctl", "swap prev" }
+  on_key("MODKEY-Control-RIGHT"){ write "/view/sel/sel/ctl", "swap next" }
+
+  on_key("MODKEY-Control-UP", "MODKEY-comma") do 
+    view  views[curr_view_index-1] || views[-1]
+  end
+  on_key("MODKEY-Control-DOWN", "MODKEY-period") do
+    view  views[curr_view_index+1] || views[0]
+  end
+
+  move_within_namespace = lambda do |offset|
+    namespace = curr_view[/([^:]+)/]
+    candidate_views = views.grep(/#{Regexp.escape(namespace)}\b/)
+    dest = candidate_views[candidate_views.index(curr_view) + offset]
+    dest ||= (offset > 0) ? candidate_views[0] : candidate_views[-1]
+    view dest
+  end
+  on_key("MODKEY2-Shift-UP", "MODKEY2-comma") do 
+    move_within_namespace.call(-1)
+  end
+  on_key("MODKEY2-Shift-DOWN", "MODKEY2-period") do
+    move_within_namespace.call(+1)
+  end
+end
+
+# {{{ ======== CONFIGURATION ENDS HERE ==============
+# You shouldn't have to change anything past this line.
+
+#{{{ Run START_PROGS
+LOGGER.info "Running START_PROGS:"
+START_PROGS.each{|line| LOGGER.info "Executing #{line}"; system(line)}
+
+#{{{ Main loop
+LOGGER.info "Executing main loop..."
+config.main_loop
+__END__
+
+require 'logger'
+require 'fcntl'
+
+$children = []
+logfile = File.open(File.join(WMIIRC_HOME, "wmiirc.log"), "a")
+logfile.fcntl Fcntl::F_SETFD, Fcntl::FD_CLOEXEC
+DATA.fcntl Fcntl::F_SETFD, Fcntl::FD_CLOEXEC
+      
+logfile.sync = true
+STDOUT.reopen(logfile)
+STDERR.reopen(logfile)
+LOGGER = Logger.new(STDERR)
+LOGGER.info "INIT"
+
+# IXP extension not ready for prime-time
+$pure_ruby_ixp_needed = true 
+begin
+$:.unshift "ext/IXP"
+require 'IXP'
+rescue LoadError
+  $pure_ruby_ixp_needed = true
+end unless $pure_ruby_ixp_needed
+
+module IXP
+  OWRITE = 1
+
+  if $pure_ruby_ixp_needed
+    IXPError = Class.new(StandardError)
+    BrokenPipeError = Class.new(IXPError)
+    class LowLevelClient
+      def initialize(address)
+        @address = address
+      end
+
+      def write(file, contents, mode = nil) # mode ignored
+        IO.popen("wmiir -a #{@address} write #{file}", "w"){|io| io.print contents.to_s }
+        true
+      rescue Errno::EPIPE
+        return false
+      end
+
+      def read(file)
+        `wmiir -a #{@address} read #{file}`
+      end
+
+      def remove(file)
+        system("wmiir -a #{@address} remove #{file}")
+      end
+
+      def create(file)
+        system("wmiir -a #{@address} create #{file}")
+      end
+
+      def foreach(file)
+        open("|wmiir read /event") do |is|
+          $children << is.pid
+          is.fcntl Fcntl::F_SETFD, Fcntl::FD_CLOEXEC
+          loop { yield is.gets }
+        end
+        nil
+      end
+    end
+  end # if $pure_ruby_ixp_needed
+
+  class Client
+    attr_reader :address
+
+    def initialize(address)
+      @address = address
+      establish_connection
+    end
+
+    %w[write read remove create].each do |meth|
+      define_method(meth) do |*args|
+        begin
+          @client.__send__(meth, *args)
+        rescue IXPError, BrokenPipeError
+          puts "RETRYING"
+          establish_connection
+          retry
+        end
+      end
+    end
+
+    def foreach(file, &block)
+      @client.foreach(file, &block)
+    rescue BrokenPipeError
+      establish_connection
+      retry
+    end
+
+    private
+    def establish_connection
+      @client = LowLevelClient.new(address)
+    end
+  end
+end
+
+module WMII
+  MOUSE_BUTTON_LEFT = 1
+  MOUSE_BUTTON_MIDDLE = 2
+  MOUSE_BUTTON_RIGHT = 3
+  MOUSE_SCROLL_UP = 4
+  MOUSE_SCROLL_DOWN = 5
+  def write(file, contents)
+    ixp_connection.write(file, contents.to_s, IXP::OWRITE)
+    true
+  end
+  
+  def read(file)
+    ixp_connection.read(file)
+  end
+
+  def remove(file)
+    ixp_connection.remove(file)
+  end
+
+  def create(file)
+    ixp_connection.create(file)
+  end
+
+  def ixp_connection
+    @ixp_conn ||= IXP::Client.new ENV["WMII_ADDRESS"]
+  end
 
 
-~/.wmii-3/status &
-~/.wmii-3/mpd &
+
+  class Configuration
+    attr_reader :plugin_config, :prev_view
+
+    class Handler
+      attr_reader :type
+
+      def initialize(type, &block)
+        @type = type
+        @block = block
+      end
+
+      def call(*a); @block.call(*a) end
+    end
+
+    class KeyHandler < Handler
+      attr_reader :key
+
+      def initialize(key, &block)
+        @key = key
+        super("Key", &block)
+      end
+    end
+
+    def initialize(&block)
+      @ixp_conn = IXP::Client.new ENV["WMII_ADDRESS"]
+      @procs = {"BarClick" => [], "ClientClick" => [],
+                "ClientFocus" => [], "CreateClient" => [], 
+                "Key" => Hash.new{|h,k| h[k] = []}}
+      @plugin_config = Hash.new{|h,k| h[k] = {}}
+      @children = $children
+      # Signal we're about to start to the previous wmiirc process, or wait
+      # until the IXP server is up
+      LOGGER.info "Waiting for the IXP server."
+      loop{ @ixp_conn.write "/event", "Starting\n" and break } # standard wmiirc
+      @ixp_conn.write "/event", "Bye\n"         # new-style wmiirc
+      # reset key bindings
+      LOGGER.info "Resetting key bindings."
+      @ixp_conn.write "/def/keys", "\n"
+      @key_substitutions = {
+        "MODKEY" => (ENV['WMII_MODKEY'] || "Mod1"), "UP" => (ENV['WMII_UP'] || "k"),
+        "DOWN" => (ENV['WMII_DOWN'] || "j"), "LEFT"  => (ENV['WMII_LEFT'] || "h"),
+        "RIGHT" => (ENV['WMII_RIGHT'] || "l")
+      }
+      LOGGER.info "Killing old wmiirc instances."
+      @view_history_decay = 0.8
+      @view_history_prev_bias = 0.4
+      @view_transition_table = Hash.new{|h,k| h[k] = Hash.new{|h2,k2| h2[k2] = 0} }
+      @view_transitions = Hash.new{|h,k| h[k] = 0}
+      @prev_view = curr_view
+      LOGGER.info "Loading configuration"
+      instance_eval(&block) if block_given?
+    end
+
+    def register(type, param1 = nil, param2 = nil, &block)
+      raise "Unknown type" unless @procs.has_key?(type)
+      case param1
+      when nil
+        handler = Handler.new(type, &block)
+      else
+        handler = Handler.new(type) do |*args|
+          if param1 === args[0] && (!param2 || param2 === args[1])
+            block.call(*args)
+          end
+        end
+      end
+      @procs[type] << handler
+
+      handler
+    end
+
+    def unregister(handler)
+      case handler
+      when KeyHandler
+        @procs["Key"][handler.key]
+      else
+        @procs[handler.type].delete handler
+      end
+    end
 
 
+    def register_key_bindings
+      LOGGER.info "Setting /def/keys"
+      @ixp_conn.write "/def/keys", @procs["Key"].keys.join("\n")
+    end
 
-emacs-snapshot -l ~/.emacs.d/wmii.el &
-epiphany &
+    def main_loop
+      @ixp_conn.write "/event", "Bye\n"
+      register_key_bindings
+      loop do 
+        begin
+          # wait for events
+          @ixp_conn.foreach("/event") do |line|
+            begin
+#              LOGGER.debug "Got #{line.inspect}"
+              case line
+              when /^(BarClick|ClientClick)\s+(\S+)\s+(\S+)$/
+                @procs[$1].each{|x| x.call($2, $3.to_i)}
+              when /^(ClientFocus|CreateClient)\s+(\S+)/
+                @procs[$1].each{|x| x.call($2.to_i)}
+              when /^Key (\S+)$/
+                @procs["Key"][$1].each{|x| x.call(x)} if @procs["Key"].has_key?($1)
+              when /^Bye|^Starting/
+                LOGGER.info "Cleanup..."
+                cleanup
+                LOGGER.info "QUIT"
+                exit!
+              end
+            rescue StandardError => e
+              LOGGER.debug e.inspect
+              LOGGER.debug e.message
+              e.backtrace.each{|x| LOGGER.debug x}
+            end
+          end
+        end
+      end
+    end
 
-exit
+    # not worth meta-programming 
+    def on_barclick(name = nil, button = nil, &b)
+      register("BarClick", name, button, &b)
+    end
 
+    def on_clientclick(client = nil, button = nil, &b)
+      register("ClientClick", client, button, &b)
+    end
 
-# EVENT LOOP
-wmiir read /event 2>/dev/null |
-while read event
-do
-	set -- $event
-	type="$1"; shift
-	case "$type" in
-	Start)
-		if test wmiirc = "$1"
-		then
-			exit
-		fi;;
-	BarClick)
-		xwrite /ctl view ''"$1"'';;
-	Key)
-		case "$1" in
-		$MODKEY-$LEFT)
-			xwrite /view/ctl select prev;;
-		$MODKEY-$RIGHT)
-			xwrite /view/ctl select next;;
-		$MODKEY-$DOWN)
-			xwrite /view/sel/ctl select next;;
-		$MODKEY-$UP)
-			xwrite /view/sel/ctl select prev;;
-		$MODKEY-space)
-			xwrite /view/ctl select toggle;;
-		$MODKEY-d)
-			xwrite /view/sel/mode default;;
-		$MODKEY-s)
-			xwrite /view/sel/mode stack;;
-		$MODKEY-m)
-			xwrite /view/sel/mode max;;
-		$MODKEY-a)
-			PATH=$HOME/.wmii-3:/usr/local/etc/wmii-3:$PATH `proglist /usr/local/etc/wmii-3 $HOME/.wmii-3 | wmiimenu` &;;
-		$MODKEY-p)
-			wmiisetsid `wmiimenu <$PROGS_FILE` &;;
-		$MODKEY-t)
-			xwrite /ctl view "`wmiir read /tags | wmiimenu`" &;;
-		$MODKEY-[0-9])
-			xwrite /ctl view `echo $1 | sed 's/.*-//'`;;
-		$MODKEY-Return)
-			xterm &;;
-		$MODKEY-Shift-$LEFT)
-			xwrite /view/sel/sel/ctl sendto prev;;
-		$MODKEY-Shift-$RIGHT)
-			xwrite /view/sel/sel/ctl sendto next;;
-		$MODKEY-Shift-$DOWN)
-			xwrite /view/sel/sel/ctl swap down;;
-		$MODKEY-Shift-$UP)
-			xwrite /view/sel/sel/ctl swap up;;
-		$MODKEY-Shift-space)
-			xwrite /view/sel/sel/ctl sendto toggle;;
-		$MODKEY-Shift-c)
-			xwrite /view/sel/sel/ctl kill;;
-		$MODKEY-Shift-t)
-			xwrite /view/sel/sel/tags ''"`wmiir read /tags | wmiimenu`"'' &;;
-		$MODKEY-Shift-[0-9])
-			xwrite /view/sel/sel/tags `echo $1 | sed 's/.*-//'`;;
-		esac;;
-	esac
-done &
+    def on_clientfocus(client = nil, &b); register("ClientFocus", client, &b) end
+    def on_createclient(client = nil, &b); register("CreateClient", client, &b) end
+
+    def on_key(*aliasedkeys, &block)
+      handlers = []
+      aliasedkeys.each do |aliasedkey|
+        key = aliasedkey.clone
+        handler = KeyHandler.new(key, &block)
+        @key_substitutions.sort_by{|kalias, actual| kalias.size}.reverse.each do |kalias, val|
+          key.gsub!(/\b#{Regexp.escape(kalias)}\b/, val)
+        end
+        
+        LOGGER.info "Registering #{aliasedkey} => #{key}."
+        @procs["Key"][key] << handler
+        handlers << handler
+      end
+
+      return *handlers
+    end
+
+    def clean_fork(&b)
+      @children << fork(&b)
+      Thread.new{ Process.wait @children.last }
+      LOGGER.debug "clean_fork(): #{@children.last}"
+    end
+
+    def cleanup
+      LOGGER.debug "This is #{Process.pid}, killing #{@children.inspect}"
+      @children.each do |pid|
+        begin
+          Process.kill("TERM", pid)
+        rescue Exception
+        end
+      end
+    end
+
+    ### Configuration methods
+    def self.def_conf_var(name)
+      define_method(name) do |val|
+        puts "GOT #{val}"
+        case val
+        when nil: instance_variable_get("@#{name}")
+        else      instance_variable_set("@#{name}", val)
+        end
+      end
+    end
+    def_conf_var :view_history_decay
+    def_conf_var :view_history_prev_bias
+    
+    %w[border font colmode colwidth rules grabmod].each do |meth|
+      define_method(meth) do |*values|
+        case values.size
+        when 0
+          @ixp_conn.read "/def/#{meth}"
+        else
+          @ixp_conn.write "/def/#{meth}", values.join("\n")
+        end
+      end
+    end
+
+    def selcolors(colors = nil)
+      case colors
+      when nil
+        @ixp_conn.read "/def/selcolors"
+      else
+        @ixp_conn.write "/def/selcolors", (ENV["WMII_SELCOLORS"] = colors.to_s)
+      end
+    end
+
+    def normcolors(colors = nil)
+      case colors
+      when nil
+        @ixp_conn.read "/def/normcolors"
+      else
+        @ixp_conn.write "/def/normcolors", (ENV["WMII_NORMCOLORS"] = colors.to_s)
+      end
+    end
+
+    def key_subs(associations)
+      unless Hash === associations
+        raise ArgumentError, 
+          "key_subs takes a hash with  alias => actual_key  associations"
+      end
+      associations.each_pair do |key, val|
+        @key_substitutions[key.to_s] = val.to_s
+      end
+    end
+ 
+    class BarButton
+      attr_reader :name
+      def initialize(wmiiconfig, name)
+        @wmiiconfig = wmiiconfig
+        @name = name
+      end
+
+      def on_click(key = nil, &block)
+        raise "block wanted" unless block
+        @wmiiconfig.on_barclick(name, key, &block)
+      end
+
+      def data;     @wmiiconfig.read("/bar/#{@name}/data") end
+      def data=(x); @wmiiconfig.write("/bar/#{@name}/data", x) end
+    end
+    
+    # convenience methods
+    def setup_bar(name, colors = normcolors, data = "", &block)
+      @ixp_conn.remove "/bar/#{name}"
+      @ixp_conn.create "/bar/#{name}"
+      @ixp_conn.write "/bar/#{name}/colors", colors
+      @ixp_conn.write "/bar/#{name}/data", data.chomp
+      if block_given?
+        yield BarButton.new(self, name)
+      end
+    end
+
+    def normalize(tags)
+      tags = tags.split(/\+/) unless Array === tags
+      tags.map{|x| x.chomp}.sort.uniq.compact.grep(/./).join("+")
+    end
+
+    def views
+      @ixp_conn.read("/tags").split(/\n/).grep(/./)
+    end
+
+    def views_intellisort
+      views.sort.sort_by do |view|
+        curr = curr_view
+        if @view_transition_table[curr].has_key?(view)
+          prob = @view_transition_table[curr][view]
+          prob = [prob, @view_history_prev_bias].max if view == @prev_view
+          [0, - prob, view]   # handle ties
+        elsif view == @prev_view
+          [0, -@view_history_prev_bias, view]
+        else
+          [1, 0, view]
+        end
+      end
+    end
+
+    def curr_view
+      @ixp_conn.read("/view/name").chomp
+    end
+
+    def set_curr_view(viewname)
+      viewname = viewname.to_s.chomp
+      return unless views.include? viewname
+      LOGGER.info("Switching to #{viewname.inspect}")
+      @prev_view = curr_view
+      @ixp_conn.write "/ctl", "view #{viewname}"
+      n_trans = (@view_transitions[@prev_view] += 1)
+      table = @view_transition_table[@prev_view]
+      table.each_pair do |key, val|
+        table[key] = val * @view_history_decay *  n_trans / (n_trans + 1)
+      end
+      table[viewname] += (1.0 - @view_history_decay) + 1.0 / (n_trans + 1)
+      total = table.values.inject{|s,x| s+x}
+      table.each_key{|k| table[k] /= total }
+      LOGGER.debug "Trans. table (order 1): #{@view_transition_table.inspect}"
+    end
+    alias_method :curr_view=, :set_curr_view
+    alias_method :view, :set_curr_view
+
+    def curr_view_index
+      views.index(curr_view)
+    end
+
+    def curr_client_tags
+      @ixp_conn.read("/view/sel/sel/tags").split(/\+/).reject{|x| x.empty?}.compact.uniq.sort
+    end
+
+    def curr_client_tags=(tags)
+      @ixp_conn.write("/view/sel/sel/tags", normalize(tags))
+    end
+    
+    alias_method :set_curr_client_tags, :curr_client_tags=
+
+    def retag_curr_client(new_tag)
+      return if /^\s*$/ =~ new_tag
+      old_tags = curr_client_tags
+      new_tags = case new_tag
+      when /^\+/ :  old_tags + [new_tag[1..-1]]
+      when /^-/  :  old_tags - [new_tag[1..-1]]
+      else          [new_tag]
+      end
+      new_tags = normalize(new_tags)
+
+      LOGGER.info "Retagging #{old_tags.inspect} => #{new_tags.inspect})"
+      set_curr_client_tags  new_tags
+    end
+
+    def retag_curr_client_ns(new_tag)
+      return if /^\s*$/ =~ new_tag
+
+      old_tags = curr_client_tags
+      namespace = old_tags.reject{|x| /^\d+$|:/ =~ x}.last
+      new_tags = case new_tag
+      when /^\+/ : old_tags + ["#{namespace}:#{new_tag[1..-1]}"]
+      when /^\-/ : old_tags - ["#{namespace}:#{new_tag[1..-1]}"]
+      else         ["#{namespace}:#{new_tag}"]
+      end
+
+      set_curr_client_tags new_tags
+    end
+
+    def wmiimenu(options, &block)
+      rd, wr = IO.pipe
+      rd.fcntl Fcntl::F_SETFD, Fcntl::FD_CLOEXEC
+      wr.fcntl Fcntl::F_SETFD, Fcntl::FD_CLOEXEC
+      Thread.new do
+        pid = fork do 
+          rd.close
+          chosen = IO.popen("wmiimenu", "r+") do |f|
+            f.puts options
+            f.close_write
+            f.read
+          end.chomp
+          LOGGER.debug "wmiimenu(#{chosen.inspect}) finished"
+          begin
+            wr.print chosen
+            wr.close
+          rescue Exception # catch EPIPE etc.
+          end
+          yield chosen if block_given?
+          exit!
+        end
+        Process.wait(pid)
+      end
+      wr.close
+      def rd.value; ret = gets.chomp; close; ret end
+      rd
+    end
+
+    def program_list
+      @__program_list_last_update ||= Time.at(0)
+      @__program_list ||= []
+      path_glob = ENV["PATH"].gsub(/,/, '\\,').tr(":",",")
+      return @__program_list if Time.new - @__program_list_last_update < 3600
+      @__program_list_last_update = Time.new
+      @__program_list = Dir.glob("{#{path_glob}}/*").select do |fname|
+        File.file?(fname) && File.executable?(fname)
+      end.map{|fname| File.basename(fname)}.sort.uniq
+    end
+
+    def action_list
+      Dir["#{WMIIRC_HOME}/*"].select do |f|
+        File.file?(f) && File.executable?(f)
+      end.map{|f| File.basename(f)}.sort.uniq
+    end
+
+    def condition(&block)
+      c = lambda(&block)
+      def c.===(*x); call(*x) end
+      c
+    end
+  end # Configuration
+
+end # WMII
+
+include WMII
+
