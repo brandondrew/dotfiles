@@ -12,10 +12,15 @@
 ;; and brighter; it simply makes everything else vanish."
 ;; -Neal Stephenson, "In the Beginning was the Command Line"
 
+;; "What you want is probably already in Emacs. If you don't use Emacs,
+;; start. If do use Emacs, use it more. If you *still* can't do what you
+;; want to do, you probably shouldn't do it."
+;; -Shawn Betts, Ratpoison FAQ
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (setq load-path (append '("~/.emacs.d") load-path))
-(setq load-path (append '("~/.emacs.d/arorem") load-path))
+(setq load-path (append '("~/.emacs.d/arorem2") load-path))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -51,10 +56,8 @@
 (global-font-lock-mode t)
 
 (require 'ruby-electric)
-(require 'inf-ruby)
-(require 'ruby-mode)
 (require 'arorem)
-(require 'ri-ruby)
+
 
 (add-to-list 'auto-mode-alist '("\\.rb$" . ruby-mode))
 (add-to-list 'auto-mode-alist '("\\.rake$" . ruby-mode)) ; d'oh!

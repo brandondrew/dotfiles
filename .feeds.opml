@@ -8,10 +8,6 @@
   <body>
 
     <outline text="Tech Folks">
-      <outline text="Boing Boing Blog"
-               description="The Blog of Wonderful things"
-               htmlUrl="http://boingboing.net"
-               xmlUrl="http://boingboing.net/rss.xml" /> 
       <outline text="ongoing"
                description="Ongoing fragmented essay by Tim Bray."
                htmlUrl="http://www.tbray.org/ongoing/"

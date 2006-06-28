@@ -18,14 +18,20 @@
 (setq nnmail-crosspost nil)
 
 (setq nnmail-split-fancy
-      '(| (any "tmornini@.*" "work")
+      '(| (to "ruby-talk@ruby-lang\\.org" "ruby-talk")
+	  (to "rails" "rails")
+	  (to "obby-users@list.0x539.de" "obby-users")
+	  (any "conkeror" "conkeror")
+	  (any "cartographer" "cartographer")
+	  (any "ocruby" "ocruby")
+	  
+	  (any "tmornini@.*" "work")
 	  (any "paxgrid@rogers\\.com" "work")
 	  (any "dallas\\.reedy@gmail\\.com" "work")
 	  (any ".*@dev\\.paxtel\\.com" "checkins")
 	  (any ".*@paxtel\\.com" "work")
 
-	  (to "ruby-talk@ruby-lang\\.org" "ruby-talk")
-	  (to "obby-users@list.0x539.de" "obby-users")
+	  (any "cron" "junk")
 	  (to "phil@localhost" "feeds")
 
 	  (any "zacchaeus.*" "friends")
@@ -33,8 +39,6 @@
 	  (any ".*kleist.*" "grace-group")
 	  (any "alisha\\.e\\.hagelberg@biola\\.edu" "alisha")
 	  (from "Hagelberg" - "Alisha" "family")
-
-	  (any "conkeror" "conkeror")
 
 	  (any ".*hackelford.*" "friends")
 	  (any ".*peckham.*" "friends")
@@ -57,6 +61,10 @@
 		      :fetchflag "\\Seen")
 		     (file
 		      :path "/var/mail/phil")
+		     (imap
+		      :server "mail.hagelb.org"
+		      :user "m2643488"
+		      :stream ssl)
 ))
 
 (setq imap-ssl-program "/usr/bin/openssl s_client -ssl3 -connect %s:%p")
