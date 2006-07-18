@@ -44,10 +44,7 @@
 (autoload 'textile-to-html-region "textilize")
 
 (require 'psvn)
-
-;; Find-file-at-point
-;(require 'ffap)
-;(ffap-bindings)
+(require 'pastie)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Ruby help
@@ -57,7 +54,6 @@
 
 (require 'ruby-electric)
 (require 'arorem)
-
 
 (add-to-list 'auto-mode-alist '("\\.rb$" . ruby-mode))
 (add-to-list 'auto-mode-alist '("\\.rake$" . ruby-mode)) ; d'oh!
@@ -101,7 +97,7 @@
 
 (defalias 'irc 'erc-select)
 (setq pcomplete-cycle-completions nil)
-(setq erc-nick '("technomancy" "teXnomancy"))
+(setq erc-nick '("technomancy" "teXnomancy" "technomancy_"))
 (setq erc-input-line-position -1)
 (setq erc-autojoin-channels-alist (quote (("freenode.net" "#emacs" "#ruby-lang"))))
 (setq erc-prompt ">")
@@ -139,7 +135,7 @@
 (global-set-key "\M-[" 'hs-hide-block)
 (global-set-key "\M-]" 'hs-show-block)
 (global-set-key "\M-{" 'hs-hide-level)
-(global-set-key "\M-}" 'hs-show-level)
+(global-set-key "\M-}" 'hs-show-all)
 
 ; linear buffer-switching
 (global-set-key "\M-p" 'bs-cycle-next)
@@ -178,7 +174,7 @@
 			       (shell-command "ssh philisha.net mpc next")))
 
 (global-set-key [(control f4)] (lambda (dir)
-				 (interactive "sPlay directory: ")
+				 (interactive (list (completing-read "Play directory: " (split-string (shell-command-to-string "ls -d ~/music/*/* | cut -c 18-") "\n"))))
 				 (shell-command (concat 
 						 "ssh philisha.net mpc clear; "
 						 "ssh philisha.net mpc add " dir
@@ -228,6 +224,9 @@
 
 (global-set-key [f11] 'ri)
 
+(global-set-key [f12] '(lambda ()
+			 (interactive)
+			 (write-file "~/mjolnir/apps/technomancy/public/tmp/tmp.txt")))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; defuns
@@ -271,7 +270,6 @@
 (set-register ?s '(file . "~/.screenrc"))
 (set-register ?t '(file . "~/mjolnir/paxtel_timecard.2006"))
 (set-register ?c '(file . "~/.contacts"))
-(set-register ?w '(file . "~/.emacs.d/wmii.el"))
 (set-register ?W '(file . "~/.wmii-3/wmiirc"))
 
 
@@ -292,6 +290,9 @@
 
 (when (not window-system)
   (keyboard-translate ?\C-h ?\C-?))
+
+
+(add-to-list 'comint-mode-hook 'ansi-color-for-comint-mode-on)
 
 (setq font-lock-maximum-decoration t)
 (setq inhibit-startup-message t)
