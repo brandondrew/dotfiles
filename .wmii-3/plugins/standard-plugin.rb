@@ -382,7 +382,7 @@ Plugin.define "standard"  do
   end
 
 #{{{ programs (w/ history)
-  binding("execute-program", "MODKEY-shift-a") do |wmii,|
+  binding("execute-program", "MODKEY-Shift-a") do |wmii,|
     remembered = (wmii.plugin_config["standard:programs"]["history"] ||= [])
     history_size = (wmii.plugin_config["standard:programs"]["history_size"] ||= 5)
     list = remembered + wmii.program_list

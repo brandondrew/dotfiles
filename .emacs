@@ -21,7 +21,7 @@
 
 (setq load-path (append '("~/.emacs.d") load-path))
 (setq load-path (append '("~/.emacs.d/arorem2") load-path))
-
+(toggle-debug-on-error)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; loading modes
@@ -112,11 +112,14 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Jabber
 
-(setq jabber-nickname "")
-(setq jabber-password nil)
-(setq jabber-resource "emacs-memex")
-(setq jabber-server "hagelb.org")
-(setq jabber-username "phil")
+;; not included in my .emacs.d; need to apt-get install emacs-jabber here
+
+(when (functionp 'jabber-connect)
+  (setq jabber-nickname "")
+  (setq jabber-password nil)
+  (setq jabber-resource "emacs-memex")
+  (setq jabber-server "hagelb.org")
+  (setq jabber-username "phil"))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -174,7 +177,7 @@
 			       (shell-command "ssh philisha.net mpc next")))
 
 (global-set-key [(control f4)] (lambda (dir)
-				 (interactive (list (completing-read "Play directory: " (split-string (shell-command-to-string "ls -d ~/music/*/* | cut -c 18-") "\n"))))
+				 (interactive (list (completing-read "Play directory: " (split-string (shell-command-to-string "ls ~/music") "\n"))))
 				 (shell-command (concat 
 						 "ssh philisha.net mpc clear; "
 						 "ssh philisha.net mpc add " dir
@@ -351,3 +354,7 @@
 
 ; C-x n n narrow visibility of buffer to selection
 ; C-x n w widen to full buffer
+
+; Dired
+; mark with 'm', press 'Q' for multi-file find/replace
+; C-j launch dired when ido-mode is enabled

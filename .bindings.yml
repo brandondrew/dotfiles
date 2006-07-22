@@ -1,0 +1,11 @@
+/apps/metacity/: 
+  keybinding_commands/: 
+    command_1: /home/phil/bin/singleton.sh
+    command_2: /home/phil/bin/rxvt
+  global_keybindings/: 
+    run_command_1: <Alt>grave
+    run_command_2: <Shift>F9
+  window_keybindings/: 
+    toggle_above: <Alt>F11
+    toggle_on_all_workspaces: <Alt><Shift>F11
+    toggle_maximized: <Alt>F10
