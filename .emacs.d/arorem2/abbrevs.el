@@ -4,7 +4,7 @@
 ;; Uses snippet.el to set up auto-expanded abbreviations
 ;; Thanks to TextMate, Pete Kazmier, and Galinsky Dmitry
 
-(snippet-with-abbrev-table 'arorem-abbrev-table
+(snippet-with-abbrev-table 'ruby-mode-abbrev-table
     ;; model
     ("bt" . "belongs_to")
     ("hm" . "has_many")

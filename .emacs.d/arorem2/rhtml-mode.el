@@ -22,7 +22,22 @@
   (make-local-variable 'font-lock-defaults)
   (setq font-lock-defaults '((rhtml-font-lock-keywords))))
 
+(defun rhtml-controller-name-from-view (view)
+  (concat (rails-root) 
+	  "app/controllers/"
+	   (file-name-nondirectory 
+	    (expand-file-name (concat view "/..")))
+	  "_controller.rb"))
+
+(defun rhtml-find-action ()
+  (interactive)
+  (let ((action (file-name-sans-extension (file-name-nondirectory buffer-file-name))))
+    (find-file (rhtml-controller-name-from-view (buffer-file-name)))
+    (beginning-of-buffer)
+    (search-forward (concat "def " action))
+    (recenter)))
+
 (define-key rhtml-mode-map
-  "\C-c\C-v" 'ruby-find-view)
+  "\C-c\C-v" 'rhtml-find-action)
 
 (provide 'rhtml-mode)
