@@ -22,9 +22,9 @@
 ;; - ri
 ;; - snippets
 ;; - rhtml
-;; - psvn help
-;; - config file registers
-;; - rake
+;; - psvn help?
+;; - config file registers?
+;; - rake?
 
 ;;; TODO
 
@@ -32,19 +32,13 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defvar arorem-version "0.3")
+(defvar arorem-version "0.2")
 (require 'ruby-mode)
 (require 'inf-ruby)
-(require 'toggle)
-(require 'ri-ruby)
 (require 'snippet)
 (require 'rhtml-mode)
-;(require 'abbrevs)
 
-
-(set-register ?d '(file . (concat (rails-root) "/config/database.yml")))
-(set-register ?v '(file . (concat (rails-root) "/config/environment.rb")))
-(set-register ?r '(file . (concat (rails-root) "/config/routes.rb")))
+(load "abbrevs")
 
 ;;; view toggling
 
@@ -56,7 +50,6 @@
  	 (appdir (file-name-directory (directory-file-name (file-name-directory (buffer-file-name))))))
     (find-file (concat appdir "views/" cls "/" fn ".rhtml"))))
 
-(which-function-mode t) ; required for ruby-find-view
 
 ;;; script/console
 
@@ -72,9 +65,6 @@
   (interactive)
   (run-ruby (concat (rails-root) "/script/console")))
 
-
-;;; key bindings
-
 (define-key ruby-mode-map
   "\C-c\C-s" 'arorem-console)
 (define-key ruby-mode-map
@@ -82,37 +72,6 @@
 (define-key ruby-mode-map
   "\C-c\C-t" 'toggle-test)
 (define-key ruby-mode-map
-  "\C-c\C-x" 'toggle-fixture)
-(define-key ruby-mode-map
-  "\C-c\C-h" 'ri)
-(define-key ruby-mode-map
-  "\C-c\C-r" (lambda () (interactive) (dired (rails-root))))
-
-;; rake stuff
-
-(defun rake (task &rest args)
-  (shell-command (concat "cd " (rails-root) "; rake " task)))
-
-(define-key ruby-mode-map
-  "\C-c\C-d" (lambda () (interactive) (rake "deploy")))
-(define-key ruby-mode-map
-  "\C-c\C-m" (lambda () (interactive) (rake "migrate")))
-
-(define-key ruby-mode-map
-  "\C-c\C-u" (lambda () (interactive) (rake "test:units")))
-(define-key ruby-mode-map
-  "\C-c\C-f" (lambda () (interactive) (rake "test:functionals")))
-(define-key ruby-mode-map
-  "\C-c\C-i" (lambda () (interactive) (rake "test:integration")))
-
-
-(defun extract-partial (begin end partial-name)
-  (interactive "r\nsName your partial: ")
-  (kill-region begin end)
-  (find-file (concat "_" partial-name ".rhtml"))
-  (yank)
-  (pop-to-buffer nil)
-  (insert (concat "<%= render :partial => '" partial-name "' %>\n")))
-
+  "\C-c\C-f" 'toggle-fixture)
 
 (provide 'arorem)
