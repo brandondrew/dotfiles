@@ -266,7 +266,7 @@
 
 (set-register ?e '(file . "~/.emacs"))
 (set-register ?d '(file . "~/.emacs.d"))
-(set-register ?a '(file . "~/.emacs.d/arorem.el"))
+(set-register ?a '(file . "~/.emacs.d/arorem2/arorem.el"))
 (set-register ?y '(file . "~/.emacs.d/ebby.el"))
 (set-register ?g '(file . "~/.gnus.el"))
 (set-register ?b '(file . "~/.bashrc"))

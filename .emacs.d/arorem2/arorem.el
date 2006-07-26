@@ -50,6 +50,21 @@
  	 (appdir (file-name-directory (directory-file-name (file-name-directory (buffer-file-name))))))
     (find-file (concat appdir "views/" cls "/" fn ".rhtml"))))
 
+;;; files table
+
+(defvar project-files-table ())
+
+(defun populate-project-files-table (file)
+  (if (file-directory-p file)
+      (mapc 'populate-project-files-table (directory-files file t "^[^\.]"))
+    (setq project-files-table (acons (file-name-nondirectory file) file project-files-table))))
+
+(defun find-file-in-project (file)
+  (interactive (list (completing-read "Find file in project: " (mapcar 'car project-files-table))))
+  (if (not project-files-table)
+      (populate-project-files-table (concatenate (rails-root) "/app")))
+  (find-file (cdr (assoc file project-files-table))))
+
 
 ;;; script/console
 
@@ -73,5 +88,7 @@
   "\C-c\C-t" 'toggle-test)
 (define-key ruby-mode-map
   "\C-c\C-f" 'toggle-fixture)
+(define-key ruby-mode-map
+  "\C-x\C-F" 'find-file-in-project)
 
 (provide 'arorem)

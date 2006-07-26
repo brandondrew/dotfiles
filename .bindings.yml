@@ -9,3 +9,5 @@
     toggle_above: <Alt>F11
     toggle_on_all_workspaces: <Alt><Shift>F11
     toggle_maximized: <Alt>F10
+    switch_to_workspace_up: <Alt>bracketleft
+    switch_to_workspace_down: <Alt>bracketright

@@ -25,6 +25,10 @@
 	  (any "cartographer" "cartographer")
 	  (any "ocruby" "ocruby")
 	  
+	  (any "Jed Levin" "ujive")
+	  (any "Marshall Pierce" "ujive")
+	  (any "Brent Hargrave" "ujive")
+
 	  (any "tmornini@.*" "work")
 	  (any "paxgrid@rogers\\.com" "work")
 	  (any "dallas\\.reedy@gmail\\.com" "work")
