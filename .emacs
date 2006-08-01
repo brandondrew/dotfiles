@@ -45,6 +45,8 @@
 
 (require 'psvn)
 (require 'pastie)
+(require 'compile)
+(require 'which-func)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Ruby help
@@ -72,7 +74,7 @@
 (when (= emacs-major-version 22)
   (ido-mode t)
   (ido-toggle-prefix)
-  (file-name-shadow-mode)
+  (file-name-shadow-mode t)
   (add-to-list 'hs-special-modes-alist
 	       (list 'ruby-mode
 		     (concat ruby-block-beg-re "\|{")
@@ -80,14 +82,41 @@
 		     "#"
 		     'ruby-forward-sexp nil)))
 
+;; Thanks PragDave:
+
+(defun ruby-xmp-region (reg-start reg-end)
+  "Pipe the region through Ruby's xmp utility and replace
+     the region with the result."
+  (interactive "r")
+  (shell-command-on-region reg-start reg-end
+			   "ruby -r xmp -n -e 'xmp($_, \"%l\t\t# %r\n\")'" t))
+
+;; for integrating compile-mode and test/unit
+
+(defun my-ruby-compile-hook ()
+  (add-to-list 'compilation-error-regexp-alist
+	       ;; this regex does not work
+	       '("\\([A-Z][a-zA-Z0-9_]*_test\.rb\\):\\([0-9]+\\):" 1 2))
+  (setq compile-command "rake"))
+
+(add-hook 'ruby-mode-hook 'my-ruby-compile-hook)
+
+;; run the current test function
+
+(defun ruby-test-function ()
+  "Test the current ruby function (must be runable via ruby <buffer> --name <test>)."
+  (interactive)
+  (let* ((funname (which-function))
+	 (fn (and (string-match "#\\(.*\\)" funname) (match-string 1 funname))))
+    (compile (concat "ruby " (file-name-nondirectory (buffer-file-name)) " --name " fn))))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Lisp
 ;;
 
 (add-to-list 'load-path "~/.emacs.d/slime-2.0/")
 (setq inferior-lisp-program "/usr/local/bin/lisp")
-(require 'slime)
-(slime-setup)
+(autoload 'slime "slime-setup")
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -183,38 +212,11 @@
 						 "ssh philisha.net mpc add " dir
 						 "; ssh philisha.net mpc play"))))
 
-; display images using imagemagick
-(global-set-key [f5] (lambda () 
-		       (interactive) 
-		       (shell-command (concat "display " 
-					      (thing-at-point 'filename)))))
-
-(global-set-key [(shift f5)] 'flickr-grab)
-
-(global-set-key [f6] (lambda (lat lng)
-		       (interactive "BLatitude: \nBLongitude")
-		       (w3m-browse-url (concat "http://maps.yahoo.com/maps_result?mag=12&lat="
-					       lat
-					       "&lon="
-					       lng))))
+(global-set-key [f5] 'compile)
+(global-set-key [(shift f5)] 'ruby-test-function)
 
 ;; For Ebby debugging, mostly
 (global-set-key [f7] (lambda () (interactive) (message "%s" (point))))
-
-; i think zenspider wrote this
-(defvar ys-eshell-wins nil)
-(global-set-key [f8] (lambda (win-num)
-		       (interactive "p")
-		       (message "win-num %s" win-num)
-		       (let ((assoc-buffer (cdr (assoc win-num ys-eshell-wins))))
-			 (if (not (buffer-live-p assoc-buffer))
-			     (progn ; the requested buffer not there 
-			       (setq assoc-buffer (eshell t))
-			       (setq ys-eshell-wins (assq-delete-all win-num ys-eshell-wins))
-			       (add-to-list 'ys-eshell-wins (cons win-num assoc-buffer))))
-			 (switch-to-buffer assoc-buffer)
-			 (rename-buffer (concat "*eshell-" (int-to-string win-num) "*"))
-			 assoc-buffer)))
 
 (global-set-key [f9] '(lambda () 
 			(interactive) 
@@ -224,6 +226,8 @@
 
 ; great for quick googles
 (global-set-key [f10] 'w3m)
+
+(global-set-key [(meta f10)] 'ruby-xmp-region)
 
 (global-set-key [f11] 'ri)
 
@@ -245,6 +249,12 @@
           "pariatur. Excepteur sint occaecat cupidatat non proident, sunt in "
           "culpa qui officia deserunt mollit anim id est laborum."))
 
+(defun display-image ()
+  "display images using imagemagick"
+  (interactive) 
+  (shell-command (concat "display " 
+			 (thing-at-point 'filename))))
+
 (defun flickr-grab ()
   "Display only the photo from a flickr url"
   (interactive)
@@ -253,6 +263,11 @@
      (save-excursion
        (re-search-backward "src=\"\\(http://static\\.flickr\\.com/[[:digit:]]*/[[:digit:]]*\_[[:alnum:]]*\\.jpg\\)")
        (match-string 1)))))
+
+(defun map-coords (lat lon)
+  (interactive "BLatitude: \nBLongitude")
+  (w3m-browse-url (concat "http://maps.yahoo.com/maps_result?mag=12&lat="
+			  lat "&lon=" lng)))
 
 (defun smallish (&optional font-size)
   (interactive)

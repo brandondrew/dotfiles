@@ -29,13 +29,14 @@
 	  (any "Marshall Pierce" "ujive")
 	  (any "Brent Hargrave" "ujive")
 
+	  (any "phil@dev.\\.paxtel\\.com" junk)
+	  (any ".*@dev\\.paxtel\\.com" "checkins")
 	  (any "tmornini@.*" "work")
 	  (any "paxgrid@rogers\\.com" "work")
 	  (any "dallas\\.reedy@gmail\\.com" "work")
-	  (any ".*@dev\\.paxtel\\.com" "checkins")
 	  (any ".*@paxtel\\.com" "work")
 
-	  (any "cron" "junk")
+	  (any "cron" junk)
 	  (to "phil@localhost" "feeds")
 
 	  (any "zacchaeus.*" "friends")

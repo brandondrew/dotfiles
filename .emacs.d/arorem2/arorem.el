@@ -37,6 +37,7 @@
 (require 'inf-ruby)
 (require 'snippet)
 (require 'rhtml-mode)
+(require 'toggle)
 
 (load "abbrevs")
 
@@ -50,7 +51,7 @@
  	 (appdir (file-name-directory (directory-file-name (file-name-directory (buffer-file-name))))))
     (find-file (concat appdir "views/" cls "/" fn ".rhtml"))))
 
-;;; files table
+;;; find-file-in-project
 
 (defvar project-files-table ())
 
@@ -60,13 +61,16 @@
     (setq project-files-table (acons (file-name-nondirectory file) file project-files-table))))
 
 (defun find-file-in-project (file)
-  (interactive (list (completing-read "Find file in project: " (mapcar 'car project-files-table))))
-  (if (not project-files-table)
-      (populate-project-files-table (concatenate (rails-root) "/app")))
+  (interactive (list (completing-read "Find file in project: " (mapcar 'car (project-files)))))
   (find-file (cdr (assoc file project-files-table))))
 
+(defun project-files ()
+  (when (or (not project-files-table) ; initial load
+	    (not (string-match (rails-root) (cdar project-files-table)))) ; switched projects
+    (setq project-files-table nil)
+    (populate-project-files-table (concat (rails-root) "/app")))
+  project-files-table)
 
-;;; script/console
 
 (defun rails-root (&optional dir)
   (or dir (setq dir default-directory))
@@ -89,6 +93,6 @@
 (define-key ruby-mode-map
   "\C-c\C-f" 'toggle-fixture)
 (define-key ruby-mode-map
-  "\C-x\C-F" 'find-file-in-project)
+  "\C-x\C-\M-F" 'find-file-in-project)
 
 (provide 'arorem)
