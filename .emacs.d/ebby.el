@@ -100,6 +100,10 @@
   "A flag so that incoming changes are not transmitted as local changes.
 Use the without-transmitting-changes macro to set this.")
 
+(defvar local-operations-cache ()
+  "A record of local operations so we can transform them against
+  incoming out-of-sync operations.")
+
 ;; So we can use setf
 (require 'cl) 
 

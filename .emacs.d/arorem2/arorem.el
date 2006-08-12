@@ -42,6 +42,7 @@
 (require 'snippet)
 (require 'rhtml-mode)
 (require 'toggle)
+(require 'rails-test)
 
 (load "abbrevs")
 
@@ -98,5 +99,8 @@
   "\C-c\C-f" 'toggle-fixture)
 (define-key ruby-mode-map
   "\C-x\C-\M-F" 'find-file-in-project)
+(define-key ruby-mode-map
+  [(shift f5)] 'ruby-test-function)
+
 
 (provide 'arorem)

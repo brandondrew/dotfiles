@@ -91,24 +91,6 @@
   (shell-command-on-region reg-start reg-end
 			   "ruby -r xmp -n -e 'xmp($_, \"%l\t\t# %r\n\")'" t))
 
-;; for integrating compile-mode and test/unit
-
-(defun my-ruby-compile-hook ()
-  (add-to-list 'compilation-error-regexp-alist
-	       ;; this regex does not work
-	       '("\\([A-Z][a-zA-Z0-9_]*_test\.rb\\):\\([0-9]+\\):" 1 2))
-  (setq compile-command "rake"))
-
-(add-hook 'ruby-mode-hook 'my-ruby-compile-hook)
-
-;; run the current test function
-
-(defun ruby-test-function ()
-  "Test the current ruby function (must be runable via ruby <buffer> --name <test>)."
-  (interactive)
-  (let* ((funname (which-function))
-	 (fn (and (string-match "#\\(.*\\)" funname) (match-string 1 funname))))
-    (compile (concat "ruby " (file-name-nondirectory (buffer-file-name)) " --name " fn))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Lisp
@@ -122,21 +104,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; IRC
 
-(require 'erc-nick-colors)
-
-(defalias 'irc 'erc-select)
-(setq pcomplete-cycle-completions nil)
-(setq erc-nick '("technomancy" "teXnomancy" "technomancy_"))
-(setq erc-input-line-position -1)
-(setq erc-autojoin-channels-alist (quote (("freenode.net" "#emacs" "#ruby-lang"))))
-(setq erc-prompt ">")
-(setq erc-current-nick-highlight-type 'keyword)
-(setq erc-auto-query 'buffer)
-
-(defun erc-notify-keyword (match-type nick message)
-  (if (eq match-type keyword)
-      (shell-command (concat "notify-send \"" nick " said \" \"" message "\""))))
-
+(load "rcirc-config")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Jabber
@@ -214,7 +182,7 @@
 						 "; ssh philisha.net mpc play"))))
 
 (global-set-key [f5] 'compile)
-(global-set-key [(shift f5)] 'ruby-test-function)
+
 
 ;; For Ebby debugging, mostly
 (global-set-key [f7] (lambda () (interactive) (message "%s" (point))))
@@ -314,7 +282,6 @@
 
 (when (not window-system)
   (keyboard-translate ?\C-h ?\C-?))
-
 
 (add-to-list 'comint-mode-hook 'ansi-color-for-comint-mode-on)
 
