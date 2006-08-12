@@ -2,7 +2,6 @@
 
 (defun my-ruby-compile-hook ()
   (add-to-list 'compilation-error-regexp-alist
-	       ;; this regex does not work
 	       '("\\([a-zA-Z0-9_]*test.rb\\):\\([0-9]+\\)" 1 2))
   (setq compile-command "rake"))
 
