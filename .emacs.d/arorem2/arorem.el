@@ -24,6 +24,10 @@
 ;; - rhtml
 ;; - psvn help?
 ;; - config file registers?
+;;   - environment.rb
+;;   - database.yml
+;;   - routes.rb
+;;   - schema.rb
 ;; - rake?
 
 ;;; TODO

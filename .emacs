@@ -192,6 +192,7 @@
 (global-set-key [f1] 'menu-bar-mode)
 
 (global-set-key [f2] 'color-theme-zenburn)
+(global-set-key [(control shift 2)] 'mark-string)
 (global-set-key [(shift f2)] 'color-theme-standard)
 
 (global-set-key [f3] 'rename-buffer)
@@ -275,6 +276,11 @@
   (tabbar-mode -1)
   (scroll-bar-mode -1))
 
+(defun mark-string ()
+  (interactive)
+  (setq deactivate-mark nil)
+  (push-mark (search-forward "\"") t t)
+  (search-backward "\""))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;     registers (C-x C-r)

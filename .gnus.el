@@ -29,6 +29,7 @@
 	  (any "Marshall Pierce" "ujive")
 	  (any "Brent Hargrave" "ujive")
 
+	  (any "noreply@paxtel\\.com" paxtel-notify)
 	  (any "phil@dev.\\.paxtel\\.com" junk)
 	  (any ".*@dev\\.paxtel\\.com" "checkins")
 	  (any "tmornini@.*" "work")
