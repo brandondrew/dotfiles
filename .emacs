@@ -47,6 +47,7 @@
 (require 'pastie)
 (require 'compile)
 (require 'which-func)
+(color-theme-zenburn)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Ruby help
@@ -54,8 +55,12 @@
 ;; syntax highlighting needs to be done before ruby-electric
 (global-font-lock-mode t)
 
+(setq erb-background "black") ; must do before rhtml-mode is loaded, i think
+
 (require 'ruby-electric)
 (require 'arorem)
+
+(set-face-attribute 'erb-face nil :background "black")
 
 (add-to-list 'auto-mode-alist '("\\.rb$" . ruby-mode))
 (add-to-list 'auto-mode-alist '("\\.rake$" . ruby-mode)) ; d'oh!

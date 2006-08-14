@@ -6,32 +6,57 @@
 (add-to-list 'auto-mode-alist '("\\.rhtml$" . rhtml-mode))
 
 (defconst rhtml-font-lock-keywords
-  (append
-   '(
-     ("<%[=]?" . font-lock-preprocessor-face)
-     ("%>" . font-lock-preprocessor-face)
-     ("<\\(/?[[:alnum:]][-_.:[:alnum:]]*\\)" 1 font-lock-function-name-face)
-     ("\\([a-zA-Z0-9]*[ ]?\\)=" 1 font-lock-variable-name-face)
-     ("\\(@[a-zA-Z0-9]*\\)" 1 font-lock-variable-name-face)
-     ("<%[=]?\\([^%]*\\)%>" 1 font-lock-preprocessor-face)
+  '(
+    ;; erb-specific
+    ("<%[=]?" . font-lock-preprocessor-face)
+    ("%>" . font-lock-preprocessor-face)
 
-     sgml-font-lock-keywords
-     sgml-font-lock-keywords-1
-     sgml-font-lock-keywords-2
-     ruby-font-lock-keywords)))
+    ("<%[=]?\\([^%]*\\)\\(['][^']*[']\\)\\([^%]*\\)%>"
+     . (2 'font-lock-string-face-erb t nil))
+    
+    ("<%[=]?\\([^%]*\\)\\([A-Z][0-9a-zA-Z_]*\\)\\([^%]*\\)%>"
+     2 'font-lock-type-face-erb)
+
+    ("<%[=]?\\([^%]*\\)\\(@[0-9a-zA-Z_]*\\)\\([^%]*\\)%>"
+     2 'font-lock-variable-name-face-erb)
+
+    ("<%[=]?\\([^%]*\\)\\(:[0-9a-zA-Z_]*\\)\\([^%]*\\)%>"
+     2 'font-lock-constant-face-erb)
+
+    ("<%[=]?\\([^%]*\\)\\<\\(alias\\|and\\|begin\\|break\\|case\\|catch\\|class\\|def\\|do\\|elsif\\|else\\|fail\\|ensure\\|for\\|end\\|if\\|in\\|module\\|next\\|not\\|or\\|raise\\|redo\\|rescue\\|retry\\|return\\|then\\|throw\\|super\\|unless\\|undef\\|until\\|when\\|while\\|yield\\|render\\)\\>\\([^%]*\\)%>"
+     2 'font-lock-keyword-face-erb)
+
+    ("<%[=]?\\([^%]*\\)%>" . (1 'erb-face keep t))
+    
+    ;; html-specific
+    ("<\\(/?[[:alnum:]][-_.:[:alnum:]]*\\)" 1 font-lock-function-name-face)
+    ("\\([a-zA-Z0-9]*[ ]?\\)=" 1 font-lock-variable-name-face)
+    ("\\(@[a-zA-Z0-9]*\\)" 1 font-lock-variable-name-face)
+    ("<!--.*?-->" . font-lock-comment-face) ; does not match comments containing "strings" or <tags>
+))
+
+
+;; Set up ERB faces with proper background
+
+(defcustom erb-background "lightblue"
+  "Background for embedded Ruby")
 
 (defface erb-face
   `((t (:background "lightblue")))
-  "Face for Ruby embedded into HTML"
+  "Basic face for Ruby embedded into HTML"
   :group 'basic-faces)
 
-(define-derived-mode rhtml-mode
-  html-mode "RHTML"
-  "Embedded Ruby Mode (RHTML)"
-  (interactive)
-  (abbrev-mode)
-  (make-local-variable 'font-lock-defaults)
-  (setq font-lock-defaults '(rhtml-font-lock-keywords)))
+(mapc (lambda (faces)
+	(copy-face (car faces) (cdr faces))
+	(set-face-background (cdr faces) erb-background))
+      '((font-lock-keyword-face . font-lock-keyword-face-erb)
+	(font-lock-variable-name-face . font-lock-variable-name-face-erb)
+	(font-lock-string-face . font-lock-string-face-erb)
+	(font-lock-type-face . font-lock-type-face-erb)
+	(font-lock-constant-face . font-lock-constant-face-erb)))
+
+
+;; Handy RHTML functions
 
 (defun rhtml-controller-name-from-view (view)
   (concat (rails-root) 
@@ -57,7 +82,21 @@
   (insert (concat "<%= render :partial => '" partial-name "' %>\n")))
 
 
+;; Defining the mode
+
+(define-derived-mode rhtml-mode
+  html-mode "RHTML"
+  "Embedded Ruby Mode (RHTML)"
+  (interactive)
+  (abbrev-mode)
+  (setq font-lock-defaults '(rhtml-font-lock-keywords)))
+
 (define-key rhtml-mode-map
   "\C-c\C-v" 'rhtml-find-action)
 
+; for debugging font-lock
+(global-set-key "\C-c\C-r" 'rhtml-mode)
+(global-set-key "\C-x\C-\M-e" 'eval-defun)
+
 (provide 'rhtml-mode)
+
