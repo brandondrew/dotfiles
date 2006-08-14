@@ -130,6 +130,7 @@
 (global-set-key "\C-xO" (lambda () (interactive) (other-window -1)))
 (global-set-key "\C-x." (lambda () (interactive) (enlarge-window 1 t)))
 (global-set-key "\C-x," (lambda () (interactive) (shrink-window 1 t)))
+(setq outline-minor-mode-prefix [(control o)])
 
 ; hide-show
 (global-set-key "\M-[" 'hs-hide-block)

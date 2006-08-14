@@ -1,26 +1,37 @@
 ;;; rhtml-mode
 
-;; Part of arorem - Another Ruby on Rails Emacs Mode
-;; Sets up an rhtml mode
+;; Sets up an rhtml mode for embedded Ruby (ERB)
 ;; (C) 2006 Phil Hagelberg
 
 (add-to-list 'auto-mode-alist '("\\.rhtml$" . rhtml-mode))
 
 (defconst rhtml-font-lock-keywords
   (append
-   '(("<%[=]?" . font-lock-preprocessor-face)
+   '(
+     ("<%[=]?" . font-lock-preprocessor-face)
      ("%>" . font-lock-preprocessor-face)
-     ("link_to" . font-lock-keyword-face)
-     ("<\\(/?[[:alnum:]][-_.:[:alnum:]]*\\)" 1 font-lock-function-name-face))
-   ruby-font-lock-keywords))
+     ("<\\(/?[[:alnum:]][-_.:[:alnum:]]*\\)" 1 font-lock-function-name-face)
+     ("\\([a-zA-Z0-9]*[ ]?\\)=" 1 font-lock-variable-name-face)
+     ("\\(@[a-zA-Z0-9]*\\)" 1 font-lock-variable-name-face)
+     ("<%[=]?\\([^%]*\\)%>" 1 font-lock-preprocessor-face)
+
+     sgml-font-lock-keywords
+     sgml-font-lock-keywords-1
+     sgml-font-lock-keywords-2
+     ruby-font-lock-keywords)))
+
+(defface erb-face
+  `((t (:background "lightblue")))
+  "Face for Ruby embedded into HTML"
+  :group 'basic-faces)
 
 (define-derived-mode rhtml-mode
   html-mode "RHTML"
-  "Another Ruby on Rails Emacs Mode (RHTML)"
+  "Embedded Ruby Mode (RHTML)"
   (interactive)
   (abbrev-mode)
   (make-local-variable 'font-lock-defaults)
-  (setq font-lock-defaults '((rhtml-font-lock-keywords))))
+  (setq font-lock-defaults '(rhtml-font-lock-keywords)))
 
 (defun rhtml-controller-name-from-view (view)
   (concat (rails-root) 

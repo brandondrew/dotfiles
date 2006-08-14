@@ -2,7 +2,7 @@
 
 (defun my-ruby-compile-hook ()
   (add-to-list 'compilation-error-regexp-alist
-	       '("\\([a-zA-Z0-9_]*test.rb\\):\\([0-9]+\\)" 1 2))
+	       '("\\([\w_]*test.rb\\):\\([0-9]+\\)" 1 2))
   (setq compile-command "rake"))
 
 (add-hook 'ruby-mode-hook 'my-ruby-compile-hook)
@@ -15,5 +15,12 @@
   (let* ((funname (which-function))
 	 (fn (and (string-match "#\\(.*\\)" funname) (match-string 1 funname))))
     (compile (concat "ruby " (file-name-nondirectory (buffer-file-name)) " --name " fn))))
+
+(defun autotest ()
+  (interactive)
+  (let ((buffer (shell (concat "cd " (rails-root) ";autotest -rails"))))
+    (compilation-shell-minor-mode)
+    (define-key shell-mode-map "\C-c\C-a" 'autotest-switch)
+    (comint-send-string buffer "autotest\n")))
 
 (provide 'rails-test)
