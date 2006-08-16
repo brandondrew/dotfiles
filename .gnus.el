@@ -19,6 +19,7 @@
 
 (setq nnmail-split-fancy
       '(| (to "ruby-talk@ruby-lang\\.org" "ruby-talk")
+	  (to "ruby_emacs_dev@yahoogroups\\.com" "emacs-rails")
 	  (to "rails" "rails")
 	  (to "obby-users@list.0x539.de" "obby-users")
 	  (any "conkeror" "conkeror")

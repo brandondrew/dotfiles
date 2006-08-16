@@ -11,14 +11,14 @@
     ("<%[=]?" . font-lock-preprocessor-face)
     ("%>" . font-lock-preprocessor-face)
 
-    ("<%[=]?\\([^%]*\\)\\(['][^']*[']\\)\\([^%]*\\)%>"
-     . (2 'font-lock-string-face-erb t nil))
+;    ("<%[=]?\\([^%]*\\)\\(['\"][^\"']*[\"']\\)\\([^%]*\\)%>"
+;     . (2 'font-lock-string-face-erb t nil)) teh broken
     
     ("<%[=]?\\([^%]*\\)\\([A-Z][0-9a-zA-Z_]*\\)\\([^%]*\\)%>"
      2 'font-lock-type-face-erb)
 
     ("<%[=]?\\([^%]*\\)\\(@[0-9a-zA-Z_]*\\)\\([^%]*\\)%>"
-     2 'font-lock-variable-name-face-erb)
+     . (2 'font-lock-variable-name-face-erb t t))
 
     ("<%[=]?\\([^%]*\\)\\(:[0-9a-zA-Z_]*\\)\\([^%]*\\)%>"
      2 'font-lock-constant-face-erb)
@@ -29,20 +29,22 @@
     ("<%[=]?\\([^%]*\\)%>" . (1 'erb-face keep t))
     
     ;; html-specific
-    ("<\\(/?[[:alnum:]][-_.:[:alnum:]]*\\)" 1 font-lock-function-name-face)
-    ("\\([a-zA-Z0-9]*[ ]?\\)=" 1 font-lock-variable-name-face)
-    ("\\(@[a-zA-Z0-9]*\\)" 1 font-lock-variable-name-face)
-    ("<!--.*?-->" . font-lock-comment-face) ; does not match comments containing "strings" or <tags>
+    ("<\\(/?[[:alnum:]][-_.:[:alnum:]]*\\)" 1 font-lock-function-name-face) ; tags
+    ("\\([a-zA-Z0-9]*[ ]?\\)=" 1 font-lock-variable-name-face) ; attributes
+
+    ("\\(\"[^\"]*\"\\)" .(1 font-lock-string-face prepend nil))
+    ("\\('[^']*'\\)" . (1 font-lock-string-face prepend nil))
+    ("\\(<!--.*?-->\\)" . (1 font-lock-comment-face t nil))
 ))
 
 
 ;; Set up ERB faces with proper background
 
-(defcustom erb-background "lightblue"
+(defcustom erb-background "grey18"
   "Background for embedded Ruby")
 
 (defface erb-face
-  `((t (:background "lightblue")))
+  `((t (:background "grey18")))
   "Basic face for Ruby embedded into HTML"
   :group 'basic-faces)
 
@@ -89,7 +91,7 @@
   "Embedded Ruby Mode (RHTML)"
   (interactive)
   (abbrev-mode)
-  (setq font-lock-defaults '(rhtml-font-lock-keywords)))
+  (setq font-lock-defaults '(rhtml-font-lock-keywords t)))
 
 (define-key rhtml-mode-map
   "\C-c\C-v" 'rhtml-find-action)
@@ -99,4 +101,3 @@
 (global-set-key "\C-x\C-\M-e" 'eval-defun)
 
 (provide 'rhtml-mode)
-
