@@ -32,10 +32,10 @@
     ("<\\(/?[[:alnum:]][-_.:[:alnum:]]*\\)" 1 font-lock-function-name-face) ; tags
     ("\\([a-zA-Z0-9]*[ ]?\\)=" 1 font-lock-variable-name-face) ; attributes
 
-    ("\\(\"[^\"]*\"\\)" .(1 font-lock-string-face prepend nil))
-    ("\\('[^']*'\\)" . (1 font-lock-string-face prepend nil))
+    ("\\([\"'][^\"']*[\"']\\)" .(1 font-lock-string-face prepend nil))
     ("\\(<!--.*?-->\\)" . (1 font-lock-comment-face t nil))
 ))
+
 
 
 ;; Set up ERB faces with proper background
@@ -97,7 +97,18 @@
   "\C-c\C-v" 'rhtml-find-action)
 
 ; for debugging font-lock
-(global-set-key "\C-c\C-r" 'rhtml-mode)
+(global-set-key "\C-c\C-r" 'rhtml-mode-test)
 (global-set-key "\C-x\C-\M-e" 'eval-defun)
 
 (provide 'rhtml-mode)
+
+
+;;; Test case
+
+(defun rhtml-mode-test ()
+  "Run this on rhtml_test.rhtml"
+  (interactive)
+  (beginning-of-buffer)
+  (assert (equal 'erb-face (get-text-property (search-forward "link_to") 'face)) t)
+  (assert (equal 'font-lock-string-face-erb (get-text-property (search-forward "somewhere") 'face)))
+)
