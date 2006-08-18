@@ -1,0 +1,5 @@
+(if (matches (application_name) "emacs")
+    (begin
+      (geometry "+0+0")
+      (maximize)
+      (undecorate)))
