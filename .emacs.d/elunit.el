@@ -24,23 +24,25 @@
 ;; to support Test-Driven Development.
 
 (defvar *elunit-suites*
-  ()
+  '((default-suite ()))
   "A list of unit test suites")
 
 
 ;;; Defining tests
 
 (defun* deftest (name docstring &key expected form suite)
+  (unless (assoc suite *elunit-suites*) (push (list suite) *elunit-suites*))
   (push (list name docstring expected form) (cdr (assoc suite *elunit-suites*))))
 
 (defun elunit-new-test ()
   (interactive)
   (let* ((test-name (read-string "Name this test: "))
-	 (suite-name (read-string "Part of suite: "))) ; TODO: should allow tab-completion
+	 (suite-name (completing-read "Part of suite: " 
+				      (mapcar (lambda (suite) (symbol-name (car suite))) *elunit-suites*))))
     (insert (format "(deftest \"%s\"
   \"Docstring\"
   :expected t
-  :form ()" test-name))
+  :form '()" test-name))
     (unless (eq "" suite-name)
       (insert (format "\n  :suite '%s" suite-name)))
     (insert ")")))
@@ -52,9 +54,10 @@
  (interactive (list (completing-read "Run test suite: " 
 				     (mapcar (lambda (suite) (symbol-name (car suite))) 
 					     *elunit-suites*))))
- (elunit-insert (concat "Loaded suite: " suite "\n\n"))
- (let ((tests (cdr (assoc (intern suite) *elunit-suites*))))
-   (elunit-report-results (mapcar #'elunit-run-test tests)))) ; TODO - clean *elunit* buffer between tests
+ (with-output-to-temp-buffer "*elunit*"
+   (princ (concat "Loaded suite: " suite "\n\n"))
+   (let ((tests (cdr (assoc (intern suite) *elunit-suites*))))
+     (elunit-report-results (mapcar #'elunit-run-test tests)))))
 
 (defun elunit-run-test (test)
   "Run the form, compare it with expected, print the status,
@@ -76,22 +79,17 @@ return the failure details or t if passed."
 ;;; Showing the results
 
 (defun elunit-status (pass)
-  (elunit-insert (if pass "." "F")))
+  (princ (if pass "." "F")))
 
 (defun elunit-report-results (tests)
   "Give a summary of the failures after the tests have all run"
   (dolist (test tests) ; wups--didn't need a function for this!
       (unless (eq t test)
 	(apply 'elunit-report-result test)))
-  (elunit-insert (format "\n\n\n%d tests total" (length tests)))) ; TODO - count successes vs fails
+  (princ (format "\n\n\n%d tests total" (length tests)))) ; TODO - count successes vs fails
     
 (defun elunit-report-result (name docstring expected actual form)
-  (elunit-insert (format "\n\nFailure - %s
+  (princ (format "\n\nFailure - %s
 Expected: %s
   Actual: %s
     Form: %s" name expected actual form))) ; TODO - number the failures
-
-(defun elunit-insert (string)
-  (save-excursion
-    (switch-to-buffer "*elunit*")
-    (insert string)))
