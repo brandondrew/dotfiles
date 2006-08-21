@@ -27,7 +27,6 @@
   '((default-suite ()))
   "A list of unit test suites")
 
-
 ;;; Defining tests
 
 (defun* deftest (name docstring &key expected form suite)
@@ -62,9 +61,11 @@
  (setq *elunit-fail-count* 0)
  (with-output-to-temp-buffer "*elunit*"
    (princ (concat "Loaded suite: " suite "\n\n"))
-   (let ((tests (cdr (assoc (intern suite) *elunit-suites*))))
-     (elunit-report-results (mapcar (lambda (test) (apply 'elunit-run-test test)) 
-				    tests)))))
+   (let ((tests (cdr (assoc (intern suite) *elunit-suites*)))
+	 (start-time (cadr (current-time))))
+       (elunit-report-results (mapcar (lambda (test) (apply 'elunit-run-test test)) 
+				      tests))
+       (princ (format " in %d seconds." (- (cadr (current-time)) start-time))))))
 
 (defun elunit-run-test (name docstring expected form file-name line-number)
   "Run the form, compare it with expected, print the status,
