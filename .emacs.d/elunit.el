@@ -32,7 +32,8 @@
 
 (defun* deftest (name docstring &key expected form suite)
   (unless (assoc suite *elunit-suites*) (push (list suite) *elunit-suites*))
-  (push (list name docstring expected form) (cdr (assoc suite *elunit-suites*))))
+  (push (list name docstring expected form buffer-file-name (line-number-at-pos))
+	(cdr (assoc suite *elunit-suites*))))
 
 (defun elunit-new-test ()
   (interactive)
@@ -47,6 +48,10 @@
       (insert (format "\n  :suite '%s" suite-name)))
     (insert ")")))
 
+(defun elunit-clear-suite ()
+  (interactive)
+  (setq *elunit-suites* '((default-suite ()))))
+
 
 ;;; Running the unit tests
 
@@ -54,31 +59,30 @@
  (interactive (list (completing-read "Run test suite: " 
 				     (mapcar (lambda (suite) (symbol-name (car suite))) 
 					     *elunit-suites*))))
+ (setq *elunit-fail-count* 0)
  (with-output-to-temp-buffer "*elunit*"
    (princ (concat "Loaded suite: " suite "\n\n"))
    (let ((tests (cdr (assoc (intern suite) *elunit-suites*))))
-     (elunit-report-results (mapcar #'elunit-run-test tests)))))
+     (elunit-report-results (mapcar (lambda (test) (apply 'elunit-run-test test)) 
+				    tests)))))
 
-(defun elunit-run-test (test)
+(defun elunit-run-test (name docstring expected form file-name line-number)
   "Run the form, compare it with expected, print the status,
 return the failure details or t if passed."
-  (let* ((name (pop test))
-	 (docstring (pop test))
-	 (expected (pop test))
-	 (form (pop test))
-	 (actual (save-excursion (condition-case err
+  (let ((actual (save-excursion (condition-case err
 				    (eval form)
 				  (error err)))))
     (setq passed (equal expected actual))
     (elunit-status passed)
     (if passed
 	t
-      (list name docstring expected actual form))))
+      (list name docstring expected actual form file-name line-number *elunit-fail-count*))))
 
 
 ;;; Showing the results
 
 (defun elunit-status (pass)
+  (unless pass (incf *elunit-fail-count*))
   (princ (if pass "." "F")))
 
 (defun elunit-report-results (tests)
@@ -86,10 +90,10 @@ return the failure details or t if passed."
   (dolist (test tests) ; wups--didn't need a function for this!
       (unless (eq t test)
 	(apply 'elunit-report-result test)))
-  (princ (format "\n\n\n%d tests total" (length tests)))) ; TODO - count successes vs fails
+  (princ (format "\n\n\n%d tests total, %d failures" (length tests) *elunit-fail-count*)))
     
-(defun elunit-report-result (name docstring expected actual form)
-  (princ (format "\n\nFailure - %s
+(defun elunit-report-result (name docstring expected actual form file-name line-number index)
+  (princ (format "\n\n%d) Failure - %s [%s:%s]
 Expected: %s
   Actual: %s
-    Form: %s" name expected actual form))) ; TODO - number the failures
+    Form: %s" index name file-name line-number expected actual form)))

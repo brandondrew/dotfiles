@@ -47,6 +47,7 @@
 (require 'pastie)
 (require 'compile)
 (require 'which-func)
+(require 'elunit)
 (color-theme-zenburn)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
