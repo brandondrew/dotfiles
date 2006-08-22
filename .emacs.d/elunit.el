@@ -23,12 +23,6 @@
   '((default-suite ()))
   "A list of unit test suites")
 
-(defface elunit-failure
-  '((t (:foreground "red"))) "Highlights a test failure")
-
-(defface elunit-success
-  '((t (:foreground "green"))) "Highlights a successful test")
-
 (defun elunit-suite (name)
   (cdr (assoc name *elunit-suites*)))
 
@@ -75,7 +69,6 @@
 					     *elunit-suites*))))
  (setq *elunit-fail-count* 0)
  (with-output-to-temp-buffer "*elunit*"
-   (compilation-minor-mode)
    (princ (concat "Loaded suite: " suite "\n\n"))
    (let ((tests (cdr (assoc (intern suite) *elunit-suites*)))
 	 (start-time (cadr (current-time))))
@@ -93,12 +86,16 @@
 	t
       (list name docstring expected actual form file-name line-number *elunit-fail-count*))))
 
+;(add-hook 'temp-buffer-show-hook 'compilation-minor-mode)
 
 ;;; Showing the results
 
 (defun elunit-status (pass)
-  (unless pass (incf *elunit-fail-count*))
-  (princ (if pass "." "F")))
+  (princ (if pass "." "F"))
+  (unless pass (incf *elunit-fail-count*)
+	  (switch-to-buffer "*elunit*")
+	  (overlay-put (make-overlay (point) (- (point) 1)) 'face '(foreground-color . "red"))
+	  (switch-to-buffer nil)))
 
 (defun elunit-report-results (tests)
   (dolist (test tests)

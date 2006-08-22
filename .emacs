@@ -48,7 +48,7 @@
 (require 'compile)
 (require 'which-func)
 (require 'elunit)
-(color-theme-zenburn)
+;(color-theme-zenburn)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Ruby help
