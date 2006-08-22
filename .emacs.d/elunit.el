@@ -23,6 +23,10 @@
   '((default-suite ()))
   "A list of unit test suites")
 
+(defvar *elunit-default-suite*
+  "default-suite"
+  "Choice to use for default suite to run (gets updated to last suite run)")
+
 (defun elunit-suite (name)
   (cdr (assoc name *elunit-suites*)))
 
@@ -64,9 +68,10 @@
 ;;; Running the unit tests
 
 (defun elunit (suite)
- (interactive (list (completing-read "Run test suite: " 
+ (interactive (list (completing-read (concat "Run test suite (default " *elunit-default-suite* "): " )
 				     (mapcar (lambda (suite) (symbol-name (car suite))) 
-					     *elunit-suites*))))
+					     *elunit-suites*) nil t nil nil *elunit-default-suite*)))
+ (setq *elunit-default-suite* suite)
  (setq *elunit-fail-count* 0)
  (with-output-to-temp-buffer "*elunit*"
    (princ (concat "Loaded suite: " suite "\n\n"))
@@ -86,7 +91,7 @@
 	t
       (list name docstring expected actual form file-name line-number *elunit-fail-count*))))
 
-;(add-hook 'temp-buffer-show-hook 'compilation-minor-mode)
+(add-hook 'temp-buffer-show-hook 'compilation-minor-mode)
 
 ;;; Showing the results
 
