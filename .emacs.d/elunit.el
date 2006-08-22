@@ -18,19 +18,34 @@
 ;; A copy of the GNU General Public License can be obtained from the
 ;; Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.
 
-;;; Commentary
-
-;; Elunit is an xUnit-style testing framework for Emacs Lisp designed
-;; to support Test-Driven Development.
 
 (defvar *elunit-suites*
   '((default-suite ()))
   "A list of unit test suites")
 
+(defface elunit-failure
+  '((t (:foreground "red"))) "Highlights a test failure")
+
+(defface elunit-success
+  '((t (:foreground "green"))) "Highlights a successful test")
+
+(defun elunit-suite (name)
+  (cdr (assoc name *elunit-suites*)))
+
+(defun elunit-test (name suite)
+  (when (symbolp suite) (setq suite (elunit-suite suite)))
+  (assoc name suite))
+
+(defun elunit-delete-test (name suite)
+  (when (elunit-test name suite)
+    (setf (cdr (assoc suite *elunit-suites*)) (assq-delete-all name (elunit-suite suite)))))
+
+
 ;;; Defining tests
 
-(defun* deftest (name docstring &key expected form suite)
-  (unless (assoc suite *elunit-suites*) (push (list suite) *elunit-suites*))
+(defun* deftest (name docstring &key (expected t) form suite)
+  (unless (elunit-suite suite) (push (list suite) *elunit-suites*))
+  (elunit-delete-test name suite)
   (push (list name docstring expected form buffer-file-name (line-number-at-pos))
 	(cdr (assoc suite *elunit-suites*))))
 
@@ -39,7 +54,7 @@
   (let* ((test-name (read-string "Name this test: "))
 	 (suite-name (completing-read "Part of suite: " 
 				      (mapcar (lambda (suite) (symbol-name (car suite))) *elunit-suites*))))
-    (insert (format "(deftest \"%s\"
+    (insert (format "(deftest '%s
   \"Docstring\"
   :expected t
   :form '()" test-name))
@@ -47,7 +62,7 @@
       (insert (format "\n  :suite '%s" suite-name)))
     (insert ")")))
 
-(defun elunit-clear-suite ()
+(defun elunit-clear-suites ()
   (interactive)
   (setq *elunit-suites* '((default-suite ()))))
 
@@ -60,6 +75,7 @@
 					     *elunit-suites*))))
  (setq *elunit-fail-count* 0)
  (with-output-to-temp-buffer "*elunit*"
+   (compilation-minor-mode)
    (princ (concat "Loaded suite: " suite "\n\n"))
    (let ((tests (cdr (assoc (intern suite) *elunit-suites*)))
 	 (start-time (cadr (current-time))))
@@ -68,8 +84,6 @@
        (princ (format " in %d seconds." (- (cadr (current-time)) start-time))))))
 
 (defun elunit-run-test (name docstring expected form file-name line-number)
-  "Run the form, compare it with expected, print the status,
-return the failure details or t if passed."
   (let ((actual (save-excursion (condition-case err
 				    (eval form)
 				  (error err)))))
@@ -87,14 +101,17 @@ return the failure details or t if passed."
   (princ (if pass "." "F")))
 
 (defun elunit-report-results (tests)
-  "Give a summary of the failures after the tests have all run"
-  (dolist (test tests) ; wups--didn't need a function for this!
+  (dolist (test tests)
       (unless (eq t test)
 	(apply 'elunit-report-result test)))
   (princ (format "\n\n\n%d tests total, %d failures" (length tests) *elunit-fail-count*)))
     
 (defun elunit-report-result (name docstring expected actual form file-name line-number index)
-  (princ (format "\n\n%d) Failure - %s [%s:%s]
-Expected: %s
-  Actual: %s
-    Form: %s" index name file-name line-number expected actual form)))
+  (princ (format "\n\n%d) Failure: %s [%s:%s]
+  Expected: %s
+    Actual: %s
+      Form: %s" index name file-name line-number expected actual form)))
+
+(add-to-list 'compilation-error-regexp-alist '("\\[\\([^:]*\\):\\([0-9]+\\)" 1 2))
+
+(provide 'elunit)
