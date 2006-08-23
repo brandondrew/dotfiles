@@ -30,39 +30,34 @@
 (defun elunit-suite (name)
   (cdr (assoc name *elunit-suites*)))
 
-(defun elunit-test (name suite)
+(defun elunit-get-test (name suite)
   (when (symbolp suite) (setq suite (elunit-suite suite)))
   (assoc name suite))
-
-(defun elunit-delete-test (name suite)
-  (when (elunit-test name suite)
-    (setf (cdr (assoc suite *elunit-suites*)) (assq-delete-all name (elunit-suite suite)))))
 
 
 ;;; Defining tests
 
-(defun* deftest (name docstring &key (expected t) form suite)
-  (unless (elunit-suite suite) (push (list suite) *elunit-suites*))
-  (elunit-delete-test name suite)
-  (push (list name docstring expected form buffer-file-name (line-number-at-pos))
-	(cdr (assoc suite *elunit-suites*))))
+(defun deftest (body)
+  (list (pop body) body buffer-file-name (line-number-at-pos))) ; TODO: line-number-at-pos doesn't work.
 
-(defun elunit-new-test ()
-  (interactive)
-  (let* ((test-name (read-string "Name this test: "))
-	 (suite-name (completing-read "Part of suite: " 
-				      (mapcar (lambda (suite) (symbol-name (car suite))) *elunit-suites*))))
-    (insert (format "(deftest '%s
-  \"Docstring\"
-  :expected t
-  :form '()" test-name))
-    (unless (eq "" suite-name)
-      (insert (format "\n  :suite '%s" suite-name)))
-    (insert ")")))
+(defmacro defsuite (suite-name &rest deftests)
+  (dolist (test deftests)
+     (elunit-add-to-suite (deftest test) suite-name)))
 
-(defun elunit-clear-suites ()
-  (interactive)
+(defun elunit-clear-suites () (interactive)
   (setq *elunit-suites* '((default-suite ()))))
+
+(defun elunit-make-suite (suite) 
+  (push (list suite) *elunit-suites*))
+
+(defun elunit-add-to-suite (test suite)
+  (unless (elunit-suite suite) (elunit-make-suite suite))
+  (elunit-delete-test (car test) suite)
+  (push test (cdr (assoc suite *elunit-suites*))))
+
+(defun elunit-delete-test (name suite)
+  (when (elunit-get-test name suite)
+    (setf (cdr (assoc suite *elunit-suites*)) (assq-delete-all name (elunit-suite suite)))))
 
 
 ;;; Running the unit tests
@@ -75,23 +70,25 @@
  (setq *elunit-fail-count* 0)
  (with-output-to-temp-buffer "*elunit*"
    (princ (concat "Loaded suite: " suite "\n\n"))
-   (let ((tests (cdr (assoc (intern suite) *elunit-suites*)))
+   (let ((tests (elunit-suite (intern suite)))
 	 (start-time (cadr (current-time))))
-       (elunit-report-results (mapcar (lambda (test) (apply 'elunit-run-test test)) 
-				      tests))
-       (princ (format " in %d seconds." (- (cadr (current-time)) start-time))))))
+     (elunit-report-results (mapcar (lambda (test) (apply 'elunit-run-test test)) 
+				    tests))
+     (princ (format " in %d seconds." (- (cadr (current-time)) start-time))))))
 
-(defun elunit-run-test (name docstring expected form file-name line-number)
-  (let ((actual (save-excursion (condition-case err
-				    (eval form)
-				  (error err)))))
-    (setq passed (equal expected actual))
+(defun elunit-run-test (name body file-name line-number)
+  (let* ((passed nil)
+	 (docstring (if (stringp (car body)) (pop body) ""))
+	 (result (condition-case err
+		     (save-excursion (eval (car body)) (setq passed t))
+		   (error err))))
     (elunit-status passed)
     (if passed
 	t
-      (list name docstring expected actual form file-name line-number *elunit-fail-count*))))
+      (list name docstring result body file-name line-number *elunit-fail-count*))))
 
 (add-hook 'temp-buffer-show-hook 'compilation-minor-mode)
+
 
 ;;; Showing the results
 
@@ -108,11 +105,11 @@
 	(apply 'elunit-report-result test)))
   (princ (format "\n\n\n%d tests total, %d failures" (length tests) *elunit-fail-count*)))
     
-(defun elunit-report-result (name docstring expected actual form file-name line-number index)
+(defun elunit-report-result (name docstring result body file-name line-number index)
   (princ (format "\n\n%d) Failure: %s [%s:%s]
-  Expected: %s
-    Actual: %s
-      Form: %s" index name file-name line-number expected actual form)))
+            %s
+    Result: %s
+      Form: %s" index name file-name line-number docstring result (car body))))
 
 (add-to-list 'compilation-error-regexp-alist '("\\[\\([^:]*\\):\\([0-9]+\\)" 1 2))
 
