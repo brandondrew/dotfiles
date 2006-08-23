@@ -2,8 +2,8 @@
 
 ;; Copyright (C) 2006 Phil Hagelberg
 
-;; Based on regress.el by Wayne Mesard and Tom Breton:
-;; http://www.panix.com/~tehom/my-code/regress.el
+;; Inspired by regress.el by Wayne Mesard and Tom Breton, Test::Unit
+;; by Nathaniel Talbott, and xUnit by Kent Beck
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -18,6 +18,7 @@
 ;; A copy of the GNU General Public License can be obtained from the
 ;; Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.
 
+;; See http://dev.technomancy.us/phil/wiki/ElUnit for usage details.
 
 (defvar *elunit-suites*
   '((default-suite ()))
@@ -37,32 +38,37 @@
 
 ;;; Defining tests
 
-(defun deftest (body)
-  (list (pop body) body buffer-file-name (line-number-at-pos))) ; TODO: line-number-at-pos doesn't work.
+(defmacro defsuite (suite-name &rest tests)
+  "This is what you use to set things up."
+  (dolist (test tests)
+     (elunit-add-to-suite (make-test test) suite-name)))
 
-(defmacro defsuite (suite-name &rest deftests)
-  (dolist (test deftests)
-     (elunit-add-to-suite (deftest test) suite-name)))
-
-(defun elunit-clear-suites () (interactive)
-  (setq *elunit-suites* '((default-suite ()))))
-
-(defun elunit-make-suite (suite) 
-  (push (list suite) *elunit-suites*))
+(defun make-test (body)
+  (let ((name (pop body)))
+    (save-excursion
+      (search-backward (symbol-name name)) ; not a foolproof heuristic to get line number, but good enough.
+      (list name body buffer-file-name (line-number-at-pos)))))
 
 (defun elunit-add-to-suite (test suite)
   (unless (elunit-suite suite) (elunit-make-suite suite))
   (elunit-delete-test (car test) suite)
   (push test (cdr (assoc suite *elunit-suites*))))
 
+(defun elunit-make-suite (suite) 
+  (push (list suite) *elunit-suites*))
+
 (defun elunit-delete-test (name suite)
   (when (elunit-get-test name suite)
     (setf (cdr (assoc suite *elunit-suites*)) (assq-delete-all name (elunit-suite suite)))))
+
+(defun elunit-clear-suites ()
+  (setq *elunit-suites* '((default-suite ()))))
 
 
 ;;; Running the unit tests
 
 (defun elunit (suite)
+  "Ask for a single suite, run all its tests, and display the results"
  (interactive (list (completing-read (concat "Run test suite (default " *elunit-default-suite* "): " )
 				     (mapcar (lambda (suite) (symbol-name (car suite))) 
 					     *elunit-suites*) nil t nil nil *elunit-default-suite*)))
@@ -73,8 +79,7 @@
    (princ (concat "Loaded suite: " suite "\n\n"))
    (let ((tests (elunit-suite (intern suite)))
 	 (start-time (cadr (current-time))))
-     (elunit-report-results (mapcar (lambda (test) (apply 'elunit-run-test test)) 
-				    tests))
+     (elunit-report-results (mapcar (lambda (test) (apply 'elunit-run-test test)) tests))
      (princ (format " in %d seconds." (- (cadr (current-time)) start-time)))))
  (run-hooks (intern (concat suite "-teardown-hook"))))
 
@@ -85,27 +90,29 @@
 		     (save-excursion (eval (car body)) (setq passed t))
 		   (error err))))
     (elunit-status passed)
-    (if passed
-	t
-      (list name docstring result body file-name line-number *elunit-fail-count*))))
+    (if passed t
+      (list name docstring result body file-name line-number *elunit-fail-count*)))) ; failure details
 
 
 ;;; Showing the results
 
-(defun elunit-status (pass)
+(defun elunit-status (pass) 
+  "Output status while the tests are running"
   (princ (if pass "." "F"))
   (unless pass (incf *elunit-fail-count*)
 	  (switch-to-buffer "*elunit*")
 	  (overlay-put (make-overlay (point) (- (point) 1)) 'face '(foreground-color . "red"))
 	  (switch-to-buffer nil)))
 
-(defun elunit-report-results (tests)
+(defun elunit-report-results (tests) 
+  "For when the tests are finished and we want details"
   (dolist (test tests)
       (unless (eq t test)
 	(apply 'elunit-report-result test)))
   (princ (format "\n\n\n%d tests total, %d failures" (length tests) *elunit-fail-count*)))
     
 (defun elunit-report-result (name docstring result body file-name line-number index)
+  "Report a single test failure"
   (princ (format "\n\n%d) Failure: %s [%s:%s]
             %s
     Result: %s
