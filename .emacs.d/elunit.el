@@ -68,13 +68,15 @@
 					     *elunit-suites*) nil t nil nil *elunit-default-suite*)))
  (setq *elunit-default-suite* suite)
  (setq *elunit-fail-count* 0)
+ (run-hooks (intern (concat suite "-setup-hook")))
  (with-output-to-temp-buffer "*elunit*"
    (princ (concat "Loaded suite: " suite "\n\n"))
    (let ((tests (elunit-suite (intern suite)))
 	 (start-time (cadr (current-time))))
      (elunit-report-results (mapcar (lambda (test) (apply 'elunit-run-test test)) 
 				    tests))
-     (princ (format " in %d seconds." (- (cadr (current-time)) start-time))))))
+     (princ (format " in %d seconds." (- (cadr (current-time)) start-time)))))
+ (run-hooks (intern (concat suite "-teardown-hook"))))
 
 (defun elunit-run-test (name body file-name line-number)
   (let* ((passed nil)
@@ -86,8 +88,6 @@
     (if passed
 	t
       (list name docstring result body file-name line-number *elunit-fail-count*))))
-
-(add-hook 'temp-buffer-show-hook 'compilation-minor-mode)
 
 
 ;;; Showing the results
@@ -111,6 +111,7 @@
     Result: %s
       Form: %s" index name file-name line-number docstring result (car body))))
 
+(add-hook 'temp-buffer-show-hook 'compilation-minor-mode)
 (add-to-list 'compilation-error-regexp-alist '("\\[\\([^:]*\\):\\([0-9]+\\)" 1 2))
 
 (provide 'elunit)
