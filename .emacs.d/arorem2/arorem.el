@@ -1,4 +1,4 @@
-;;;
+ ;;;
 ;;;  arorem.el -
 ;;;
 ;;;  Assorted Ruby on Rails Emacs Modes
@@ -101,6 +101,9 @@
   "\C-x\C-\M-F" 'find-file-in-project)
 (define-key ruby-mode-map
   [(shift f5)] 'ruby-test-function)
+(define-key ruby-mode-map
+  [(control f5)] (lambda () (interactive)
+		   (compile (concat "ruby " (file-name-nondirectory buffer-file-name)))))
 
 
 (provide 'arorem)

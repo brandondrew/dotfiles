@@ -87,11 +87,11 @@
   (let* ((passed nil)
 	 (docstring (if (stringp (car body)) (pop body) ""))
 	 (result (condition-case err
-		     (save-excursion (eval (car body)) (setq passed t))
+		     (save-excursion (eval (cons 'progn body)) (setq passed t))
 		   (error err))))
     (elunit-status passed)
     (if passed t
-      (list name docstring result body file-name line-number *elunit-fail-count*)))) ; failure details
+      (list name docstring result body file-name line-number *elunit-fail-count*))))
 
 
 ;;; Showing the results
