@@ -11,9 +11,8 @@
     ("<%[=]?" . font-lock-preprocessor-face)
     ("%>" . font-lock-preprocessor-face)
 
-;    ("<%[=]?\\([^%]*\\)\\(['\"][^\"']*[\"']\\)\\([^%]*\\)%>"
-;     . (2 'font-lock-string-face-erb t nil)) teh broken
-    
+    ("\\(<%\\#[^%]*%>\\)" . (1 font-lock-comment-face t nil))
+
     ("<%[=]?\\([^%]*\\)\\([A-Z][0-9a-zA-Z_]*\\)\\([^%]*\\)%>"
      2 'font-lock-type-face-erb)
 
@@ -55,22 +54,23 @@
 	(font-lock-variable-name-face . font-lock-variable-name-face-erb)
 	(font-lock-string-face . font-lock-string-face-erb)
 	(font-lock-type-face . font-lock-type-face-erb)
+	(font-lock-comment-face . font-lock-comment-face-erb)
 	(font-lock-constant-face . font-lock-constant-face-erb)))
 
 
 ;; Handy RHTML functions
 
-(defun rhtml-controller-name-from-view (view)
+(defun rhtml-controller-name-from-view ()
   (concat (rails-root) 
 	  "app/controllers/"
 	   (file-name-nondirectory 
-	    (expand-file-name (concat view "/..")))
+	    (expand-file-name "."))
 	  "_controller.rb"))
 
 (defun rhtml-find-action ()
   (interactive)
   (let ((action (file-name-sans-extension (file-name-nondirectory buffer-file-name))))
-    (find-file (rhtml-controller-name-from-view (buffer-file-name)))
+    (find-file (rhtml-controller-name-from-view))
     (beginning-of-buffer)
     (search-forward (concat "def " action))
     (recenter)))
@@ -101,14 +101,3 @@
 (global-set-key "\C-x\C-\M-e" 'eval-defun)
 
 (provide 'rhtml-mode)
-
-
-;;; Test case
-
-(defun rhtml-mode-test ()
-  "Run this on rhtml_test.rhtml"
-  (interactive)
-  (beginning-of-buffer)
-  (assert (equal 'erb-face (get-text-property (search-forward "link_to") 'face)) t)
-  (assert (equal 'font-lock-string-face-erb (get-text-property (search-forward "somewhere") 'face)))
-)
