@@ -21,6 +21,7 @@
 
 (setq load-path (append '("~/.emacs.d") load-path))
 (setq load-path (append '("~/.emacs.d/arorem2") load-path))
+(setq load-path (append '("~/.emacs.d/rinari") load-path))
 (toggle-debug-on-error)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -60,6 +61,7 @@
 
 (require 'ruby-electric)
 (require 'arorem)
+(require 'ri-ruby)
 
 (set-face-background 'erb-face "grey18")
 
@@ -110,7 +112,8 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; IRC
 
-(load "rcirc-config")
+(if (featurep 'rcirc)
+    (load "rcirc-config"))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Jabber
@@ -268,6 +271,7 @@
 (set-register ?b '(file . "~/.bashrc"))
 (set-register ?s '(file . "~/.screenrc"))
 (set-register ?t '(file . "~/mjolnir/paxtel_timecard.2006"))
+(set-register ?u '(file . "~/mjolnir/ujive_timecard.2006"))
 (set-register ?c '(file . "~/.contacts"))
 (set-register ?W '(file . "~/.wmii-3/wmiirc"))
 

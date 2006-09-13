@@ -106,4 +106,9 @@
 		   (compile (concat "ruby " (file-name-nondirectory buffer-file-name)))))
 
 
+;; (global-set-key [f7] 'symbol-links-to-string-links)
+;; (defun symbol-links-to-string-links ()
+;;   (interactive)
+;;   (query-replace-regexp " => :\\([^,]*\\)" " => '\\1'"))
+
 (provide 'arorem)

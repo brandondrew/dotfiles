@@ -42,6 +42,8 @@
 ;;  * Poor error handling
 
 ;; Major items
+;;  * INCLUSION TRANSFORMATION
+;;  * NoOp, SplitOp
 ;;  * Color text based on author
 ;;  * Allow compatibility with language major-modes (for higlighting)
 ;;  * Subscribe based on document name rather than ID
@@ -102,7 +104,9 @@ Use the without-transmitting-changes macro to set this.")
 
 (defvar local-operations-cache ()
   "A record of local operations so we can transform them against
-  incoming out-of-sync operations.")
+  incoming out-of-sync operations. This is implemented as an alist of
+  document ids where each id references a list of operations formatted
+  as (local-operation-coun string position)")
 
 ;; So we can use setf
 (require 'cl) 
@@ -362,6 +366,7 @@ Use the without-transmitting-changes macro to set this.")
 			    ":" (format "%x" (ebby-get-doc-remote-count doc-id)) 
 			    ":ins:" (format "%x" position) ":" 
 			    string))
+  (ebby-store-insertion (doc-id string position))
   (when ebby-debug (message "local: %s remote: %s" 
 			    (ebby-get-doc-local-count doc-id) 
 			    (ebby-get-doc-remote-count doc-id)))
@@ -386,5 +391,13 @@ Use the without-transmitting-changes macro to set this.")
       (ebby-send-ins this-doc-id (ebby-escape 
 				  (buffer-substring begin end)) 
 		     (- begin 1)))))
+
+(defun ebby-store-innsertion (doc-id string position)
+;  (append (assoc doc-id local-operations-cache) (list (ebby-get-doc-local-count) string position))
+)
+
+(defun ebby-store-deletion (doc-id position length)
+)
+
 
 (provide 'ebby)

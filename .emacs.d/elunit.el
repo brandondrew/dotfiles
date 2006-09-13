@@ -20,6 +20,9 @@
 
 ;; See http://dev.technomancy.us/phil/wiki/ElUnit for usage details.
 
+(require 'cl)
+(require 'compile)
+
 (defvar *elunit-suites*
   '((default-suite ()))
   "A list of unit test suites")
@@ -119,6 +122,7 @@
       Form: %s" index name file-name line-number docstring result (car body))))
 
 (add-hook 'temp-buffer-show-hook 'compilation-minor-mode)
-(add-to-list 'compilation-error-regexp-alist '("\\[\\([^:]*\\):\\([0-9]+\\)" 1 2))
+;(add-to-list 'compilation-error-regexp-alist '("\\[\\([^:]*\\):\\([0-9]+\\)" 1 2))
+(add-to-list 'compilation-error-regexp-alist '("\\[\\([^\]]*\\):\\([0-9]+\\)\\]" 1 2))
 
 (provide 'elunit)

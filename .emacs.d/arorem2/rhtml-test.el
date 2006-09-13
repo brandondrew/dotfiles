@@ -12,7 +12,7 @@
 ;; <body id="st1"> <!-- html comment -->
 ;; <!-- html comment
 ;;  spanning lines -->
-;; <%= link_to "somewhere", :action => "blah" -%>
+;; <%= link_to "somewhere", :action => 'blah', :action => 'hh  oae th' -%>
 ;; <% do end rescue 'blah' @word Const @var %>
 ;; <%# a comment %>
 
@@ -21,7 +21,7 @@
 
 (defun rhtml-setup-buffer ()
   (rhtml-mode)
-  (sit-for 0)) ; fontification won't happen unless we wait
+  (sit-for 0.5)) ; fontification won't happen unless we wait
 
 (defsuite rhtml-test
 ;;   Bah; how to test this without a real rails project?
@@ -30,17 +30,18 @@
 ;;    (assert (equal (rhtml-controller-name-from-view)))
 ;;    (rhtml-find-action)
 ;;    (assert (equal ())))
-  (rhtml-extract-partial-test ; TODO - clean up this test by using a real project
-   (switch-to-buffer "*rhtml-test-partial*")
-   (insert "blah blah blah PARTIAL")
-   (set-mark 16)
-   (forward-word)
-   (extract-partial (point) (mark) "blah")
-   (assert (equal (buffer-string) "blah blah blah <%= render :partial => 'blah' %>\n"))
-   (switch-to-buffer "_blah.rhtml")
-   (assert (equal (buffer-string) "PARTIAL"))
-   (kill-buffer "*rhtml-test-partial*")
-   (kill-buffer "_blah.rhtml"))
+
+;;   (rhtml-extract-partial-test ; TODO - clean up this test by using a real project
+;;    (switch-to-buffer "*rhtml-test-partial*")
+;;    (insert "blah blah blah PARTIAL")
+;;    (set-mark 16)
+;;    (forward-word)
+;;    (extract-partial (point) (mark) "blah")
+;;    (assert (equal (buffer-string) "blah blah blah <%= render :partial => 'blah' %>\n"))
+;;    (switch-to-buffer "_blah.rhtml")
+;;    (assert (equal (buffer-string) "PARTIAL"))
+;;    (kill-buffer "*rhtml-test-partial*")
+;;    (kill-buffer "_blah.rhtml"))
 
   (rhtml-font-lock-erb-test
    "test font locking"

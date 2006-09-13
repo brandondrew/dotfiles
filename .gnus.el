@@ -12,7 +12,7 @@
 (setq smtpmail-auth-credentials '(("mail.hagelb.org" 25 "m7139145" "testyy")))
 (setq message-kill-buffer-on-exit t)
 
-(setq gnus-message-archive-group "sent")
+;(setq gnus-message-archive-group "sent")
 
 (setq nnmail-split-methods 'nnmail-split-fancy)
 (setq nnmail-crosspost nil)
@@ -63,9 +63,7 @@
 (setq mail-sources '((imap 
 		      :server "mail.hagelb.org"
 		      :user "philhag"
-		      :stream ssl
-		      :predicate "UNSEEN"
-		      :fetchflag "\\Seen")
+		      :stream ssl)
 		     (file
 		      :path "/var/mail/phil")
 		     (imap
@@ -84,12 +82,9 @@
 (add-hook 'message-mode-hook 'auto-fill-mode)
 (add-hook 'message-mode-hook 'flyspell-mode)
 
-(setq gnus-buffer-configuration 
-      '((group (vertical 1.0 (group 1.0 point)))
-	(summary (vertical 1.0 (summary 1.0 point)))
-	(article (horizontal 1.0 (summary 1.0 point)
-			   (article 80)))))
+;; (setq gnus-buffer-configuration 
+;;       '((group (vertical 1.0 (group 1.0 point)))
+;; 	(summary (vertical 1.0 (summary 1.0 point)))
+;; 	(article (horizontal 1.0 (summary 1.0 point)
+;; 			   (article 80)))))
 
-(setq gnus-sum-thread-tree-leaf-with-other "+-> ")
-(setq gnus-sum-thread-tree-vertical "|")
-(setq gnus-sum-thread-tree-single-leaf "`-> ")

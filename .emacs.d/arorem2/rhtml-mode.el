@@ -5,37 +5,60 @@
 
 (add-to-list 'auto-mode-alist '("\\.rhtml$" . rhtml-mode))
 
-(defconst rhtml-font-lock-keywords
-  '(
-    ;; erb-specific
-    ("<%[=]?" . font-lock-preprocessor-face)
+(defvar rhtml-font-lock-keywords
+  '(("<%=?" . font-lock-preprocessor-face)
     ("%>" . font-lock-preprocessor-face)
 
     ("\\(<%\\#[^%]*%>\\)" . (1 font-lock-comment-face t nil))
 
-    ("<%[=]?\\([^%]*\\)\\([A-Z][0-9a-zA-Z_]*\\)\\([^%]*\\)%>"
-     2 'font-lock-type-face-erb)
-
-    ("<%[=]?\\([^%]*\\)\\(@[0-9a-zA-Z_]*\\)\\([^%]*\\)%>"
-     . (2 'font-lock-variable-name-face-erb t t))
-
-    ("<%[=]?\\([^%]*\\)\\(:[0-9a-zA-Z_]*\\)\\([^%]*\\)%>"
-     2 'font-lock-constant-face-erb)
-
-    ("<%[=]?\\([^%]*\\)\\<\\(alias\\|and\\|begin\\|break\\|case\\|catch\\|class\\|def\\|do\\|elsif\\|else\\|fail\\|ensure\\|for\\|end\\|if\\|in\\|module\\|next\\|not\\|or\\|raise\\|redo\\|rescue\\|retry\\|return\\|then\\|throw\\|super\\|unless\\|undef\\|until\\|when\\|while\\|yield\\|render\\)\\>\\([^%]*\\)%>"
-     2 'font-lock-keyword-face-erb)
-
     ("<%[=]?\\([^%]*\\)%>" . (1 'erb-face keep t))
-    
-    ;; html-specific
+
     ("<\\(/?[[:alnum:]][-_.:[:alnum:]]*\\)" 1 font-lock-function-name-face) ; tags
     ("\\([a-zA-Z0-9]*[ ]?\\)=" 1 font-lock-variable-name-face) ; attributes
 
-    ("\\([\"'][^\"']*[\"']\\)" .(1 font-lock-string-face prepend nil))
-    ("\\(<!--.*?-->\\)" . (1 font-lock-comment-face t nil))
-))
+    ("\\(\"[^\"\n]*\"\\)" .(1 font-lock-string-face prepend nil))
+    ("\\('[^'\n]*'\\)" .(1 font-lock-string-face prepend nil))
+    ("\\(<!--.*?-->\\)" . (1 font-lock-comment-face prepend nil))))
+
+(defvar rhtml-in-erb-keywords
+  '(("\\([A-Z][0-9a-zA-Z_]*\\)" . font-lock-type-face-erb)
+    ("[^_]\\<\\(alias\\|and\\|begin\\|break\\|case\\|catch\\|class\\|def\\|do\\|elsif\\|else\\|fail\\|ensure\\|for\\|end\\|if\\|in\\|module\\|next\\|not\\|or\\|raise\\|redo\\|rescue\\|retry\\|return\\|then\\|throw\\|super\\|unless\\|undef\\|until\\|when\\|while\\|yield\\|render\\)\\>[^_]" .
+     font-lock-keyword-face-erb)
+    ("\\(@[0-9a-zA-Z_]*\\)" . font-lock-variable-name-face-erb)
+    ("\\(:[0-9a-zA-Z_]*\\)" . font-lock-constant-face-erb)))
 
 
+(defmacro each-search (re &rest body)
+  `(save-excursion
+     (beginning-of-buffer)
+     (while (re-search-forward ,re nil t)
+       (let ((start (match-beginning 0))
+	     (end (match-end 0)))
+	 ,@body))))
+
+(defun in-erb (point)
+  (interactive)
+  (save-excursion
+    (let ((erb-begin (re-search-backward "<%=?" nil t))
+	  (erb-end (re-search-forward "%>" nil t)))
+      (and erb-begin erb-end
+	   (> erb-end point)
+	   (< erb-begin point)))))
+    
+
+(defun rhtml-fontify-region (begin end &optional loudly)
+  (interactive "r")
+  (setq case-fold-search nil)
+  (font-lock-fontify-keywords-region begin end)
+  (mapc (lambda (matcher) (each-search (car matcher)
+				       (if (in-erb start) (put-text-property start end 'face (cdr matcher)))))
+	rhtml-in-erb-keywords))
+
+(defun rhtml-fontify-buffer ()
+  (interactive)
+  (save-restriction
+    (widen)
+    (rhtml-fontify-region (point-min) (point-max))))
 
 ;; Set up ERB faces with proper background
 
@@ -91,7 +114,13 @@
   "Embedded Ruby Mode (RHTML)"
   (interactive)
   (abbrev-mode)
-  (setq font-lock-defaults '(rhtml-font-lock-keywords t)))
+  (setq font-lock-defaults '(rhtml-font-lock-keywords t))
+
+  (make-local-variable 'font-lock-fontify-region-function)
+  (setq font-lock-fontify-region-function 'rhtml-fontify-region)
+
+  (make-local-variable 'font-lock-fontify-buffer-function)
+  (setq font-lock-fontify-buffer-function 'rhtml-fontify-buffer))
 
 (define-key rhtml-mode-map
   "\C-c\C-v" 'rhtml-find-action)
