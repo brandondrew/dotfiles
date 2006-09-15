@@ -63,17 +63,39 @@
 (defun populate-project-files-table (file)
   (if (file-directory-p file)
       (mapc 'populate-project-files-table (directory-files file t "^[^\.]"))
-    (setq project-files-table (acons (file-name-nondirectory file) file project-files-table))))
+    (let* ((file-name (file-name-nondirectory file))
+	   (existing-record (assoc file-name project-files-table))
+	   (unique-parts (get-unique-directory-names file (cdr existing-record))))
+      (if existing-record
+	  (let ((new-key (concat file-name " - " (car unique-parts)))
+		(old-key (concat (car existing-record) " - " (cadr unique-parts))))
+	    (setf (car existing-record) old-key)
+	    (setq project-files-table (acons new-key file project-files-table)))
+	(setq project-files-table (acons file-name file project-files-table))))))
+
+(defun get-unique-directory-names (path1 path2)
+  (let* ((parts1 (and path1 (split-string path1 "/" t)))
+	 (parts2 (and path2 (split-string path2 "/" t)))
+	 (part1 (pop parts1))
+	 (part2 (pop parts2))
+	 (looping t))
+    (while (and part1 part2 looping)
+	   (if (equal part1 part2)
+	       (setq part1 (pop parts1) part2 (pop parts2))
+	     (setq looping nil)))
+    (list part1 part2)))
 
 (defun find-file-in-project (file)
-  (interactive (list (completing-read "Find file in project: " (mapcar 'car (project-files)))))
+  (interactive (list (if (functionp 'ido-completing-read)
+			 (ido-completing-read "Find file in project: " (mapcar 'car (project-files)))
+			 (completing-read "Find file in project: " (mapcar 'car (project-files))))))
   (find-file (cdr (assoc file project-files-table))))
 
 (defun project-files ()
-  (when (or (not project-files-table) ; initial load
-	    (not (string-match (rails-root) (cdar project-files-table)))) ; switched projects
+;  (when (or (not project-files-table) ; initial load
+;	    (not (string-match (rails-root) (cdar project-files-table)))) ; switched projects
     (setq project-files-table nil)
-    (populate-project-files-table (concat (rails-root) "/app")))
+    (populate-project-files-table (concat (rails-root) "/app"))
   project-files-table)
 
 

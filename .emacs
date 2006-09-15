@@ -57,7 +57,7 @@
 ;; syntax highlighting needs to be done before ruby-electric
 (global-font-lock-mode t)
 
-(setq erb-background "grey18") ; must do before rhtml-mode is loaded, i think
+;(setq erb-background "grey18") ; must do before rhtml-mode is loaded, i think
 
 (require 'ruby-electric)
 (require 'arorem)
@@ -82,6 +82,7 @@
 (when (= emacs-major-version 22)
   (ido-mode t)
   (ido-toggle-prefix)
+  (setq ido-enable-flex-matching t)
   (file-name-shadow-mode t)
   (add-to-list 'hs-special-modes-alist
 	       (list 'ruby-mode

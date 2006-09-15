@@ -6,9 +6,9 @@
 
 (snippet-with-abbrev-table 'ruby-mode-abbrev-table
     ;; model
-    ("bt" . "belongs_to")
-    ("hm" . "has_many")
-    ("ho" . "has_one")
+    ("bt" . "belongs_to :$${class}")
+    ("hm" . "has_many :$${class}")
+    ("ho" . "has_one :$${class}")
     ;; controller renders
     ("ra" . "render :action => \"$${action}\"")
     ("ral" . "render :action => \"$${action}\", :layout => \"$${layoutname}\"")
