@@ -92,11 +92,12 @@
   (find-file (cdr (assoc file project-files-table))))
 
 (defun project-files ()
+; uncomment these lines if it's too slow to load the whole project-files-table
 ;  (when (or (not project-files-table) ; initial load
 ;	    (not (string-match (rails-root) (cdar project-files-table)))) ; switched projects
     (setq project-files-table nil)
     (populate-project-files-table (concat (rails-root) "/app"))
-  project-files-table)
+    project-files-table)
 
 
 (defun rails-root (&optional dir)
@@ -126,6 +127,15 @@
 (define-key ruby-mode-map
   [(control f5)] (lambda () (interactive)
 		   (compile (concat "ruby " (file-name-nondirectory buffer-file-name)))))
+
+(defun rails-get-path (path)
+  (interactive "MPath: ")
+  (switch-to-buffer (concat "rails-" path))
+  (insert (shell-command-to-string (concat (rails-root) "/script/runner \"app = ActionController::Integration::Session.new; app.get '"
+					   path "'; puts app.response.body\"")))
+  (html-mode)
+  ;; work around the fact that it inserts some random testing output
+  (kill-region (search-backward "Loaded suite") (point-max)))
 
 
 ;; (global-set-key [f7] 'symbol-links-to-string-links)

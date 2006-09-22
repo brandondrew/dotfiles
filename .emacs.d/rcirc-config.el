@@ -10,6 +10,9 @@
 	    (set (make-local-variable 'scroll-conservatively)
 		 8192)))
 
+(setq rcirc-default-nick "technomancy")
+;(setq rcirc-fill-column 120)
+(setq rcirc-unambiguous-complete t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; colors!

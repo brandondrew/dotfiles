@@ -1,8 +1,12 @@
 ;; for integrating compile-mode and test/unit
 
 (defun my-ruby-compile-hook ()
-  (add-to-list 'compilation-error-regexp-alist
-	       '("\\([\w_]*test.rb\\):\\([0-9]+\\)" 1 2))
+  (add-to-list 'compilation-error-regexp-alist 
+	       '("test[a-zA-Z0-9_]*([A-Z][a-zA-Z0-9_]*) \\[\\(.*\\):\\([0-9]+\\)\\]:"
+		 1 2))
+  (add-to-list 'compilation-error-regexp-alist 
+	       '("^ *\\[?\\([^:\\n\\r]+\\):\\([0-9]+\\):in"
+		 1 2))
   (setq compile-command "rake"))
 
 (add-hook 'ruby-mode-hook 'my-ruby-compile-hook)

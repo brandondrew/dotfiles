@@ -124,6 +124,8 @@
 
 (define-key rhtml-mode-map
   "\C-c\C-v" 'rhtml-find-action)
+(define-key rhtml-mode-map
+  "\C-c\C-\M-f" 'find-file-in-project)
 
 ; for debugging font-lock
 (global-set-key "\C-c\C-r" 'rhtml-mode-test)
