@@ -20,8 +20,9 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (setq load-path (append '("~/.emacs.d") load-path))
-(setq load-path (append '("~/.emacs.d/arorem2") load-path))
+;(setq load-path (append '("~/.emacs.d/arorem2") load-path))
 (setq load-path (append '("~/.emacs.d/rinari") load-path))
+(setq load-path (append '("~/.emacs.d/rinari/rhtml") load-path))
 (toggle-debug-on-error)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -60,10 +61,10 @@
 ;(setq erb-background "grey18") ; must do before rhtml-mode is loaded, i think
 
 (require 'ruby-electric)
-(require 'arorem)
+(require 'rinari)
 (require 'ri-ruby)
 
-(set-face-background 'erb-face "grey18")
+;(set-face-background 'erb-face "grey18")
 
 (add-to-list 'auto-mode-alist '("\\.rb$" . ruby-mode))
 (add-to-list 'auto-mode-alist '("\\.rake$" . ruby-mode)) ; d'oh!
@@ -83,6 +84,7 @@
   (ido-mode t)
   (ido-toggle-prefix)
   (setq ido-enable-flex-matching t)
+  (setq ido-create-new-buffer 'always)
   (file-name-shadow-mode t)
   (add-to-list 'hs-special-modes-alist
 	       (list 'ruby-mode
@@ -113,7 +115,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; IRC
 
-(if (featurep 'rcirc)
+(if (functionp 'rcirc)
     (load "rcirc-config"))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -266,7 +268,7 @@
 
 (set-register ?e '(file . "~/.emacs"))
 (set-register ?d '(file . "~/.emacs.d"))
-(set-register ?a '(file . "~/.emacs.d/arorem2/arorem.el"))
+(set-register ?r '(file . "~/.emacs.d/rinari/rinari.el"))
 (set-register ?y '(file . "~/.emacs.d/ebby.el"))
 (set-register ?g '(file . "~/.gnus.el"))
 (set-register ?b '(file . "~/.bashrc"))
@@ -274,7 +276,7 @@
 (set-register ?t '(file . "~/mjolnir/paxtel_timecard.2006"))
 (set-register ?u '(file . "~/mjolnir/ujive_timecard.2006"))
 (set-register ?c '(file . "~/.contacts"))
-(set-register ?W '(file . "~/.wmii-3/wmiirc"))
+(set-register ?p '(file . "~/paxtel/app/views/vehicles/index.rhtml"))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -285,7 +287,7 @@
   (global-hl-line-mode t)
   (set-scroll-bar-mode 'right) ; mostly for seeing how far down we are, not for clicking
   (setq frame-title-format '(buffer-file-name "%f" ("%b")))
-  (set-default-font "terminus-16") ; apt-get install xfonts-terminus
+;  (set-default-font "terminus-16") ; apt-get install xfonts-terminus
   (setq browse-url-browser-function 'browse-url-epiphany)
   (tooltip-mode -1)
   (tool-bar-mode -1)
@@ -300,13 +302,12 @@
 (setq font-lock-maximum-decoration t)
 (setq inhibit-startup-message t)
 (setq transient-mark-mode t)
-(auto-compression-mode) ; load .gz's automatically
+(auto-compression-mode t) ; load .gz's automatically
 (global-font-lock-mode t)
 (menu-bar-mode -1) ; toggled by F1
 (show-paren-mode 1)
 (setq color-theme-is-global nil)
 (put 'narrow-to-region 'disabled nil)
-(display-time)
 (defalias 'yes-or-no-p 'y-or-n-p)
 
 ;; don't clutter directories!

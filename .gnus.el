@@ -12,7 +12,7 @@
 (setq smtpmail-auth-credentials '(("mail.hagelb.org" 25 "m7139145" "testyy")))
 (setq message-kill-buffer-on-exit t)
 
-;(setq gnus-message-archive-group "sent")
+(setq gnus-message-archive-group "sent")
 
 (setq nnmail-split-methods 'nnmail-split-fancy)
 (setq nnmail-crosspost nil)
@@ -28,15 +28,15 @@
 	  
 	  (any "Jed Levin" "ujive")
 	  (any "Marshall Pierce" "ujive")
-	  (any "Brent Hargrave" "ujive")
+	  (any "brent.hargrave" "ujive")
 
 	  (any "noreply@paxtel\\.com" paxtel-notify)
 	  (any "phil@dev.\\.paxtel\\.com" junk)
 	  (any ".*@dev\\.paxtel\\.com" "checkins")
-	  (any "tmornini@.*" "work")
-	  (any "paxgrid@rogers\\.com" "work")
-	  (any "dallas\\.reedy@gmail\\.com" "work")
-	  (any ".*@paxtel\\.com" "work")
+	  (any "tmornini@.*" "paxtel")
+	  (any "paxgrid@rogers\\.com" "paxtel")
+	  (any "dallas\\.reedy@gmail\\.com" "paxtel")
+	  (any ".*@paxtel\\.com" "paxtel")
 
 	  (any "cron" junk)
 	  (to "phil@localhost" "feeds")

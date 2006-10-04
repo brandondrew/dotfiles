@@ -1,5 +1,3 @@
 (if (and (is (application_name) "gaim")
     (not (is (window_name) "Buddy List")))
-    (begin (above) (geometry "200x324+2325+700")))
-
-    
+    (begin (above) (geometry "200x324+2360+700")))
