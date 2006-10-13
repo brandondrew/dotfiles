@@ -19,10 +19,11 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(setq load-path (append '("~/.emacs.d") load-path))
-;(setq load-path (append '("~/.emacs.d/arorem2") load-path))
-(setq load-path (append '("~/.emacs.d/rinari") load-path))
-(setq load-path (append '("~/.emacs.d/rinari/rhtml") load-path))
+(add-to-list 'load-path "~/.emacs.d")
+(add-to-list 'load-path "~/.emacs.d/rinari")
+(add-to-list 'load-path "~/.emacs.d/rinari/rhtml")
+
+(add-to-list 'load-path "/usr/share/emacs/site-lisp/sawfish/")
 (toggle-debug-on-error)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -111,6 +112,17 @@
 (setq inferior-lisp-program "/usr/local/bin/lisp")
 (autoload 'slime "slime-setup")
 
+(add-hook 'emacs-lisp-mode-hook 'pretty-lambdas)
+(add-hook 'lisp-mode-hook 'pretty-lambdas)
+
+(add-hook 'emacs-lisp-mode-hook 
+ 	  (lambda ()
+ 	    (font-lock-add-keywords nil 
+ 				    '(("(\\|)" . 'paren-face)))))
+(add-hook 'lisp-mode-hook 
+ 	  (lambda ()
+ 	    (font-lock-add-keywords nil 
+ 				    '(("(\\|)" . 'paren-face)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; IRC
@@ -251,17 +263,34 @@
   (w3m-browse-url (concat "http://maps.yahoo.com/maps_result?mag=12&lat="
 			  lat "&lon=" lng)))
 
+(defun mark-string ()
+  (interactive)
+  (setq deactivate-mark nil)
+  (push-mark (search-forward "\"") t t)
+  (search-backward "\""))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;     cosmetics
+
 (defun smallish (&optional font-size)
   (interactive)
   (set-default-font (concat "terminus-" (or font-size "12")))
   (tabbar-mode -1)
   (scroll-bar-mode -1))
 
-(defun mark-string ()
-  (interactive)
-  (setq deactivate-mark nil)
-  (push-mark (search-forward "\"") t t)
-  (search-backward "\""))
+(defun pretty-lambdas ()
+    (font-lock-add-keywords
+     nil `(("(\\(lambda\\>\\)"
+            (0 (progn (compose-region (match-beginning 1) (match-end 1)
+                                      ,(make-char 'greek-iso8859-7 107))
+                      nil))))))
+
+(defface paren-face
+   '((((class color) (background dark))
+      (:foreground "grey20"))
+     (((class color) (background light))
+      (:foreground "grey80")))
+   "Face used to dim parentheses.")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;     registers (C-x C-r)
@@ -274,7 +303,7 @@
 (set-register ?b '(file . "~/.bashrc"))
 (set-register ?s '(file . "~/.screenrc"))
 (set-register ?t '(file . "~/mjolnir/paxtel_timecard.2006"))
-(set-register ?u '(file . "~/mjolnir/ujive_timecard.2006"))
+(set-register ?u '(file . "~/mjolnir/ujive_timecard"))
 (set-register ?c '(file . "~/.contacts"))
 (set-register ?p '(file . "~/paxtel/app/views/vehicles/index.rhtml"))
 
@@ -292,7 +321,7 @@
   (tooltip-mode -1)
   (tool-bar-mode -1)
   (blink-cursor-mode -1)
-  (add-hook 'erc-text-matched-hook 'erc-notify-keyword))
+  (ignore-errors (set-default-font "terminus-16")))
 
 (when (not window-system)
   (keyboard-translate ?\C-h ?\C-?))

@@ -1,0 +1,10 @@
+(defun hook-test (window)
+  (display-message (window-name window)))
+
+;(add-hook 'after-framing-hook 'hook-test t)
+;(remove-hook 'add-window-hook 'hook-test)
+
+;(maybe-maximize (input-focus))
+;(display-message nil)
+
+;(restart)

@@ -1,0 +1,7 @@
+;; sawfish user customization -- do not edit by hand!
+;; sawfish version 1.3, written Fri Oct 13 10:05:16 2006
+
+(custom-set-keymap (quote window-keymap) (quote (keymap (raise-and-pass-through-click . "Button1-Click") (resize-window-interactively . "M-Button3-Click") (move-window-interactively . "W-Button1-Move") (popup-window-menu . "W-Button2-Click") (raise-lower-window . "W-Button3-Click") (lower-window . "W-Down") (raise-window . "W-Up"))))
+(custom-set-keymap (quote global-keymap) (quote (keymap (cycle-windows . "W-TAB") ((run-shell-command "emacs") . "XF86Mail") ((run-shell-command "/home/phil/bin/myrxvt") . "M-`") ((activate-workspace 1) . "C-1") ((activate-workspace 2) . "C-2") ((activate-workspace 3) . "C-3") ((activate-workspace 4) . "C-4") ((activate-workspace 5) . "C-5") ((activate-workspace 6) . "C-6") (maximize-window-toggle . "M-F10") (next-workspace . "W-Right") (previous-workspace . "W-Left"))))
+(custom-set-typed-variable (quote default-font) (quote ("Pango" . "Saab 7")) (quote font))
+(custom-set-typed-variable (quote default-frame-style) (quote Microtene) (quote frame-style))

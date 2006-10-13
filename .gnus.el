@@ -25,12 +25,14 @@
 	  (any "conkeror" "conkeror")
 	  (any "cartographer" "cartographer")
 	  (any "ocruby" "ocruby")
-	  
+
+	  (any "planetargon" "argon")
+
 	  (any "Jed Levin" "ujive")
 	  (any "Marshall Pierce" "ujive")
 	  (any "brent.hargrave" "ujive")
 
-	  (any "noreply@paxtel\\.com" paxtel-notify)
+	  (any "Paxtel Notifier" junk)
 	  (any "phil@dev.\\.paxtel\\.com" junk)
 	  (any ".*@dev\\.paxtel\\.com" "checkins")
 	  (any "tmornini@.*" "paxtel")
