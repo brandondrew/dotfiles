@@ -45,6 +45,7 @@
 (autoload 'htmlize-buffer "htmlize" "" t)
 (autoload 'color-theme-zenburn "zenburn")
 (autoload 'textile-to-html-region "textilize")
+(autoload 'sawfish-mode "sawfish" "" t)
 
 (require 'psvn)
 (require 'pastie)
@@ -127,8 +128,10 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; IRC
 
-(if (functionp 'rcirc)
-    (load "rcirc-config"))
+;(if (functionp 'rcirc)
+;    (load "rcirc-config"))
+(require 'rcirc)
+(setq rcirc-unambiguous-complete t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Jabber
@@ -154,6 +157,12 @@
 (global-set-key "\C-xO" (lambda () (interactive) (other-window -1)))
 (global-set-key "\C-x." (lambda () (interactive) (enlarge-window 1 t)))
 (global-set-key "\C-x," (lambda () (interactive) (shrink-window 1 t)))
+
+(global-set-key "\C-xh" (lambda (url) (interactive "MUrl: ") 
+			  (switch-to-buffer (url-retrieve-synchronously url))
+			  (rename-buffer url t)
+			  (html-mode)))
+
 (setq outline-minor-mode-prefix [(control o)])
 
 ; hide-show
@@ -199,12 +208,15 @@
 			       (interactive)
 			       (shell-command "ssh philisha.net mpc next")))
 
-(global-set-key [(control f4)] (lambda (dir)
-				 (interactive (list (completing-read "Play directory: " (split-string (shell-command-to-string "ls ~/music") "\n"))))
-				 (shell-command (concat 
-						 "ssh philisha.net mpc clear; "
-						 "ssh philisha.net mpc add " dir
-						 "; ssh philisha.net mpc play"))))
+(global-set-key [(control f4)] 
+		(lambda (dir)
+		  (interactive (list (completing-read "Play directory: " 
+						      (split-string 
+						       (shell-command-to-string "find /home/phil/music -type d | cut -c 18-") "\n"))))
+		  (shell-command (concat 
+				  "ssh philisha.net mpc clear; "
+				  "ssh philisha.net mpc add " dir
+				  "; ssh philisha.net mpc play"))))
 
 (global-set-key [f5] 'compile)
 
@@ -316,7 +328,6 @@
   (global-hl-line-mode t)
   (set-scroll-bar-mode 'right) ; mostly for seeing how far down we are, not for clicking
   (setq frame-title-format '(buffer-file-name "%f" ("%b")))
-;  (set-default-font "terminus-16") ; apt-get install xfonts-terminus
   (setq browse-url-browser-function 'browse-url-epiphany)
   (tooltip-mode -1)
   (tool-bar-mode -1)
