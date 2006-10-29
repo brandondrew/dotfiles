@@ -85,11 +85,50 @@ PARAMS may contain extra arguments to certain API calls."
   (switch-to-buffer (rdoc-request "/doc/fr_file_index.html"))
   (let ((files ()))
     (while (search-forward-regexp "\\(files/[^\"]*\\)" nil t)
-      (add-to-list 'files (buffer-substring (car (match-data)) (cadr (match-data)))))
+      (add-to-list 'files (buffer-substring (+ 6 (car (match-data))) (cadr (match-data)))))
     (kill-buffer (current-buffer))
     files))
 
 (defun rdoc-find-file (file)
   (interactive (list (completing-read "Open RDoc for file: " 
 				      (rdoc-get-file-list))))
-  (rdoc-request (concat "http://localhost:3333/doc/" file))
+  (rdoc-prepare (rdoc-request (concat "/doc/files/" file)) file))
+
+(defun rdoc-find-class (class)
+  ;; TODO: write
+)
+
+(defun rdoc-find-method (method)
+  ;; TODO: write
+)
+
+(defun rdoc-submit ()
+  (interactive)
+
+  ;; TODO: write
+)
+
+(defun rdoc-prepare (buffer name)
+  (switch-to-buffer buffer)
+  (rename-buffer name t)
+
+  ;; Delete HTML and leave us with just the contents of the textarea
+  (delete-region 1
+		 (search-forward-regexp "<textarea [^>]*>"))
+  (delete-region (- (search-forward-regexp "</textarea>") 11)
+		 (buffer-end 1))
+  (beginning-of-buffer)
+
+  (rdoc-edit-mode)
+  (buffer-enable-undo))
+
+(define-derived-mode rdoc-edit-mode
+  text-mode "RDoc"
+  "RDoc editing mode"
+  (interactive))
+
+(define-key rdoc-edit-mode-map
+  "\C-c\C-c" rdoc-submit)
+
+(define-key rdoc-edit-mode-map
+  "C-c\C-f" rdoc-find-file)
