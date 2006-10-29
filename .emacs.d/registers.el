@@ -1,0 +1,25 @@
+
+;;; Part of my .emacs file
+
+;; by Phil Hagelberg
+;; Much thanks to emacswiki.org and RMS.
+
+;; Note: this relies on files found in my dotfiles repository:
+;; http://dev.technomancy.us/phil/browser/dotfiles/
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;     registers (C-x C-r)
+
+(set-register ?e '(file . "~/.emacs"))
+(set-register ?d '(file . "~/.emacs.d"))
+(set-register ?r '(file . "~/.emacs.d/rinari/rinari.el"))
+(set-register ?y '(file . "~/.emacs.d/ebby.el"))
+(set-register ?g '(file . "~/.gnus.el"))
+(set-register ?b '(file . "~/.bashrc"))
+(set-register ?s '(file . "~/.screenrc"))
+(set-register ?t '(file . "~/mjolnir/paxtel_timecard.2006"))
+(set-register ?u '(file . "~/mjolnir/ujive_timecard"))
+(set-register ?c '(file . "~/.contacts"))
+(set-register ?p '(file . "~/paxtel/app/views/vehicles/index.rhtml"))
+
+(provide 'registers)
