@@ -27,7 +27,8 @@
 ;;   Boston, MA 02110-1301
 ;;   USA
 
-;; Please set `rdoc-username' and `rdoc-password' appropriately.
+;; Please log on manually first and tell your openid server to always
+;; allow rdoc to authenticate. Then set `openid-url' appropriately.
 
 ;;; Code:
 
@@ -41,22 +42,17 @@
 
 ;; * User-serviceable parts.
 
+(defcustom openid-url "technomancy.myopenid.com"
+  "Your Rdoc password."
+  :group 'rdoc
+  :type '(string))
+
 (defgroup rdoc nil
   "Emacs interface to Caboose RDoc patch app."
   :group 'processes
   :prefix "rdoc-"
   :link '(url-link :tag "Rdoc"
                    "http://rdoc.caboo.se"))
-
-(defcustom rdoc-username "quentin"
-  "Your Rdoc username."
-  :group 'rdoc
-  :type '(string))
-
-(defcustom rdoc-password "test"
-  "Your Rdoc password."
-  :group 'rdoc
-  :type '(string))
 
 (defcustom rdoc-host "localhost:3333"
   "Host to connect to."
@@ -93,3 +89,7 @@ PARAMS may contain extra arguments to certain API calls."
     (kill-buffer (current-buffer))
     files))
 
+(defun rdoc-find-file (file)
+  (interactive (list (completing-read "Open RDoc for file: " 
+				      (rdoc-get-file-list))))
+  (rdoc-request (concat "http://localhost:3333/doc/" file))

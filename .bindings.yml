@@ -4,11 +4,13 @@
     command_2: /home/phil/bin/rxvt
     command_3: wmctrl -r screen -e 0,1280,0,-1,-1
     command_4: wmctrl -r screen -e 0,0,0,-1,-1
+    command_5: synergyc puyo
   global_keybindings/: 
     run_command_1: <Alt>grave
     run_command_2: <Shift>F9
     run_command_3: <Control>0
     run_command_4: <Control>9
+    run_command_5: <Control>Esc
   window_keybindings/: 
     toggle_above: <Alt>F11
     toggle_on_all_workspaces: <Alt><Shift>F11

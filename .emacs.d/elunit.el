@@ -44,7 +44,7 @@
 (defmacro defsuite (suite-name &rest tests)
   "This is what you use to set things up."
   (dolist (test tests)
-     (elunit-add-to-suite (make-test test) suite-name)))
+    (elunit-add-to-suite (make-test test) suite-name)))
 
 (defun make-test (body)
   (let ((name (pop body)))
