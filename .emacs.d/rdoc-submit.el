@@ -89,14 +89,23 @@ PARAMS may contain extra arguments to certain API calls."
     (kill-buffer (current-buffer))
     files))
 
+(defun rdoc-get-class-list ()
+  (switch-to-buffer (rdoc-request "/doc/fr_class_index.html"))
+  (let ((classes ()))
+    (while (search-forward-regexp "\\(classes/[^\"]*\\)" nil t)
+      (add-to-list 'classes (buffer-substring (+ 8 (car (match-data))) (cadr (match-data)))))
+    (kill-buffer (current-buffer))
+    classes))
+
 (defun rdoc-find-file (file)
   (interactive (list (completing-read "Open RDoc for file: " 
 				      (rdoc-get-file-list))))
-  (rdoc-prepare (rdoc-request (concat "/doc/files/" file)) file))
+  (rdoc-prepare-buffer (rdoc-request (concat "/doc/files/" file)) file))
 
 (defun rdoc-find-class (class)
-  ;; TODO: write
-)
+  (interactive (list (completing-read "Open RDoc for class: " 
+				      (rdoc-get-class-list))))
+  (rdoc-prepare-buffer (rdoc-request (concat "/doc/classes/" class)) class))
 
 (defun rdoc-find-method (method)
   ;; TODO: write
@@ -104,11 +113,11 @@ PARAMS may contain extra arguments to certain API calls."
 
 (defun rdoc-submit ()
   (interactive)
-
-  ;; TODO: write
+  (rdoc-request "/patch/new" (concat "patch[modified_rdoc_source]=" (buffer-string)))
+  ;; TODO: finish
 )
 
-(defun rdoc-prepare (buffer name)
+(defun rdoc-prepare-buffer (buffer name)
   (switch-to-buffer buffer)
   (rename-buffer name t)
 
