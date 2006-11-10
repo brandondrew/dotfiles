@@ -12,6 +12,10 @@
                description="Ongoing fragmented essay by Tim Bray."
                htmlUrl="http://www.tbray.org/ongoing/"
                xmlUrl="http://www.tbray.org/ongoing/ongoing.rss" />
+      <outline text="Mark Pilgrim"
+	       description="Dive into Mark"
+	       htmlUrl="http://diveintomark.org"
+	       xmlUrl="http://diveintomark.org/feed" />
       <outline text="Bruce Schneier"
 	       description="Schneier on Security"
 	       htmlUrl="http://www.schneier.com/blog/"
@@ -41,6 +45,9 @@
       <outline text="O'Reily Radar"
 	       htmlUrl="http://radar.oreilly.com/"
 	       xmlUrl="http://radar.oreilly.com/atom.xml" />
+      <outline text="Steve Yegge"
+	       htmlUrl="http://steve-yegge.blogspot.com/"
+	       xmlUrl="http://steve-yegge.blogspot.com/atom.xml" />
     </outline>
 
     <outline text="Friends">
@@ -52,6 +59,10 @@
 	       description="bitwise"
 	       htmlUrl="http://www.joelmwatson.com/blog/"
 	       xmlUrl="http://www.joelmwatson.com/blog/xml/rss20/feed.xml" />
+      <outline text="Forrest Chang"
+	       description="Funkworks"
+	       htmlUrl="http://funkworks.blogspot.com/"
+	       xmlUrl="http://funkworks.blogspot.com/atom.xml" />
       <outline text="Tim Malabuyo"
 	       description="Intelligent Design"
 	       htmlUrl="http://webdesign.timches.com/"
@@ -90,6 +101,10 @@
       <outline text="O'Reily Ruby"
 	       htmlUrl="http://www.oreillynet.com/ruby"
 	       xmlUrl="http://www.oreillynet.com/ruby/blog/index.xml" />
+      <outline text="Mauricio Fernandez"
+	       description="eigenclass.org"
+	       htmlUrl="http://eigenclass.org/"
+	       xmlUrl="http://eigenclass.org/hiki.rb?c=rss;format=1;tags=blog" />
     </outline>
 
     <outline text="Plain text emails" textonly="1">

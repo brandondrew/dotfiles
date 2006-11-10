@@ -6,7 +6,7 @@
 
 alias emac="emacs -nw -q --no-site-file"
 alias ri="ri -f ansi -T"
-alias conkeror="firefox -chrome chrome://conkeror/content"
+alias devlog="tail -F log/development.log"
 
 #alias cd="cd \!*; ls"
 alias ll="ls -l"

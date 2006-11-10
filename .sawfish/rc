@@ -1,11 +1,5 @@
 (require 'sawfish.wm.state.maximize)
 
-(defun hook-test (window)
-  (display-message (window-name window)))
-
-(defun test-fun ()
-  (display-message "test"))
-
 (defun maximize-position (x y)
   (let ((window (input-focus)))
     (unmaximize-window window)
@@ -15,12 +9,3 @@
 (bind-keys global-keymap 
 	   "M-[" '(maximize-position 1 1)
 	   "M-]" '(maximize-position 1281 1))
-
-;(add-hook 'after-add-window-hook 'hook-test t)
-;(remove-hook 'after-add-window-hook 'hook-test)
-
-;(maybe-maximize (input-focus))
-;(display-message nil)
-
-;(restart)
-

@@ -42,8 +42,18 @@
 
 ;; * User-serviceable parts.
 
-(defcustom openid-url "technomancy.myopenid.com"
-  "Your Rdoc password."
+(defcustom openid-url "quentin.myopenid.com"
+  "Your openID url."
+  :group 'rdoc
+  :type '(string))
+
+(defcustom openid-username "quentin"
+  "Your openID username."
+  :group 'rdoc
+  :type '(string))
+
+(defcustom openid-password "testy"
+  "Your openID password."
   :group 'rdoc
   :type '(string))
 
@@ -61,11 +71,6 @@
 
 ;; * HTTP request/response handling
 
-(put 'rdoc-error 'error-message "Rdoc error")
-(put 'rdoc-error 'error-conditions '(rdoc-error error))
-
-(defvar rdoc-debug t)
-
 (defun rdoc-request (path &optional params method)
   "Perform a Rdoc API request to PATH.
 PARAMS may contain extra arguments to certain API calls."
@@ -79,7 +84,14 @@ PARAMS may contain extra arguments to certain API calls."
      (concat "http://" rdoc-host path))))
 
 (defun rdoc-login ()
-  (rdoc-request "/sessions/create" (concat "login=" rdoc-username "&password=" rdoc-password) "POST"))
+  (interactive)
+  (rdoc-request "/sessions" (concat "openid_url=" openid-url) "POST"))
+
+;; (let ((url-request-method "POST")
+;;       (url-request-data "openid_url=quentin.myopenid.com"))
+;;   (url-retrieve-synchronously "http://localhost:3333/sessions")
+;;   (let ((url-request-data (concat "user_name=quentin&password=testy")))
+;;     (url-retrieve-synchronously "http://myopenid.com/signin_submit")))
 
 (defun rdoc-get-file-list ()
   (switch-to-buffer (rdoc-request "/doc/fr_file_index.html"))
@@ -113,9 +125,9 @@ PARAMS may contain extra arguments to certain API calls."
 
 (defun rdoc-submit ()
   (interactive)
-  (rdoc-request "/patch/new" (concat "patch[modified_rdoc_source]=" (buffer-string)))
-  ;; TODO: finish
-)
+  (rdoc-request "/patches/new" (concat "patch[filename]=" filename "&patch[original_rdoc_source]=" 
+				       original-rdoc-source "&patch[line]=0&patch[modified_rdoc_source]=" 
+				       (buffer-string)) "POST"))
 
 (defun rdoc-prepare-buffer (buffer name)
   (switch-to-buffer buffer)
@@ -129,15 +141,19 @@ PARAMS may contain extra arguments to certain API calls."
   (beginning-of-buffer)
 
   (rdoc-edit-mode)
+
   (buffer-enable-undo))
 
 (define-derived-mode rdoc-edit-mode
   text-mode "RDoc"
   "RDoc editing mode"
+  (set (make-local-variable 'filename) (buffer-name))
+  (set (make-local-variable 'original-rdoc-source) (buffer-string))
+
   (interactive))
 
 (define-key rdoc-edit-mode-map
-  "\C-c\C-c" rdoc-submit)
+  "\C-c\C-c" 'rdoc-submit)
 
 (define-key rdoc-edit-mode-map
-  "C-c\C-f" rdoc-find-file)
+  "C-c\C-f" 'rdoc-find-file)
