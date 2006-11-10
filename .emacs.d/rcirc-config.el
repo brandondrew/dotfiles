@@ -1,5 +1,7 @@
 (require 'rcirc)
 
+(add-hook 'rcirc-mode-hook 'rcirc-track-minor-mode)
+
 ;; Turn on spell checking.
 (add-hook 'rcirc-mode-hook (lambda ()
 			     (flyspell-mode 1)))
@@ -11,15 +13,13 @@
 		 8192)))
 
 (setq rcirc-default-nick "technomancy")
-;(setq rcirc-fill-column 120)
-(setq rcirc-unambiguous-complete t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; colors!
 
 (defvar rcirc-colors
   (if (fboundp 'color-distance)
-      (let ((min-distance (* 0.2 (color-distance "black" "white")))
+      (let ((min-distance (* 0.23 (color-distance "black" "white")))
 	    (bg (face-background 'default))
 	    (fg (face-foreground 'rcirc-my-nick))
 	    candidates)
@@ -42,19 +42,28 @@ To check out the list, evaluate (list-colors-display rcirc-colors).")
 (defvar rcirc-color-mapping (make-hash-table :test 'equal)
   "Hash-map mapping nicks to color names.")
 
-(eval-after-load 'rcirc
-  '(defun rcirc-facify (string face)
-     "Return a copy of STRING with FACE property added.
-Also add colors to other nicks based on `rcirc-colors'."
-     (when (eq face 'rcirc-other-nick)
-       (let ((color (gethash string rcirc-color-mapping)))
-	 (unless color
-	   (setq color (elt rcirc-colors (random (length rcirc-colors))))
-	   (puthash string color rcirc-color-mapping))
-	 (setq face `((foreground-color . ,color)))))
-     (if face
-	 (propertize (or string "") 'face face 'rear-nonsticky t)
-       string)))
+(defadvice rcirc-facify (before rcirc-facify-colors activate)
+  "Add colors to other nicks based on `rcirc-colors'."
+  (when (and (eq face 'rcirc-other-nick)
+	     (not (string= string "")))
+    (let ((color (gethash string rcirc-color-mapping)))
+      (unless color
+	(setq color (elt rcirc-colors (random (length rcirc-colors))))
+	(puthash string color rcirc-color-mapping))
+      (setq face `((foreground-color . ,color))))))
+
+(defun rcirc-markup-nick-colors (process sender response channel-buffer)
+  (let* ((target (with-current-buffer channel-buffer (or rcirc-target ""))))
+    (with-syntax-table rcirc-nick-syntax-table
+      (maphash (lambda (nick color)
+		 (let ((face (cons 'foreground-color color)))
+		   (goto-char (point-min))
+		   (while (re-search-forward
+			   (concat "\\b" (regexp-quote nick) "\\b") nil t)
+		     (rcirc-add-face (match-beginning 0) (match-end 0) face))))
+	     rcirc-color-mapping))))
+
+(add-to-list 'rcirc-markup-text-functions 'rcirc-markup-nick-colors)
 
 (eval-after-load 'rcirc
   '(defun-rcirc-command color (args)
@@ -80,7 +89,6 @@ Also add colors to other nicks based on `rcirc-colors'."
       (error "Use what color?"))
     (puthash nick color rcirc-color-mapping)))
 
-
 (defadvice rcirc-handler-NICK (before rcirc-handler-NICK-colors activate)
   "Update colors in `rcirc-color-mapping'."
   (let* ((old-nick (rcirc-user-nick sender))
@@ -89,6 +97,7 @@ Also add colors to other nicks based on `rcirc-colors'."
     ;; don't delete the old mapping
     (puthash new-nick color rcirc-color-mapping)))
 
+
 (add-hook 'rcirc-print-hooks 'my-rcirc-print-hook)
 (defun my-rcirc-print-hook (a b c d e)
   (when (and
@@ -96,7 +105,7 @@ Also add colors to other nicks based on `rcirc-colors'."
 	 (not (string-match (concat "<" (rcirc-nick a) ">") e))) ; but, ignore my own messages 
     (shell-command (concat "notify-send \"" (car (split-string b "!")) " said your nick\" \"" e "\""))))
 
-(setq rcirc-unambiguous-complete t)
+
 
 (setq rcirc-unambiguous-complete t)
 
