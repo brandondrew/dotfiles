@@ -1,6 +1,6 @@
 (require 'rcirc)
 
-(add-hook 'rcirc-mode-hook 'rcirc-track-minor-mode)
+(add-hook 'rcirc-mode-hook (lambda () (rcirc-track-minor-mode 1)))
 
 ;; Turn on spell checking.
 (add-hook 'rcirc-mode-hook (lambda ()
@@ -13,6 +13,7 @@
 		 8192)))
 
 (setq rcirc-default-nick "technomancy")
+(setq rcirc-startup-channels-alist '(("^irc.freenode.net$" "#conkeror" "#emacs" "#ruby-lang" "#rinari")))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; colors!
