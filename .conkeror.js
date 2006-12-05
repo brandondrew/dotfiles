@@ -51,7 +51,7 @@ function miniBufferCompleteKeyPress(event)
 	    var idx;
 	    var initialSelection = field.value.substring(0, field.selectionStart);
 
-	    // fill in unambiguous part
+	    // deselect in unambiguous part
 	    while (gCurrentCompletions.length == miniBufferCompleteStr(field.value.substring(0, field.selectionStart+1), gMiniBufferCompletions).length &&
 		   field.selectionStart != field.value.length) {
 		field.setSelectionRange(field.selectionStart + 1, field.value.length);
@@ -75,11 +75,12 @@ function miniBufferCompleteKeyPress(event)
 		if (idx != null && gCurrentCompletions[idx]) {
 		    gCurrentCompletion = idx;
 		    field.value = gCurrentCompletions[idx][0];
-		    field.setSelectionRange(initialSelection.length, field.value.length);
 		    // When we allow non-matches it generally means the
 		    // completion takes an argument. So add a space.
-		    if (gAllowNonMatches)
-			field.value += " ";
+ 		    if (gAllowNonMatches)
+ 			field.value += " ";
+		    field.setSelectionRange(initialSelection.length, field.value.length);
+
 		}
 	    }
 	    event.preventDefault();
@@ -129,7 +130,10 @@ function miniBufferCompleteImproved(prompt, initVal, history, completions, nonMa
     gReadFromMinibufferCallBack = callBack;
     gReadFromMinibufferAbortCallBack = abortCallback;
     gMiniBufferCompletions = completions;
-    gCurrentCompletion = 0;
+    gCurrentCompletions = miniBufferCompleteStr("", gMiniBufferCompletions);
+    for (i=0;i < gCurrentCompletions.length; i++)
+	{ if (gCurrentCompletions[i][0] == initVal) gCurrentCompletion = i; }
+
     gDefaultMatch = def;
     gAllowNonMatches = nonMatches;
     initHistory(history);
@@ -138,15 +142,31 @@ function miniBufferCompleteImproved(prompt, initVal, history, completions, nonMa
 
 add_command("switch-to-buffer", switchToBuffer, []);
 
-// function open_url(args, fillInput)
+function killBuffer()
+{
+    var defBrowser = getBrowser().webNavigation.currentURI.spec;
+    var bufs = getBrowser().getBrowserNames();
+    var matches = zip2(bufs,getBrowser().mBrowsers);
+    miniBufferCompleteImproved("Kill buffer: ", defBrowser, "buffer", matches, true,
+		       function(m,b) {if (b=="") {getBrowser().killCurrentBrowser();} else {getBrowser().killBrowser(m);}});
+    document.getElementById("input-field").select();
+}
+
+add_command("kill-buffer", killBuffer, []);
+
+// function openUrl(args, fillInput)
 // {
 //     var prefix = args[0];
-//     var templs = gHistory.url;
-//     for (var x in gWebJumpLocations)
-// 	templs.push([x,x]);
+//     var templs = [];
+//      for (var x in gWebJumpLocations)
+//  	templs.push([x,x]);
 //     var input = fillInput ? getWebNavigation().currentURI.spec : null;
+//     var initVal = gHistory && gHistory.url[gHistory.url.length];
+//     var completions = gHistory ? gHistory.url.reverse() : []
 
-//     miniBufferCompleteImproved(open_url_in_prompt(prefix), gHistory.url[0], "url", templs, true, 
+//     miniBufferCompleteImproved(open_url_in_prompt(prefix), initVal, "url", completions, true, 
 // 		       function(match,url) {open_url_in(prefix, get_url_or_webjump(url));});
 //     document.getElementById("input-field").select();
 // }
+
+// add_command("open-url", openUrl, []);
