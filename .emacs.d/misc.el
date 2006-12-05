@@ -16,6 +16,7 @@
   (set-scroll-bar-mode 'right) ; mostly for seeing how far down we are, not for clicking
   (setq frame-title-format '(buffer-file-name "%f" ("%b")))
   (setq browse-url-browser-function 'browse-url-epiphany)
+  (setq browse-url-epiphany-new-window-is-tab t)
   (tooltip-mode -1)
   (tool-bar-mode -1)
   (blink-cursor-mode -1)

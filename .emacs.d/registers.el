@@ -17,9 +17,7 @@
 (set-register ?g '(file . "~/.gnus.el"))
 (set-register ?b '(file . "~/.bashrc"))
 (set-register ?s '(file . "~/.screenrc"))
-(set-register ?t '(file . "~/mjolnir/paxtel_timecard.2006"))
-(set-register ?u '(file . "~/mjolnir/ujive_timecard"))
 (set-register ?c '(file . "~/.contacts"))
-(set-register ?p '(file . "~/paxtel/app/views/vehicles/index.rhtml"))
+(set-register ?k '(file . "/home/phil/.mozilla/firefox/i6m4tefk.default/extensions/{a79fe89b-6662-4ff4-8e88-09950ad4dfde}/chrome/conkeror.jar"))
 
 (provide 'registers)

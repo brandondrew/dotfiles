@@ -24,9 +24,9 @@
 	       description="Bliki"
 	       htmlUrl="http://martinfowler.com/bliki/"
 	       xmlUrl="http://martinfowler.com/bliki/bliki.rss" />
-      <outline text="Planet GNOME"
+<!--      <outline text="Planet GNOME"
 	       htmlUrl="http://planet.gnome.org/"
-	       xmlUrl="http://planet.gnome.org/rss20.xml" />
+	       xmlUrl="http://planet.gnome.org/rss20.xml" />-->
       <outline text="Projectionist"
 	       description="A tumblelog"
 	       htmlUrl="http://project.ioni.st/"
@@ -105,18 +105,6 @@
 	       description="eigenclass.org"
 	       htmlUrl="http://eigenclass.org/"
 	       xmlUrl="http://eigenclass.org/hiki.rb?c=rss;format=1;tags=blog" />
-    </outline>
-
-    <outline text="Plain text emails" textonly="1">
-      <outline text="FSF News"
-	       description="Free software is a matter of liberty not price."
-	       htmlUrl="http://www.fsf.org/"
-	       xmlUrl="http://www.fsf.org/news/RSS" />
-<!--      <outline text="Phil"
-	       description="technomancy"
-	       htmlUrl="http://technomancy.us"
-	       xmlUrl="http://technomancy.us/blog/rss" />
--->
     </outline>
   </body>
 </opml>

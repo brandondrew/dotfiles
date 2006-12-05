@@ -24,6 +24,8 @@
 (add-to-list 'load-path "~/.emacs.d")
 (add-to-list 'load-path "~/.emacs.d/rinari")
 (add-to-list 'load-path "~/.emacs.d/rinari/rhtml")
+(add-to-list 'load-path "~/.emacs.d/jabber")
+(add-to-list 'load-path "~/.emacs.d/w3m")
 (add-to-list 'load-path "/usr/share/emacs/site-lisp/sawfish/")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -32,6 +34,8 @@
 (autoload 'php-mode "php-mode")
 (autoload 'yaml-mode "yaml-mode")
 (autoload 'css-mode "css-mode")
+(autoload 'js-mode "js-mode" "" t)
+(autoload 'moz-minor-mode "moz" "Mozilla Minor and Inferior Mozilla Modes" t)
 (autoload 'tabbar-mode "tabbar")
 (autoload 'lisppaste-paste-region "lisppaste" "" t)
 (autoload 'ebby "ebby" "" t)
@@ -41,16 +45,20 @@
 (autoload 'textile-to-html-region "textilize")
 (autoload 'sawfish-mode "sawfish" "" t)
 (autoload 'pastie-region "pastie" "" t)
+(autoload 'jabber-connect "jabber" "" t)
+(autoload 'w3m "w3m" "" t)
 
 (require 'psvn)
 (require 'compile)
 (require 'which-func)
 (require 'elunit)
 
-(add-to-list 'auto-mode-alist '("\\.js$" . c-mode))
 (add-to-list 'auto-mode-alist '("\\.php$" . php-mode))
 (add-to-list 'auto-mode-alist '("\\.css$" . css-mode))
 (add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
+(add-to-list 'auto-mode-alist '("\\.js$" . js-mode))
+
+(add-hook 'js-mode-hook 'moz-minor-mode)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; My support files and configurations

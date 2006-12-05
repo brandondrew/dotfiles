@@ -37,6 +37,7 @@ Copies the URL into the kill ring."
           (concat "<paste>"
                   "<parser>" mode "</parser>"
                   "<body>" body "</body>"
+		  "<authorization>burger</authorization>"
                   "</paste>")))
 
     (let ((pastie-buffer (url-retrieve-synchronously url)))

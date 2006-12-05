@@ -26,6 +26,12 @@
 
 (setq outline-minor-mode-prefix [(control o)])
 
+; searching with regexes by default
+(global-set-key "\C-s" 'isearch-forward-regexp)
+(global-set-key "\C-r" 'isearch-backward-regexp)
+(global-set-key "\C-\M-s" 'isearch-forward)
+(global-set-key "\C-\M-r" 'isearch-backward)
+
 ; hide-show
 (global-set-key "\M-[" 'hs-hide-block)
 (global-set-key "\M-]" 'hs-show-block)
@@ -97,10 +103,13 @@
 (global-set-key [(meta f10)] 'ruby-xmp-region)
 
 (global-set-key [f11] 'ri)
+;(global-set-key "\C-hr" 'ri)
 
 (global-set-key [f12] '(lambda ()
 			 (interactive)
 			 (write-file "~/mjolnir/apps/technomancy/public/tmp/tmp.txt")))
 
+
+(add-hook 'c-mode-hook (lambda () (define-key c-mode-map "\C-\M-h" 'backward-kill-word)))
 
 (provide 'bindings)

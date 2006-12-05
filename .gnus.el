@@ -41,6 +41,7 @@
 	  (any ".*@paxtel\\.com" "paxtel")
 
 	  (any "cron" junk)
+	  ("subject" "EQSE News" junk)
 	  (to "phil@localhost" "feeds")
 
 	  (any "zacchaeus.*" "friends")

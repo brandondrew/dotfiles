@@ -66,7 +66,17 @@
      (concat "ssh philisha.net apps/technomancy/script/runner \"p = Post.new(:title => '" title
 	     "', :content => '" content "'); \""))))
 
-
+(random t)
+(defun random-music ()
+  (interactive)
+  (let* ((dirs (split-string (shell-command-to-string "find /home/phil/music -type d | cut -c 18-") "\n"))
+	(dir (nth (random (length dirs)) dirs)))
+    (setq dr dir)
+    (shell-command (concat 
+		    "ssh philisha.net mpc clear; "
+		    "ssh philisha.net mpc add " dir))
+    (message dir)))
+    
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;     cosmetics
 
@@ -82,5 +92,6 @@
             (0 (progn (compose-region (match-beginning 1) (match-end 1)
                                       ,(make-char 'greek-iso8859-7 107))
                       nil))))))
+
 
 (provide 'defuns)
