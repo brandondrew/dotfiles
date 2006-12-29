@@ -17,6 +17,11 @@
 ;; want to do, you probably shouldn't do it."
 ;; -Shawn Betts, Ratpoison FAQ
 
+;; I think of emacs as 49Shkembe Chorba. As one Bulgarian saying goes:
+;; 'Shkembe chorba is best when it's hot, peppery and someone praises
+;; it'.
+;; -http://programming.reddit.com/info/uw44/comments/cuze4
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (toggle-debug-on-error)
@@ -59,6 +64,7 @@
 (add-to-list 'auto-mode-alist '("\\.js$" . js-mode))
 
 (add-hook 'js-mode-hook 'moz-minor-mode)
+(add-hook 'java-mode-hook 'moz-minor-mode)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; My support files and configurations

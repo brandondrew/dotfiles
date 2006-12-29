@@ -71,9 +71,15 @@
 		       (interactive)
 		       (shell-command "ssh philisha.net mpc toggle")))
 
-(global-set-key [(shift f4)] (lambda ()
+(global-set-key [(f5)] (lambda ()
 			       (interactive)
 			       (shell-command "ssh philisha.net mpc next")))
+
+(global-set-key [(f3)] (lambda ()
+			       (interactive)
+			       (shell-command "ssh philisha.net mpc prev")))
+
+(global-set-key [(control f3)] 'random-music)
 
 (global-set-key [(control f4)] 
 		(lambda (dir)
@@ -83,9 +89,8 @@
 		  (shell-command (concat 
 				  "ssh philisha.net mpc clear; "
 				  "ssh philisha.net mpc add " dir
-				  "; ssh philisha.net mpc play"))))
+				  "; ssh philisha.net mpc play > /dev/null"))))
 
-(global-set-key [f5] 'compile)
 
 
 ;; For Ebby debugging, mostly

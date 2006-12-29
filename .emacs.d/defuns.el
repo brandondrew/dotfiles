@@ -69,14 +69,18 @@
 (random t)
 (defun random-music ()
   (interactive)
-  (let* ((dirs (split-string (shell-command-to-string "find /home/phil/music -type d | cut -c 18-") "\n"))
-	(dir (nth (random (length dirs)) dirs)))
-    (setq dr dir)
+  (unless (boundp 'music-dirs)
+    (setq music-dirs (split-string (shell-command-to-string "find /home/phil/music -type d | cut -c 18-") "\n")))
+  (let ((dir (nth (random (length music-dirs)) music-dirs)))
     (shell-command (concat 
 		    "ssh philisha.net mpc clear; "
-		    "ssh philisha.net mpc add " dir))
+		    "ssh philisha.net mpc add " dir " > /dev/null"))
     (message dir)))
     
+(defun make-frame-on-memex ()
+  (interactive)
+  (make-frame-on-display "192.168.1.47:0.0"))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;     cosmetics
 

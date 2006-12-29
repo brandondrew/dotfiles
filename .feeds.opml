@@ -34,10 +34,6 @@
       <outline text="Planet Lisp"
 	       htmlUrl="http://planet.lisp.org/"
 	       xmlUrl="http://planet.lisp.org/rss20.xml" />
-      <outline text="Signal vs Noise"
-	       description="37signals"
-	       htmlUrl="http://www.37signals.com/svn/"
-	       xmlUrl="http://feeds.feedburner.com/37signals/beMH" />
       <outline text="Creating Passionate Users"
 	       description="Scoble says blogging will make us richer and improve our sex life..."
 	       htmlUrl="http://headrush.typepad.com/creating_passionate_users/"

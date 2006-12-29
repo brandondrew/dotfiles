@@ -23,10 +23,12 @@
 	  (to "rails" "rails")
 	  (to "obby-users@list.0x539.de" "obby-users")
 	  (any "conkeror" "conkeror")
+	  (any "mozlab" "mozlab")
 	  (any "cartographer" "cartographer")
 	  (any "ocruby" "ocruby")
 
 	  (any "planetargon" "argon")
+	  (any "Jason Wong" "i5labs")
 
 	  (any "Jed Levin" "ujive")
 	  (any "Marshall Pierce" "ujive")
