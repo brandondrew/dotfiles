@@ -13,13 +13,20 @@
 ;; syntax highlighting needs to be done before ruby-electric
 (global-font-lock-mode t)
 
-;(setq erb-background "grey18") ; must do before rhtml-mode is loaded, i think
+; for zenburn niceness:
+(defface erb-face
+  `((t (:background "grey18")))
+  "Default inherited face for ERB tag body"
+  :group 'rhtml-faces)
+
+(defface erb-delim-face
+  `((t (:background "grey15")))
+  "Default inherited face for ERB tag delimeters"
+  :group 'rhtml-faces)
 
 (require 'ruby-electric)
 (require 'rinari)
 (require 'ri-ruby)
-
-;(set-face-background 'erb-face "grey18")
 
 (add-to-list 'auto-mode-alist '("\\.rb$" . ruby-mode))
 (add-to-list 'auto-mode-alist '("\\.rake$" . ruby-mode)) ; d'oh!

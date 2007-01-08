@@ -12,8 +12,8 @@
 ;;
 
 (add-to-list 'load-path "~/.emacs.d/slime-2.0/")
-(setq inferior-lisp-program "/usr/local/bin/lisp")
-(autoload 'slime "slime-setup")
+(setq inferior-lisp-program "/usr/bin/sbcl")
+(require 'slime)
 
 (add-hook 'emacs-lisp-mode-hook 'pretty-lambdas)
 (add-hook 'lisp-mode-hook 'pretty-lambdas)
