@@ -79,3 +79,13 @@ function fillDomain() {
     field.value = domain;
 }
 add_command("fill_domain", fillDomain, []);
+
+
+
+
+// focus issues
+function fix_focus() {
+    0
+}
+
+add_command("fix-focus", fix_focus, []);

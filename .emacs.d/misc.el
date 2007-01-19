@@ -37,6 +37,8 @@
 (setq color-theme-is-global nil)
 (put 'narrow-to-region 'disabled nil)
 (defalias 'yes-or-no-p 'y-or-n-p)
+(setq display-time-format "%r")
+(display-time)
 
 ;; don't clutter directories!
 (setq backup-directory-alist `(("." . ,(expand-file-name "~/.emacs.d/backups"))))

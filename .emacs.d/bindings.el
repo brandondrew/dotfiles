@@ -15,9 +15,13 @@
 (global-set-key "\C-x\C-r" 'jump-to-register)
 (global-set-key "\C-x-" 'shrink-window)
 (global-set-key "\C-x=" 'enlarge-window)
+(global-set-key (kbd "C-x !") 'window-small-and-large)
 (global-set-key "\C-xO" (lambda () (interactive) (other-window -1)))
 (global-set-key "\C-x." (lambda () (interactive) (enlarge-window 1 t)))
 (global-set-key "\C-x," (lambda () (interactive) (shrink-window 1 t)))
+
+(global-set-key (kbd "C-c e") 'fc-eval-and-replace)
+(global-set-key (kbd "M-\\") 'jao-toggle-selective-display)
 
 (global-set-key "\C-xh" (lambda (url) (interactive "MUrl: ") 
 			  (switch-to-buffer (url-retrieve-synchronously url))
@@ -32,11 +36,10 @@
 (global-set-key "\C-\M-s" 'isearch-forward)
 (global-set-key "\C-\M-r" 'isearch-backward)
 
-; hide-show
-(global-set-key "\M-[" 'hs-hide-block)
-(global-set-key "\M-]" 'hs-show-block)
-(global-set-key "\M-{" 'hs-hide-level)
-(global-set-key "\M-}" 'hs-show-all)
+;; ; hide-show
+(global-set-key "\C-]" 'hs-hide-level)
+(global-set-key (kbd "C-}") 'hs-hide-block)
+(global-set-key (kbd "C-{") 'hs-show-block)
 
 ; linear buffer-switching
 (global-set-key "\M-p" 'bs-cycle-next)
@@ -116,5 +119,11 @@
 
 
 (add-hook 'c-mode-hook (lambda () (define-key c-mode-map "\C-\M-h" 'backward-kill-word)))
+
+(define-key isearch-mode-map (kbd "C-o") ; occur easily inside isearch
+  (lambda ()
+    (interactive)
+    (let ((case-fold-search isearch-case-fold-search))
+      (occur (if isearch-regexp isearch-string (regexp-quote isearch-string))))))
 
 (provide 'bindings)

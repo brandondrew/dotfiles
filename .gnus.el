@@ -20,30 +20,19 @@
 (setq nnmail-split-fancy
       '(| (to "ruby-talk@ruby-lang\\.org" "ruby-talk")
 	  (to "ruby_emacs_dev@yahoogroups\\.com" "emacs-rails")
-	  (to "rails" "rails")
+	  (to "rubyonrails-talk@googlegroups.com" junk)
 	  (to "obby-users@list.0x539.de" "obby-users")
 	  (any "conkeror" "conkeror")
 	  (any "mozlab" "mozlab")
 	  (any "cartographer" "cartographer")
 	  (any "ocruby" "ocruby")
+	  (any "rspec" "rspec")
 
-	  (any "planetargon" "argon")
 	  (any "Jason Wong" "i5labs")
-
-	  (any "Jed Levin" "ujive")
-	  (any "Marshall Pierce" "ujive")
-	  (any "brent.hargrave" "ujive")
-
-	  (any "Paxtel Notifier" junk)
-	  (any "phil@dev.\\.paxtel\\.com" junk)
-	  (any ".*@dev\\.paxtel\\.com" "checkins")
-	  (any "tmornini@.*" "paxtel")
-	  (any "paxgrid@rogers\\.com" "paxtel")
-	  (any "dallas\\.reedy@gmail\\.com" "paxtel")
-	  (any ".*@paxtel\\.com" "paxtel")
+	  (any "Brent Cohen" "i5labs")
+	  (any "Howard Brown" "i5labs")
 
 	  (any "cron" junk)
-	  ("subject" "EQSE News" junk)
 	  (to "phil@localhost" "feeds")
 
 	  (any "zacchaeus.*" "friends")
@@ -86,6 +75,16 @@
 
 (add-hook 'message-mode-hook 'auto-fill-mode)
 (add-hook 'message-mode-hook 'flyspell-mode)
+
+(setq gnus-summary-line-format
+      (concat
+       "%{|%}"
+       "%U%R%z"
+       "%{|%}"
+       "%(%-18,18f"
+       "%{|%}"
+       "%*%{%B%} %s%)"
+       "\n"))
 
 ;; (setq gnus-buffer-configuration 
 ;;       '((group (vertical 1.0 (group 1.0 point)))

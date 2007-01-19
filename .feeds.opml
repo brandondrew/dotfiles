@@ -23,7 +23,7 @@
       <outline text="Martin Fowler"
 	       description="Bliki"
 	       htmlUrl="http://martinfowler.com/bliki/"
-	       xmlUrl="http://martinfowler.com/bliki/bliki.rss" />
+	       xmlUrl="http://martinfowler.com/bliki/bliki.atom" />
 <!--      <outline text="Planet GNOME"
 	       htmlUrl="http://planet.gnome.org/"
 	       xmlUrl="http://planet.gnome.org/rss20.xml" />-->
@@ -44,6 +44,9 @@
       <outline text="Steve Yegge"
 	       htmlUrl="http://steve-yegge.blogspot.com/"
 	       xmlUrl="http://steve-yegge.blogspot.com/atom.xml" />
+      <outline text="minor emacs wizardry"
+	       htmlUrl="http://emacs.wordpress.com/"
+	       xmlUrl="http://emacs.wordpress.com/feed/" />
     </outline>
 
     <outline text="Friends">
@@ -102,6 +105,17 @@
 	       htmlUrl="http://eigenclass.org/"
 	       xmlUrl="http://eigenclass.org/hiki.rb?c=rss;format=1;tags=blog" />
     </outline>
+
+    <outline text="Technomancy Comments"
+	     description="Comments on http://technomancy.us blog"
+	     htmlUrl="http://technomancy.us/"
+	     xmlUrl="http://technomancy.us/blog/comments" />
+
+    <outline text="Philisha Comments"
+	     description="Comments on http://philisha.net blog"
+	     htmlUrl="http://philisha.net/"
+	     xmlUrl="http://philisha.net/xml/rss20/comments/feed.xml" />
+
   </body>
 </opml>
 

@@ -2,6 +2,11 @@
 ;; Copyright (C) 2006  Christian Neukirchen <purl.org/net/chneukirchen>
 ;; Licensed under the GPL.
 
+;; Version: 1.4
+;; 08jan2007  +chris+
+
+;; Thanks to: Phil Hagelberg for fixes.
+
 (defun pastie-region (begin end)
   "Post the current region as a new paste at pastie.caboo.se.
 Copies the URL into the kill ring."
@@ -12,9 +17,9 @@ Copies the URL into the kill ring."
                 "[<>&]"
                 (lambda (match)
                   (case (string-to-char match)
-                    (?< "&lt;")
-                    (?> "&gt;")
-                    (?& "&amp;")))
+                    (?< "<")
+                    (?> ">")
+                    (?& "&")))
                 body-raw))
 
          ;; Adjust as needed.
@@ -37,7 +42,7 @@ Copies the URL into the kill ring."
           (concat "<paste>"
                   "<parser>" mode "</parser>"
                   "<body>" body "</body>"
-		  "<authorization>burger</authorization>"
+                  "<authorization>burger</authorization>"
                   "</paste>")))
 
     (let ((pastie-buffer (url-retrieve-synchronously url)))
@@ -47,11 +52,11 @@ Copies the URL into the kill ring."
         (let ((status (match-string 1)))
           (if (string-match "^20[01]" status)
               (progn
-                (goto-char (point-max))
+                (search-forward-regexp "^Location: \\(.*\\)")
                 (beginning-of-line)
-                (let ((id (buffer-substring (point) (point-max))))
-                  (message "Paste created: http://pastie.caboo.se/paste/%s" id)
-                  (kill-new (format "http://pastie.caboo.se/paste/%s" id))))
+                (let ((result (match-string 1)))
+                  (message "Paste created: %s" result)
+                  (kill-new result)))
             (message "Error occured: %s" status))))
       (kill-buffer pastie-buffer))))
 
@@ -90,3 +95,4 @@ Copies the URL into the kill ring."
           (kill-buffer pastie-buffer))))))
 
 (provide 'pastie)
+;;; pastie.el ends here.

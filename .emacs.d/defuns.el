@@ -66,6 +66,20 @@
      (concat "ssh philisha.net apps/technomancy/script/runner \"p = Post.new(:title => '" title
 	     "', :content => '" content "'); \""))))
 
+(defun fc-eval-and-replace ()
+  "Replace the preceding sexp with its value."
+  (interactive)
+  (backward-kill-sexp)
+  (condition-case nil
+      (prin1 (eval (read (current-kill 0)))
+             (current-buffer))
+    (error (message "Invalid expression")
+           (insert (current-kill 0)))))
+
+(defun jao-toggle-selective-display ()
+  (interactive)
+  (set-selective-display (if selective-display nil 3)))
+
 (random t)
 (defun random-music ()
   (interactive)
@@ -77,9 +91,9 @@
 		    "ssh philisha.net mpc add " dir " > /dev/null"))
     (message dir)))
     
-(defun make-frame-on-memex ()
-  (interactive)
-  (make-frame-on-display "192.168.1.47:0.0"))
+(defun make-frame-on-host (host)
+  (interactive (list (completing-read "Host: " '("192.168.1.47:0.0" "192.168.1.46:0.0"))))
+  (make-frame-on-display host))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;     cosmetics
@@ -97,5 +111,10 @@
                                       ,(make-char 'greek-iso8859-7 107))
                       nil))))))
 
+(defun window-small-and-large ()
+  (interactive)
+  (if (equal 1 (length (window-list)))
+      (split-window))
+  (set-window-text-height (first (window-list)) (- (frame-height) 20)))
 
 (provide 'defuns)
