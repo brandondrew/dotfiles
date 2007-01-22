@@ -76,6 +76,12 @@
     (error (message "Invalid expression")
            (insert (current-kill 0)))))
 
+(defun pmacro ()
+  (interactive)
+  (backward-kill-sexp)
+  (undo)
+  (insert (concat "\n" (pp (cl-macroexpand (read (current-kill 0)))))))
+
 (defun jao-toggle-selective-display ()
   (interactive)
   (set-selective-display (if selective-display nil 3)))

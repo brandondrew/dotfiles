@@ -21,6 +21,7 @@
 (global-set-key "\C-x," (lambda () (interactive) (shrink-window 1 t)))
 
 (global-set-key (kbd "C-c e") 'fc-eval-and-replace)
+(global-set-key (kbd "C-x m") 'pmacro)
 (global-set-key (kbd "M-\\") 'jao-toggle-selective-display)
 
 (global-set-key "\C-xh" (lambda (url) (interactive "MUrl: ") 
