@@ -1,5 +1,0 @@
-(if (matches (application_name) "Browser")
-    (begin
-      (geometry "+0+1024")
-      (maximize)
-      (undecorate)))

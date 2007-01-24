@@ -1,8 +1,0 @@
-(if (or
-        (matches (application_name) "rxvt")
-        (matches (application_name) "screen"))
-
-
-    (begin
-      (maximize)
-))

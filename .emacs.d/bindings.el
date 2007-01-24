@@ -112,7 +112,7 @@
 (global-set-key [(meta f10)] 'ruby-xmp-region)
 
 (global-set-key [f11] 'ri)
-;(global-set-key "\C-hr" 'ri)
+(global-set-key (kbd "C-h r") 'ri)
 
 (global-set-key [f12] '(lambda ()
 			 (interactive)

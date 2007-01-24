@@ -31,7 +31,7 @@
      (setf (context-description context) ,description)
      (dolist (item ',body)
 	(case (car item)
-	  (for (setf (context-tags context) (cdr item)))
+	  (tag (setf (context-tags context) (cdr item)))
 	  (setup (setf (context-setup context) (cadr item)))
 	  (specify (setf (context-specs context) (append (list (cdr item)) (context-specs context))))))
      (add-to-list '*behave-contexts* context)))
