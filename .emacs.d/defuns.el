@@ -86,6 +86,12 @@
   (interactive)
   (set-selective-display (if selective-display nil 3)))
 
+(defun ido-imenu ()
+  (interactive)
+  (flet ((completing-read (&rest params)
+			  (apply 'ido-completing-read params)))
+    (imenu)))
+
 (random t)
 (defun random-music ()
   (interactive)
@@ -97,6 +103,22 @@
 		    "ssh philisha.net mpc add " dir " > /dev/null"))
     (message dir)))
     
+(defun music-play-dir (dir)
+  (interactive (list (completing-read "Play directory: " 
+				      (split-string 
+				       (shell-command-to-string "find /home/phil/music -type d | cut -c 18-") "\n"))))
+  (shell-command (concat 
+		  "ssh philisha.net mpc clear; "
+		  "ssh philisha.net mpc add " dir
+		  "; ssh philisha.net mpc play > /dev/null")))
+
+(defun music-add-file (file)
+  (interactive (list (completing-read "Add file: " 
+				      (split-string 
+				       (shell-command-to-string "find /home/phil/music -type f | cut -c 18-") "\n"))))
+  (shell-command (concat 
+		  "ssh philisha.net mpc add " file))) ; todo - remove spaces in file name
+
 (defun make-frame-on-host (host)
   (interactive (list (completing-read "Host: " '("192.168.1.47:0.0" "192.168.1.46:0.0"))))
   (make-frame-on-display host))

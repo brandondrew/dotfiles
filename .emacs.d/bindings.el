@@ -85,17 +85,9 @@
 
 (global-set-key [(control f3)] 'random-music)
 
-(global-set-key [(control f4)] 
-		(lambda (dir)
-		  (interactive (list (completing-read "Play directory: " 
-						      (split-string 
-						       (shell-command-to-string "find /home/phil/music -type d | cut -c 18-") "\n"))))
-		  (shell-command (concat 
-				  "ssh philisha.net mpc clear; "
-				  "ssh philisha.net mpc add " dir
-				  "; ssh philisha.net mpc play > /dev/null"))))
+(global-set-key [(control f4)] 'music-play-dir)
 
-
+(global-set-key [(control f5)] 'music-add-file)
 
 ;; For Ebby debugging, mostly
 (global-set-key [f7] (lambda () (interactive) (message "%s" (point))))

@@ -9,28 +9,26 @@
 (context "A stack which is neither empty nor full"
 	 (for stack)
 
-	 (setup (c)
-		(let ((stack ()))
-		  (mapc (lambda (x) (stack-push 'stack x)) (list "a" "b" "c"))
-		  (callf c)))
+	 (lexical-let ((stack ()))
+	   (mapc (lambda (x) (stack-push 'stack x)) (list "a" "b" "c"))
 
-	 (specify "should add to the top when pushed"
-		  (stack-push 'stack "d")
-		  (expect (stack-peek 'stack) equal "d"))
+	   (specify "should add to the top when pushed"
+		    (stack-push 'stack "d")
+		    (expect (stack-peek 'stack) equal "d"))
 
-	 (specify "should return the top item when peeked"
-		  (expect (stack-peek 'stack) equal "c"))
+	   (specify "should return the top item when peeked"
+		    (expect (stack-peek 'stack) equal "c"))
 
-	 (specify "should NOT remove the top item when peeked"
-		  (expect (stack-peek 'stack) equal "c")
-		  (expect (stack-peek 'stack) equal "c"))
+	   (specify "should NOT remove the top item when peeked"
+		    (expect (stack-peek 'stack) equal "c")
+		    (expect (stack-peek 'stack) equal "c"))
 
-	 (specify "should return the top item when popped"
-		  (expect (stack-pop 'stack) equal "c"))
+	   (specify "should return the top item when popped"
+		    (expect (stack-pop 'stack) equal "c"))
 
-	 (specify "should remove the top item when popped" 
-		  (expect (stack-pop 'stack) equal "c")
-		  (expect (stack-pop 'stack) equal "b")))
+	   (specify "should remove the top item when popped" 
+		    (expect (stack-pop 'stack) equal "c")
+		    (expect (stack-pop 'stack) equal "b"))))
 
 (context "An empty stack"
 	 (for stack)
