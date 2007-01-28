@@ -79,12 +79,26 @@
   "Execute all contexts that match given tags"
   (interactive)
   (let ((tags-string (or tags (read-string (concat "Execute specs matching these tags (default " *behave-default-tags* "): ")
-					   nil nil *behave-default-tags*))))
+					   nil nil *behave-default-tags*)))
+	(start-time (cadr (current-time)))
+	(failures nil))
     (setq *behave-default-tags* tags-string) ; update default for next time
-    (mapc 'execute-context (context-find-by-tags (mapcar 'intern (split-string tags-string " "))))))
+    (with-output-to-temp-buffer "*behave*"
+      (mapcar (lambda (c) (condition-case err
+			 (progn (execute-context c)
+				(princ "."))
+		       (error (princ "F")
+			      (add-to-list 'failures c))))
+	      (context-find-by-tags (mapcar 'intern (split-string tags-string " "))))
+;      (behave-describe-failures failures start-time)
+)))
+
 
 (defun execute-context (context)
   (mapcar #'funcall (context-specs context)))
+
+(defun behave-describe-failures (failures start-time)
+)
 
 (provide 'behave)
 
@@ -93,6 +107,5 @@
 ; todo:
 ; expect macro
 ; report results in a pretty fashion
-;  * error-catching
-;  * pass/fail count (lift from elunit)
+;  * details about errors
 ;  * differentiate errors from expectation failures
