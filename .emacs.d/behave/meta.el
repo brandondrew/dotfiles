@@ -14,7 +14,7 @@
 	 (tag meta)
 	 (specify "should add specifications to context"
 		  (assert (= (length (context-specs context)) 2)))
-	 (specify "dummy spec" (message "ran the dummy spec!")))
+	 (specify "message spec" (message "ran the message spec!")))
 
 (context "a context that sets up variables"
 	 (tag meta)
@@ -44,15 +44,20 @@
 		  (assert (> (length (context-find-by-tag 'meta)) 4))))
 
 (context "failing"
-	 (tag meta fail)
+	 (tag fail)
 	 (specify "should cause failure"
 		  (assert nil)))
 
+(context "failing context"
+	 (tag meta)
+	 (specify "should signal failure"
+		  (assert (condition-case err
+			      (execute-context (context-find "failing"))
+			    (error t)))))
 
 ;; Writing a spec for execute-context would cause an infinite loop.
 ;; So we have to test it by hand.
 ; (execute-context (context-find "helper functions"))
-
 
 ;; Should fail:
 ; (execute-context (context-find "failing"))
@@ -67,7 +72,6 @@
 		    (assert nil))))
 
 
-
 (context "A context with multiple specs"
 	 (tag meta foo bar)
 	 (specify "should have multiple specs"
@@ -75,12 +79,10 @@
 	 (specify "should be tagged meta"
 		  (expect (context-tags context) equal '(meta)))
 	 (specify "should fail this spec"
-		  (expect (execute-spec (last (context-specs context))) equal t))))
+		  (expect (execute-spec (last (context-specs context))) equal t)))
 
 
 
 ;; (setf c (make-context))
-
 ;; (context-specs c)
 
-;; (setf (context-specs c) (cons '(1 2 3) (context-specs c)))

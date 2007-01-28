@@ -27,15 +27,17 @@
 (defstruct context description tags (specs '()))
 
 (defmacro context (description &rest body)
+  "Defines a context for specifications to run in. Variable capture warning: sets CONTEXT to the current context."
   (setq *behave-contexts* (delete (context-find description) *behave-contexts*))
   `(lexical-let ((context (make-context)))
      (setf (context-description context) ,description)
      (add-to-list '*behave-contexts* context)
      ,@body))
 
-(defmacro specify (description body)
+(defmacro specify (description &rest body)
+  "Add a specification and its description to the current context."
   `(setf (context-specs context) ; or in Ruby: context.specs << lambda { description; body }
-	 (cons (lambda () ,description (,@body)) (context-specs context))))
+	 (cons (lambda () ,description ,@body) (context-specs context))))
 
 (defmacro expect (actual &optional predicate expect)
   (case predicate
@@ -43,51 +45,54 @@
     (nil
      `(assert ,actual))
     (equal
-     `(assert (equal ,actual ,expect)))))
+     `(assert (equal ,actual ,expect)))
+    (error ; no idea if this will work. =)
+     (assert (condition-case err
+		 (,@actual)
+	       (error t))))))
 
 (defmacro tag (&rest tags)
+  "Give a context tags for easy reference. (Must be used within a context.)"
   `(setf (context-tags context) (append '(,@tags) (context-tags context))))
 
 ;; Context-management
 
-(defun behave-clear-contexts () 
+(defun behave-clear-contexts ()
   (interactive)
   (setq *behave-contexts* '())
   (message "Behave: contexts cleared"))
 
-(defun context-find (name)
-  (find name *behave-contexts* :test (lambda (name context) (equal name (context-description context)))))
+(defun context-find (description)
+  "Find a context by its description."
+  (find description *behave-contexts* :test (lambda (description context) (equal description (context-description context)))))
 
 (defun context-find-by-tag (tag)
   (remove-if (lambda (context) (not (find tag (context-tags context))))
 	     *behave-contexts*))
 
 (defun context-find-by-tags (tags)
-  (remove-duplicates (mapcan 'context-find-by-tag tags)))
+  (delete nil (remove-duplicates (mapcan 'context-find-by-tag tags))))
 
 ;; Execute
 
 (defun behave (&optional tags)
   "Execute all contexts that match given tags"
   (interactive)
-  (let ((tags-string (or tags (read-string "Execute specs matching these tags: " nil nil *behave-default-tags*))))
+  (let ((tags-string (or tags (read-string (concat "Execute specs matching these tags (default " *behave-default-tags* "): ")
+					   nil nil *behave-default-tags*))))
     (setq *behave-default-tags* tags-string) ; update default for next time
-    (mapc 'execute-context (delete nil (context-find-by-tags (mapcar 'intern (split-string tags-string " ")))))))
+    (mapc 'execute-context (context-find-by-tags (mapcar 'intern (split-string tags-string " "))))))
 
 (defun execute-context (context)
   (mapcar #'funcall (context-specs context)))
-
-;; TODO: pretty reports
-(defun spec-report (results)
-  )
 
 (provide 'behave)
 
 ;(setq max-specpdl-size 5000)
 
 ; todo:
-; multi-form specs (suspect need progn)
 ; expect macro
 ; report results in a pretty fashion
-; error-catching
-
+;  * error-catching
+;  * pass/fail count (lift from elunit)
+;  * differentiate errors from expectation failures

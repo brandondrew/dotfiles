@@ -2,7 +2,8 @@
 
 ;; Copyright (C) 2007 Phil Hagelberg
 
-; Example: let's copy http://rspec.rubyforge.org/examples.html
+;; Note: behave.el usage has changed; haven't gotten around to updating this. See meta.el instead.
+;; Example: let's copy http://rspec.rubyforge.org/examples.html
 
 (require 'behave)
 
