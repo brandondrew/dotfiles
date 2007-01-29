@@ -14,7 +14,7 @@
 	 (tag meta)
 	 (specify "should add specifications to context"
 		  (assert (= (length (context-specs context)) 2)))
-	 (specify "message spec" (message "ran the message spec!")))
+	 (specify "should execute specification including message when run" (message "ran the message spec!")))
 
 (context "a context that sets up variables"
 	 (tag meta)
@@ -38,9 +38,9 @@
 
 (context "helper functions"
 	 (tag meta)
-	 (specify "should find this context"
-		  (assert (context-find "specify macro")))
-	 (specify "should find many contexts tagged meta"
+	 (specify "should find this context with context-find"
+		  (assert (context-find "helper functions")))
+	 (specify "should find many contexts tagged meta with context-find-by-tag"
 		  (assert (> (length (context-find-by-tag 'meta)) 4))))
 
 (context "failing"
@@ -73,7 +73,7 @@
 
 
 (context "A context with multiple specs"
-	 (tag meta foo bar)
+	 (tag meta)
 	 (specify "should have multiple specs"
 		  (expect (length (context-specs context)) equal 2))
 	 (specify "should be tagged meta"

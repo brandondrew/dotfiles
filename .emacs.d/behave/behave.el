@@ -15,7 +15,47 @@
 ;; A copy of the GNU General Public License can be obtained from the
 ;; Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.
 
-;; For usage see example.el or meta.el
+;;; Description:
+
+;; behave.el allows you to write executable specifications for your
+;; Emacs Lisp code. If you aren't familiar with the concept, you can
+;; read up on it at http://behaviour-driven.org. Specifications and
+;; contexts both must have docstrings so that when the specifications
+;; aren't met it is easy to see what caused the failure.
+
+;; Each specification should live within a context. In each context,
+;; you can set up relevant things to test, such as necessary buffers
+;; or data structures. (Be sure to use lexical-let for setting up the
+;; variables you need--since the specify macro uses lambdas, closures
+;; will be made for those variables.) Everything within the context is
+;; executed normally.
+
+;; Each context can be tagged with the TAG form. This allows you to
+;; group your contexts by tags. When you execute the specs, M-x behave
+;; will ask you to give some tags, and it will execute all contexts
+;; that match those tags.
+
+;; When you want to run the specs, evaluate them and press M-x
+;; behave. Enter the tags you want to run (or "all"), and they will be
+;; executed with results in the *behave* buffer.
+
+;;; Implementation
+
+;; Contexts are stored in the *behave-contexts* list as structs. Each
+;; context has a "specs" slot that contains a list of its specs, which
+;; are stored as closures.
+
+;;; To do:
+
+;; Expect macro
+;; Report results in a pretty fashion
+;;  * Explain failures
+;;  * Differentiate errors from expectation failures
+
+;;; Example:
+
+;; See meta.el for specifications for behave.el. Evaluate meta.el and
+;; M-x specify meta RET to see the specifications explained.
 
 (require 'cl)
 
@@ -71,7 +111,9 @@
 	     *behave-contexts*))
 
 (defun context-find-by-tags (tags)
-  (delete nil (remove-duplicates (mapcan 'context-find-by-tag tags))))
+  (if (find 'all tags)
+      *behave-contexts*
+    (delete nil (remove-duplicates (mapcan 'context-find-by-tag tags)))))
 
 ;; Execute
 
@@ -84,28 +126,42 @@
 	(failures nil))
     (setq *behave-default-tags* tags-string) ; update default for next time
     (with-output-to-temp-buffer "*behave*"
+      (princ (concat "Running specs tagged \"" tags-string "\":\n\n"))
       (mapcar (lambda (c) (condition-case err
-			 (progn (execute-context c)
-				(princ "."))
+			 (execute-context c)
 		       (error (princ "F")
-			      (add-to-list 'failures c))))
+			      (add-to-list 'failures err))))
 	      (context-find-by-tags (mapcar 'intern (split-string tags-string " "))))
-;      (behave-describe-failures failures start-time)
-)))
-
+      (behave-describe-failures failures start-time))))
 
 (defun execute-context (context)
-  (mapcar #'funcall (context-specs context)))
+  (mapcar #'execute-spec (context-specs context)))
+
+(defun execute-spec (spec)
+  (funcall spec)
+  (princ "."))
 
 (defun behave-describe-failures (failures start-time)
-)
+  (princ (concat "\n\n" (number-to-string (length failures)) " failures in " (number-to-string (- (cadr (current-time)) start-time)) " seconds.\n\n"))
+  (dolist (failure failures)
+    (princ failure)))
+
+(defun specify (&optional tags)
+  "Show specifications for all contexts that match given tags"
+  (interactive)
+  (let ((tags-string (or tags (read-string (concat "Show specs matching these tags (default " *behave-default-tags* "): ")
+					   nil nil *behave-default-tags*))))
+    (with-output-to-temp-buffer "*behave*"
+      (princ "Specifications:\n")
+      (mapcar #'specify-context (context-find-by-tags (mapcar 'intern (split-string tags-string " ")))))))
+
+(defun specify-context (context)
+  (princ (concat "\n" (context-description context) "...\n"))
+  (dolist (spec (context-specs context))
+    (princ (concat " * " (caddr spec) "\n"))))
 
 (provide 'behave)
 
+;; When trouble strikes, eval this:
 ;(setq max-specpdl-size 5000)
 
-; todo:
-; expect macro
-; report results in a pretty fashion
-;  * details about errors
-;  * differentiate errors from expectation failures

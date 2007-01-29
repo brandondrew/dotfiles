@@ -123,6 +123,19 @@
   (interactive (list (completing-read "Host: " '("192.168.1.47:0.0" "192.168.1.46:0.0"))))
   (make-frame-on-display host))
 
+(defun line-count-lisp ()
+  (interactive)
+  (save-excursion
+    (flush-lines "^$")
+    (flush-lines "^;")
+    (end-of-buffer)
+    (let ((loc (line-number-at-pos)))
+      (undo)
+      (undo)
+      (undo)
+      (message (number-to-string loc) " lines of code"))))
+      
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;     cosmetics
 
