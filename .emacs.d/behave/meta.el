@@ -52,11 +52,13 @@
 	 (tag meta)
 	 (specify "should signal failure"
 		  (assert (condition-case err
-			      (execute-context (context-find "failing"))
+			      (mapcar #'execute-spec (context-specs (context-find "failing")))
 			    (error t)))))
 
 ;; Writing a spec for execute-context would cause an infinite loop.
 ;; So we have to test it by hand.
+
+;; Should pass:
 ; (execute-context (context-find "helper functions"))
 
 ;; Should fail:
@@ -64,25 +66,13 @@
 
 (context "The expect macro"
 	 (tag meta expect)
-	 (let ((context (context-find "The expect macro")))
-	   (specify "should expand to assert actual"
-		    (expect (cl-macroexpand '(expect (+ 2 2) equal 4)) equal 
-			    (cl-macroexpand '(assert (equal (+ 2 2) 4)))))
-	   (specify "should fail by asserting nil"
-		    (assert nil))))
+;; 	   (specify "should expand to assert actual"
+;; 		    (expect (cl-macroexpand '(expect (+ 2 2) equal 4)) equal 
+;; 			    (cl-macroexpand '(assert (equal (+ 2 2) 4)))))
+	   (specify "should fail by expecting nil"
+		    (expect nil)))
 
-
-(context "A context with multiple specs"
-	 (tag meta)
-	 (specify "should have multiple specs"
-		  (expect (length (context-specs context)) equal 2))
-	 (specify "should be tagged meta"
-		  (expect (context-tags context) equal '(meta)))
-	 (specify "should fail this spec"
-		  (expect (execute-spec (last (context-specs context))) equal t)))
-
-
-
-;; (setf c (make-context))
+;; (setf context (make-context))
 ;; (context-specs c)
 
+(expect nil equal t)

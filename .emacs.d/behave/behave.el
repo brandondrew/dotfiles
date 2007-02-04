@@ -51,20 +51,23 @@
 ;; Report results in a pretty fashion
 ;;  * Explain failures
 ;;  * Differentiate errors from expectation failures
+;;  * Allow each specify macro to get the variables in a fresh state
 
 ;;; Example:
 
 ;; See meta.el for specifications for behave.el. Evaluate meta.el and
-;; M-x specify meta RET to see the specifications explained.
+;; M-x specifications meta RET to see the specifications explained.
 
 (require 'cl)
 
 (defvar *behave-contexts* '()
   "A list of contexts and their specs.")
 
-(defvar *behave-default-tags* "")
+(defvar *behave-default-tags* "all")
 
 (defstruct context description tags (specs '()))
+
+;; Core Macros
 
 (defmacro context (description &rest body)
   "Defines a context for specifications to run in. Variable capture warning: sets CONTEXT to the current context."
@@ -79,17 +82,19 @@
   `(setf (context-specs context) ; or in Ruby: context.specs << lambda { description; body }
 	 (cons (lambda () ,description ,@body) (context-specs context))))
 
-(defmacro expect (actual &optional predicate expect)
+(defmacro expect (actual &optional predicate expected)
   (case predicate
-    ;; TODO: add predicates
-    (nil
-     `(assert ,actual))
-    (equal
-     `(assert (equal ,actual ,expect)))
-    (error ; no idea if this will work. =)
-     (assert (condition-case err
-		 (,@actual)
-	       (error t))))))
+    ((equals equal)
+     `(if (not (equal ,actual ,expected))
+	  (signal 'behave-spec-failed (list "Spec failed"))))
+    (t
+     `(or ,actual
+	  (signal 'behave-spec-failed (list description))))
+;;     (error ; no idea if this will work. =)
+;;      (assert (condition-case err
+;; 		 (,@actual)
+;; 	       (error t))))))
+))
 
 (defmacro tag (&rest tags)
   "Give a context tags for easy reference. (Must be used within a context.)"
@@ -115,7 +120,7 @@
       *behave-contexts*
     (delete nil (remove-duplicates (mapcan 'context-find-by-tag tags)))))
 
-;; Execute
+;; Execution
 
 (defun behave (&optional tags)
   "Execute all contexts that match given tags"
@@ -123,30 +128,39 @@
   (let ((tags-string (or tags (read-string (concat "Execute specs matching these tags (default " *behave-default-tags* "): ")
 					   nil nil *behave-default-tags*)))
 	(start-time (cadr (current-time)))
-	(failures nil))
+	(failures nil)
+	(spec-count 0))
     (setq *behave-default-tags* tags-string) ; update default for next time
     (with-output-to-temp-buffer "*behave*"
       (princ (concat "Running specs tagged \"" tags-string "\":\n\n"))
-      (mapcar (lambda (c) (condition-case err
-			 (execute-context c)
-		       (error (princ "F")
-			      (add-to-list 'failures err))))
-	      (context-find-by-tags (mapcar 'intern (split-string tags-string " "))))
+      (dolist (context (context-find-by-tags (mapcar 'intern (split-string tags-string " "))))
+	    (execute-context context))
       (behave-describe-failures failures start-time))))
 
 (defun execute-context (context)
-  (mapcar #'execute-spec (context-specs context)))
+  (condition-case failure
+      (mapcar #'execute-spec (context-specs context))
+    (error (princ "E")
+	   (add-to-list 'failures failure))
+    (behave-spec-failed (princ "F")
+	     (add-to-list 'failures failure))))
 
 (defun execute-spec (spec)
+  (incf spec-count)
   (funcall spec)
   (princ "."))
 
-(defun behave-describe-failures (failures start-time)
-  (princ (concat "\n\n" (number-to-string (length failures)) " failures in " (number-to-string (- (cadr (current-time)) start-time)) " seconds.\n\n"))
-  (dolist (failure failures)
-    (princ failure)))
+;; Reporting
 
-(defun specify (&optional tags)
+(defun behave-describe-failures (failures start-time)
+  (princ (concat "\n\n" (number-to-string (length failures)) " failure" (unless (= 1 (length failures)) "s") " in " 
+		 (number-to-string spec-count)
+		 " specifications. (" (number-to-string (- (cadr (current-time)) start-time)) " seconds)\n\n"))
+  (dolist (failure failures)
+    (princ failure)
+    (princ "\n\n")))
+
+(defun specifications (&optional tags)
   "Show specifications for all contexts that match given tags"
   (interactive)
   (let ((tags-string (or tags (read-string (concat "Show specs matching these tags (default " *behave-default-tags* "): ")
@@ -164,4 +178,4 @@
 
 ;; When trouble strikes, eval this:
 ;(setq max-specpdl-size 5000)
-
+;(global-set-key [(f5)] 'behave)

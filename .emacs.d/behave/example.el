@@ -7,8 +7,17 @@
 
 (require 'behave)
 
+(defun stack-push (stack elt)
+  (add-to-list stack elt))
+
+(defun stack-peek (stack)
+  (car stack))
+
+(defun stack-pop (stack)
+  (setf stack (cadr stack)))
+
 (context "A stack which is neither empty nor full"
-	 (for stack)
+	 (tag stack)
 
 	 (lexical-let ((stack ()))
 	   (mapc (lambda (x) (stack-push 'stack x)) (list "a" "b" "c"))
@@ -32,7 +41,7 @@
 		    (expect (stack-pop 'stack) equal "b"))))
 
 (context "An empty stack"
-	 (for stack)
+	 (tag stack)
 	 (setup (c)
 		(let ((stack ()))
 		  (callf c)))
@@ -51,7 +60,7 @@
 		  (expect ((lambda (stack) (stack-pop stack)) stack) raises 'stackunderflow)))
 
 (context "An almost empty stack (with one item)"
-	 (for stack)
+	 (tag stack)
 	 (setup (c)
 		(let ((stack ()))
 		  (stack-push 'stack 3)))
