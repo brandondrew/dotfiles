@@ -49,8 +49,6 @@
 
 ;; Expect macro
 ;; Report results in a pretty fashion
-;;  * Explain failures
-;;  * Differentiate errors from expectation failures
 ;;  * Allow each specify macro to get the variables in a fresh state
 
 ;;; Example:
@@ -67,6 +65,8 @@
 
 (defstruct context description tags (specs '()))
 
+(put 'behave-spec-failed 'error-conditions '(failure))
+
 ;; Core Macros
 
 (defmacro context (description &rest body)
@@ -79,22 +79,23 @@
 
 (defmacro specify (description &rest body)
   "Add a specification and its description to the current context."
+  (declare (description description))
   `(setf (context-specs context) ; or in Ruby: context.specs << lambda { description; body }
-	 (cons (lambda () ,description ,@body) (context-specs context))))
+	 (cons (lambda () (let ((spec-desc ,description)) ,@body)) (context-specs context))))
 
 (defmacro expect (actual &optional predicate expected)
   (case predicate
     ((equals equal)
      `(if (not (equal ,actual ,expected))
-	  (signal 'behave-spec-failed (list "Spec failed"))))
+	  (signal 'behave-spec-failed (list spec-desc))))
     (t
      `(or ,actual
-	  (signal 'behave-spec-failed (list description))))
+	  (signal 'behave-spec-failed (list (context-description context) spec-desc))))))
 ;;     (error ; no idea if this will work. =)
 ;;      (assert (condition-case err
 ;; 		 (,@actual)
 ;; 	       (error t))))))
-))
+
 
 (defmacro tag (&rest tags)
   "Give a context tags for easy reference. (Must be used within a context.)"
@@ -141,9 +142,9 @@
   (condition-case failure
       (mapcar #'execute-spec (context-specs context))
     (error (princ "E")
-	   (add-to-list 'failures failure))
-    (behave-spec-failed (princ "F")
-	     (add-to-list 'failures failure))))
+	   (add-to-list 'failures failure t))
+    (failure (princ "F")
+	     (add-to-list 'failures (cdr failure) t))))
 
 (defun execute-spec (spec)
   (incf spec-count)
@@ -153,9 +154,10 @@
 ;; Reporting
 
 (defun behave-describe-failures (failures start-time)
-  (princ (concat "\n\n" (number-to-string (length failures)) " failure" (unless (= 1 (length failures)) "s") " in " 
+  (princ (concat "\n\n" (number-to-string (length failures)) " problem" (unless (= 1 (length failures)) "s") " in " 
 		 (number-to-string spec-count)
-		 " specifications. (" (number-to-string (- (cadr (current-time)) start-time)) " seconds)\n\n"))
+		 " specification" (unless (= 1 spec-count) "s") 
+		 ". (" (number-to-string (- (cadr (current-time)) start-time)) " seconds)\n\n"))
   (dolist (failure failures)
     (princ failure)
     (princ "\n\n")))
