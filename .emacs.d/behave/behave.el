@@ -18,17 +18,20 @@
 ;;; Description:
 
 ;; behave.el allows you to write executable specifications for your
-;; Emacs Lisp code. If you aren't familiar with the concept, you can
-;; read up on it at http://behaviour-driven.org. Specifications and
-;; contexts both must have docstrings so that when the specifications
-;; aren't met it is easy to see what caused the failure.
+;; Emacs Lisp code. Executable specifications allow you to check that
+;; your code is working correctly in an automated fashion that you can
+;; use to drive the focus of your development. (It's related to
+;; Test-Driven Development.) You can read up on it at
+;; http://behaviour-driven.org.
 
-;; Each specification should live within a context. In each context,
-;; you can set up relevant things to test, such as necessary buffers
-;; or data structures. (Be sure to use lexical-let for setting up the
-;; variables you need--since the specify macro uses lambdas, closures
-;; will be made for those variables.) Everything within the context is
-;; executed normally.
+;; Specifications and contexts both must have docstrings so that when
+;; the specifications aren't met it is easy to see what caused the
+;; failure.  Each specification should live within a context. In each
+;; context, you can set up relevant things to test, such as necessary
+;; buffers or data structures. (Be sure to use lexical-let for setting
+;; up the variables you need--since the specify macro uses lambdas,
+;; closures will be made for those variables.) Everything within the
+;; context is executed normally.
 
 ;; Each context can be tagged with the TAG form. This allows you to
 ;; group your contexts by tags. When you execute the specs, M-x behave
@@ -37,21 +40,31 @@
 
 ;; When you want to run the specs, evaluate them and press M-x
 ;; behave. Enter the tags you want to run (or "all"), and they will be
-;; executed with results in the *behave* buffer.
+;; executed with results in the *behave* buffer. You can also do M-x
+;; specifications to show a list of all the specified behaviours of
+;; the code.
 
 ;;; Implementation
 
 ;; Contexts are stored in the *behave-contexts* list as structs. Each
 ;; context has a "specs" slot that contains a list of its specs, which
-;; are stored as closures.
+;; are stored as closures. The expect form ensures that expectations
+;; are met and signals behave-spec-failed if they are not.
+
+;; Warning: the variables CONTEXT and SPEC-DESC are used within macros
+;; in such a way that they could shadow variables of the same name in
+;; the code being tested. Future versions will use gensyms to solve
+;; this issue, but in the mean time avoid relying upon variables with
+;; those names.
 
 ;;; To do:
 
-;; Expect macro
-;; Report results in a pretty fashion
-;;  * Allow each specify macro to get the variables in a fresh state
+;; See open tickets on my Trac:
+;; http://dev.technomancy.us/phil/query?status=new&status=assigned&status=reopened&component=behave&order=priority
 
-;;; Example:
+;; Main issues: more expect predicates and protected-let
+
+;;; Example usage:
 
 ;; See meta.el for specifications for behave.el. Evaluate meta.el and
 ;; M-x specifications meta RET to see the specifications explained.
@@ -67,10 +80,12 @@
 
 (put 'behave-spec-failed 'error-conditions '(failure))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Core Macros
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defmacro context (description &rest body)
-  "Defines a context for specifications to run in. Variable capture warning: sets CONTEXT to the current context."
+  "Defines a context for specifications to run in."
   (setq *behave-contexts* (delete (context-find description) *behave-contexts*))
   `(lexical-let ((context (make-context)))
      (setf (context-description context) ,description)
@@ -79,29 +94,26 @@
 
 (defmacro specify (description &rest body)
   "Add a specification and its description to the current context."
-  (declare (description description))
-  `(setf (context-specs context) ; or in Ruby: context.specs << lambda { description; body }
-	 (cons (lambda () (let ((spec-desc ,description)) ,@body)) (context-specs context))))
+  `(push (lambda () ,description (let ((spec-desc ,description)) 
+			      ,@body)) (context-specs context)))
 
 (defmacro expect (actual &optional predicate expected)
+  "State expectations the code should fulfill."
   (case predicate
     ((equals equal)
      `(if (not (equal ,actual ,expected))
-	  (signal 'behave-spec-failed (list spec-desc))))
+	  (signal 'behave-spec-failed (list (context-description context) spec-desc))))
     (t
      `(or ,actual
 	  (signal 'behave-spec-failed (list (context-description context) spec-desc))))))
-;;     (error ; no idea if this will work. =)
-;;      (assert (condition-case err
-;; 		 (,@actual)
-;; 	       (error t))))))
-
 
 (defmacro tag (&rest tags)
   "Give a context tags for easy reference. (Must be used within a context.)"
   `(setf (context-tags context) (append '(,@tags) (context-tags context))))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Context-management
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun behave-clear-contexts ()
   (interactive)
@@ -121,7 +133,9 @@
       *behave-contexts*
     (delete nil (remove-duplicates (mapcan 'context-find-by-tag tags)))))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Execution
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun behave (&optional tags)
   "Execute all contexts that match given tags"
@@ -140,9 +154,9 @@
 
 (defun execute-context (context)
   (condition-case failure
-      (mapcar #'execute-spec (context-specs context))
+      (mapcar #'execute-spec (reverse (context-specs context)))
     (error (princ "E")
-	   (add-to-list 'failures failure t))
+	   (add-to-list 'failures (list "Error:" failure) t))
     (failure (princ "F")
 	     (add-to-list 'failures (cdr failure) t))))
 
@@ -151,7 +165,9 @@
   (funcall spec)
   (princ "."))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Reporting
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun behave-describe-failures (failures start-time)
   (princ (concat "\n\n" (number-to-string (length failures)) " problem" (unless (= 1 (length failures)) "s") " in " 
@@ -177,7 +193,3 @@
     (princ (concat " * " (caddr spec) "\n"))))
 
 (provide 'behave)
-
-;; When trouble strikes, eval this:
-;(setq max-specpdl-size 5000)
-;(global-set-key [(f5)] 'behave)

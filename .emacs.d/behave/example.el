@@ -7,41 +7,31 @@
 
 (require 'behave)
 
-(defun stack-push (stack elt)
-  (add-to-list stack elt))
+(context "A list with three items"
+	 (tag list example)
 
-(defun stack-peek (stack)
-  (car stack))
+	 (lexical-let ((list (list "a" "b" "c")))
 
-(defun stack-pop (stack)
-  (setf stack (cadr stack)))
+	   (specify "should contain the first item"
+		    (expect (first list) equal "a"))
 
-(context "A stack which is neither empty nor full"
-	 (tag stack)
+	   (specify "should push new values onto the front"
+		    (push "d" list)
+		    (expect (first list) equal "d"))
 
-	 (lexical-let ((stack ()))
-	   (mapc (lambda (x) (stack-push 'stack x)) (list "a" "b" "c"))
-
-	   (specify "should add to the top when pushed"
-		    (stack-push 'stack "d")
-		    (expect (stack-peek 'stack) equal "d"))
-
-	   (specify "should return the top item when peeked"
-		    (expect (stack-peek 'stack) equal "c"))
-
-	   (specify "should NOT remove the top item when peeked"
-		    (expect (stack-peek 'stack) equal "c")
-		    (expect (stack-peek 'stack) equal "c"))
+	   (specify "should NOT remove the top item when reading the car"
+		    (expect (first list) equal "d")
+		    (expect (first list) equal "d"))
 
 	   (specify "should return the top item when popped"
-		    (expect (stack-pop 'stack) equal "c"))
+		    (expect (pop list) equal "d"))
 
 	   (specify "should remove the top item when popped" 
-		    (expect (stack-pop 'stack) equal "c")
-		    (expect (stack-pop 'stack) equal "b"))))
+		    (expect (pop list) equal "a")
+		    (expect (pop list) equal "b"))))
 
 (context "An empty stack"
-	 (tag stack)
+	 (tag stack example)
 	 (setup (c)
 		(let ((stack ()))
 		  (callf c)))

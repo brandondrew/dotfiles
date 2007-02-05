@@ -55,24 +55,29 @@
 			      (mapcar #'execute-spec (context-specs (context-find "failing")))
 			    (error t)))))
 
-;; Writing a spec for execute-context would cause an infinite loop.
-;; So we have to test it by hand.
-
-;; Should pass:
-; (execute-context (context-find "helper functions"))
-
-;; Should fail:
-; (execute-context (context-find "failing"))
-
 (context "The expect macro"
 	 (tag meta expect)
-;; 	   (specify "should expand to assert actual"
-;; 		    (expect (cl-macroexpand '(expect (+ 2 2) equal 4)) equal 
-;; 			    (cl-macroexpand '(assert (equal (+ 2 2) 4)))))
-	   (specify "should fail by expecting nil"
-		    (expect nil)))
+;	 (specify "should fail by expecting nil"
+;		    (expect nil))
+	 (specify "should expect 1 to equal 1"
+		  (expect 1 equal 1)))
 
-;; (setf context (make-context))
-;; (context-specs c)
+;; (context "The protect macro"
+;; 	 (tag meta protect)
+;; 	 (specify "should protect a variable's value"
+;; 		  (lexical-let ((f "foo"))
+;; 		    (protect (f)
+;; 			     (setf f "baz"))
+;; 		    (expect f equal "foo"))))
 
-(expect nil equal t)
+;; (context "The protected-let macro"
+;; 	 (tag meta protected-let protect)
+;; 	 (protected-let ((foo "foo"))
+;; 			 (specify "should set protected-vars to the variables set in protected-let"
+;; 				  (expect protected-vars equal '(foo)))
+;; 			 (specify "should start with initial value"
+;; 				  (expect foo equals "foo"))
+;; 			 (specify "should allow a variable to be altered"
+;; 				  (setf foo "bar"))
+;; 			 (specify "should return an altered variable to its original state"
+;; 				  (expect foo equals "foo"))))
