@@ -70,7 +70,7 @@ add_command("toggle-http-proxy", toggle_http_proxy, []);
 
 
 // fill domain
-bind_key(minibuffer_kmap, make_key("/", MOD_CTRL), "fill_domain");
+define_key(minibuffer_kmap, make_key("/", MOD_CTRL), "fill_domain");
 
 function fillDomain() {
     var field = document.getElementById("input-field");
@@ -82,10 +82,83 @@ add_command("fill_domain", fillDomain, []);
 
 
 
+// buffer-switcher
 
-// focus issues
-function fix_focus() {
-    0
+function readFromMiniBuffer(prompt, initVal, history, completions, allowNonMatches, 
+			    defaultMatch, callBack, abortCallback)
+{
+    var field = document.getElementById("input-field");
+    gReadFromMinibufferCallBack = callBack;
+    gReadFromMinibufferAbortCallBack = abortCallback;
+    gMiniBufferCompletions = completions;
+    gCurrentCompletion = null;
+    gDefaultMatch = defaultMatch;
+    gAllowNonMatches = allowNonMatches;
+    initHistory(history);
+    // set up onchange to reset the current completion
+    if (gMiniBufferCompletions != null) {
+        var field = document.getElementById("input-field"); 
+        field.onchange = "gCurrentCompletion = null;"
+    }
+    read_from_minibuffer_internal (prompt);
+    if (initVal) {
+        setInputValue(initVal);
+	field.setSelectionRange(0, field.value.length);
+    }
 }
 
-add_command("fix-focus", fix_focus, []);
+function switch_to_buffer()
+{
+    var bufs = getBrowser().getBrowserNames();
+    var defBrowser = getBrowser().lastBrowser().webNavigation.currentURI.spec;
+    var matches = zip2(bufs,getBrowser().mBrowsers);
+    readFromMiniBuffer("Switch to buffer: ", defBrowser, 
+		       "buffer", matches, false, defBrowser, go_to_buffer, null);
+}
+
+function minibuffer_complete(direction)
+{
+    var field = document.getElementById("input-field");
+    var str = field.value;
+    var enteredText = str.substring(0, field.selectionStart);
+    var initialSelectionStart = field.selectionStart;
+    direction = 1;
+
+    gCurrentCompletions = miniBufferCompleteStr(enteredText, gMiniBufferCompletions);
+    gCurrentCompletion = gCurrentCompletion || 0;
+
+    // deselect unambiguous part
+    while (gCurrentCompletions.length == 
+	   miniBufferCompleteStr(str.substring(0, field.selectionStart + 1), 
+				 gMiniBufferCompletions).length &&
+	   field.selectionStart != field.value.length) {
+	field.setSelectionRange(field.selectionStart + 1, field.value.length);
+    }
+
+    // if the above had no effect, cycle through options
+    if (initialSelectionStart == field.selectionStart) {
+	gCurrentCompletion = wrap(gCurrentCompletion + direction, gCurrentCompletions.length - 1);
+	//gCurrentCompletion = gCurrentCompletion + direction;
+	if(!gCurrentCompletions[gCurrentCompletion]) return;
+	field.value = gCurrentCompletions[gCurrentCompletion][0];
+	// When we allow non-matches it generally means the
+	// completion takes an argument. So add a space.
+	if (gAllowNonMatches)
+	    field.value += " ";
+	field.setSelectionRange(enteredText.length, field.value.length);
+    }
+}
+
+function wrap(val, max)
+{
+    if (val < 0)
+	return max;
+    if (val > max)
+	return 0;
+    return val;
+}
+
+add_command("minibuffer-complete", minibuffer_complete, []);
+add_command("minibuffer-complete-reverse", minibuffer_complete, [-1]);
+add_command("switch-to-buffer", switch_to_buffer, []);
+
