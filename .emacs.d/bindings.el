@@ -64,24 +64,20 @@
 ; just useful for learning new modes
 (global-set-key [f1] 'menu-bar-mode)
 
-(global-set-key [f2] 'color-theme-zenburn)
+(global-set-key [f2] (lambda () (interactive) 
+		       (set-default-font "-xos4-terminus-medium-r-normal--16-160-72-72-c-80-iso8859-9")
+		       (color-theme-zenburn)))
 (global-set-key [(control shift 2)] 'mark-string)
 (global-set-key [(shift f2)] 'color-theme-standard)
 
 (global-set-key [f3] 'rename-buffer)
 
 ; music management
-(global-set-key [f4] (lambda ()
-		       (interactive)
-		       (shell-command "ssh philisha.net mpc toggle")))
+(global-set-key [f4] 'music-toggle)
 
-(global-set-key [(f5)] (lambda ()
-			       (interactive)
-			       (shell-command "ssh philisha.net mpc next")))
+(global-set-key [(f5)] 'music-next)
 
-(global-set-key [(f3)] (lambda ()
-			       (interactive)
-			       (shell-command "ssh philisha.net mpc prev")))
+(global-set-key [(f3)] 'music-prev)
 
 (global-set-key [(control f3)] 'random-music)
 

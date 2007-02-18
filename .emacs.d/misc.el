@@ -39,6 +39,7 @@
 (defalias 'yes-or-no-p 'y-or-n-p)
 (setq display-time-format "%r")
 (display-time)
+(random t)
 
 ;; don't clutter directories!
 (setq backup-directory-alist `(("." . ,(expand-file-name "~/.emacs.d/backups"))))

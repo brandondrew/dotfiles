@@ -92,33 +92,6 @@
 			  (apply 'ido-completing-read params)))
     (imenu)))
 
-(random t)
-(defun random-music ()
-  (interactive)
-  (unless (boundp 'music-dirs)
-    (setq music-dirs (split-string (shell-command-to-string "find /home/phil/music -type d | cut -c 18-") "\n")))
-  (let ((dir (nth (random (length music-dirs)) music-dirs)))
-    (shell-command (concat 
-		    "ssh philisha.net mpc clear; "
-		    "ssh philisha.net mpc add " dir " > /dev/null"))
-    (message dir)))
-    
-(defun music-play-dir (dir)
-  (interactive (list (completing-read "Play directory: " 
-				      (split-string 
-				       (shell-command-to-string "find /home/phil/music -type d | cut -c 18-") "\n"))))
-  (shell-command (concat 
-		  "ssh philisha.net mpc clear; "
-		  "ssh philisha.net mpc add " dir
-		  "; ssh philisha.net mpc play > /dev/null")))
-
-(defun music-add-file (file)
-  (interactive (list (completing-read "Add file: " 
-				      (split-string 
-				       (shell-command-to-string "find /home/phil/music -type f | cut -c 18-") "\n"))))
-  (shell-command (concat 
-		  "ssh philisha.net mpc add " file))) ; todo - remove spaces in file name
-
 (defun make-frame-on-host (host)
   (interactive (list (completing-read "Host: " '("192.168.1.47:0.0" "192.168.1.46:0.0"))))
   (make-frame-on-display host))
@@ -134,6 +107,45 @@
       (undo)
       (undo)
       (message (number-to-string loc) " lines of code"))))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; music
+
+(defun random-music ()
+  (interactive)
+  (unless (boundp 'music-dirs)
+    (setq music-dirs (split-string (shell-command-to-string "find /home/phil/music -type d | cut -c 18-") "\n")))
+  (let ((dir (nth (random (length music-dirs)) music-dirs)))
+    (shell-command (concat 
+		    "mpc clear; "
+		    "mpc add " dir " > /dev/null"))
+    (message dir)))
+    
+(defun music-play-dir (dir)
+  (interactive (list (completing-read "Play directory: " 
+				      (split-string 
+				       (shell-command-to-string "find /home/phil/music -type d | cut -c 18-") "\n"))))
+  (shell-command (concat 
+		  "mpc clear; "
+		  "mpc add " dir
+		  "; mpc play > /dev/null")))
+
+(defun music-add-file (file)
+  (interactive (list (completing-read "Add file: " 
+				      (split-string 
+				       (shell-command-to-string "find /home/phil/music -type f | cut -c 18-") "\n"))))
+  (shell-command (concat 
+		  "mpc add " file))) ; todo - remove spaces in file name
+
+(defun music-toggle () (interactive)
+  (shell-command "mpc toggle"))
+
+(defun music-next () (interactive)
+  (shell-command "mpc next"))
+
+(defun music-prev () (interactive)
+  (shell-command "mpc prev"))
       
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
