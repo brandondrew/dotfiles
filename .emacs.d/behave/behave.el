@@ -76,7 +76,7 @@
 
 (defvar *behave-default-tags* "all")
 
-(defstruct context description tags (specs '()))
+(defstruct context description tags (specs '()) refreshing-vars)
 
 (put 'behave-spec-failed 'error-conditions '(failure))
 

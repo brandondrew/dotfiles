@@ -20,6 +20,9 @@
 (global-set-key "\C-x." (lambda () (interactive) (enlarge-window 1 t)))
 (global-set-key "\C-x," (lambda () (interactive) (shrink-window 1 t)))
 
+(global-set-key "\C-xd" (lambda () (interactive) 
+			  (shell-command (concat "dict " (read-string (concat "Define word (default " (word-at-point) "): ") nil nil (word-at-point))))))
+
 (global-set-key (kbd "C-c e") 'fc-eval-and-replace)
 (global-set-key (kbd "C-x m") 'pmacro)
 (global-set-key (kbd "M-\\") 'jao-toggle-selective-display)

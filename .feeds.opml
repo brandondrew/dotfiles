@@ -11,7 +11,7 @@
       <outline text="ongoing"
                description="Ongoing fragmented essay by Tim Bray."
                htmlUrl="http://www.tbray.org/ongoing/"
-               xmlUrl="http://www.tbray.org/ongoing/ongoing.rss" />
+               xmlUrl="http://www.tbray.org/ongoing/ongoing.atom" />
       <outline text="Mark Pilgrim"
 	       description="Dive into Mark"
 	       htmlUrl="http://diveintomark.org"
@@ -24,20 +24,9 @@
 	       description="Bliki"
 	       htmlUrl="http://martinfowler.com/bliki/"
 	       xmlUrl="http://martinfowler.com/bliki/bliki.atom" />
-<!--      <outline text="Planet GNOME"
-	       htmlUrl="http://planet.gnome.org/"
-	       xmlUrl="http://planet.gnome.org/rss20.xml" />-->
-      <outline text="Projectionist"
-	       description="A tumblelog"
-	       htmlUrl="http://project.ioni.st/"
-	       xmlUrl="http://project.ioni.st/syndicate/rss.xml" />
       <outline text="Planet Lisp"
 	       htmlUrl="http://planet.lisp.org/"
 	       xmlUrl="http://planet.lisp.org/rss20.xml" />
-      <outline text="Creating Passionate Users"
-	       description="Scoble says blogging will make us richer and improve our sex life..."
-	       htmlUrl="http://headrush.typepad.com/creating_passionate_users/"
-	       xmlUrl="http://headrush.typepad.com/creating_passionate_users/index.rdf" />
       <outline text="O'Reily Radar"
 	       htmlUrl="http://radar.oreilly.com/"
 	       xmlUrl="http://radar.oreilly.com/atom.xml" />
@@ -47,6 +36,15 @@
       <outline text="minor emacs wizardry"
 	       htmlUrl="http://emacs.wordpress.com/"
 	       xmlUrl="http://emacs.wordpress.com/feed/" />
+      <outline text="programming musings"
+	       htmlUrl="http://jaortega.wordpress.com/"
+	       xmlUrl="http://jaortega.wordpress.com/feed/" />
+      <outline text="epistemologic"
+	       htmlUrl="http://epistemologic.com/"
+	       xmlUrl="http://epistemologic.com/feed/" />
+      <outline text="Intertwingly"
+	       htmlUrl="http://www.intertwingly.net/blog/"
+	       xmlUrl="http://www.intertwingly.net/blog/index.atom" />
     </outline>
 
     <outline text="Friends">
@@ -62,6 +60,10 @@
 	       description="Funkworks"
 	       htmlUrl="http://funkworks.blogspot.com/"
 	       xmlUrl="http://funkworks.blogspot.com/atom.xml" />
+      <outline text="Doug Alcorn"
+	       description="Lathi.net"
+	       htmlUrl="http://www.lathi.net/"
+	       xmlUrl="http://www.lathi.net/xml/rss20/feed.xml" />
       <outline text="Tim Malabuyo"
 	       description="Intelligent Design"
 	       htmlUrl="http://webdesign.timches.com/"
@@ -76,9 +78,13 @@
 	       xmlUrl="http://planet.philisha.net/rss.xml" />
     </outline>
 
-<!--    <outline text="Caboose">
+    <outline text="Caboose">
+      <outline text="Planet Caboose"
+	       description="Rails Masons"
+	       htmlUrl="http://planet.caboo.se/"
+	       xmlUrl="http://planet.caboo.se/rss.xml" />
     </outline>
--->
+
 
     <outline text="Ruby Luminaries">
       <outline text="Dave Thomas"
@@ -104,6 +110,13 @@
 	       description="eigenclass.org"
 	       htmlUrl="http://eigenclass.org/"
 	       xmlUrl="http://eigenclass.org/hiki.rb?c=rss;format=1;tags=blog" />
+      <outline text="Ola Bini"
+	       htmlUrl="http://ola-bini.blogspot.com/"
+	       xmlUrl="http://ola-bini.blogspot.com/atom.xml" />
+      <outline text="Ryan Daigle"
+	       description="Ryan's Scrapts"
+	       htmlUrl="http://www.ryandaigle.com"
+	       xmlUrl="http://feeds.feedburner.com/RyansScraps" />
     </outline>
 
     <outline text="Technomancy Comments"
@@ -115,6 +128,11 @@
 	     description="Comments on http://philisha.net blog"
 	     htmlUrl="http://philisha.net/"
 	     xmlUrl="http://philisha.net/xml/rss20/comments/feed.xml" />
+
+    <outline text="Technomancy Trac"
+	     description="Changes to my Trac"
+	     htmlUrl="http://dev.technomancy.us/phil"
+	     xmlUrl="http://dev.technomancy.us/phil/timeline?milestone=on&amp;ticket=on&amp;changeset=on&amp;wiki=on&amp;max=50&amp;daysback=90&amp;format=rss" />
 
   </body>
 </opml>

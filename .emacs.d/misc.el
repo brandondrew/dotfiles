@@ -27,6 +27,7 @@
 
 (add-to-list 'comint-mode-hook 'ansi-color-for-comint-mode-on)
 
+(setq visible-bell t)
 (setq font-lock-maximum-decoration t)
 (setq inhibit-startup-message t)
 (setq transient-mark-mode t)

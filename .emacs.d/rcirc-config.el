@@ -13,7 +13,7 @@
 		 8192)))
 
 (setq rcirc-default-nick "technomancy")
-(setq rcirc-startup-channels-alist '(("^irc.freenode.net$" "#conkeror" "#emacs" "#ruby-lang" "#rinari")))
+(setq rcirc-startup-channels-alist '(("^irc.freenode.net$" "#conkeror" "#emacs" "#ruby-lang")))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; colors!
@@ -150,7 +150,6 @@ To check out the list, evaluate (list-colors-display rcirc-colors).")
     (mapc (lambda (nick)
 	    (setq unambiguous (rcirc-get-unambiguous nick unambiguous)))
 	  (cdr completions))
-    (setq unamb unambiguous)
     (if (string= unambiguous (buffer-substring
 			      (+ rcirc-prompt-end-marker
 				 rcirc-nick-completion-start-offset)

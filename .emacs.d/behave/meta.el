@@ -4,6 +4,8 @@
 
 ;; Meta-specifications for how behave.el should work
 
+(require 'behave)
+
 (local-set-key (kbd "C-x y") 'behave-clear-contexts)
 
 (context "context macro"
@@ -62,22 +64,14 @@
 	 (specify "should expect 1 to equal 1"
 		  (expect 1 equal 1)))
 
-;; (context "The protect macro"
-;; 	 (tag meta protect)
-;; 	 (specify "should protect a variable's value"
-;; 		  (lexical-let ((f "foo"))
-;; 		    (protect (f)
-;; 			     (setf f "baz"))
-;; 		    (expect f equal "foo"))))
-
-;; (context "The protected-let macro"
-;; 	 (tag meta protected-let protect)
-;; 	 (protected-let ((foo "foo"))
-;; 			 (specify "should set protected-vars to the variables set in protected-let"
-;; 				  (expect protected-vars equal '(foo)))
-;; 			 (specify "should start with initial value"
-;; 				  (expect foo equals "foo"))
-;; 			 (specify "should allow a variable to be altered"
-;; 				  (setf foo "bar"))
-;; 			 (specify "should return an altered variable to its original state"
-;; 				  (expect foo equals "foo"))))
+(context "The refreshing-let macro"
+	 (tag meta refreshing-let protect)
+	 (refreshing-let ((foo "foo"))
+			 (specify "should set refreshing-vars to the variables set in refreshing-let"
+				  (expect (context-refreshing-vars context) equal '(foo)))
+			 (specify "should start with initial value"
+				  (expect foo equals "foo"))
+			 (specify "should allow a variable to be altered"
+				  (setf foo "bar"))
+			 (specify "should return an altered variable to its original state"
+				  (expect foo equals "foo"))))

@@ -31,6 +31,7 @@
 (add-to-list 'load-path "~/.emacs.d/rinari/rhtml")
 (add-to-list 'load-path "~/.emacs.d/jabber")
 (add-to-list 'load-path "~/.emacs.d/w3m")
+(add-to-list 'load-path "~/.emacs.d/dictionary")
 (add-to-list 'load-path "/usr/share/emacs/site-lisp/sawfish/")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -65,6 +66,8 @@
 
 (add-hook 'js-mode-hook 'moz-minor-mode)
 (add-hook 'java-mode-hook 'moz-minor-mode)
+
+(load "dictionary-init")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; My support files and configurations

@@ -9,7 +9,6 @@
 
 (context "A list with three items"
 	 (tag list example)
-
 	 (lexical-let ((list (list "a" "b" "c")))
 
 	   (specify "should contain the first item"

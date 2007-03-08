@@ -1,3 +1,4 @@
+
 (setq gnus-select-method '(nnnil ""))
 (setq gnus-secondary-select-methods '((nnml ""
 					    (nnml-directory "~/Mail"))))
@@ -29,12 +30,17 @@
 	  (any "cartographer" "cartographer")
 	  (any "ocruby" "ocruby")
 	  (any "rspec" "rspec")
+	  (any "emacs-devel" "emacs-devel")
 
 	  (any "Jason Wong" "i5labs")
 	  (any "Brent Cohen" "i5labs")
 	  (any "Howard Brown" "i5labs")
 
+	  (any "philh@paxtel" junk)
 	  (any "cron" junk)
+;	  (& (from "Junk Mail Watcher" junk)
+;	     (to "lists@hagelb.org" junk))
+
 	  (to "phil@localhost" "feeds")
 
 	  (any "zacchaeus.*" "friends")
@@ -87,6 +93,15 @@
        "%{|%}"
        "%*%{%B%} %s%)"
        "\n"))
+
+(when (require 'nnir nil t)
+  (setq nnir-search-engine 'namazu)
+  (setq nnir-namazu-index-directory
+        (expand-file-name "~/.namazu"))
+  (setq nnir-namazu-remove-prefix
+        (expand-file-name "~/Mail/"))
+  (setq nnir-mail-backend (nth 0 gnus-secondary-select-methods)))
+
 
 ;; (setq gnus-buffer-configuration 
 ;;       '((group (vertical 1.0 (group 1.0 point)))
