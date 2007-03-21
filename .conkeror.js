@@ -7,7 +7,7 @@ function reinit()
 {
  load_rc_file("~/.conkeror/init.js");
 }
-add_command("reinit", reinit, []);
+interactive("reinit", reinit, []);
 
 function startRepl()
 {
@@ -16,14 +16,14 @@ function startRepl()
 	.getService(Components.interfaces.nsIMozRepl)
 	.start(4242);
 }
-add_command("repl", startRepl, []);
+interactive("repl", startRepl, []);
 
 function openTestBuffers(){
     open_url_in(2, 'http://technomancy.us');
     open_url_in(2, 'http://dev.technomancy.us/phil');
     open_url_in(2, 'http://dev.technomancy.us');
 }
-add_command("test-buffers", openTestBuffers, []);
+interactive("test-buffers", openTestBuffers, []);
 
 add_webjump("conkerorwiki","http://dev.technomancy.us/conkeror/search?q=%s&wiki=on&changeset=on&ticket=on");
 
@@ -65,12 +65,12 @@ function toggle_http_proxy()
     var proxytype = get_pref("network.proxy.type");
     set_pref("network.proxy.type", proxytype == 1 ? 0 : 1);
  }
-add_command("toggle-http-proxy", toggle_http_proxy, []);
-//define_key(ctrlx_kmap, make_key("p", 0), "toggle-http-proxy");
+interactive("toggle-http-proxy", toggle_http_proxy, []);
+//define_key(ctrlx_kmap, kbd("p", 0), "toggle-http-proxy");
 
 
 // fill domain
-define_key(minibuffer_kmap, make_key("/", MOD_CTRL), "fill_domain");
+define_key(minibuffer_kmap, kbd("/", MOD_CTRL), "fill_domain");
 
 function fillDomain() {
     var field = document.getElementById("input-field");
@@ -78,7 +78,7 @@ function fillDomain() {
     var domain = paths[0] + "/" + paths[1] + "/" + paths[2] + "/";
     field.value = domain;
 }
-add_command("fill_domain", fillDomain, []);
+interactive("fill_domain", fillDomain, []);
 
 
 function load_rc_directory(directory) { 
@@ -113,4 +113,4 @@ function load_rc_directory(directory) {
 }
                                                                                                                                  
 // Change this to reflect the directory in which you put initialization js files
-load_rc_directory("/home/phil/.conkeror.d/");
+//load_rc_directory("/home/phil/.conkeror.d/");
