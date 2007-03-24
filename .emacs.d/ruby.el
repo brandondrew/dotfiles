@@ -24,6 +24,8 @@
   "Default inherited face for ERB tag delimeters"
   :group 'rhtml-faces)
 
+(setq rhtml-fast t)
+
 (require 'ruby-electric)
 (require 'rinari)
 (require 'ri-ruby)

@@ -19,6 +19,13 @@ Host hagelb
 Host memex
   HostName memex.mine.nu
 
+Host rubyforge
+  User technomancy
+  HostName rubyforge.org
+
+Host rubyforge.org
+  User technomancy
+
 Host *
   User phil
   KeepAlive yes

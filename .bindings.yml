@@ -1,19 +1,63 @@
+/apps/deskbar/:
+  keybinding: <Alt>space
+/apps/epiphany/general/:
+  homepage: about:blank
+/apps/epiphany/general/:
+  allow_popups: false
+/apps/gnome-terminal/:
+  global/:
+    use_menu_accelerators: false
+    use_mnemonics: false
 /apps/metacity/: 
   keybinding_commands/: 
-    command_1: /home/phil/bin/singleton.sh
-    command_2: /home/phil/bin/rxvt
-    command_3: wmctrl -r screen -e 0,1280,0,-1,-1
-    command_4: wmctrl -r screen -e 0,0,0,-1,-1
-    command_5: synergyc puyo
+    command_1: gnome-terminal
+    command_2: synergys
+    command_3: synergy_connect
   global_keybindings/: 
     run_command_1: <Alt>grave
-    run_command_2: <Shift>F9
-    run_command_3: <Control>0
-    run_command_4: <Control>9
-    run_command_5: <Control>Esc
+    run_command_2: <Shift>F1
+    run_command_3: <Shift>F2
+    switch_to_workspace_1: <Control>1
+    switch_to_workspace_2: <Control>2
+    switch_to_workspace_3: <Control>3
+    switch_to_workspace_4: <Control>4
+    switch_to_workspace_5: <Control>5
+    switch_to_workspace_6: <Control>6
   window_keybindings/: 
-    toggle_above: <Alt>F11
+    toggle_above: <Alt>Home
     toggle_on_all_workspaces: <Alt><Shift>F11
     toggle_maximized: <Alt>F10
     switch_to_workspace_up: <Alt>bracketleft
     switch_to_workspace_down: <Alt>bracketright
+    move_to_workspace_1: <Control><Alt>1
+    move_to_workspace_2: <Control><Alt>2
+    move_to_workspace_3: <Control><Alt>3
+    move_to_workspace_4: <Control><Alt>4
+    move_to_workspace_5: <Control><Alt>5
+    move_to_workspace_6: <Control><Alt>6
+    move_to_corner_nw: <Super>1
+    move_to_side_n: <Super>2
+    move_to_corner_ne: <Super>3
+    move_to_side_w: <Super>'
+    move_to_side_e: <Super>.
+    move_to_corner_sw: <Super>a
+    move_to_side_s: <Super>o
+    move_to_corner_se: <Super>e
+/apps/nautilus/:
+  desktop/: 
+    computer_icon_visible: true
+    trash_icon_visible: true
+  preferences:
+    always_use_browser: false
+    always_use_location_entry: false
+    desktop_is_home_dir: true
+    no_ubuntu_spatial: true
+/apps/notifcation-daemon/:
+  theme: standard
+/desktop/gnome/:
+  font_rendering/:
+    dpi: 72
+    hinting: full
+  interface/:
+    can_change_accels: true
+    toolbar_style: icons

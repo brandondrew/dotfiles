@@ -62,17 +62,8 @@
 	  (any "Joel Watson" "friends")
 	  "inbox"))
 
-(setq mail-sources '((imap 
-		      :server "mail.hagelb.org"
-		      :user "philhag"
-		      :stream ssl)
-		     (file
-		      :path "/var/mail/phil")
-		     (imap
-		      :server "mail.hagelb.org"
-		      :user "m2643488"
-		      :stream ssl)
-))
+(setq mail-sources '((file
+		      :path "/var/mail/phil")))
 
 (setq imap-ssl-program "/usr/bin/openssl s_client -ssl3 -connect %s:%p")
 (setq gnus-agent-expire-days 0)
