@@ -52,6 +52,8 @@
     always_use_location_entry: false
     desktop_is_home_dir: true
     no_ubuntu_spatial: true
+/apps/gnome-screensaver/:
+  mode: blank-only
 /apps/notifcation-daemon/:
   theme: standard
 /desktop/gnome/:
@@ -61,3 +63,7 @@
   interface/:
     can_change_accels: true
     toolbar_style: icons
+  appications/browser:
+    exec: conkeror
+#  peripherals/keyboard/kbd/:
+#    options: ctrl:nocaps
