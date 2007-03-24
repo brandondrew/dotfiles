@@ -36,13 +36,13 @@
     move_to_workspace_5: <Control><Alt>5
     move_to_workspace_6: <Control><Alt>6
     move_to_corner_nw: <Super>1
-    move_to_side_n: <Super>2
-    move_to_corner_ne: <Super>3
-    move_to_side_w: <Super>'
-    move_to_side_e: <Super>.
+    move_to_corner_ne: <Super>2
+    move_to_corner_se: <Super>o
     move_to_corner_sw: <Super>a
-    move_to_side_s: <Super>o
-    move_to_corner_se: <Super>e
+    move_to_side_n: <Super>e
+    move_to_side_s: <Super>j
+    move_to_side_e: <Super>k
+    move_to_side_w: <Super>q
 /apps/nautilus/:
   desktop/: 
     computer_icon_visible: true
@@ -56,7 +56,7 @@
   theme: standard
 /desktop/gnome/:
   font_rendering/:
-    dpi: 72
+    dpi: 72.0
     hinting: full
   interface/:
     can_change_accels: true
