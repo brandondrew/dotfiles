@@ -51,6 +51,7 @@
 (global-set-key [XF86Back] 'bs-cycle-next)
 (global-set-key [XF86Forward] 'bs-cycle-previous)
 (setq bs-cycle-configuration-name "files")
+(global-set-key (kbd "C-x C-b") 'bs-show)
 
 ; 2D spatial buffer-switching
 (global-set-key [(control shift p)] 'tabbar-backward-group)

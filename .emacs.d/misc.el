@@ -49,6 +49,7 @@
 ;; w3m
 (setq w3m-use-cookies t)
 (setq w3m-default-save-directory "~/")
+(setq w3m-default-display-inline-images t)
 
 (mapc (lambda (v) (set v nil))
       '(w3m-show-graphic-icons-in-header-line

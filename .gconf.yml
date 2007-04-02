@@ -13,10 +13,12 @@
     command_1: gnome-terminal
     command_2: synergys
     command_3: synergy_connect
+    command_4: fetchmail
   global_keybindings/: 
     run_command_1: <Alt>grave
     run_command_2: <Shift>F1
     run_command_3: <Shift>F2
+    run_command_4: <Shift>F12
     switch_to_workspace_1: <Control>1
     switch_to_workspace_2: <Control>2
     switch_to_workspace_3: <Control>3
@@ -25,7 +27,9 @@
     switch_to_workspace_6: <Control>6
   window_keybindings/: 
     toggle_above: <Alt>Home
-    toggle_on_all_workspaces: <Alt><Shift>F11
+    toggle_on_all_workspaces: <Alt>End
+    maximize_vertically: <Super>Page_Up
+    maximize_horizontally: <Super>Page_Down
     toggle_maximized: <Alt>F10
     switch_to_workspace_up: <Alt>bracketleft
     switch_to_workspace_down: <Alt>bracketright
@@ -54,7 +58,7 @@
     no_ubuntu_spatial: true
 /apps/gnome-screensaver/:
   mode: blank-only
-/apps/notifcation-daemon/:
+/apps/notification-daemon/:
   theme: standard
 /desktop/gnome/:
   font_rendering/:
@@ -63,6 +67,7 @@
   interface/:
     can_change_accels: true
     toolbar_style: icons
+    gtk_key_theme: Emacs
   appications/browser:
     exec: conkeror
 #  peripherals/keyboard/kbd/:

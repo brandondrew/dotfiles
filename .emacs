@@ -17,9 +17,8 @@
 ;; want to do, you probably shouldn't do it."
 ;; -Shawn Betts, Ratpoison FAQ
 
-;; I think of emacs as 49Shkembe Chorba. As one Bulgarian saying goes:
-;; 'Shkembe chorba is best when it's hot, peppery and someone praises
-;; it'.
+;; I think of emacs as Shkembe Chorba. As one Bulgarian saying goes:
+;; 'Shkembe chorba is best when it's hot, peppery and someone praises it'.
 ;; -http://programming.reddit.com/info/uw44/comments/cuze4
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -81,6 +80,10 @@
 
 (if (functionp 'rcirc)
     (load "rcirc-config"))
+
+(let ((system-specific-config (concat "~/.emacs.d/" (substring (shell-command-to-string "hostname") 0 -1)".el")))
+  (if (file-exists-p system-specific-config)
+      (load system-specific-config)))
 
 (when (functionp 'jabber-connect)
   (setq jabber-nickname "")

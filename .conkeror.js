@@ -111,6 +111,8 @@ function load_rc_directory(directory) {
 	    alert("rc directory " + directory + " not found");
 	}
 }
-                                                                                                                                 
+
+add_delicious_webjumps("technomancy")
+
 // Change this to reflect the directory in which you put initialization js files
 //load_rc_directory("/home/phil/.conkeror.d/");

@@ -150,11 +150,14 @@ To check out the list, evaluate (list-colors-display rcirc-colors).")
     (mapc (lambda (nick)
 	    (setq unambiguous (rcirc-get-unambiguous nick unambiguous)))
 	  (cdr completions))
-    (if (string= unambiguous (buffer-substring
-			      (+ rcirc-prompt-end-marker
-				 rcirc-nick-completion-start-offset)
-			      (point)))
-	(message (mapconcat 'identity completions " "))
+    (if (string= (upcase unambiguous) (upcase (buffer-substring
+					       (+ rcirc-prompt-end-marker
+						  rcirc-nick-completion-start-offset)
+					       (point))))
+	(let ((truncated-completions (subseq completions 0 15)))
+	  (if (> (length completions) 15)
+	      (push "[more...]" truncated-completions))
+	  (message (mapconcat 'identity (reverse truncated-completions)  " ")))
       (if unambiguous
 	  (rcirc-insert-completed-nick unambiguous (not (equal (length completions) 1)))))))
 

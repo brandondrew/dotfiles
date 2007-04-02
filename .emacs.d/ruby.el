@@ -14,17 +14,15 @@
 (global-font-lock-mode t)
 
 ; for zenburn niceness:
-(defface erb-face
-  `((t (:background "grey18")))
-  "Default inherited face for ERB tag body"
-  :group 'rhtml-faces)
+;; (defface erb-face
+;;   `((t (:background "grey18")))
+;;   "Default inherited face for ERB tag body"
+;;   :group 'rhtml-faces)
 
-(defface erb-delim-face
-  `((t (:background "grey15")))
-  "Default inherited face for ERB tag delimeters"
-  :group 'rhtml-faces)
-
-(setq rhtml-fast t)
+;; (defface erb-delim-face
+;;   `((t (:background "grey15")))
+;;   "Default inherited face for ERB tag delimeters"
+;;   :group 'rhtml-faces)
 
 (require 'ruby-electric)
 (require 'rinari)
@@ -65,5 +63,13 @@
   (interactive "r")
   (shell-command-on-region reg-start reg-end
 			   "ruby -r xmp -n -e 'xmp($_, \"%l\t\t# %r\n\")'" t))
+
+;; Thanks Zenspider
+
+(autoload 'autotest-switch "autotest" "doco" t)
+(autoload 'autotest "autotest" "doco" t)
+(add-hook 'ruby-mode-hook
+          '(lambda ()
+             (define-key ruby-mode-map (kbd "C-c C-a") 'autotest-switch)))
 
 (provide 'ruby)
