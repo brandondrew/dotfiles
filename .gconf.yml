@@ -14,11 +14,17 @@
     command_2: synergys
     command_3: synergy_connect
     command_4: fetchmail
+    command_5: mpc prev
+    command_6: mpc toggle
+    command_7: mpc next
   global_keybindings/: 
     run_command_1: <Alt>grave
     run_command_2: <Shift>F1
     run_command_3: <Shift>F2
     run_command_4: <Shift>F12
+    run_command_5: F3
+    run_command_6: F4
+    run_command_7: F5
     switch_to_workspace_1: <Control>1
     switch_to_workspace_2: <Control>2
     switch_to_workspace_3: <Control>3

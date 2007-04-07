@@ -41,6 +41,8 @@
 (setq display-time-format "%r")
 (display-time)
 (random t)
+;(add-to-list 'bs-configurations
+;	     '("gnus" nil nil "^[^#]" nil nil))
 
 ;; don't clutter directories!
 (setq backup-directory-alist `(("." . ,(expand-file-name "~/.emacs.d/backups"))))

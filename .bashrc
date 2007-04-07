@@ -63,8 +63,8 @@ if [ $TERM = "eterm-color" ] ; then
     TERM=xterm
 fi
 
-MPD_HOST=mjolnir
-MPD_PORT=6600
+#MPD_HOST=mjolnir
+#MPD_PORT=6600
 #if [ `ssh 192.168.1.2 hostname` != "mjolnir" ] ; then
 #    MPD_HOST=localhost
 #fi
