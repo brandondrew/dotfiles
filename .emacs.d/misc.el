@@ -46,7 +46,9 @@
 
 ;; don't clutter directories!
 (setq backup-directory-alist `(("." . ,(expand-file-name "~/.emacs.d/backups"))))
-(setq auto-save-directory (expand-file-name "~/.emacs.d/backups"))
+(setq auto-save-default nil)
+
+(add-to-list 'auto-mode-alist '("\\.ds$" . emacs-lisp-mode))
 
 ;; w3m
 (setq w3m-use-cookies t)

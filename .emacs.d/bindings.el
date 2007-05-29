@@ -70,11 +70,11 @@
 
 (global-set-key [f2] (lambda () (interactive) 
 		       (set-default-font "-xos4-terminus-medium-r-normal--16-160-72-72-c-80-iso8859-9")
+		       (set-face-attribute 'erb-face nil :background "grey18")
+		       (set-face-attribute 'erb-delim-face nil :background "grey15")
 		       (color-theme-zenburn)))
 (global-set-key [(control shift 2)] 'mark-string)
 (global-set-key [(shift f2)] 'color-theme-standard)
-
-(global-set-key [f3] 'rename-buffer)
 
 ; music management
 (global-set-key [f4] 'music-toggle)

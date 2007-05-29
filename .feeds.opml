@@ -15,7 +15,7 @@
       <outline text="Mark Pilgrim"
 	       description="Dive into Mark"
 	       htmlUrl="http://diveintomark.org"
-	       xmlUrl="http://diveintomark.org/feed" />
+	       xmlUrl="http://diveintomark.org/feed/" />
       <outline text="Bruce Schneier"
 	       description="Schneier on Security"
 	       htmlUrl="http://www.schneier.com/blog/"
@@ -24,9 +24,6 @@
 	       description="Bliki"
 	       htmlUrl="http://martinfowler.com/bliki/"
 	       xmlUrl="http://martinfowler.com/bliki/bliki.atom" />
-      <outline text="Planet Lisp"
-	       htmlUrl="http://planet.lisp.org/"
-	       xmlUrl="http://planet.lisp.org/rss20.xml" />
       <outline text="O'Reily Radar"
 	       htmlUrl="http://radar.oreilly.com/"
 	       xmlUrl="http://radar.oreilly.com/atom.xml" />
@@ -51,11 +48,11 @@
       <outline text="Andre Arko"
 	       description="nothingness incarnate"
 	       htmlUrl="http://arko.net/"
-	       xmlUrl="http://arko.net/xml/rss/feed.xml" />
+	       xmlUrl="http://arko.net/feed/atom.xml" />
       <outline text="Joel Watson"
 	       description="bitwise"
 	       htmlUrl="http://www.joelmwatson.com/blog/"
-	       xmlUrl="http://www.joelmwatson.com/blog/xml/rss20/feed.xml" />
+	       xmlUrl="http://www.joelmwatson.com/blog/feed/" />
       <outline text="Forrest Chang"
 	       description="Funkworks"
 	       htmlUrl="http://funkworks.blogspot.com/"
@@ -76,25 +73,29 @@
 	       description="We like to climb trees"
 	       htmlUrl="http://planet.philisha.net/"
 	       xmlUrl="http://planet.philisha.net/rss.xml" />
-    </outline>
+      <outline text="Jason Wong"
+	       htmlUrl="http://jasonwong.org/"
+	       xmlUrl="http://jasonwong.org/feed/atom.xml" />
 
+    </outline>
+<!--
     <outline text="Caboose">
       <outline text="Planet Caboose"
 	       description="Rails Masons"
 	       htmlUrl="http://planet.caboo.se/"
 	       xmlUrl="http://planet.caboo.se/rss.xml" />
     </outline>
-
+-->
 
     <outline text="Ruby Luminaries">
       <outline text="Dave Thomas"
 	       description="PragDave"
 	       htmlUrl="http://blogs.pragprog.com/cgi-bin/pragdave.cgi"
 	       xmlUrl="http://blogs.pragprog.com/cgi-bin/pragdave.cgi?rss" />
-      <outline text="RedHanded"
-	       description="Sneaking Ruby through the System"
-	       htmlUrl="http://redhanded.hobix.com/"
-	       xmlUrl="http://redhanded.hobix.com/index.xml" />
+      <outline text="Hackety Org"
+	       description="Why for kids"
+	       htmlUrl="http://hackety.org/"
+	       xmlUrl="http://feeds.feedburner.com/HacketyOrg" />
       <outline text="Jim Weirich"
 	       description="{| one, step, back|}"
 	       htmlUrl="http://onestepback.org/"
@@ -114,9 +115,20 @@
 	       htmlUrl="http://ola-bini.blogspot.com/"
 	       xmlUrl="http://ola-bini.blogspot.com/atom.xml" />
       <outline text="Ryan Daigle"
-	       description="Ryan's Scrapts"
+	       description="Ryan's Scraps"
 	       htmlUrl="http://www.ryandaigle.com"
 	       xmlUrl="http://feeds.feedburner.com/RyansScraps" />
+      <outline text="Giles Bowkett"
+	       htmlUrl="http://gilesbowkett.blogspot.com/"
+	       xmlUrl="http://feeds.feedburner.com/gilesbowkett" />
+      <outline text="Hampton Catlin"
+	       htmlUrl="http://hamptoncatlin.com/"
+	       xmlUrl="http://hamptoncatlin.com/feed/atom.xml" />
+
+      <outline text="RoR Podcast"
+	       description="Geoff's talks"
+	       htmlUrl="http://podcast.rubyonrails.org"
+	       xmlUrl="http://feeds.feedburner.com/rubyonrails_transcript" />
     </outline>
 
     <outline text="Technomancy Comments"
@@ -127,12 +139,37 @@
     <outline text="Philisha Comments"
 	     description="Comments on http://philisha.net blog"
 	     htmlUrl="http://philisha.net/"
-	     xmlUrl="http://philisha.net/xml/rss20/comments/feed.xml" />
-
+	     xmlUrl="http://philisha.net/comments/feed/" />
+<!--
     <outline text="Technomancy Trac"
 	     description="Changes to my Trac"
-	     htmlUrl="http://dev.technomancy.us/phil"
-	     xmlUrl="http://dev.technomancy.us/phil/timeline?milestone=on&amp;ticket=on&amp;changeset=on&amp;wiki=on&amp;max=50&amp;daysback=90&amp;format=rss" />
+	     htmlUrl="http://dev.technomancy.us/"
+	     xmlUrl="http://dev.technomancy.us/index.cgi/timeline?milestone=on&amp;ticket=on&amp;changeset=on&amp;wiki=on&amp;max=50&amp;daysback=90&amp;format=rss" />
+-->
+
+    <outline text="Web Comics">
+      <outline text="Achewood"
+	       description="A momentary diversion on the road to the grave"
+	       htmlUrl="http://achewood.com"
+	       xmlUrl="http://achewood.com/rss.php" />
+      <outline text="Penny Arcade"
+	       htmlUrl="http://www.penny-arcade.com/comic"
+	       xmlUrl="http://www.penny-arcade.com/rss.xml" />
+      <outline text="xkcd"
+	       description="A webcomic of romance, sarcasm, math, and language."
+	       htmlUrl="http://xkcd.com"
+	       xmlUrl="http://xkcd.com/rss.xml" />
+      <outline text="xkcd blagh"
+	       description="A webcomic of romance, sarcasm, math, and language."
+	       htmlUrl="http://xkcd.com"
+	       xmlUrl="http://xkcd.com/rss.xml" />
+
+      <outline text="Wondermark"
+	       description="An Illustrated Jocularity"
+	       htmlUrl="http://www.wondermark.com/"
+	       xmlUrl="http://www.wondermark.com/wondermarkrss.xml" />
+
+    </outline>
 
   </body>
 </opml>

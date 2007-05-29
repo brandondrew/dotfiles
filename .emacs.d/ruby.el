@@ -30,12 +30,15 @@
 
 (add-to-list 'auto-mode-alist '("\\.rb$" . ruby-mode))
 (add-to-list 'auto-mode-alist '("\\.rake$" . ruby-mode)) ; d'oh!
+(add-to-list 'auto-mode-alist '("\\.erb$" . rhtml-mode))
+(add-to-list 'auto-mode-alist '("\\.builder$" . ruby-mode))
 
 (add-hook 'ruby-mode-hook 'my-ruby-mode-hook)
 
 (defun my-ruby-mode-hook ()
   (ruby-electric-mode)
   (hs-minor-mode)
+  (pretty-lambdas)
   (if (= emacs-major-version 22) (reveal-mode))
   (define-key ruby-mode-map "\C-\M-h" 'backward-kill-word) ; ruby-mode redefines this badly
   (local-set-key (kbd "RET") 'ruby-reindent-then-newline-and-indent))

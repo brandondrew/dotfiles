@@ -170,4 +170,11 @@
       (split-window))
   (set-window-text-height (first (window-list)) (- (frame-height) 20)))
 
+(defun big-fonts ()
+  (interactive)
+;  (set-default-font "-b&h-lucidatypewriter-bold-r-normal-sans-34-190-100-100-m-159-iso8859-1")
+  (set-default-font "-b&h-lucidatypewriter-bold-r-normal-sans-34-240-100-100-m-200-iso8859-1"))
+
+(defun terminus () (interactive) (set-default-font "-xos4-terminus-medium-r-normal--14-140-72-72-c-80-iso8859-1"))
+
 (provide 'defuns)

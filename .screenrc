@@ -18,6 +18,6 @@ hardstatus alwayslastline "%{=b}%{G}%H: %{C}%w %=%{G}%D, %m/%d %C%a"
 #screen 5
 #screen 4
 #screen 3
-screen 2
-screen 1
+#screen 2
+#screen 1
 screen 0

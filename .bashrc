@@ -9,7 +9,7 @@ alias ri="ri -f ansi -T"
 alias devlog="tail -F log/development.log"
 
 #alias cd="cd \!*; ls"
-alias ll="ls -l"
+alias ll="ls -l -h"
 alias la="ls -a"
 alias less="less -R"
 alias l="ls -la"

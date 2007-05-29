@@ -7,10 +7,18 @@
 (setq user-full-name "Phil Hagelberg")
 (setq gnus-ignored-from-addresses "Phil Hagelberg")
 
-(setq send-mail-function 'smtpmail-send-it)
-(setq message-send-mail-function 'smtpmail-send-it)
-(setq smtpmail-default-smtp-server "mail.hagelb.org")
-(setq smtpmail-auth-credentials '(("mail.hagelb.org" 25 "m7139145" "testyy")))
+;; Now with SSL!
+(setq smtpmail-starttls-credentials '(("mail.hagelb.org" 587 nil nil))
+      smtpmail-smtp-server "mail.hagelb.org"
+      smtpmail-default-smtp-server "mail.hagelb.org"
+      send-mail-function 'smtpmail-send-it
+      message-send-mail-function 'smtpmail-send-it
+      smtpmail-smtp-service 587
+      smtpmail-auth-credentials '(("mail.hagelb.org"
+				   587
+				   "m7139145"
+				   "testyy")))
+
 (setq message-kill-buffer-on-exit t)
 
 (setq gnus-message-archive-group "sent")
@@ -27,14 +35,18 @@
 	  (any "conkeror" "conkeror")
 	  (any "zenspider\\.com" "seattle.rb")
 	  (any "mozlab" "mozlab")
+	  (any "dbus" "dbus")
 	  (any "cartographer" "cartographer")
 	  (any "ocruby" "ocruby")
 	  (any "rspec" "rspec")
+	  (any "helma" "helma")
 	  (any "emacs-devel" "emacs-devel")
 
+	  (any "i5labs\.com" "i5labs")
 	  (any "Jason Wong" "i5labs")
 	  (any "Brent Cohen" "i5labs")
 	  (any "Howard Brown" "i5labs")
+	  (any "circlebuilder" "i5labs")
 
 	  (any "philh@paxtel" junk)
 	  (any "cron" junk)
@@ -47,7 +59,7 @@
 
 	  (any ".*kleist.*" "grace-group")
 	  (any "alisha\\.e\\.hagelberg@biola\\.edu" "alisha")
-	  (from "Hagelberg" - "Alisha" "family")
+	  (from "agelberg" - "Alisha" "family")
 
 	  (any ".*hackelford.*" "friends")
 	  (any ".*peckham.*" "friends")
@@ -93,7 +105,7 @@
         (expand-file-name "~/Mail/"))
   (setq nnir-mail-backend (nth 0 gnus-secondary-select-methods)))
 
-
+(add-hook 'gnus-group-mode-hook 'gnus-topic-mode)
 ;; (setq gnus-buffer-configuration 
 ;;       '((group (vertical 1.0 (group 1.0 point)))
 ;; 	(summary (vertical 1.0 (summary 1.0 point)))

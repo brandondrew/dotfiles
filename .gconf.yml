@@ -9,14 +9,18 @@
     use_menu_accelerators: false
     use_mnemonics: false
 /apps/metacity/: 
+  general/:
+    num_workspaces: 6
+    theme: Glossy
   keybinding_commands/: 
-    command_1: gnome-terminal
+    command_1: urxvt -bg white +sb -bd white -e screen -xRR
     command_2: synergys
     command_3: synergy_connect
     command_4: fetchmail
     command_5: mpc prev
     command_6: mpc toggle
     command_7: mpc next
+    command_8: urxvt -bg white +sb -bd white
   global_keybindings/: 
     run_command_1: <Alt>grave
     run_command_2: <Shift>F1
@@ -25,6 +29,7 @@
     run_command_5: F3
     run_command_6: F4
     run_command_7: F5
+    run_command_8: <Alt><Shift>grave
     switch_to_workspace_1: <Control>1
     switch_to_workspace_2: <Control>2
     switch_to_workspace_3: <Control>3
@@ -57,13 +62,11 @@
   desktop/: 
     computer_icon_visible: true
     trash_icon_visible: true
-  preferences:
+  preferences/:
     always_use_browser: false
     always_use_location_entry: false
     desktop_is_home_dir: true
     no_ubuntu_spatial: true
-/apps/gnome-screensaver/:
-  mode: blank-only
 /apps/notification-daemon/:
   theme: standard
 /desktop/gnome/:

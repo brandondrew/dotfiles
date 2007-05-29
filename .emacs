@@ -74,6 +74,7 @@
 (require 'bindings)
 (require 'ruby)
 (require 'lisp)
+(require 'helma)
 (require 'registers)
 (require 'defuns)
 (require 'misc)

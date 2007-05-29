@@ -13,7 +13,7 @@
 		 8192)))
 
 (setq rcirc-default-nick "technomancy")
-(setq rcirc-startup-channels-alist '(("^irc.freenode.net$" "#conkeror" "#emacs" "#ruby-lang")))
+(setq rcirc-startup-channels-alist '(("^irc.freenode.net$" "#conkeror" "#emacs" "#ruby-lang" "#helma")))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; colors!
