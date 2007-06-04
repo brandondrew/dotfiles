@@ -15,6 +15,8 @@
 (setq rcirc-default-nick "technomancy")
 (setq rcirc-startup-channels-alist '(("^irc.freenode.net$" "#conkeror" "#emacs" "#ruby-lang" "#helma")))
 
+(setq rcirc-buffer-maximum-lines 10240)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; colors!
 

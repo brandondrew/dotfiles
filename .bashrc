@@ -17,6 +17,7 @@ alias grep="grep --color=auto"
 alias svnci="rake test && svn ci"
 
 alias svnpx="svn up; svn up -r 656 config/database.yml"
+alias less="most"
 
 alias sapti="sudo apt-get install"
 alias saptr="sudo apt-get remove"

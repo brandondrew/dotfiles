@@ -26,6 +26,7 @@
   (keyboard-translate ?\C-h ?\C-?))
 
 (add-to-list 'comint-mode-hook 'ansi-color-for-comint-mode-on)
+(add-hook 'find-file-hook 'jao-toggle-selective-display)
 
 (setq visible-bell t)
 (setq font-lock-maximum-decoration t)
@@ -38,6 +39,7 @@
 (setq color-theme-is-global nil)
 (put 'narrow-to-region 'disabled nil)
 (defalias 'yes-or-no-p 'y-or-n-p)
+(defalias 'qrr 'query-replace-regexp)
 (setq display-time-format "%r")
 (display-time)
 (random t)

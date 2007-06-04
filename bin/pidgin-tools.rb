@@ -7,10 +7,7 @@ require 'yaml'
 require 'dbus'
 require 'notify'
 require 'thinklight' rescue
-require 'notify'
-require 'thinklight'
 
-Bus = DBus.session_bus
 TwitterClient = Twitter::Client.new(:login => 'technomancy',
                                     :password => File.read(File.expand_path("~/.twitter_password")))
 
@@ -18,7 +15,7 @@ class Pidgin
   attr_reader :purple # for debug
   
   def initialize
-    @service = Bus.service("im.pidgin.purple.PurpleService")
+    @service = DBus.session_bus.service("im.pidgin.purple.PurpleService")
     @purple = @service.object("/im/pidgin/purple/PurpleObject")
 
     @purple.introspect
@@ -39,9 +36,12 @@ class Pidgin
 
   def notify_messages
     @purple.on_signal("ReceivedImMsg") do |account, user, message|
-      message.gsub!(/\<[^\>]*\>/, '') # jabber messages have XML crap
+      message.gsub!(/\<[^\>]*\>/, '') # jabber messages have unnecessary XML
       user = user.split(/\//).first # get rid of jabber resource part
-      Notify.send :message => message, :title => "#{user} says:", :seconds => 5, :icon => (File.expand_path("~/.purple/icons/") + '/' + @buddy_icons[user] if @buddy_icons[user])
+      Notify.send(:message => message, :title => "#{user} says:",
+                  :seconds => 5,
+                  :icon => (File.expand_path("~/.purple/icons/") + '/'
+                            + @buddy_icons[user] if @buddy_icons[user]))
       begin
         ThinkLight.flash
         sleep 0.2
@@ -58,6 +58,7 @@ class Pidgin
   end
 
   def init_buddy_icons
+    # would be cool if we could do this thru dbus, but whatever. this is easy.
     @buddy_icons = {}
     @buddy_list = File.read(File.expand_path("~/.purple/blist.xml"))
     @buddy_list.split(/\<buddy/).each do |buddy|
@@ -74,6 +75,6 @@ pidgin.notify_messages
 
 if __FILE__ == $0
   m = DBus::Main.new
-  m << Bus
+  m << DBus.session_bus
   m.run
 end

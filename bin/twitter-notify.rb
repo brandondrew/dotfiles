@@ -2,6 +2,7 @@ require 'rubygems'
 require 'open-uri'
 require 'notify'
 require 'twitter'
+require 'yaml'
 #require 'hpricot'
 
 
@@ -14,19 +15,23 @@ require 'twitter'
 #   end
 # end
 
-
+DOTFILE = File.expand_path('~/.twitter-notify')
 client = Twitter::Client.new(:login => 'technomancy', :password => 'AElenaB')
-displayed = []
 
 while true do
   begin
     statuses = client.friend_timeline
+    already_displayed = File.read(DOTFILE).split("\n") rescue File.open(DOTFILE, 'w') { |f| f.puts "" }
 
     statuses.reverse.each do |stat|
-      Notify.send(:message => stat.text, :title => "Twitter: #{stat.user.screen_name}", :seconds => 7) unless displayed.include? stat.id
-      displayed << stat.id
+      unless already_displayed.include?(stat.id)
+        Notify.send(:message => stat.text, :title => "Twitter: #{stat.user.screen_name}", :seconds => 7)
+        already_displayed << stat.id
+        File.open(DOTFILE, 'w') { |f| f.puts already_displayed[-25 .. -1].join("\n")}
+        sleep 3
+      end
     end
-  rescue
+  rescue IOError
   end
   sleep 300
 end

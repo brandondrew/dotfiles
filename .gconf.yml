@@ -21,6 +21,8 @@
     command_6: mpc toggle
     command_7: mpc next
     command_8: urxvt -bg white +sb -bd white
+    command_9: emacs
+    command_10: /home/phil/bin/notify-mpc
   global_keybindings/: 
     run_command_1: <Alt>grave
     run_command_2: <Shift>F1
@@ -30,6 +32,8 @@
     run_command_6: F4
     run_command_7: F5
     run_command_8: <Alt><Shift>grave
+    run_command_9: <Super>e
+    run_command_10: <Control>F5
     switch_to_workspace_1: <Control>1
     switch_to_workspace_2: <Control>2
     switch_to_workspace_3: <Control>3
@@ -54,10 +58,6 @@
     move_to_corner_ne: <Super>2
     move_to_corner_se: <Super>o
     move_to_corner_sw: <Super>a
-    move_to_side_n: <Super>e
-    move_to_side_s: <Super>j
-    move_to_side_e: <Super>k
-    move_to_side_w: <Super>q
 /apps/nautilus/:
   desktop/: 
     computer_icon_visible: true

@@ -10,6 +10,9 @@ class Notify
       source = options[:source]
     end
 
+    ['"'].each { |char| message.gsub!(/#{char}/, "\\#{char}") }
+    message.gsub!(/&/, '\\&amp;') # special case
+    
     source ||= 'notify.rb'
     seconds ||= 3
 
