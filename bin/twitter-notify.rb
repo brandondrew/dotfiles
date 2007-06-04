@@ -24,7 +24,7 @@ while true do
     already_displayed = File.read(DOTFILE).split("\n") rescue File.open(DOTFILE, 'w') { |f| f.puts "" }
 
     statuses.reverse.each do |stat|
-      unless already_displayed.include?(stat.id)
+      unless already_displayed.include?(stat.id.to_s)
         Notify.send(:message => stat.text, :title => "Twitter: #{stat.user.screen_name}", :seconds => 7)
         already_displayed << stat.id
         File.open(DOTFILE, 'w') { |f| f.puts already_displayed[-25 .. -1].join("\n")}
