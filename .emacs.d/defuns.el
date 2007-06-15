@@ -54,18 +54,6 @@
   (html-mode)
   (auto-fill-mode))
 
-(defun blog-post-region (begin end)
-  "Create a new post on technomancy.us from the contents of the region"
-  (interactive "r")
-
-  (let ((content (buffer-substring begin end))
-	(title (read-string "Title: "))
-	(tags (split-string (read-string "Tags: ") ", ")))
-
-    (shell-command
-     (concat "ssh philisha.net apps/technomancy/script/runner \"p = Post.new(:title => '" title
-	     "', :content => '" content "'); \""))))
-
 (defun fc-eval-and-replace ()
   "Replace the preceding sexp with its value."
   (interactive)
@@ -120,7 +108,7 @@
   (let ((dir (nth (random (length music-dirs)) music-dirs)))
     (shell-command (concat 
 		    "mpc clear; "
-		    "mpc add " dir " > /dev/null"))
+		    "mpc add " (shell-quote-argument dir) " > /dev/null"))
     (message dir)))
     
 (defun music-play-dir (dir)
@@ -129,15 +117,15 @@
 				       (shell-command-to-string "find /home/phil/music -type d | cut -c 18-") "\n"))))
   (shell-command (concat 
 		  "mpc clear; "
-		  "mpc add " dir
+		  "mpc add " (shell-quote-argument dir)
 		  "; mpc play > /dev/null")))
 
 (defun music-add-file (file)
   (interactive (list (completing-read "Add file: " 
 				      (split-string 
 				       (shell-command-to-string "find /home/phil/music -type f | cut -c 18-") "\n"))))
-  (shell-command (concat 
-		  "mpc add " file))) ; todo - remove spaces in file name
+  (shell-command (shell-quote-argument (concat 
+					"mpc add " file))))
 
 (defun music-toggle () (interactive)
   (shell-command "mpc toggle"))
