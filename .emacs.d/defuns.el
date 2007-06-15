@@ -77,6 +77,7 @@
            (insert (current-kill 0)))))
 
 (defun pmacro ()
+  "insert the expansion of a macro"
   (interactive)
   (backward-kill-sexp)
   (undo)

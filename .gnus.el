@@ -40,6 +40,7 @@
 	  (any "ocruby" "ocruby")
 	  (any "rspec" "rspec")
 	  (any "helma" "helma")
+	  (any "utuprotocol" "utu")
 	  (any "emacs-devel" "emacs-devel")
 
 	  (any "i5labs\.com" "i5labs")

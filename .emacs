@@ -52,6 +52,7 @@
 (autoload 'pastie-region "pastie" "" t)
 (autoload 'jabber-connect "jabber" "" t)
 (autoload 'w3m "w3m" "" t)
+(autoload 'tail-file "tail.el" "Tail a file." t)
 
 (require 'psvn)
 (require 'compile)
@@ -126,3 +127,4 @@
 ; Dired
 ; mark with 'm', press 'Q' for multi-file find/replace
 ; C-j launch dired when ido-mode is enabled
+

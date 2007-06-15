@@ -27,7 +27,8 @@ class Pidgin
   def watch_status
     @purple.on_signal("AccountStatusChanged") do |account, old, new|
       begin
-        TwitterClient.update(current_message) unless current_message == ''
+        # statuses that start with space stay on pidgin. also blank ones.
+        TwitterClient.update(current_message) unless current_message == '' or current_message.match(/^ /)
       rescue Twitter::RESTError => re
         puts re
       end
@@ -40,8 +41,8 @@ class Pidgin
       user = user.split(/\//).first # get rid of jabber resource part
       Notify.send(:message => message, :title => "#{user} says:",
                   :seconds => 5,
-                  :icon => (File.expand_path("~/.purple/icons/") + '/'
-                            + @buddy_icons[user] if @buddy_icons[user]))
+                  :icon => (File.expand_path("~/.purple/icons/") + '/' +
+                            @buddy_icons[user] if @buddy_icons[user]))
       begin
         ThinkLight.flash
         sleep 0.2

@@ -42,6 +42,11 @@
       <outline text="Intertwingly"
 	       htmlUrl="http://www.intertwingly.net/blog/"
 	       xmlUrl="http://www.intertwingly.net/blog/index.atom" />
+      <outline text="O'Reilly Radar"
+	       description="What's new in tech."
+	       htmlUrl="http://radar.oreilly.com/"
+	       xmlUrl="http://radar.oreilly.com/feed" />
+
     </outline>
 
     <outline text="Friends">
@@ -155,10 +160,10 @@
       <outline text="Penny Arcade"
 	       htmlUrl="http://www.penny-arcade.com/comic"
 	       xmlUrl="http://www.penny-arcade.com/rss.xml" />
-      <outline text="xkcd"
-	       description="A webcomic of romance, sarcasm, math, and language."
-	       htmlUrl="http://xkcd.com"
-	       xmlUrl="http://xkcd.com/rss.xml" />
+<!--       <outline text="xkcd" -->
+<!-- 	       description="A webcomic of romance, sarcasm, math, and language." -->
+<!-- 	       htmlUrl="http://xkcd.com" -->
+<!-- 	       xmlUrl="http://xkcd.com/rss.xml" /> -->
       <outline text="xkcd blagh"
 	       description="A webcomic of romance, sarcasm, math, and language."
 	       htmlUrl="http://xkcd.com"
@@ -170,6 +175,10 @@
 	       xmlUrl="http://www.wondermark.com/wondermarkrss.xml" />
 
     </outline>
+      <outline text="Ze Frank"
+	       description="League of Awesomeness"
+	       htmlUrl="http://zefrank.com"
+	       xmlUrl="http://www.zefrank.com/atom.xml" />
 
   </body>
 </opml>

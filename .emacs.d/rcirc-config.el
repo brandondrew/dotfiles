@@ -110,6 +110,8 @@ To check out the list, evaluate (list-colors-display rcirc-colors).")
 
 
 
+;;; Completion stuff!
+
 (setq rcirc-unambiguous-complete t)
 
 (defun rcirc-complete-nick ()

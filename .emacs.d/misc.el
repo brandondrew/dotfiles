@@ -13,7 +13,8 @@
 (when window-system
   (mouse-wheel-mode t)
   (global-hl-line-mode t)
-  (set-scroll-bar-mode 'right) ; mostly for seeing how far down we are, not for clicking
+;; this slows boot significantly in emacs 22
+;  (set-scroll-bar-mode 'right) ; mostly for seeing how far down we are, not for clicking
   (setq frame-title-format '(buffer-file-name "%f" ("%b")))
   (setq browse-url-browser-function 'browse-url-epiphany)
   (setq browse-url-epiphany-new-window-is-tab t)
@@ -38,6 +39,7 @@
 (show-paren-mode 1)
 (setq color-theme-is-global nil)
 (put 'narrow-to-region 'disabled nil)
+(put 'downcase-region 'disabled nil)
 (defalias 'yes-or-no-p 'y-or-n-p)
 (defalias 'qrr 'query-replace-regexp)
 (setq display-time-format "%r")

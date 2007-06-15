@@ -113,7 +113,8 @@ function load_rc_directory(directory) {
 }
 
 add_delicious_webjumps("technomancy");
-add_webjump("cb", "http://trac.i5labs.com/cb/query?status=new&status=assigned&status=reopened&group=milestone&order=priority");
+add_webjump("cb", "http://trac.i5labs.com/cb/query?status=new&status=assigned&status=reopened&group=owner&milestone=PrivateBeta&order=priority");
+add_webjump("mongrel", "http://localhost:3000");
 
 // Change this to reflect the directory in which you put initialization js files
 //load_rc_directory("/home/phil/.conkeror.d/");

@@ -24,7 +24,9 @@
 			  (shell-command (concat "dict " (read-string (concat "Define word (default " (word-at-point) "): ") nil nil (word-at-point))))))
 
 (global-set-key (kbd "C-c e") 'fc-eval-and-replace)
-(global-set-key (kbd "C-x m") 'pmacro)
+(global-set-key (kbd "C-x m") 'eshell)
+(global-set-key (kbd "C-x M") (lambda () (interactive) (eshell t)))
+
 (global-set-key (kbd "M-\\") 'jao-toggle-selective-display)
 
 (global-set-key "\C-xh" (lambda (url) (interactive "MUrl: ") 
@@ -67,6 +69,8 @@
 
 ; just useful for learning new modes
 (global-set-key [f1] 'menu-bar-mode)
+
+(global-set-key (kbd "C-h a") 'apropos)
 
 (global-set-key [f2] (lambda () (interactive) 
 		       (set-default-font "-xos4-terminus-medium-r-normal--16-160-72-72-c-80-iso8859-9")
