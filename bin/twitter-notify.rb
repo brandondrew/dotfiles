@@ -16,7 +16,7 @@ require 'yaml'
 # end
 
 DOTFILE = File.expand_path('~/.twitter-notify')
-client = Twitter::Client.new(:login => 'technomancy', :password => 'AElenaB')
+client = Twitter::Client.new(:login => 'technomancy', :password => File.read(File.expand_path('~/.twitter_password')))
 
 while true do
   begin
