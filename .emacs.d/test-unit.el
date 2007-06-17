@@ -137,7 +137,6 @@
       (ruby-end-of-block)
       (end-of-line)
       (overlay-put (make-overlay method-start (point)) 'face face))))
-;    (font-lock-append-text-property method-start (point) 'background-color 'red))))
 
 (provide 'test-unit)
 ;;; test-unit.el ends here

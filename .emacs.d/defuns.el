@@ -92,9 +92,6 @@
     (flush-lines "^;")
     (end-of-buffer)
     (let ((loc (line-number-at-pos)))
-      (undo)
-      (undo)
-      (undo)
       (message (number-to-string loc) " lines of code"))))
 
 
