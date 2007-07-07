@@ -42,8 +42,6 @@
 (put 'downcase-region 'disabled nil)
 (defalias 'yes-or-no-p 'y-or-n-p)
 (defalias 'qrr 'query-replace-regexp)
-(setq display-time-format "%r")
-(display-time)
 (random t)
 ;(add-to-list 'bs-configurations
 ;	     '("gnus" nil nil "^[^#]" nil nil))

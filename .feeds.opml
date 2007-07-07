@@ -46,6 +46,10 @@
 	       description="What's new in tech."
 	       htmlUrl="http://radar.oreilly.com/"
 	       xmlUrl="http://radar.oreilly.com/feed" />
+      <outline text="Hyperstruct"
+	       description="Creator of Mozlab"
+	       htmlUrl="http://hyperstruct.net/"
+	       xmlUrl="http://feeds.feedburner.com/hyperstruct" />
 
     </outline>
 

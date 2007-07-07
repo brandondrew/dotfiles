@@ -1,12 +1,15 @@
 #!/usr/bin/ruby
 
+$LOAD_PATH << File.dirname(__FILE__)
+
 require 'rubygems'
 require 'twitter'
 require 'hpricot'
 require 'yaml'
 require 'dbus'
 require 'notify'
-require 'thinklight' rescue
+require 'thinklight'
+
 
 TwitterClient = Twitter::Client.new(:login => 'technomancy',
                                     :password => File.read(File.expand_path("~/.twitter_password")))

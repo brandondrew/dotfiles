@@ -2,6 +2,9 @@
 
 ;; Copyright (C) 2007 Phil Hagelberg
 
+;; Author: Phil Hagelberg
+;; URL: http://dev.technomancy.us/wiki/behave.el
+
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
 ;; the Free Software Foundation; either version 1, or (at your option)
@@ -64,12 +67,13 @@
 
 ;; Main issues: more expect predicates and protected-let
 
-;;; Example usage:
+;;; Usage:
 
 ;; See meta.el for specifications for behave.el. Evaluate meta.el and
 ;; M-x specifications meta RET to see the specifications explained.
 
-(require 'cl)
+(eval-when-compile
+  (require 'cl))
 
 (defvar *behave-contexts* '()
   "A list of contexts and their specs.")

@@ -49,4 +49,12 @@
     (when this-match
       (append (list this-match) (match-strings string (+ 1 n))))))
 
+(defun rails-root (&optional dir)
+  (or dir (setq dir default-directory))
+  (if (file-exists-p (concat dir "config/environment.rb"))
+      dir
+    (if (equal dir  "/")
+	nil
+      (rails-root (expand-file-name (concat dir "../"))))))
+
 (provide 'rhtml-navigation)

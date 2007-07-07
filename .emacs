@@ -26,12 +26,12 @@
 (toggle-debug-on-error)
 
 (add-to-list 'load-path "~/.emacs.d")
-(add-to-list 'load-path "~/.emacs.d/rinari")
+;(add-to-list 'load-path "~/.emacs.d/rinari")
 (add-to-list 'load-path "~/.emacs.d/rinari/rhtml")
+(add-to-list 'load-path "~/.emacs.d/rails")
 (add-to-list 'load-path "~/.emacs.d/jabber")
 (add-to-list 'load-path "~/.emacs.d/w3m")
 (add-to-list 'load-path "~/.emacs.d/dictionary")
-(add-to-list 'load-path "/usr/share/emacs/site-lisp/sawfish/")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; loading modes
@@ -41,23 +41,22 @@
 (autoload 'css-mode "css-mode")
 (autoload 'js-mode "js-mode" "" t)
 (autoload 'moz-minor-mode "moz" "Mozilla Minor and Inferior Mozilla Modes" t)
-(autoload 'tabbar-mode "tabbar")
 (autoload 'lisppaste-paste-region "lisppaste" "" t)
 (autoload 'ebby "ebby" "" t)
 (autoload 'htmlize-region "htmlize" "" t)
 (autoload 'htmlize-buffer "htmlize" "" t)
 (autoload 'color-theme-zenburn "zenburn")
 (autoload 'textile-to-html-region "textilize")
-(autoload 'sawfish-mode "sawfish" "" t)
 (autoload 'pastie-region "pastie" "" t)
 (autoload 'jabber-connect "jabber" "" t)
 (autoload 'w3m "w3m" "" t)
 (autoload 'tail-file "tail.el" "Tail a file." t)
 
 (require 'psvn)
+(require 'toggle)
 (require 'compile)
 (require 'which-func)
-(require 'elunit)
+(require 'wrap-region)
 
 (add-to-list 'auto-mode-alist '("\\.php$" . php-mode))
 (add-to-list 'auto-mode-alist '("\\.css$" . css-mode))
@@ -72,8 +71,8 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; My support files and configurations
 
-(require 'bindings)
 (require 'ruby)
+(require 'bindings)
 (require 'lisp)
 (require 'helma)
 (require 'registers)
@@ -106,7 +105,7 @@
 ; C-r k Rectangle kill
 
 ; C-x h select all
-; C-M-\ indent
+; C-M-\ indent-region
 
 ; Macros
 ; C-m C-r to begin
@@ -121,10 +120,11 @@
 ; M-C-p, M-C-n back and forward blocks
 ; C-c C-s irb when in ruby-mode
 
-; C-x n n narrow visibility of buffer to selection
+; C-x n n narrow visibility of buffer to region
 ; C-x n w widen to full buffer
 
 ; Dired
 ; mark with 'm', press 'Q' for multi-file find/replace
 ; C-j launch dired when ido-mode is enabled
 
+; list-colors-display

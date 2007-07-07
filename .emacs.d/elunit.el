@@ -2,12 +2,14 @@
 
 ;; Copyright (C) 2006 Phil Hagelberg
 
-;; Inspired by regress.el by Wayne Mesard and Tom Breton, Test::Unit
-;; by Nathaniel Talbott, and xUnit by Kent Beck
+;; Author: Phil Hagelberg
+;; URL: http://dev.technomancy.us/wiki/ElUnit
+
+;;; License:
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
-;; the Free Software Foundation; either version 1, or (at your option)
+;; the Free Software Foundation; either version 2, or (at your option)
 ;; any later version.
 ;;
 ;; This program is distributed in the hope that it will be useful,
@@ -15,13 +17,27 @@
 ;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ;; GNU General Public License for more details.
 ;;
-;; A copy of the GNU General Public License can be obtained from the
-;; Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.
+;; You should have received a copy of the GNU General Public License
+;; along with GNU Emacs; see the file COPYING.  If not, write to the
+;; Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+;; Boston, MA 02110-1301, USA.
+
+;;; Description:
+
+;; Inspired by regress.el by Wayne Mesard and Tom Breton, Test::Unit
+;; by Nathaniel Talbott, and xUnit by Kent Beck
+
+;; elunit exists to accomodate test-driven development of Emacs Lisp
+;; programs. Tests are divided up into suites. Each test makes a number
+;; of assertions to ensure that things are going according to expected.
+
+;;; Usage:
 
 ;; See http://dev.technomancy.us/phil/wiki/ElUnit for usage details.
 
-(require 'cl)
-(require 'compile)
+(eval-when-compile 
+  (require 'cl)
+  (require 'compile))
 
 (defvar *elunit-suites*
   '((default-suite ()))

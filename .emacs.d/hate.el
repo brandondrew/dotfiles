@@ -41,6 +41,9 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Init
 
+(eval-when-compile
+  (require 'cl))
+
 (defgroup utu nil
   "Interface to the Utu communications protocol."
   :version "22.1"
@@ -81,8 +84,6 @@
 (defvar utu-recv-count 0)
 (defvar utu-config) ;; hash?
 (defvar utu-socket-name)
-
-(require 'cl)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

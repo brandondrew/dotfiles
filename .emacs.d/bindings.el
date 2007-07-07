@@ -20,8 +20,8 @@
 (global-set-key "\C-x." (lambda () (interactive) (enlarge-window 1 t)))
 (global-set-key "\C-x," (lambda () (interactive) (shrink-window 1 t)))
 
-(global-set-key "\C-xd" (lambda () (interactive) 
-			  (shell-command (concat "dict " (read-string (concat "Define word (default " (word-at-point) "): ") nil nil (word-at-point))))))
+(global-set-key "\C-xd" (lambda () (interactive)
+                          (shell-command (concat "dict " (read-string (concat "Define word (default " (word-at-point) "): ") nil nil (word-at-point))))))
 
 (global-set-key (kbd "C-c e") 'fc-eval-and-replace)
 (global-set-key (kbd "C-x m") 'eshell)
@@ -29,10 +29,10 @@
 
 (global-set-key (kbd "M-\\") 'jao-toggle-selective-display)
 
-(global-set-key "\C-xh" (lambda (url) (interactive "MUrl: ") 
-			  (switch-to-buffer (url-retrieve-synchronously url))
-			  (rename-buffer url t)
-			  (html-mode)))
+(global-set-key "\C-xh" (lambda (url) (interactive "MUrl: ")
+                          (switch-to-buffer (url-retrieve-synchronously url))
+                          (rename-buffer url t)
+                          (html-mode)))
 
 (setq outline-minor-mode-prefix [(control o)])
 
@@ -55,28 +55,22 @@
 (setq bs-cycle-configuration-name "files")
 (global-set-key (kbd "C-x C-b") 'bs-show)
 
-; 2D spatial buffer-switching
-(global-set-key [(control shift p)] 'tabbar-backward-group)
-(global-set-key [(control shift n)] 'tabbar-forward-group)
-(global-set-key [(control shift b)] 'tabbar-backward)
-(global-set-key [(control shift f)] 'tabbar-forward)
-
-; sometimes my hands aren't in the right place
-(global-set-key [(control shift up)] 'tabbar-backward-group)
-(global-set-key [(control shift down)] 'tabbar-forward-group)
-(global-set-key [(control shift left)] 'tabbar-backward)
-(global-set-key [(control shift right)] 'tabbar-forward)
-
 ; just useful for learning new modes
 (global-set-key [f1] 'menu-bar-mode)
 
 (global-set-key (kbd "C-h a") 'apropos)
 
-(global-set-key [f2] (lambda () (interactive) 
-		       (set-default-font "-xos4-terminus-medium-r-normal--16-160-72-72-c-80-iso8859-9")
+(global-set-key [f2] (lambda () (interactive)
+                       (set-default-font "-xos4-terminus-medium-r-normal--16-160-72-72-c-80-iso8859-9")
 		       (set-face-attribute 'erb-face nil :background "grey18")
 		       (set-face-attribute 'erb-delim-face nil :background "grey15")
-		       (color-theme-zenburn)))
+		       (set-face-attribute 'flymake-errline nil :background "Maroon4")
+		       (set-face-attribute 'test-unit-pass-face nil :background "PaleGreen4")
+		       (set-face-attribute 'test-unit-fail-face  nil :background "firebrick3")
+		       (set-face-attribute 'test-unit-error-face nil :background "sienna")
+		       (set-face-attribute 'test-unit-line-face nil :background "firebrick4")
+                       (color-theme-zenburn)))
+
 (global-set-key [(control shift 2)] 'mark-string)
 (global-set-key [(shift f2)] 'color-theme-standard)
 
@@ -96,11 +90,11 @@
 ;; For Ebby debugging, mostly
 (global-set-key [f7] (lambda () (interactive) (message "%s" (point))))
 
-(global-set-key [f9] '(lambda () 
-			(interactive) 
-			(if (get-buffer "*ansi-term*")
-			    (switch-to-buffer "*ansi-term*")
-			  (ansi-term "/bin/bash"))))
+(global-set-key [f9] '(lambda ()
+                        (interactive)
+                        (if (get-buffer "*ansi-term*")
+                            (switch-to-buffer "*ansi-term*")
+                          (ansi-term "/bin/bash"))))
 
 ; great for quick googles
 (global-set-key [f10] 'w3m)
@@ -111,8 +105,8 @@
 (global-set-key (kbd "C-h r") 'ri)
 
 (global-set-key [f12] '(lambda ()
-			 (interactive)
-			 (write-file "~/mjolnir/apps/technomancy/public/tmp/tmp.txt")))
+                         (interactive)
+                         (write-file "~/mjolnir/apps/technomancy/public/tmp/tmp.txt")))
 
 
 (add-hook 'c-mode-hook (lambda () (define-key c-mode-map "\C-\M-h" 'backward-kill-word)))

@@ -29,3 +29,5 @@ Host rubyforge.org
 Host *
   User phil
   KeepAlive yes
+
+GSSAPIAuthentication no

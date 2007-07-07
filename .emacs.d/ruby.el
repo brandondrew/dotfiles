@@ -14,19 +14,21 @@
 (global-font-lock-mode t)
 
 ; for zenburn niceness:
-;; (defface erb-face
-;;   `((t (:background "grey18")))
-;;   "Default inherited face for ERB tag body"
-;;   :group 'rhtml-faces)
+(defface erb-face
+  `((t (:background "grey18")))
+  "Default inherited face for ERB tag body"
+  :group 'rhtml-faces)
 
-;; (defface erb-delim-face
-;;   `((t (:background "grey15")))
-;;   "Default inherited face for ERB tag delimeters"
-;;   :group 'rhtml-faces)
+(defface erb-delim-face
+  `((t (:background "grey15")))
+  "Default inherited face for ERB tag delimeters"
+  :group 'rhtml-faces)
 
 (require 'ruby-electric)
-(require 'rinari)
+(require 'rails)
+(require 'rhtml-mode)
 (require 'ri-ruby)
+(require 'test-unit)
 
 (add-to-list 'auto-mode-alist '("\\.rb$" . ruby-mode))
 (add-to-list 'auto-mode-alist '("\\.rake$" . ruby-mode)) ; d'oh!
@@ -37,9 +39,7 @@
 
 (defun my-ruby-mode-hook ()
   (ruby-electric-mode)
-  (hs-minor-mode)
   (pretty-lambdas)
-  (if (= emacs-major-version 22) (reveal-mode))
   (define-key ruby-mode-map "\C-\M-h" 'backward-kill-word) ; ruby-mode redefines this badly
   (local-set-key (kbd "RET") 'ruby-reindent-then-newline-and-indent))
 
@@ -57,6 +57,9 @@
 		     (concat ruby-block-end-re "\|}")
 		     "#"
 		     'ruby-forward-sexp nil)))
+
+(define-key ruby-mode-map
+  "\C-c\C-t" 'toggle-buffer)
 
 ;; Thanks PragDave:
 

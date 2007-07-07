@@ -16,6 +16,7 @@
 (require 'slime)
 
 (add-hook 'emacs-lisp-mode-hook 'pretty-lambdas)
+(add-hook 'emacs-lisp-mode-hook 'eldoc-mode)
 (add-hook 'lisp-mode-hook 'pretty-lambdas)
 
 (add-hook 'emacs-lisp-mode-hook 
