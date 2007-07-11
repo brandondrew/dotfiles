@@ -50,7 +50,10 @@
 	       description="Creator of Mozlab"
 	       htmlUrl="http://hyperstruct.net/"
 	       xmlUrl="http://feeds.feedburner.com/hyperstruct" />
-
+      <outline text="Marshall Vandegrift"
+	       description="Platypope"
+	       htmlUrl="http://platypope.org/blog/syndicate"
+	       xmlUrl="http://platypope.org/blog/syndicate" />
     </outline>
 
     <outline text="Friends">
@@ -164,10 +167,6 @@
       <outline text="Penny Arcade"
 	       htmlUrl="http://www.penny-arcade.com/comic"
 	       xmlUrl="http://www.penny-arcade.com/rss.xml" />
-<!--       <outline text="xkcd" -->
-<!-- 	       description="A webcomic of romance, sarcasm, math, and language." -->
-<!-- 	       htmlUrl="http://xkcd.com" -->
-<!-- 	       xmlUrl="http://xkcd.com/rss.xml" /> -->
       <outline text="xkcd blagh"
 	       description="A webcomic of romance, sarcasm, math, and language."
 	       htmlUrl="http://xkcd.com"

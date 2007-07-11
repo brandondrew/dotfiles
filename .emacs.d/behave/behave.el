@@ -4,21 +4,32 @@
 
 ;; Author: Phil Hagelberg
 ;; URL: http://dev.technomancy.us/wiki/behave.el
+;; Created: 19 Jan 2007
+;; Version: 0.1
+;; Keywords: bdd specification specs
 
-;; This program is free software; you can redistribute it and/or modify
-;; it under the terms of the GNU General Public License as published by
-;; the Free Software Foundation; either version 1, or (at your option)
-;; any later version.
-;;
-;; This program is distributed in the hope that it will be useful,
-;; but WITHOUT ANY WARRANTY; without even the implied warranty of
-;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-;; GNU General Public License for more details.
-;;
-;; A copy of the GNU General Public License can be obtained from the
-;; Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.
+;; This file is NOT part of GNU Emacs.
 
-;;; Description:
+;; This is free software; you can redistribute it and/or modify it under
+;; the terms of the GNU General Public License as published by the Free
+;; Software Foundation; either version 3, or (at your option) any later
+;; version.
+
+;; This file is distributed in the hope that it will be useful, but
+;; WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+;; General Public License for more details.
+
+;; You should have received a copy of the GNU General Public License
+;; along with Emacs; see the file COPYING, or type `C-h C-c'. If not,
+;; write to the Free Software Foundation at this address:
+
+;;   Free Software Foundation
+;;   51 Franklin Street, Fifth Floor
+;;   Boston, MA 02110-1301
+;;   USA
+
+;;; Commentary:
 
 ;; behave.el allows you to write executable specifications for your
 ;; Emacs Lisp code. Executable specifications allow you to check that
@@ -65,7 +76,7 @@
 ;; See open tickets on my Trac:
 ;; http://dev.technomancy.us/phil/query?status=new&status=assigned&status=reopened&component=behave&order=priority
 
-;; Main issues: more expect predicates and protected-let
+;; Main issues: more expect predicates
 
 ;;; Usage:
 
@@ -160,8 +171,14 @@
   (condition-case failure
       (mapcar #'execute-spec (reverse (context-specs context)))
     (error (princ "E")
+	   (switch-to-buffer "*behave*")
+	   (overlay-put (make-overlay (point) (- (point) 1)) 'face '(foreground-color . "red"))
+	   (switch-to-buffer nil)
 	   (add-to-list 'failures (list "Error:" failure) t))
     (failure (princ "F")
+	     (switch-to-buffer "*behave*")
+	     (overlay-put (make-overlay (point) (- (point) 1)) 'face '(foreground-color . "red"))
+	     (switch-to-buffer nil)
 	     (add-to-list 'failures (cdr failure) t))))
 
 (defun execute-spec (spec)
@@ -179,8 +196,11 @@
 		 " specification" (unless (= 1 spec-count) "s") 
 		 ". (" (number-to-string (- (cadr (current-time)) start-time)) " seconds)\n\n"))
   (dolist (failure failures)
-    (princ failure)
-    (princ "\n\n")))
+    (behave-report-result failure)))
+
+(defun behave-report-result (failure)
+  (princ failure)
+  (princ "\n\n"))
 
 (defun specifications (&optional tags)
   "Show specifications for all contexts that match given tags"

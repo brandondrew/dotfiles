@@ -1,5 +1,8 @@
 (require 'rcirc)
 
+;; example:
+;(setq rcirc-authinfo '(("freenode" nickserv "technomancy" "password")))
+
 (add-hook 'rcirc-mode-hook (lambda () (rcirc-track-minor-mode 1)))
 
 ;; Turn on spell checking.
@@ -13,7 +16,7 @@
 		 8192)))
 
 (setq rcirc-default-nick "technomancy")
-(setq rcirc-startup-channels-alist '(("^irc.freenode.net$" "#conkeror" "#emacs" "#ruby-lang" "#helma")))
+(setq rcirc-startup-channels-alist '(("^irc.freenode.net$" "#conkeror" "#emacs" "#ruby-lang" "#helma" "#seattle.rb")))
 
 (setq rcirc-buffer-maximum-lines 10240)
 
