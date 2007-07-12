@@ -21,6 +21,7 @@
 (set-register ?c '(file . "~/.contacts"))
 (set-register ?f '(file . "~/.feeds.opml"))
 (set-register ?h '(file . "~/.emacs.d/hate.el"))
+(set-register ?u '(file . "~/.emacs.d/test-unit.el"))
 (set-register ?n '(file . "~/documents/NOTES"))
 
 

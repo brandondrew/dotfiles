@@ -48,7 +48,7 @@
 ;; For ruby-mode it adds a hook that will try to determine if a buffer
 ;; contains unit tests and switch to test-unit-mode if it does.  It
 ;; also requires that the "turn" library be installed. It's packaged
-;; as a gem, so "gem install turn" should get it.
+;; as a gem, but it needs to be installed in your load path.
 
 ;; If you want quick toggling between tests and implementation, (trust
 ;; me: if you're reading this, you do) try toggle.el:
@@ -60,6 +60,7 @@
 
 ;;; Todo:
 
+;;  * Meta-test
 ;;  * Finish behave.el support
 ;;  * Modeline could be better (moving indicator to the end)
 ;;  * Add in other languages? (PDI!)
@@ -68,7 +69,7 @@
 
 ;;  * Can't switch buffers while test is running
 ;;  * Test output larger than 15 lines or so can't be seen
-;;  * Certain test outputs cause errors in the filter
+;;  * Certain test outputs cause errors in the filter; need to isolate this problem.
 
 ;;; Code:
 
@@ -169,6 +170,7 @@
   (funcall colorize-test-function name 'test-unit-pass-face))
 
 (defun test-unit-fail-test (name)
+  ;; test-unit-problems should be a list of conses. (test-name . description)
   (push (cons name "") test-unit-problems)
   (force-mode-line-update)
   (funcall colorize-test-function name 'test-unit-fail-face))
@@ -203,7 +205,7 @@ problems table. Highlight the line if given."
 
 (defun test-unit-show-info ()
   (interactive)
-  (message (cdar (assoc (ruby-get-current-test) test-unit-problems))))
+  (message (cdr (assoc (ruby-get-current-test) test-unit-problems))))
 
 ;;;; Language-specific parts
 
@@ -231,14 +233,11 @@ problems table. Highlight the line if given."
       (overlay-put (make-overlay (ruby-beginning-of-method test) (ruby-end-of-method test)) 'face face)))
 
   (defun ruby-start-test-process (file &optional test)
-					; (set-process-buffer 
-			(if test
-			    (start-process "test-unit" nil
-					   "ruby" "-rturn" file "--name" test)
-			  (start-process "test-unit" nil
-					 "ruby" "-rturn" file)) 
-					;(current-buffer))
-			)
+    (if test
+	(start-process "test-unit" nil
+		       "ruby" "-rturn" file "--name" test)
+      (start-process "test-unit" nil
+		     "ruby" "-rturn" file)))
 	
 
   (defun ruby-test-filter (process output)
@@ -258,7 +257,9 @@ problems table. Highlight the line if given."
 	  ((string-match "\\(test[^ ]*\\) *ERROR$" output)
 	   (test-unit-error-test (match-string-no-properties 1 output)))
 	  ((string-match "^	\\(.*\\)$" output) ;; failure explanation uses tabs. ick!
-	   (test-unit-explain-problem (match-string-no-properties 1 output))))))
+	   (test-unit-explain-problem (match-string-no-properties 1 output)))
+	  ((string-match "/usr/bin/ruby: no such file to load -- turn (LoadError)" output)
+	   (error "Need to install \"turn\" library. The gem is not good enough; it must be on your site path.")))))
 
   ;; support functions
   (defun ruby-beginning-of-method (method)
