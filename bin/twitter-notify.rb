@@ -25,7 +25,7 @@ while true do
 
     statuses.reverse.each do |stat|
       unless already_displayed.include?(stat.id.to_s)
-        Notify.send(:message => stat.text, :title => "Twitter: #{stat.user.screen_name}", :seconds => 7)
+        Notify.send(:message => stat.text, :title => "Twitter: #{stat.user.screen_name}", :seconds => 7) unless stat.text.match(/iphone/i)
         already_displayed << stat.id
         File.open(DOTFILE, 'w') { |f| f.puts already_displayed[-25 .. -1].join("\n")}
         sleep 3
