@@ -94,6 +94,11 @@
     (let ((loc (line-number-at-pos)))
       (message (number-to-string loc) " lines of code"))))
 
+(defmacro case-string (expr &rest choices)
+  "A variation on the case macro that uses equal rather than eql, and is thus suitable for strings."
+  `(cond ,@(mapcar (lambda (c)
+		    `((equal ,expr ,(car c)) ,@(cdr c)))
+		    choices)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; music

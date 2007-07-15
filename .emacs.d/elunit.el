@@ -1,6 +1,6 @@
 ;;; elunit.el --- Emacs Lisp Unit Testing framework
 
-;; Copyright (C) 2006 Phil Hagelberg
+;; Copyright (C) 2006 - 2007 Phil Hagelberg
 
 ;; Author: Phil Hagelberg
 ;; URL: http://dev.technomancy.us/wiki/ElUnit
@@ -9,7 +9,7 @@
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
-;; the Free Software Foundation; either version 2, or (at your option)
+;; the Free Software Foundation; either version 3, or (at your option)
 ;; any later version.
 ;;
 ;; This program is distributed in the hope that it will be useful,
@@ -28,8 +28,21 @@
 ;; by Nathaniel Talbott, and xUnit by Kent Beck
 
 ;; elunit exists to accomodate test-driven development of Emacs Lisp
-;; programs. Tests are divided up into suites. Each test makes a number
-;; of assertions to ensure that things are going according to expected.
+;; programs. Tests are divided up into suites. Each test makes a
+;; number of assertions to ensure that things are going according to
+;; expected.  
+
+;; Tests are divided into suites for the purpose of hooks. These hooks
+;; are meant to allow for extra setup that happens once per test, for
+;; both before and after it runs.
+
+;;; Todo:
+
+;;  * setup/teardown hooks as properties of suite symbol
+;;  * restructure defsuite, allowing executable code inside it
+;;  * distinguish between assertion failures and other errors (like behave.el)
+;;  * port tagging system from behave.el?
+;;  * more assertions
 
 ;;; Usage:
 
@@ -54,13 +67,17 @@
   (when (symbolp suite) (setq suite (elunit-suite suite)))
   (assoc name suite))
 
-
 ;;; Defining tests
 
-(defmacro defsuite (suite-name &rest tests)
+(defmacro defsuite (suite-name &rest body)
   "This is what you use to set things up."
-  (dolist (test tests)
-    (elunit-add-to-suite (make-test test) suite-name)))
+  (set (make-local-variable (intern (concat (symbol-name suite-name) "-setup-hook"))) nil)
+  (set (make-local-variable (intern (concat (symbol-name suite-name) "-teardown-hook"))) nil)
+
+  (let ((suite-name ,suite-name))
+    ,@body))
+
+(defmacro deftest (name suite &rest body) `(let ((f (lambda () ,b)) (push (gethash suites ,suite) f))))
 
 (defun make-test (body)
   (let ((name (pop body)))
@@ -93,14 +110,13 @@
 					     *elunit-suites*) nil t nil nil *elunit-default-suite*)))
  (setq *elunit-default-suite* suite)
  (setq *elunit-fail-count* 0)
- (run-hooks (intern (concat suite "-setup-hook")))
+
  (with-output-to-temp-buffer "*elunit*"
    (princ (concat "Loaded suite: " suite "\n\n"))
    (let ((tests (elunit-suite (intern suite)))
 	 (start-time (cadr (current-time))))
      (elunit-report-results (mapcar (lambda (test) (apply 'elunit-run-test test)) tests))
-     (princ (format " in %d seconds." (- (cadr (current-time)) start-time)))))
- (run-hooks (intern (concat suite "-teardown-hook"))))
+     (princ (format " in %d seconds." (- (cadr (current-time)) start-time))))))
 
 (defun elunit-run-test (name body file-name line-number)
   (let* ((passed nil)
@@ -137,8 +153,8 @@
     Result: %s
       Form: %s" index name file-name line-number docstring result (car body))))
 
-(add-hook 'temp-buffer-show-hook 'compilation-minor-mode)
-;(add-to-list 'compilation-error-regexp-alist '("\\[\\([^:]*\\):\\([0-9]+\\)" 1 2))
+(add-hook 'temp-buffer-pshow-hook 'compilation-minor-mode)
 (add-to-list 'compilation-error-regexp-alist '("\\[\\([^\]]*\\):\\([0-9]+\\)\\]" 1 2))
 
 (provide 'elunit)
+;;; elunit.el ends here

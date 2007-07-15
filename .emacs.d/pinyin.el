@@ -1,10 +1,9 @@
-;; ā á ǎ à a
+;; ā á ă à a
 ;; ē é ě è e
-;; ī í ǐ ì i
-;; ō ó ǒ ò o
-;; ū ú ǔ ù u
+;; ī í ĭ ì i
+;; ō ó ŏ ò o
+;; ū ú ŭ ù u
 ;; ǖ ǘ ǚ ǜ ü
-
 
 (defun macron-char (c)
   (case-string c
@@ -15,13 +14,13 @@
     ("u" "ū")
     (t c)))
 
-(defun caron-char (c)
+(defun breve-char (c)
   (case-string c
-    ("a" "ǎ")
+    ("a" "ă")
     ("e" "ě")
-    ("i" "ǐ")
-    ("o" "ǒ")
-    ("u" "ǔ")
+    ("i" "ĭ")
+    ("o" "ŏ")
+    ("u" "ŭ")
     (t c)))
 
 (defun macron-prev ()
@@ -30,13 +29,13 @@
     (backward-delete-char 1)
     (insert (macron-char char))))
 
-(defun caron-prev ()
+(defun breve-prev ()
   (interactive)
   (let ((char (buffer-substring (- (point) 1) (point))))
     (backward-delete-char 1)
-    (insert (caron-char char))))
+    (insert (breve-char char))))
 
 (global-set-key "\C-x_" 'macron-prev)
-(global-set-key "\C-x(" 'caron-prev)
+(global-set-key "\C-x(" 'breve-prev)
 
 (provide 'pinyin)

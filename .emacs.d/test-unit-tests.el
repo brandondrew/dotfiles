@@ -2,31 +2,60 @@
 
 ;; Copyright (C) 2007 Phil Hagelberg
 
+(require 'test-unit)
 (require 'elunit)
 
-;; (context "passing tests"
-;; 	 (tag test-unit passing)
-;; 	 (specify "should highlight tests")
-;; 	 (specify "should increase passing count"))
+(elunit-clear-suites)
 
-;; (context "running tests"
-;; 	 (tag test-unit running)
-;; 	 (specify "should run all tests")
-;; 	 (specify "should run filter once per line")
-;; 	 (specify "should be able to run a single test"))
+(defvar sample-file "test-unit-sample.rb")
 
-;; (context "failing tests"
-;; 	 (tag test-unit failing)
-;; 	 (specify "should store failure data"
-;; 		  (save-excursion
-;; 		    (find-file "test-unit-sample.rb")
-;; 		    (test-unit-clear)
-;; 		    (test-unit-run-tests "test_will_fail")
-;; 		    (expect (length test-unit-problems) equal 0)))    ;; ensure the proper description is included
-;; 	 (specify "should store line number")
-;; 	 (specify "should jump to failures")
-;; 	 (specify "should highlight failure")
-;; 	 (specify "should highlight error")
-;; 	 (specify "should show failure info")) ;; currently broken
+;;; The tests:
+
+(defsuite test-unit
+   (deftest passing-tests-should-indicate-success
+     (with-current-buffer sample-file
+       (assert (equal 3 test-unit-pass-count))))
+
+  (deftest problematic-tests
+   (with-current-buffer sample-file
+     (let ((error-description (assoc "test_might_error" test-unit-problems))
+	   (failure-description (assoc "test_will_fail" test-unit-problems)))
+       (assert error-description)
+       (assert (string-match "undefined method `foo'" (cdr error-description)))
+       ;; should store line number
+       ;; should jump to failures
+       (assert failure-description)
+       (assert (string-match "bad length" (cdr failure-description))))))
+
+  (deftest should-highlight-test
+
+   )
+
+(defsuite test-unit-single-test
+
+)
+
+;; setup
+
+(defun wait-for-finished-tests ()
+  (while (get-process "test-unit")
+    (sit-for 0.3)))
+
+(defun run-sample-tests ()
+  (find-file sample-file)
+  (switch-to-buffer sample-file)
+  (test-unit-clear)
+  (test-unit-run-tests)
+  (wait-for-finished-tests)) ; wait for tests to run
+
+(add-hook 'test-unit-suite-setup-hook 'run-sample-tests)
+
+;; Run the tests if eval-ed from current buffer
+
+(if (string= (buffer-name (current-buffer)) "test-unit-tests.el")
+    (elunit "test-unit"))
+
+;; run tests
+(local-set-key "\C-c\C-t" 'eval-buffer)
 
 ;; test these things for every supported framework?

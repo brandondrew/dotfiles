@@ -73,10 +73,10 @@
 
 (require 'ruby)
 (require 'bindings)
+(require 'defuns)
 (require 'lisp)
 (require 'helma)
 (require 'registers)
-(require 'defuns)
 (require 'misc)
 
 (if (functionp 'rcirc)

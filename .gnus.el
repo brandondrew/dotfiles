@@ -42,6 +42,7 @@
 	  (any "helma" "helma")
 	  (any "utuprotocol" "utu")
 	  (any "emacs-devel" "emacs-devel")
+	  (any "SeattleTech" "seattle-tech")
 
 	  (any "i5labs\.com" "i5labs")
 	  (any "Jason Wong" "i5labs")

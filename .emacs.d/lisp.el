@@ -19,14 +19,13 @@
 (add-hook 'emacs-lisp-mode-hook 'eldoc-mode)
 (add-hook 'lisp-mode-hook 'pretty-lambdas)
 
-(add-hook 'emacs-lisp-mode-hook 
- 	  (lambda ()
- 	    (font-lock-add-keywords nil 
- 				    '(("(\\|)" . 'paren-face)))))
-(add-hook 'lisp-mode-hook 
- 	  (lambda ()
- 	    (font-lock-add-keywords nil 
- 				    '(("(\\|)" . 'paren-face)))))
+(defun my-lisp-hook ()
+  (local-set-key (kbd "RET") 'reindent-then-newline-and-indent)
+  (font-lock-add-keywords nil 
+			  '(("(\\|)" . 'paren-face))))
+
+(add-hook 'emacs-lisp-mode-hook 'my-lisp-hook)
+(add-hook 'lisp-mode-hook 'my-lisp-hook)
 
 (defface paren-face
    '((((class color) (background dark))

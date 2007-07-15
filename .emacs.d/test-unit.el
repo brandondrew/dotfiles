@@ -60,14 +60,16 @@
 
 ;;; Todo:
 
-;;  * Meta-test
+;;  * Finish meta-test (test-unit-tests.el)
 ;;  * Finish behave.el support
 ;;  * Modeline could be better (moving indicator to the end)
 ;;  * Add in other languages? (PDI!)
+;;  * Allow more than one test process to run at once
+;;    (by making test-unit-currently-running-buffer process-local, not global)
 
 ;;; Bugs:
 
-;;  * Can't switch buffers while test is running
+;;  * No output if there's a syntaxt error in the test
 ;;  * Test output larger than 15 lines or so can't be seen
 ;;  * Certain test outputs cause errors in the filter; need to isolate this problem.
 
@@ -96,6 +98,9 @@
   "Face for errored unit tests"
   :group 'test-unit-faces)
 
+;; FIXME: should be process-local rather than global; see process-put
+(defvar test-unit-currently-running-buffer nil
+  "Which buffer the currently-running tests reside in")
 
 (define-minor-mode test-unit-mode
   "Major mode for editing and running unit tests.
@@ -129,6 +134,7 @@
   (interactive)
   (save-some-buffers)
   (test-unit-clear)
+  (setq test-unit-currently-running-buffer (current-buffer))
   (let ((process (funcall start-test-process-function (buffer-file-name) test)))
     (set-process-filter process 'test-unit-filter)))
 
@@ -145,6 +151,7 @@
 
 (defun test-unit-clear ()
   (interactive)
+  (setq test-unit-currently-running-buffer nil)
   (setq test-unit-pass-count 0)
   (setq test-unit-problems ())
   (setq test-unit-failure-lines ())
@@ -155,14 +162,16 @@
   "Calls appropriate test-filter only when a full line has been received."
   ;; SO bloody annoying; why can't processes do this by default?!
   ;; At least we can use the Power of Recursion (tm)!
-  (if (string-match "\n" output)
-      (progn
-	;; Send everything up to the first newline to the real filter
-	(funcall test-filter-function process (concat test-unit-incomplete-line (car (split-string output "\n"))))
-	;; Recurse on the rest
-	(test-unit-filter process (substring output (+ 1 (string-match "\n" output)))))
-    ;; Save the remainder to a buffer
-    (setq test-unit-incomplete-line (concat test-unit-incomplete-line output))))
+  (with-current-buffer test-unit-currently-running-buffer
+    (if (string-match "\n" output)
+	(progn
+	  ;; Send everything up to the first newline to the real filter
+	  (funcall test-filter-function
+		   process (concat test-unit-incomplete-line (car (split-string output "\n"))))
+	  ;; Recurse on the rest
+	  (test-unit-filter process (substring output (+ 1 (string-match "\n" output)))))
+      ;; Save the remainder to a buffer
+      (setq test-unit-incomplete-line (concat test-unit-incomplete-line output)))))
 
 (defun test-unit-pass-test (name)
   (incf test-unit-pass-count)
@@ -190,6 +199,7 @@ problems table. Highlight the line if given."
 
 (defun test-unit-tests-running ()
   (message "Tests running..."))
+
 (defun test-unit-tests-done ()
   (setq test-unit-failure-lines (sort test-unit-failure-lines '<))
   (message "Tests running...done"))
@@ -244,9 +254,7 @@ problems table. Highlight the line if given."
     "Do a different thing based on the output of the test."
     (setq test-unit-incomplete-line "")
     (save-excursion
-      ;; FIXME: switch to proper buffer
-      ;;    (switch-to-buffer (getf (process-plist process) :test-buffer))
-    (cond ((string-match "^Loaded suite" output)
+     (cond ((string-match "^Loaded suite" output)
 	   (test-unit-tests-running))
 	  ((string-match "==============================================================================" output)
 	   (test-unit-tests-done))
