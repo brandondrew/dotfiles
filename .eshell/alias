@@ -1,0 +1,10 @@
+alias xmlcurl curl -H Accept:text/xml $*
+alias saptd sudo apt-get update $*
+alias saptu sudo apt-get upgrade $*
+alias saptr sudo apt-get remove $*
+alias l ls -a -l $*
+alias la ls -a $*
+alias ll ls -l $*
+alias sapts sudo apt-cache show $*
+alias saptc sudo apt-cache search $*
+alias sapti sudo apt-get install $*
