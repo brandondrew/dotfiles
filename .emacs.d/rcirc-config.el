@@ -109,6 +109,7 @@ To check out the list, evaluate (list-colors-display rcirc-colors).")
   (when (and
 	 (string-match (rcirc-nick a) e)
 	 (not (string-match (concat "<" (rcirc-nick a) ">") e))) ; but, ignore my own messages 
-    (shell-command (concat (concat "notify-send \"" (shell-quote-argument (car (split-string b "!"))) " said your nick\" \"" (shell-quote-argument e) "\"")))))
+    (shell-command (concat "notify-send \"" (car (split-string b "!")) " said
+    your nick\" \"" e "\""))))
 
 (load "rcirc-completion")

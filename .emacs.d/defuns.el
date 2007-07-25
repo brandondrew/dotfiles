@@ -27,6 +27,21 @@
   (shell-command (concat "display " 
 			 (thing-at-point 'filename))))
 
+(defun view-url (url) (interactive "MUrl: ")
+                          (switch-to-buffer (url-retrieve-synchronously url))
+                          (rename-buffer url t)
+                         (eval ;set major mode
+  (read
+   (concat
+    "("
+    (completing-read "Major mode: "
+                     (mapcar (lambda
+                               (x)
+                               (list (symbol-name x)))
+                             (apropos-internal "-mode$"
+                                               'commandp))
+                     nil t) ")"))))
+
 (defun flickr-grab ()
   "Display only the photo from a flickr url"
   (interactive)
@@ -36,7 +51,7 @@
        (re-search-backward "src=\"\\(http://static\\.flickr\\.com/[[:digit:]]*/[[:digit:]]*\_[[:alnum:]]*\\.jpg\\)")
        (match-string 1)))))
 
-(defun map-coords (lat lon)
+(defun map-coords (lat lng)
   (interactive "BLatitude: \nBLongitude")
   (w3m-browse-url (concat "http://maps.yahoo.com/maps_result?mag=12&lat="
 			  lat "&lon=" lng)))

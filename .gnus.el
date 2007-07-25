@@ -3,6 +3,7 @@
 (setq gnus-secondary-select-methods '((nnml ""
 					    (nnml-directory "~/Mail"))))
 
+(setq gnus-home-directory "~/.emacs.d")
 (setq user-mail-address "phil@hagelb.org")
 (setq user-full-name "Phil Hagelberg")
 (setq gnus-ignored-from-addresses "Phil Hagelberg")
@@ -30,6 +31,7 @@
       '(| (to "ruby-talk@ruby-lang\\.org" "ruby-talk")
 	  (to "ruby_emacs_dev@yahoogroups\\.com" "emacs-rails")
 	  (to "rubyonrails-talk@googlegroups.com" junk)
+	  ("subject" "^\\[Rails\\]" junk)
 	  (to "obby-users@list.0x539.de" "obby-users")
 	  (any "darjeeling" "darjeeling")
 	  (any "conkeror" "conkeror")
@@ -44,22 +46,14 @@
 	  (any "emacs-devel" "emacs-devel")
 	  (any "SeattleTech" "seattle-tech")
 
-	  (any "i5labs\.com" "i5labs")
-	  (any "Jason Wong" "i5labs")
-	  (any "Brent Cohen" "i5labs")
-	  (any "Howard Brown" "i5labs")
-	  (any "circlebuilder" "i5labs")
-
+	  (any "team@circlebuilder\.com" junk)
 	  (any "philh@paxtel" junk)
 	  (any "cron" junk)
-;	  (& (from "Junk Mail Watcher" junk)
-;	     (to "lists@hagelb.org" junk))
 
 	  (to "phil@localhost" "feeds")
 
 	  (any "zacchaeus.*" "friends")
 
-	  (any ".*kleist.*" "grace-group")
 	  (any "alisha\\.e\\.hagelberg@biola\\.edu" "alisha")
 	  (from "agelberg" - "Alisha" "family")
 
@@ -76,8 +70,7 @@
 	  (any "Joel Watson" "friends")
 	  "inbox"))
 
-(setq mail-sources '((file
-		      :path "/var/mail/phil")))
+(setq mail-sources '((file :path "/var/mail/phil")))
 
 (setq imap-ssl-program "/usr/bin/openssl s_client -ssl3 -connect %s:%p")
 (setq gnus-agent-expire-days 0)
@@ -108,6 +101,10 @@
   (setq nnir-mail-backend (nth 0 gnus-secondary-select-methods)))
 
 (add-hook 'gnus-group-mode-hook 'gnus-topic-mode)
+(setq gnus-use-full-window nil)
+
+(mailcap-add "image/jpeg" "display")
+
 ;; (setq gnus-buffer-configuration 
 ;;       '((group (vertical 1.0 (group 1.0 point)))
 ;; 	(summary (vertical 1.0 (summary 1.0 point)))

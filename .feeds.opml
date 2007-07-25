@@ -178,10 +178,6 @@
 	       xmlUrl="http://www.wondermark.com/wondermarkrss.xml" />
 
     </outline>
-      <outline text="Ze Frank"
-	       description="League of Awesomeness"
-	       htmlUrl="http://zefrank.com"
-	       xmlUrl="http://www.zefrank.com/atom.xml" />
 
   </body>
 </opml>

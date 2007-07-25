@@ -31,7 +31,7 @@ while true do
         sleep 3
       end
     end
-  rescue IOError
+  rescue IOError, SocketError
   end
   sleep 300
 end

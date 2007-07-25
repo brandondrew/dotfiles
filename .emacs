@@ -82,16 +82,12 @@
 (if (functionp 'rcirc)
     (load "rcirc-config"))
 
+(if (functionp 'jabber-connect)
+    (load "jabber-config"))
+
 (let ((system-specific-config (concat "~/.emacs.d/" (substring (shell-command-to-string "hostname") 0 -1)".el")))
   (if (file-exists-p system-specific-config)
       (load system-specific-config)))
-
-(when (functionp 'jabber-connect)
-  (setq jabber-nickname "")
-  (setq jabber-password nil)
-  (setq jabber-resource (concat "emacs-" (shell-command-to-string "hostname")))
-  (setq jabber-server "hagelb.org")
-  (setq jabber-username "phil"))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;    Nifty things to remember and hopefully use
