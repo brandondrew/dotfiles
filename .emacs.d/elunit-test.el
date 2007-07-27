@@ -13,10 +13,10 @@
 (assert (elunit-get-suite 'meta-suite))
 (assert (test-suite-setup-hook (elunit-get-suite 'meta-suite)))
 (assert (test-suite-teardown-hook (elunit-get-suite 'meta-suite)))
-(assert (equal 1 (length elunit-suites)))
+(assert (equal 2 (length elunit-suites)))
 
 (elunit-delete-suite 'meta-suite)
-(assert (equal 0 (length elunit-suites)))
+(assert (equal 1 (length elunit-suites)))
 
 (defsuite meta-suite nil
   :teardown-hook (lambda () (message "done testing")))
@@ -25,7 +25,7 @@
   :teardown-hook (lambda () (message "done testing")))
 
 ;; should still be a single suite
-(assert (equal 1 (length elunit-suites)))
+(assert (equal 2 (length elunit-suites)))
 ;; make sure it's the right one; shouldn't have a setup-hook
 (assert (not (test-suite-setup-hook (elunit-get-suite 'meta-suite))))
 
@@ -58,9 +58,34 @@
 (assert (equal 47
 	       (test-line (elunit-get-test 'empty-test 'meta-suite))))
 
-;; should allow hierarchical suites
+;; should run a suite
+
+(save-excursion
+  (delete-other-windows)
+  (elunit "meta-suite")
+  (other-window 1)
+  ;; Will signal an error if not found.
+  (search-forward "meta-suite")
+  (kill-buffer (current-buffer))
+  (other-window 1))
 
 ;; should run a suite's tests plus a suite's children
+
+(defsuite child-suite meta-suite)
+
+(deftest child-test child-suite
+  "put some crap in the elunit buffer"
+  ;; must use princ to take advantage of with-output-to-temp-buffer
+  (princ "some crap"))
+
+(save-excursion
+  (delete-other-windows)
+  (elunit "meta-suite")
+  (other-window 1)
+  ;; Will signal an error if not found.
+  (search-forward "some crap")
+  (kill-buffer (current-buffer))
+  (other-window 1))
 
 (message "looks like it works. what do you want, a gold star?")
 
