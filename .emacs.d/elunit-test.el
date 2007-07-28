@@ -1,110 +1,124 @@
 (require 'cl)
-(require 'elunit)
+(load "elunit")
+
+(make-local-variable 'after-save-hook)
+(add-hook 'after-save-hook (lambda () (elunit "meta-suite")))
 
 (elunit-clear-suites)
 
 ;; Meta suite
 
-(defsuite meta-suite nil ; nil means it's not part of a larger suite. suites can be nested.
-  ;; put something here if needed...
-  :setup-hook (lambda () (message "started tests"))
-  :teardown-hook (lambda () (message "done testing")))
+(defsuite meta-suite nil)
 
-(assert (elunit-get-suite 'meta-suite))
-(assert (test-suite-setup-hook (elunit-get-suite 'meta-suite)))
-(assert (test-suite-teardown-hook (elunit-get-suite 'meta-suite)))
-(assert (equal 2 (length elunit-suites)))
+(deftest assertions meta-suite
+  "Let's make sure our assertions work."
+  (assert-equal 2 (+ 1 1))
+  (assert-not-equal 2 1)
+  (assert-member 1 '(2 3 1))
+  (assert-nil (not t))
+  (assert-error (assert nil))
+  (setq foo "foo")
+  (assert-changed foo
+		  (setq foo "bar"))
+  (assert-not-changed foo
+ 		      (setq foo "bar")))
 
-(elunit-delete-suite 'meta-suite)
-(assert (equal 1 (length elunit-suites)))
+(deftest sample-suite-setup meta-suite
+  "Ensure that defsuite creates new suites properly."
+  (defsuite sample-suite nil ; nil for no parent suite
+    :setup-hook (lambda () (message "setting up test"))
+    :teardown-hook (lambda () (message "done with test")))
+  
+  (assert-that (elunit-get-suite 'sample-suite))
+  (assert-that (test-suite-setup-hook (elunit-get-suite 'sample-suite)))
+  (assert-that (test-suite-teardown-hook (elunit-get-suite 'sample-suite)))
+  (assert-equal 4 (length elunit-suites))
 
-(defsuite meta-suite nil
-  :teardown-hook (lambda () (message "done testing")))
-;; Should replace existing suite
-(defsuite meta-suite nil
-  :teardown-hook (lambda () (message "done testing")))
+  (elunit-delete-suite 'sample-suite)
+  ;; should just have default suite now
+  (assert-equal 3 (length elunit-suites)))
 
-;; should still be a single suite
-(assert (equal 2 (length elunit-suites)))
-;; make sure it's the right one; shouldn't have a setup-hook
-(assert (not (test-suite-setup-hook (elunit-get-suite 'meta-suite))))
 
-(deftest empty-test meta-suite
-  "This is just here to increment the size of meta-suite's test list."
-  (assert t))
+(deftest duplicate-suite meta-suite
+  (defsuite sample-suite nil
+    :setup-hook (lambda () (message "start testing")))
+  ;; Should replace existing suite
+  (assert-not-changed (length elunit-suites)
+		      (defsuite sample-suite nil
+			:teardown-hook (lambda () (message "done testing")))
 
-(assert (equal 1 (length (test-suite-tests (elunit-get-suite 'meta-suite)))))
+		      ;; make sure it really got replaced.
+		      (assert-nil (test-suite-setup-hook
+				    (elunit-get-suite 'sample-suite)))))
 
-;; should delete test
-(elunit-delete-test 'empty-test 'meta-suite)
+(deftest duplicate-test meta-suite
+  (defsuite sample-suite nil)
+  (assert-changed (length (test-suite-tests (elunit-get-suite 'sample-suite)))
+		  (deftest empty-test sample-suite
+		    (assert-that t))))
 
-(assert (equal 0 (length (test-suite-tests (elunit-get-suite 'meta-suite))
-			 )))
+(deftest deleting-and-redefining-tests meta-suite
+  (defsuite sample-suite nil)
+  (deftest empty-test sample-suite)
+  ;; should not define twice
+  (assert-not-changed (length (test-suite-tests (elunit-get-suite 'sample-suite)))
+		      (deftest empty-test sample-suite))
 
-(deftest empty-test meta-suite
-  "This is just here to increment the size of meta-suite's test list."
-  (assert t))
-(deftest empty-test meta-suite
-  "This is just here to increment the size of meta-suite's test list."
-  (assert t))
+    ;; should store file and line number in test
+  (assert-equal buffer-file-name
+		(test-file (elunit-get-test 'empty-test 'sample-suite)))
 
-;; should rewrite existing test of the same name
-(assert (equal 1 (length (test-suite-tests (elunit-get-suite 'meta-suite)))))
+  (let ((test-count (length (test-suite-tests (elunit-get-suite 'sample-suite)))))
+    ;; should delete test
+    (elunit-delete-test 'empty-test 'sample-suite)
+    (assert-equal (- test-count 1)
+		  (length (test-suite-tests (elunit-get-suite 'sample-suite))))))
 
-;; should store file and line number in test
-(assert (equal buffer-file-name
-	       (test-file (elunit-get-test 'empty-test 'meta-suite))))
 
-(assert (equal 47
-	       (test-line (elunit-get-test 'empty-test 'meta-suite))))
+(defsuite sample-suite nil)
 
-;; should run a suite
+(deftest test-fail sample-suite
+  (assert-that nil))
 
-(save-excursion
+(deftest test-error sample-suite
+  (assert nil))
+
+(deftest test-success sample-suite
+  (assert-that t))
+
+(elunit-quiet "sample-suite")
+
+;; have to write raw assertions as suites can't run inside suites.
+;; probably should fix this, allowing multiple *elunit* buffers, but
+;; doesn't seem worth it.
+
+(save-window-excursion
   (delete-other-windows)
-  (elunit "meta-suite")
+  (elunit "sample-suite")
   (other-window 1)
   ;; Will signal an error if not found.
-  (search-forward "meta-suite")
-  (kill-buffer (current-buffer))
-  (other-window 1))
+  (search-forward "sample-suite")
+  (search-forward "Error:")
+  (search-forward "Failure:"))
 
-;; should run a suite's tests plus a suite's children
+;; ;; should run a suite's tests plus a suite's children
 
-(defsuite child-suite meta-suite)
+(defsuite child-suite sample-suite)
 
 (deftest child-test child-suite
-  "put some crap in the elunit buffer"
-  ;; must use princ to take advantage of with-output-to-temp-buffer
-  (princ "some crap"))
+   "put some crap in the elunit buffer"
+   ;; must use princ to take advantage of with-output-to-temp-buffer
+   (princ "some crap"))
 
-(save-excursion
-  (delete-other-windows)
+(save-window-excursion
+  (elunit "child-suite")
+  (assert-in-buffer "some crap" "*elunit*"))
+
+
+;; report successes with dots
+
+(save-window-excursion
   (elunit "meta-suite")
-  (other-window 1)
-  ;; Will signal an error if not found.
-  (search-forward "some crap")
-  (kill-buffer (current-buffer))
-  (other-window 1))
+  (assert-in-buffer ".." "*elunit*"))
 
-(message "looks like it works. what do you want, a gold star?")
-
-;; (deftest passing-tests meta-suite
-;;   ;; optional docstring
-;;   "passing tests should leave fail counter, open elunit buffer, and display results"
-;;   (save-buffer-excursion ; execute body and return to the current buffer configuration
-;;    (load "passing-sample-tests")
-;;    (elunit "passing-tests")
-;;    (assert (equal 0 elunit-fail-count))
-;;    (assert (string= (buffer-name (current-buffer)) "*elunit*"))
-;;    (assert (search-forward-regexp "0 failures"))))
-
-;; (deftest failing-tests meta-suite
-;;   (save-buffer-excursion
-;;    (load "failing-sample-tests")
-;;    (elunit "failing-tests")
-;;    (assert (equal 4 elunit-fail-count))
-;;    (assert (string= (buffer-name (current-buffer)) "*elunit*"))
-;;    (search-forward-regexp "(cl-assertion-failed (equal 5 (+ 2 2)))")
-;;    (search-forward-regexp "4 failures")))
-   
+(elunit-quiet "meta-suite")

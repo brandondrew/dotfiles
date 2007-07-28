@@ -61,7 +61,7 @@
 ;;; Todo:
 
 ;;  * Finish meta-test (test-unit-tests.el)
-;;  * Finish behave.el support
+;;  * Finish elunit support
 ;;  * Modeline could be better (moving indicator to the end)
 ;;  * Add in other languages? (PDI!)
 ;;  * Allow more than one test process to run at once

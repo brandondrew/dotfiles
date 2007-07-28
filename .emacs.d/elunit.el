@@ -32,34 +32,55 @@
 ;; number of assertions to ensure that things are going according to
 ;; expected.  
 
-;; Tests are divided into suites for the purpose of hooks. These hooks
-;; are meant to allow for extra setup that happens once per test, for
-;; both before and after it runs.
+;; Tests are divided into suites for the purpose of hierarchical
+;; structure and hooks. The hierarchy allows suites to belong to
+;; suites, in essence creating test trees. The hooks are meant to
+;; allow for extra setup that happens once per test, for both before
+;; and after it runs.
+
+;; The file `elunit-assertions.el' provides a number of helpful
+;; assertions for ensuring that things are going properly. You may use
+;; emacs' built-in `assert' function for checking such things, but the
+;; assertions in that file provide much better reporting if you use
+;; them. Using `assert-that' is preferred over built-in `assert'.
 
 ;;; Todo:
 
-;;  * running
-;;  * reporting
-;;  * distinguish between assertion failures and other errors (like behave.el)
-;;  * more assertions
+;;  * more helper functions
+;;  * optionally run tests on save via hook
 
 ;;; Usage:
 
-;; See http://dev.technomancy.us/phil/wiki/ElUnit for usage details.
+;; See http://www.emacswiki.org/cgi-bin/wiki/ElUnit for discussion and usage.
+;; The file `elunit-test.el' contains meta-tests that you may find helpful
+;; to refer to as samples.
+
+;; Add the lines:
+;; (make-local-variable 'after-save-hook)
+;; (add-hook 'after-save-hook (lambda () (elunit "meta-suite")))
+;; to the file containing your tests for convenient auto-running.
+
+;;; Code:
 
 (eval-when-compile 
   (require 'cl)
   (require 'compile))
 
 (defstruct test-suite name children tests setup-hook teardown-hook)
-(defstruct test name body file line)
+(defstruct test name body file line message problem)
+
+(put 'elunit-test-failed 'error-conditions '(failure))
 
 (defvar elunit-default-suite
   "default-suite"
   "Choice to use for default suite to run (gets updated to last suite run)")
 
-(defvar elunit-suites nil
+(defvar elunit-suites (list (make-test-suite :name 'default-suite))
   "A list of every suite that's been defined.")
+
+(defvar elunit-test-count 0)
+(defvar elunit-failures nil
+  "A list of tests that have failed.")
 
 (defun elunit-clear-suites ()
   (setq elunit-suites (list (make-test-suite :name 'default-suite))))
@@ -87,14 +108,16 @@
 
 (defmacro deftest (name suite &rest body)
   ;; TODO: gensym
-  `(let ((suite (elunit-get-suite ',suite)))
-     (save-excursion
-       ;; not a foolproof heuristic to get line number, but good enough.
-       (search-backward (symbol-name ',name))
-       (elunit-delete-test ',name suite)
-       (push (make-test :name ',name :body (lambda () ,@body)
-				     :file buffer-file-name :line (line-number-at-pos))
-	     (test-suite-tests suite)))))
+  (save-excursion
+    (search-backward (symbol-name name) nil t)
+    (let ((line (line-number-at-pos))
+	  (file buffer-file-name))
+      `(let ((suite (elunit-get-suite ',suite)))
+	 ;; not a foolproof heuristic to get line number, but good enough.
+	 (elunit-delete-test ',name suite)
+	 (push (make-test :name ',name :body (lambda () ,@body)
+				       :file ,file :line ,line)
+	       (test-suite-tests suite))))))
 
 (defun elunit-get-test (name suite)
   (if (test-p name) name
@@ -106,6 +129,19 @@
     (setf (test-suite-tests suite)
 	  (delete (elunit-get-test name suite) (test-suite-tests suite)))))
 
+;; TODO: broken.
+(defun elunit-total-test-count (suite)
+  (let ((suite (elunit-get-suite suite)))
+    (if suite
+	(+ (apply #'+ (elunit-total-test-count (test-suite-children suite)))
+	   (length (test-suite-tests suite))))))
+
+(defun elunit-test-docstring (test)
+  (if (equal (car (test-body test)) 'lambda)
+      (if (stringp (caddr (test-body test)))
+	  (caddr (test-body test))
+	"")))
+
 ;;; Running the unit tests
 
 (defun elunit (suite)
@@ -114,63 +150,70 @@
 				      (mapcar (lambda (suite) (symbol-name (test-suite-name suite))) 
 					      elunit-suites) nil t nil nil elunit-default-suite)))
  (setq elunit-default-suite suite)
- (setq elunit-fail-count 0)
  (setq elunit-test-count 0)
+ (setq elunit-failures nil)
 
  (with-output-to-temp-buffer "*elunit*"
+   (switch-to-buffer "*elunit*")
+   (compilation-minor-mode)
+   (switch-to-buffer nil)
+
    (princ (concat "Loaded suite: " suite "\n\n"))
    (let ((start-time (cadr (current-time))))
      (elunit-run-suite (elunit-get-suite (intern suite)))
-     (princ (format "%d tests in %d seconds." elunit-test-count (- (cadr (current-time)) start-time))))))
+     (princ (format "\n\n%d tests with %d failures in %d seconds."
+		    elunit-test-count (length elunit-failures)
+		    (- (cadr (current-time)) start-time))))
+   (elunit-report-failures)))
 
 (defun elunit-run-suite (suite)
   "Run a suite's tests and children."
-  (dolist (test (test-suite-tests suite))
-    (elunit-run-test test))
+  (dolist (test (reverse (test-suite-tests suite)))
+    (if (test-suite-setup-hook suite) (funcall (test-suite-setup-hook suite)))
+    (elunit-run-test test)
+    (if (test-suite-teardown-hook suite) (funcall (test-suite-teardown-hook suite))))
   (dolist (child-suite (test-suite-children suite))
     (elunit-run-suite child-suite)))
 
 (defun elunit-run-test (test)
   "Run a single test."
-  (incf elunit-test-count)
-  (funcall (test-body test)))
-  
-;;   (let* ((passed nil)
-;; 	 (docstring (if (stringp (car body)) (pop body) ""))
-;; 	 (result (condition-case err
-;; 		     (save-excursion (eval (cons 'progn body)) (setq passed t))
-;; 		   (error err))))
-;;     (elunit-status passed)
-;;     (if passed t
-;;       (list name docstring result body file-name line-number *elunit-fail-count*))))
+  (condition-case err
+      (progn
+	(incf elunit-test-count)
+	(funcall (test-body test))
+	(princ "."))
+    (failure
+     (elunit-failure test err "F"))
+    (error
+     (elunit-failure test err "E"))))
 
+(defun elunit-failure (test err output)
+  (princ output)
+  (setf (test-problem test) err)
+  ;; color overlays are GNU-only IIRC
+  (unless (featurep 'xemacs)
+    (switch-to-buffer "*elunit*")
+    (overlay-put (make-overlay (point) (- (point) 1)) 'face '(foreground-color . "red"))
+    (switch-to-buffer nil))
+  (setf (test-message test) err)
+  (push test elunit-failures))
 
-;; ;;; Showing the results
+(defun elunit-report-failures ()
+  (let ((count 0))
+    (dolist (test elunit-failures)
+      (incf count)
+      (princ (format "\n\n%d) %s %s [%s:%s]
+            %s
+   Message: %s
+      Form: %s" count
+      (if (equal (car (test-problem test)) 'elunit-test-failed)
+	  "Failure:" "  Error:")
+      (test-name test) (test-file test) (test-line test)
+      (elunit-test-docstring test) (test-message test) (test-body test))))))
 
-;; (defun elunit-status (pass) 
-;;   "Output status while the tests are running"
-;;   (princ (if pass "." "F"))
-;;   (unless pass (incf *elunit-fail-count*)
-;; 	  (switch-to-buffer "*elunit*")
-;; 	  (overlay-put (make-overlay (point) (- (point) 1)) 'face '(foreground-color . "red"))
-;; 	  (switch-to-buffer nil)))
+(add-to-list 'compilation-error-regexp-alist '("\\[\\([^\]]*\\):\\([0-9]+\\)\\]" 1 2))
 
-;; (defun elunit-report-results (tests) 
-;;   "For when the tests are finished and we want details"
-;;   (dolist (test tests)
-;;       (unless (eq t test)
-;; 	(apply 'elunit-report-result test)))
-;;   (princ (format "\n\n\n%d tests total, %d failures" (length tests) *elunit-fail-count*)))
-    
-;; (defun elunit-report-result (name docstring result body file-name line-number index)
-;;   "Report a single test failure"
-;;   (princ (format "\n\n%d) Failure: %s [%s:%s]
-;;             %s
-;;     Result: %s
-;;       Form: %s" index name file-name line-number docstring result (car body))))
-
-;; (add-hook 'temp-buffer-pshow-hook 'compilation-minor-mode)
-;; (add-to-list 'compilation-error-regexp-alist '("\\[\\([^\]]*\\):\\([0-9]+\\)\\]" 1 2))
-
+(require 'elunit-assertions)
+(require 'elunit-helpers)
 (provide 'elunit)
 ;;; elunit.el ends here

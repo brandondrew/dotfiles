@@ -77,7 +77,7 @@ for strings using the \"%s\" format so that extents are copied in XEmacs."
 ;; Serialize and unserialize strings with text properties. Since FSF
 ;; Emacs already correctly handles this, it's basically just a wrapper
 ;; for XEmacs.
-f
+
 (defun prin1-handles-text-properties-p ()
   "Returns non-nil if the emacs implementation of `prin1-to-string'
 correctly handles strings with properties. (FSF Emacs 21 and 22 do while
