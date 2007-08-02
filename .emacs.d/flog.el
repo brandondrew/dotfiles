@@ -116,7 +116,7 @@ time from the process."
       (search-forward-regexp (concat "def .*" method))
       (beginning-of-line)
       (overlay-put (make-overlay (point) (progn (end-of-line) (forward-char) (point)))
-		   'face (cons 'background-color (flog-color score)))))
+		   'face (cons 'background-color (flog-color score))))))
 
 (defun flog-color (score)
   (rest (assoc (flog-nearest-score score flog-colors) flog-colors)))
