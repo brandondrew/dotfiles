@@ -50,24 +50,29 @@
 ;; M-\, but to each his/her own. See for details:
 ;; http://emacs.wordpress.com/2007/01/16/quick-and-dirty-code-folding/
 
+;;; Todo
+
+;; * Can we get output for *every* method?
+;; * elunit tests
+
 ;;; Code:
 
-(defvar flog-colors '((10 . "green4") ;; Be happy!
-		      (20 . "green3")
-		      (30 . "green2")
-		      (40 . "green1")
-		      (50 . "orange4") ;; Start to worry
-		      (75 . "orange3")
-		      (100 . "orange2") 
-		      (125 . "orange1")
-		      (150 . "red4") ;; Stop what you're doing and refactor
-		      (200 . "red3")
-		      (250 . "red2")
-		      (300 . "red1")) ;; Ideally only _why should reach this and live
+(defvar flog-colors '((10 . "green1") ;; Be happy!
+		      (20 . "green2")
+		      (30 . "green3")
+		      (40 . "green4")
+		      (50 . "orange1") ;; Start to worry
+		      (75 . "orange2")
+		      (100 . "orange3") 
+		      (125 . "orange4")
+		      (150 . "red1") ;; Stop what you're doing and refactor
+		      (200 . "red2")
+		      (250 . "red3")
+		      (300 . "red4")) ;; Ideally only _why should reach this and live
   
   "An alist of flog scores to colors they should be highlighted
-  with. Green is better than orange is better than red. Dark is
-  better than bright.")
+  with. Green is better than orange is better than red. Bright is
+  better than dark.")
 
 (defvar flogging-current-buffer nil)
 (defvar flog-incomplete-line "")
@@ -113,7 +118,7 @@ time from the process."
     (save-excursion
       (goto-char (point-min))
       ;; TODO: improve this regex? Need to be able to match class methods
-      (search-forward-regexp (concat "def .*" method))
+      (search-forward-regexp (concat "def .*" method) nil t)
       (beginning-of-line)
       (overlay-put (make-overlay (point) (progn (end-of-line) (forward-char) (point)))
 		   'face (cons 'background-color (flog-color score))))))
