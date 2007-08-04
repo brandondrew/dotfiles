@@ -107,21 +107,22 @@ time from the process."
     (setq flog-incomplete-line (concat flog-incomplete-line output))))
 
 (defun flog-filter-line (process line)
-  (when (string-match "^\\([A-Za-z]+\\)#\\([A-Za-z_]+\\): (\\([0-9]+\\))" line)
+  (when (string-match "^\\([A-Za-z]+\\)#\\([^:]+\\): (\\([0-9]+\\)" line)
     (flog-method (match-string 1 line)
 		 (match-string 2 line)
 		 (string-to-number (match-string 3 line)))))
 
 (defun flog-method (class method score)
   ;; TODO: class is ignored for now
-  (with-current-buffer flogging-current-buffer
-    (save-excursion
-      (goto-char (point-min))
-      ;; TODO: improve this regex? Need to be able to match class methods
-      (search-forward-regexp (concat "def .*" method) nil t)
-      (beginning-of-line)
-      (overlay-put (make-overlay (point) (progn (end-of-line) (forward-char) (point)))
-		   'face (cons 'background-color (flog-color score))))))
+  (if (not (equal "none" method))
+      (with-current-buffer flogging-current-buffer
+        (save-excursion
+          (goto-char (point-min))
+          ;; TODO: improve this regex? Need to be able to match class methods
+          (search-forward-regexp (concat "def .*" method) nil t)
+          (beginning-of-line)
+          (overlay-put (make-overlay (point) (progn (end-of-line) (forward-char) (point)))
+                       'face (cons 'background-color (flog-color score)))))))
 
 (defun flog-color (score)
   (rest (assoc (flog-nearest-score score flog-colors) flog-colors)))
