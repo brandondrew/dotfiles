@@ -39,23 +39,17 @@ export SVN_EDITOR="zile"
 
 complete -C ~/bin/rake-complete.rb -o default rake
 
-# blue by default
-#PS1='\e[0;36m[\u@\h \w]\\$ \[\e[0;39m\]'
-#PS1="\033k\033\134@\h\n\033[1A"
-
-# mjolnir has a green prompt
 if [ `hostname` = "mjolnir" ] ; then
-  PS1='\e[32m[\u@\h \w]# \[\e[0;39m\]'
-fi
-
-# paxtel has purple
-if [ `hostname` = "www.paxtel.com" ] ; then
-  PS1='\e[35m[\u@\h \w]# \[\e[0;39m\]'
-fi
-
-# root has a red prompt
-if [ `/usr/bin/whoami` = "root" ] ; then
-  PS1='\e[31m[\u@\h \w]# \[\e[0;39m\]'
+  # mjolnir has a green prompt
+  export PS1="\[\033[0;32m\]\u@\h \w \$ \[\033[0m\]"
+elif [ `/usr/bin/whoami` = "root" ] ; then
+  # root has a red prompt
+  export PS1="\[\033[0;31m\]\u@\h \w \$ \[\033[0m\]"
+elif [ `hostname` = "vannevar" -o `hostname` = "puyo" -o `hostname` = "imp" ] ; then
+  export PS1="\[\033[0;36m\]\u@\h \w \$ \[\033[0m\]"
+else
+  # purple by default
+  export PS1="\[\033[0;35m\]\u@\h \w \$ \[\033[0m\]"
 fi
 
 # Source global definitions
