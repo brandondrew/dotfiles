@@ -11,29 +11,28 @@
 
 ;;; The tests:
 
-(defsuite test-unit
-   (deftest passing-tests-should-indicate-success
-     (with-current-buffer sample-file
-       (assert (equal 3 test-unit-pass-count))))
+(defsuite test-unit nil
+  :setup-hook 'run-sample-tests)
 
-  (deftest problematic-tests
-   (with-current-buffer sample-file
-     (let ((error-description (assoc "test_might_error" test-unit-problems))
-	   (failure-description (assoc "test_will_fail" test-unit-problems)))
-       (assert error-description)
-       (assert (string-match "undefined method `foo'" (cdr error-description)))
-       ;; should store line number
-       ;; should jump to failures
-       (assert failure-description)
-       (assert (string-match "bad length" (cdr failure-description))))))
+(deftest passing-tests-should-indicate-success test-unit
+  (with-current-buffer sample-file
+    (assert-equal 3 test-unit-pass-count)))
 
-  (deftest should-highlight-test
+(deftest problematic-tests test-unit
+  (with-current-buffer sample-file
+    (let ((error-description (assoc "test_might_error" test-unit-problems))
+	  (failure-description (assoc "test_will_fail" test-unit-problems)))
+      (assert-that error-description)
+      (assert-match "undefined local variable.*`junk'" (cdr error-description))
+      ;; should store line number
+      ;; should jump to failures
+      (assert-that failure-description)
+      (assert-match "bad length" (cdr failure-description)))))
 
-   )
-
-(defsuite test-unit-single-test
-
-)
+(deftest should-highlight-test test-unit
+  (with-current-buffer sample-file
+    
+  ))
 
 ;; setup
 
@@ -48,14 +47,9 @@
   (test-unit-run-tests)
   (wait-for-finished-tests)) ; wait for tests to run
 
-(add-hook 'test-unit-suite-setup-hook 'run-sample-tests)
-
 ;; Run the tests if eval-ed from current buffer
 
 (if (string= (buffer-name (current-buffer)) "test-unit-tests.el")
-    (elunit "test-unit"))
-
-;; run tests
-(local-set-key "\C-c\C-t" 'eval-buffer)
+    (save-window-excursion (elunit "test-unit")))
 
 ;; test these things for every supported framework?

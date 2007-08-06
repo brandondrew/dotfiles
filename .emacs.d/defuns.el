@@ -183,4 +183,8 @@
 
 (defun terminus () (interactive) (set-default-font "-xos4-terminus-medium-r-normal--14-140-72-72-c-80-iso8859-1"))
 
+(defun play-test-sounds (total fail-total)
+  (if (= 0 fail-total)
+      (shell-command "mpg321 ~/music/final.fantasy/ff9/1-19\\ Fanfare.mp3 &")))
+
 (provide 'defuns)

@@ -47,7 +47,6 @@
 ;;; Todo:
 
 ;;  * more helper functions
-;;  * optionally run tests on save via hook
 
 ;;; Usage:
 
@@ -82,13 +81,16 @@
 (defvar elunit-failures nil
   "A list of tests that have failed.")
 
+(defvar elunit-done-running-hook nil
+  "Runs when the tests are finished; passed a total test count and a failure count.")
+
 (defun elunit-clear-suites ()
   (setq elunit-suites (list (make-test-suite :name 'default-suite))))
 
 ;;; Defining tests
 
 (defmacro* defsuite (suite-name suite-ancestor &key setup-hook teardown-hook)
-  "Create a suite, which may be hierarchical."
+  "Define a suite, which may be hierarchical."
   `(let ((suite (make-test-suite :name ',suite-name
 				 :setup-hook ,setup-hook :teardown-hook ,teardown-hook)))
      (elunit-delete-suite ',suite-name)
@@ -96,11 +98,12 @@
 	 (push suite (test-suite-children (elunit-get-suite ',suite-ancestor))))
      (add-to-list 'elunit-suites suite)))
 
-(defun elunit-get-suite (name)
-  (if (test-suite-p name)
-      name
-    (find name elunit-suites :test (lambda (name suite)
-				     (equal name (test-suite-name suite))))))
+(defun elunit-get-suite (suite)
+  "Fetch a suite by its name."
+  (if (test-suite-p suite)
+      suite
+    (find suite elunit-suites :test (lambda (suite asuite)
+				     (equal suite (test-suite-name asuite))))))
 
 (defun elunit-delete-suite (name)
   (setq elunit-suites (remove (elunit-get-suite name) elunit-suites)))
@@ -173,7 +176,8 @@
     (elunit-run-test test)
     (if (test-suite-teardown-hook suite) (funcall (test-suite-teardown-hook suite))))
   (dolist (child-suite (test-suite-children suite))
-    (elunit-run-suite child-suite)))
+    (elunit-run-suite child-suite))
+  (run-hook-with-args 'elunit-done-running-hook elunit-test-count (length elunit-failures)))
 
 (defun elunit-run-test (test)
   "Run a single test."
@@ -188,6 +192,7 @@
      (elunit-failure test err "E"))))
 
 (defun elunit-failure (test err output)
+  "Display and store failure info."
   (princ output)
   (setf (test-problem test) err)
   ;; color overlays are GNU-only IIRC
@@ -199,6 +204,7 @@
   (push test elunit-failures))
 
 (defun elunit-report-failures ()
+  "Summarize failures."
   (let ((count 0))
     (dolist (test elunit-failures)
       (incf count)

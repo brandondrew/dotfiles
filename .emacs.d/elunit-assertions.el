@@ -58,6 +58,10 @@
   (unless (member elt list)
     (fail "%s expected to include %s" list elt)))
 
+(defun assert-match (regex string)
+  (unless (string-match regex string)
+    (fail "%s expected to match %s" string regex)))
+
 (defmacro assert-error (&rest body)
   `(condition-case err
        (progn
@@ -86,14 +90,13 @@
     (unless (search-forward target nil t)
       (fail "%s expected to be found in buffer %s" target buffer))))
 
-(defun assert-uses-face (target face &optional buffer)
+(defun assert-background (target face &optional buffer)
   (save-window-excursion
     (if buffer (switch-to-buffer buffer))
     (goto-char (point-min))
     (unless (search-forward target nil t)
       (fail "%s expected to be found in buffer %s" target buffer))
-    ;; TODO: this condition doesn't work
-    (unless (face-equal (face (face-at-point)))
+    (unless (equal (face (get-text-property (point) 'background)))
       (fail "%s expected to be displayed with face %s" target face))))
 
 (provide 'elunit-assertions)

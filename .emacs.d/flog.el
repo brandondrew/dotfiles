@@ -92,7 +92,7 @@ the buffer with their pain levels."
   (interactive)
   (flog-clear)
   (setq flogging-current-buffer (current-buffer))
-  (set-process-filter (start-process "flog" nil "flog" (buffer-file-name)) 'flog-filter))
+  (set-process-filter (start-process "flog" nil "-s" "-a" "flog" (buffer-file-name)) 'flog-filter))
 
 (defun flog-filter (process output)
   "This lets us pretend like we're only receiving a line at a

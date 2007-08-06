@@ -2,7 +2,7 @@ require 'test/unit'
 
 class SampleTest < Test::Unit::TestCase
   def test_might_error
-    thnths.hh
+    junk.foo
   end
   
   def test_i_should_pass
@@ -18,7 +18,7 @@ class SampleTest < Test::Unit::TestCase
   def test_will_fail
     a = "hello world"
     a.split(' ')
-    assert_equal 88, a.length, "hello ~ fool\""
+    assert_equal 88, a.length, "bad length"
   end
 
   def test_will_pass

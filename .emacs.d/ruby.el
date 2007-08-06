@@ -25,7 +25,9 @@
   :group 'rhtml-faces)
 
 (require 'ruby-electric)
-(require 'rails)
+;; This isn't in my repo; so don't whine when I do a fresh checkout and
+;; haven't symlinked in the dev checkout.
+(ignore-errors (require 'rails))
 (require 'rhtml-mode)
 (require 'ri-ruby)
 (require 'test-unit)
@@ -38,6 +40,8 @@
 (add-hook 'ruby-mode-hook 'my-ruby-mode-hook)
 
 (defun my-ruby-mode-hook ()
+  (highlight-trailing-whitespace)
+  (highlight-tabs)
   (ruby-electric-mode)
   (pretty-lambdas)
   (define-key ruby-mode-map "\C-\M-h" 'backward-kill-word) ; ruby-mode redefines this badly

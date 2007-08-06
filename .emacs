@@ -57,6 +57,8 @@
 (require 'compile)
 (require 'which-func)
 (require 'wrap-region)
+(require 'elunit)
+(require 'show-wspace)
 
 (add-to-list 'auto-mode-alist '("\\.php$" . php-mode))
 (add-to-list 'auto-mode-alist '("\\.css$" . css-mode))

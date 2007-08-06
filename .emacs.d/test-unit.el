@@ -124,6 +124,8 @@
   (set (make-local-variable 'test-unit-problems) ()) ; each entry is a cons of the test name and the description of the problem and line number
   (set (make-local-variable 'test-unit-incomplete-line) "") ; a buffer where we wait for a complete line from the test process
   (set (make-local-variable 'test-unit-failure-lines) ())
+  (make-local-variable 'after-save-hook)
+  (add-hook 'after-save-hook 'test-unit-run-tests)
 
   (make-local-variable 'mode-line-format)
   ;; FIXME: backwards! (using append in add-to-list doesn't work)
@@ -284,9 +286,51 @@ problems table. Highlight the line if given."
   
   ;; well, we want to actually *use* this.
   (add-hook 'ruby-mode-hook 
-	    (lambda () (save-excursion (when (search-forward-regexp "class.*Test::Unit::TestCase" nil t)
+	    (lambda () (save-excursion (when (ruby-mode-test-p)
 				      (test-unit-mode)
-				      (test-unit-use-framework "ruby"))))))
+				      (test-unit-use-framework "ruby")))))
+
+  (defun ruby-mode-test-p ()
+    (search-forward-regexp "class.*Test::Unit::TestCase" nil t))
+  
+  (defun test-unit-impl-run ()
+    (when (and (not (ruby-mode-test-p))
+	       (toggle-filename (buffer-file-name) toggle-mappings))
+      (toggle-buffer)
+      (test-unit-run-tests)))
+
+  (add-hook 'ruby-mode-hook 'test-unit-impl-run)
+  )
+
+;;; elunit
+
+(ignore-errors
+  (require 'elunit)
+  (require 'thingatpt)
+
+  (defun elunit-get-current-test ()
+    (save-excursion
+      (search-backward "deftest" nil t)
+      (forward-word 2)
+      (thing-at-point 'symbol)))
+
+  ;; TODO: implement for elunit
+  (defun elunit-colorize-test (test face)
+    (save-excursion
+      (overlay-put (make-overlay (ruby-beginning-of-method test)
+				 (ruby-end-of-method test)) 'face face)))
+
+  (defun elunit-start-test-process (file &optional test)
+    )
+
+  (defun elunit-test-filter (process output)
+    )
+
+  (add-hook 'emacs-lisp-mode-hook 
+	    (lambda () (save-excursion (when (search-forward-regexp "defsuite" nil t)
+				    (test-unit-mode)
+				    (test-unit-use-framework "elunit")))))
+  )
 
 ;;; Emacs Lisp - behave.el
 

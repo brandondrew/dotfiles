@@ -29,14 +29,19 @@ alias xmlcurl="curl -H Accept:text/xml"
 
 alias ml="ls ~/music"
 
+function cdgem {
+  cd /opt/local/lib/ruby/gems/1.8/gems/; cd `ls|grep $1|sort|tail -1`
+}
+
 tmpit () { cp "$*" ~/mjolnir/apps/technomancy/public/tmp/; }
 
-export SVN_EDITOR="emacs -nw -q --no-site-file"
+export SVN_EDITOR="zile"
 
 complete -C ~/bin/rake-complete.rb -o default rake
 
 # blue by default
-PS1='\e[0;36m[\u@\h \w]\\$ \[\e[0;39m\]'
+#PS1='\e[0;36m[\u@\h \w]\\$ \[\e[0;39m\]'
+#PS1="\033k\033\134@\h\n\033[1A"
 
 # mjolnir has a green prompt
 if [ `hostname` = "mjolnir" ] ; then
@@ -62,9 +67,3 @@ fi
 if [ $TERM = "eterm-color" ] ; then
     TERM=xterm
 fi
-
-#MPD_HOST=mjolnir
-#MPD_PORT=6600
-#if [ `ssh 192.168.1.2 hostname` != "mjolnir" ] ; then
-#    MPD_HOST=localhost
-#fi
