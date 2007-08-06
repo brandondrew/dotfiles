@@ -19,4 +19,4 @@ apt-get install epiphany-browser epiphany-extensions emacs21 f-spot gmpc x2x gai
 
 sed -i s/DisallowTCP=true/DisallowTCP=false/ /etc/gdm/gdm.conf
 
-gem install rails mongrel rcov tattle capistrano daemons cheat fastri hoe hpricot redcloth redgreen parsetree sqlite3-ruby termios tidy tzinfo ZenTest rspec rake vpim camping json --include-dependencies
+gem install -y rails mongrel rcov tattle capistrano daemons cheat fastri hoe hpricot redcloth redgreen parsetree sqlite3-ruby termios tidy tzinfo ZenTest rspec rake vpim camping json rcodetools

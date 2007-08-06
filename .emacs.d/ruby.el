@@ -31,6 +31,7 @@
 (require 'rhtml-mode)
 (require 'ri-ruby)
 (require 'test-unit)
+(require 'rcodetools)
 
 (add-to-list 'auto-mode-alist '("\\.rb$" . ruby-mode))
 (add-to-list 'auto-mode-alist '("\\.rake$" . ruby-mode)) ; d'oh!
