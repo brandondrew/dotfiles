@@ -39,6 +39,8 @@ export SVN_EDITOR="zile"
 
 complete -C ~/bin/rake-complete.rb -o default rake
 
+# prompt coloring
+# see http://attachr.com/9288 for full-fledged craziness
 if [ `hostname` = "mjolnir" ] ; then
   # mjolnir has a green prompt
   export PS1="\[\033[0;32m\]\u@\h \w \$ \[\033[0m\]"

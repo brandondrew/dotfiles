@@ -183,6 +183,16 @@
 
 (defun terminus () (interactive) (set-default-font "-xos4-terminus-medium-r-normal--14-140-72-72-c-80-iso8859-1"))
 
+(defun eshell-maybe-bol ()
+  (interactive)
+  (let ((p (point)))
+    (eshell-bol)
+    (if (= p (point))
+	(beginning-of-line))))
+
+(add-hook 'eshell-mode-hook
+	  '(lambda () (define-key eshell-mode-map "\C-a" 'eshell-maybe-bol)))
+
 (defun play-test-sounds (total fail-total)
   (if (= 0 fail-total)
       (shell-command "mpg321 ~/music/final.fantasy/ff9/1-19\\ Fanfare.mp3 &")))

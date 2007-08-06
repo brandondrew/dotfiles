@@ -286,9 +286,10 @@ problems table. Highlight the line if given."
   
   ;; well, we want to actually *use* this.
   (add-hook 'ruby-mode-hook 
-	    (lambda () (save-excursion (when (ruby-mode-test-p)
-				      (test-unit-mode)
-				      (test-unit-use-framework "ruby")))))
+	    (lambda () (save-excursion
+		    (when (ruby-mode-test-p)
+		      (test-unit-mode)
+		      (test-unit-use-framework "ruby")))))
 
   (defun ruby-mode-test-p ()
     (search-forward-regexp "class.*Test::Unit::TestCase" nil t))
@@ -297,10 +298,7 @@ problems table. Highlight the line if given."
     (when (and (not (ruby-mode-test-p))
 	       (toggle-filename (buffer-file-name) toggle-mappings))
       (toggle-buffer)
-      (test-unit-run-tests)))
-
-  (add-hook 'ruby-mode-hook 'test-unit-impl-run)
-  )
+      (test-unit-run-tests))))
 
 ;;; elunit
 
