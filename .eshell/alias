@@ -5,6 +5,6 @@ alias saptr sudo apt-get remove $*
 alias l ls -a -l $*
 alias la ls -a $*
 alias ll ls -l $*
-alias sapts sudo apt-cache show $*
-alias saptc sudo apt-cache search $*
+alias sapts apt-cache show $*
+alias saptc apt-cache search $*
 alias sapti sudo apt-get install $*

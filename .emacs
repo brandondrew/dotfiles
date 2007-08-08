@@ -61,6 +61,7 @@
 (require 'flog)
 (require 'test-unit)
 (require 'show-wspace)
+(require 'esh-mode)
 
 (add-to-list 'auto-mode-alist '("\\.php$" . php-mode))
 (add-to-list 'auto-mode-alist '("\\.css$" . css-mode))
