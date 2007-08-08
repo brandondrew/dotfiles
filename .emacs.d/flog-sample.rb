@@ -23,3 +23,4 @@ class Flogger
     FlogSample.find(:all).map(&:to_s).map{ |s| puts s }
   end
 end
+

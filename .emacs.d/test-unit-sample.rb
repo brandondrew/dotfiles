@@ -1,6 +1,10 @@
 require 'test/unit'
 
 class SampleTest < Test::Unit::TestCase
+#   def setup
+#     sleep 0.3
+#   end
+
   def test_might_error
     junk.foo
   end

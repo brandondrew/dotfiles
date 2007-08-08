@@ -30,4 +30,4 @@ Host *
   User phil
   KeepAlive yes
 
-GSSAPIAuthentication no
+  GSSAPIAuthentication no

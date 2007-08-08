@@ -58,6 +58,8 @@
 (require 'which-func)
 (require 'wrap-region)
 (require 'elunit)
+(require 'flog)
+(require 'test-unit)
 (require 'show-wspace)
 
 (add-to-list 'auto-mode-alist '("\\.php$" . php-mode))

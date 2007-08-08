@@ -52,8 +52,7 @@
 
 ;;; Todo
 
-;; * Can we get output for *every* method?
-;; * elunit tests
+;; * class methods
 
 ;;; Code:
 
@@ -92,25 +91,14 @@ the buffer with their pain levels."
   (interactive)
   (flog-clear)
   (setq flogging-current-buffer (current-buffer))
-  (set-process-filter (start-process "flog" nil "-s" "-a" "flog" (buffer-file-name)) 'flog-filter))
+  (set-process-filter (start-process "flog" nil "flog" "-a" (buffer-file-name)) 'flog-filter))
 
 (defun flog-filter (process output)
-  "This lets us pretend like we're only receiving a line at a
-time from the process."
-  (if (string-match "\n" output)
-      (progn
-	;; Send everything up to the first newline to the real filter
-	(flog-filter-line process (concat flog-incomplete-line (car (split-string output "\n"))))
-	;; Recurse on the rest
-	(flog-filter process (substring output (+ 1 (string-match "\n" output)))))
-    ;; Save the remainder to a buffer
-    (setq flog-incomplete-line (concat flog-incomplete-line output))))
-
-(defun flog-filter-line (process line)
-  (when (string-match "^\\([A-Za-z]+\\)#\\([^:]+\\): (\\([0-9]+\\)" line)
-    (flog-method (match-string 1 line)
-		 (match-string 2 line)
-		 (string-to-number (match-string 3 line)))))
+  (dolist (line (split-string output "\n"))
+    (when (string-match "^\\([A-Za-z]+\\)#\\([^:]+\\): (\\([0-9]+\\)" line)
+      (flog-method (match-string 1 line)
+		   (match-string 2 line)
+		   (string-to-number (match-string 3 line))))))
 
 (defun flog-method (class method score)
   ;; TODO: class is ignored for now
@@ -119,8 +107,10 @@ time from the process."
         (save-excursion
           (goto-char (point-min))
           ;; TODO: improve this regex? Need to be able to match class methods
-          (search-forward-regexp (concat "def .*" method) nil t)
-          (beginning-of-line)
+          (search-forward-regexp (concat "def " (regexp-quote method) "[ (\n]") nil t)
+	  (ignore-errors
+	    (backward-char)
+	    (beginning-of-line))
           (overlay-put (make-overlay (point) (progn (end-of-line) (forward-char) (point)))
                        'face (cons 'background-color (flog-color score)))))))
 

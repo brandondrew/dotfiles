@@ -38,6 +38,8 @@
 (add-to-list 'auto-mode-alist '("\\.erb$" . rhtml-mode))
 (add-to-list 'auto-mode-alist '("\\.builder$" . ruby-mode))
 
+(add-to-list 'interpreter-mode-alist '("ruby" . ruby-mode))
+ 
 (add-hook 'ruby-mode-hook 'my-ruby-mode-hook)
 
 (defun my-ruby-mode-hook ()
@@ -47,6 +49,8 @@
   (pretty-lambdas)
   (define-key ruby-mode-map "\C-\M-h" 'backward-kill-word) ; ruby-mode redefines this badly
   (local-set-key (kbd "RET") 'ruby-reindent-then-newline-and-indent))
+
+(define-key ruby-mode-map (kbd "RET") 'ruby-reindent-then-newline-and-indent)
 
 (setq ri-ruby-script (expand-file-name "~/.emacs.d/ri-emacs.rb"))
 

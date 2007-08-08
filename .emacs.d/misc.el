@@ -30,6 +30,7 @@
 (add-hook 'find-file-hook 'jao-toggle-selective-display)
 ;(add-hook 'elunit-done-running-hook 'play-test-sounds)
 
+(setq eshell-cmpl-cycle-completions nil)
 (setq visible-bell t)
 (setq font-lock-maximum-decoration t)
 (setq inhibit-startup-message t)

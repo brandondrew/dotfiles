@@ -66,6 +66,7 @@
 ;;  * Add in other languages? (PDI!)
 ;;  * Allow more than one test process to run at once
 ;;    (by making test-unit-currently-running-buffer process-local, not global)
+;;  * Save autotest output for highlighting and apply it to test files as they're opened
 
 ;;; Bugs:
 
@@ -125,7 +126,7 @@
   (set (make-local-variable 'test-unit-incomplete-line) "") ; a buffer where we wait for a complete line from the test process
   (set (make-local-variable 'test-unit-failure-lines) ())
   (make-local-variable 'after-save-hook)
-  (add-hook 'after-save-hook 'test-unit-run-tests)
+;  (add-hook 'after-save-hook 'test-unit-run-tests)
 
   (make-local-variable 'mode-line-format)
   ;; FIXME: backwards! (using append in add-to-list doesn't work)
@@ -299,6 +300,16 @@ problems table. Highlight the line if given."
 	       (toggle-filename (buffer-file-name) toggle-mappings))
       (toggle-buffer)
       (test-unit-run-tests))))
+
+;;; autotest
+
+(ignore-errors
+  (require 'autotest)
+  (defalias 'autotest-get-current-test 'ruby-get-current-test)
+  (defalias 'autotest-colorize-test 'ruby-colorize-test)
+  (defun autotest-start-test-process (file &optional test))
+  (defun autotest-test-filter (process output))
+  )
 
 ;;; elunit
 

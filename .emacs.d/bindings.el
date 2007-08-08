@@ -31,6 +31,7 @@
 (global-set-key (kbd "M-\\") 'jao-toggle-selective-display)
 
 (global-set-key "\C-xh" 'view-url)
+(global-set-key (kbd "C-c l") (lambda () (interactive) (insert "lambda")))
 
 (setq outline-minor-mode-prefix [(control o)])
 

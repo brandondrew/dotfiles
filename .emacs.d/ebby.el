@@ -118,8 +118,9 @@ Use the without-transmitting-changes macro to set this.")
   "Allow execute BODY without notifying server of any changes."
   `(progn
      (setq ebby-dont-transmit-changes t)
-     ,@body
-     (setq ebby-dont-transmit-changes nil)))
+     (unwind-protect
+	 (progn ,@body)
+       (setq ebby-dont-transmit-changes nil))))
 
 (defmacro case-string (expr &rest choices)
   "A variation on the case macro that uses equal rather than eql, and is thus suitable for strings."
