@@ -1,4 +1,4 @@
-#!/usr/local/bin/ruby
+#!/usr/bin/env ruby
 # (c) 25 June 2006 Andre Arko and Phil Hagelberg
 # Written by pairing at 30,000 feet in the air
 
