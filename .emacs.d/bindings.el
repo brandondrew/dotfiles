@@ -24,7 +24,7 @@
                           (shell-command (concat "dict " (read-string (concat "Define word (default " (word-at-point) "): ") nil nil (word-at-point))))))
 
 (global-set-key (kbd "C-c e") 'fc-eval-and-replace)
-(global-set-key (kbd "C-c C-v") 'eval-buffer)
+(global-set-key (kbd "C-c v") 'eval-buffer)
 (global-set-key (kbd "C-x m") 'eshell)
 (global-set-key (kbd "C-x M") (lambda () (interactive) (eshell t)))
 
@@ -33,18 +33,11 @@
 (global-set-key "\C-xh" 'view-url)
 (global-set-key (kbd "C-c l") (lambda () (interactive) (insert "lambda")))
 
-(setq outline-minor-mode-prefix [(control o)])
-
 ; searching with regexes by default
 (global-set-key "\C-s" 'isearch-forward-regexp)
 (global-set-key "\C-r" 'isearch-backward-regexp)
 (global-set-key "\C-\M-s" 'isearch-forward)
 (global-set-key "\C-\M-r" 'isearch-backward)
-
-;; ; hide-show
-(global-set-key "\C-]" 'hs-hide-level)
-(global-set-key (kbd "C-}") 'hs-hide-block)
-(global-set-key (kbd "C-{") 'hs-show-block)
 
 ; linear buffer-switching
 (global-set-key "\M-p" 'bs-cycle-next)
@@ -90,18 +83,11 @@
 ;; For Ebby debugging, mostly
 (global-set-key [f7] (lambda () (interactive) (message "%s" (point))))
 
-(global-set-key [f9] '(lambda ()
-                        (interactive)
-                        (if (get-buffer "*ansi-term*")
-                            (switch-to-buffer "*ansi-term*")
-                          (ansi-term "/bin/bash"))))
-
 ; great for quick googles
 (global-set-key [f10] 'w3m)
 
 (global-set-key [(meta f10)] 'ruby-xmp-region)
 
-(global-set-key [f11] 'ri)
 (global-set-key (kbd "C-h r") 'ri)
 
 (global-set-key [f12] '(lambda ()

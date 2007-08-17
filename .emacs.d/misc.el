@@ -13,8 +13,6 @@
 (when window-system
   (mouse-wheel-mode t)
   (global-hl-line-mode t)
-;; this slows boot significantly in emacs 22
-;  (set-scroll-bar-mode 'right) ; mostly for seeing how far down we are, not for clicking
   (setq frame-title-format '(buffer-file-name "%f" ("%b")))
   (setq browse-url-browser-function 'browse-url-firefox)
   (setq browse-url-firefox-new-window-is-tab t)
@@ -68,5 +66,17 @@
         w3m-track-mouse
         w3m-use-favicon
         w3m-use-toolbar))
+
+;; bug me
+(setq yellow-tokens (delete ?\s "\\<\\(F IX\\|D OC\\|R ETIRE\\|T ODO\\|W ARN\\).*\\>"))
+(setq red-tokens (delete ?\s "\\<\\(H ACK\\|R EFACTOR\\).*\\>"))
+
+(mapcar (lambda (mode)
+          (font-lock-add-keywords
+           mode
+           (list (list yellow-tokens 0 ''my-yellow-face 'prepend)
+                 (list red-tokens    0 ''my-red-face    'prepend))))
+        '(ruby-mode lisp-mode emacs-lisp-mode))
+
 
 (provide 'misc)

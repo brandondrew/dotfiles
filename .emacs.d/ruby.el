@@ -32,11 +32,13 @@
 (require 'ri-ruby)
 (require 'test-unit)
 (require 'rcodetools)
+(require 'cheat)
 
 (add-to-list 'auto-mode-alist '("\\.rb$" . ruby-mode))
 (add-to-list 'auto-mode-alist '("\\.rake$" . ruby-mode)) ; d'oh!
 (add-to-list 'auto-mode-alist '("\\.erb$" . rhtml-mode))
 (add-to-list 'auto-mode-alist '("\\.builder$" . ruby-mode))
+(add-to-list 'auto-mode-alist '("\\.mab$" . ruby-mode))
 
 (add-to-list 'interpreter-mode-alist '("ruby" . ruby-mode))
  

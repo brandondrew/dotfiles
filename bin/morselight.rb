@@ -1,3 +1,5 @@
+#!/usr/bin/env ruby
+
 require 'rubygems'
 require 'morse'
 
@@ -45,4 +47,8 @@ class MorseLight
       end
     end
   end
+end
+
+if __FILE__ == $0
+  MorseLight.say ARGV.join(' ')
 end

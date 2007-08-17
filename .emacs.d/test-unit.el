@@ -35,20 +35,12 @@
 ;; will minimize buffer switching and allow users to see immediately
 ;; which tests pass and where the failures are.
 
-;; Right now it only works with Ruby's test/unit library, but I've
-;; tried to extract the language/framework specific code so it should
-;; be easy to add support for other systems. See the
-;; "Language-specific" section at the end of the file.
-
-;; For now it relies on ruby-mode, which should come with your ruby
-;; distribution and is slated to be included in the next Emacs. If you
-;; don't have it, you can get it from the Ruby SVN repository:
-;; http://svn.ruby-lang.org/repos/ruby/trunk/misc/
-
-;; For ruby-mode it adds a hook that will try to determine if a buffer
-;; contains unit tests and switch to test-unit-mode if it does.  It
-;; also requires that the "turn" library be installed. It's packaged
-;; as a gem, but it needs to be installed in your load path.
+;; Right now the only testing framework completely supported is Ruby's
+;; test/unit. I've tried to extract the language/framework specific
+;; code so it should be easy to add support for other systems. See the
+;; "Language-specific" section at the end of the file and
+;; `test-unit-ruby.el' for an example of what kind of functions you'll
+;; need to write.
 
 ;; If you want quick toggling between tests and implementation, (trust
 ;; me: if you're reading this, you do) try toggle.el:
@@ -70,7 +62,6 @@
 
 ;;; Bugs:
 
-;;  * No output if there's a syntaxt error in the test
 ;;  * Test output larger than 15 lines or so can't be seen
 ;;  * Certain test outputs cause errors in the filter; need to isolate this problem.
 
@@ -126,7 +117,7 @@
   (set (make-local-variable 'test-unit-incomplete-line) "") ; a buffer where we wait for a complete line from the test process
   (set (make-local-variable 'test-unit-failure-lines) ())
   (make-local-variable 'after-save-hook)
-;  (add-hook 'after-save-hook 'test-unit-run-tests)
+  (add-hook 'after-save-hook 'test-unit-run-tests)
 
   (make-local-variable 'mode-line-format)
   ;; FIXME: backwards! (using append in add-to-list doesn't work)
@@ -230,144 +221,11 @@ problems table. Highlight the line if given."
   (set (make-local-variable 'colorize-test-function) (intern (concat framework "-colorize-test")))
   (set (make-local-variable 'test-filter-function) (intern (concat framework "-test-filter"))))
 
-
-;;; Ruby - test/unit with "turn" gem
-
-(ignore-errors
-  (require 'ruby-mode)
-
-  ;; required functions
-  (defun ruby-get-current-test ()
-    "Where are we now?"
-    (substring-no-properties (caddr (split-string (ruby-add-log-current-method) ":"))))
-
-  (defun ruby-colorize-test (test face)
-    (save-excursion
-      (overlay-put (make-overlay (ruby-beginning-of-method test) (ruby-end-of-method test)) 'face face)))
-
-  (defun ruby-start-test-process (file &optional test)
-    (if test
-	(start-process "test-unit" nil
-		       "ruby" "-rturn" file "--name" test)
-      (start-process "test-unit" nil
-		     "ruby" "-rturn" file)))
-	
-
-  (defun ruby-test-filter (process output)
-    "Do a different thing based on the output of the test."
-    (setq test-unit-incomplete-line "")
-    (save-excursion
-     (cond ((string-match "^Loaded suite" output)
-	   (test-unit-tests-running))
-	  ((string-match "==============================================================================" output)
-	   (test-unit-tests-done))
-	  ((string-match "\\(test[^ ]*\\) *PASS$" output)
-	   (test-unit-pass-test (match-string-no-properties 1 output)))
-	  ((string-match "\\(test[^ ]*\\) *FAIL$" output)
-	   (test-unit-fail-test (match-string-no-properties 1 output)))
-	  ((string-match "\\(test[^ ]*\\) *ERROR$" output)
-	   (test-unit-error-test (match-string-no-properties 1 output)))
-	  ((string-match "^	\\(.*\\)$" output) ;; failure explanation uses tabs. ick!
-	   (test-unit-explain-problem (match-string-no-properties 1 output)))
-	  ((string-match "/usr/bin/ruby: no such file to load -- turn (LoadError)" output)
-	   (error "Need to install \"turn\" library. The gem is not good enough; it must be on your site path.")))))
-
-  ;; support functions
-  (defun ruby-beginning-of-method (method)
-    (beginning-of-buffer)
-    (search-forward (concat "def " method))
-    (beginning-of-line)
-    (point))
-
-  (defun ruby-end-of-method (&optional method)
-    (ruby-end-of-block)
-    (end-of-line)
-    (forward-char)
-    (point))
-  
-  ;; well, we want to actually *use* this.
-  (add-hook 'ruby-mode-hook 
-	    (lambda () (save-excursion
-		    (when (ruby-mode-test-p)
-		      (test-unit-mode)
-		      (test-unit-use-framework "ruby")))))
-
-  (defun ruby-mode-test-p ()
-    (search-forward-regexp "class.*Test::Unit::TestCase" nil t))
-  
-  (defun test-unit-impl-run ()
-    (when (and (not (ruby-mode-test-p))
-	       (toggle-filename (buffer-file-name) toggle-mappings))
-      (toggle-buffer)
-      (test-unit-run-tests))))
-
-;;; autotest
-
-(ignore-errors
-  (require 'autotest)
-  (defalias 'autotest-get-current-test 'ruby-get-current-test)
-  (defalias 'autotest-colorize-test 'ruby-colorize-test)
-  (defun autotest-start-test-process (file &optional test))
-  (defun autotest-test-filter (process output))
-  )
-
-;;; elunit
-
-(ignore-errors
-  (require 'elunit)
-  (require 'thingatpt)
-
-  (defun elunit-get-current-test ()
-    (save-excursion
-      (search-backward "deftest" nil t)
-      (forward-word 2)
-      (thing-at-point 'symbol)))
-
-  ;; TODO: implement for elunit
-  (defun elunit-colorize-test (test face)
-    (save-excursion
-      (overlay-put (make-overlay (ruby-beginning-of-method test)
-				 (ruby-end-of-method test)) 'face face)))
-
-  (defun elunit-start-test-process (file &optional test)
-    )
-
-  (defun elunit-test-filter (process output)
-    )
-
-  (add-hook 'emacs-lisp-mode-hook 
-	    (lambda () (save-excursion (when (search-forward-regexp "defsuite" nil t)
-				    (test-unit-mode)
-				    (test-unit-use-framework "elunit")))))
-  )
-
-;;; Emacs Lisp - behave.el
-
-(ignore-errors
-  (require 'behave)
-
-  (defun behave-get-current-test ()
-    (save-excursion
-      (end-of-line)
-      (search-backward-regexp (concat "(specify \"\\([^\"]*\\)\""))
-      (match-string-no-properties 1)))
-
-  (defun behave-colorize-test (test face) 
-    (save-excursion
-      (beginning-of-buffer)
-      (search-forward (concat "(specify " test))
-      (overlay-put (make-overlay (beginning-of-defun) (end-of-defun)) 'face face)))
-
-  (defun behave-start-process (file &optional test)
-    )
-
-  (add-hook 'emacs-lisp-mode-hook
-	    (lambda () (save-excursion (when (search-forward "(context \"" nil t)
-				      (test-unit-mode)
-				      (test-unit-use-framework "behave"))))))
+(require 'test-unit-ruby)
+(require 'test-unit-autotest) ;; unfinished
+(require 'test-unit-elunit) ;; unfinished
 
 ;;; More languages later?
 
 (provide 'test-unit)
-
 ;;; test-unit.el ends here
