@@ -50,6 +50,8 @@
   (ruby-electric-mode)
   (pretty-lambdas)
   (define-key ruby-mode-map "\C-\M-h" 'backward-kill-word) ; ruby-mode redefines this badly
+  (when (featurep 'flymake)
+    (add-hook 'ruby-mode-hook 'flymake-ruby-load))
   (local-set-key (kbd "RET") 'ruby-reindent-then-newline-and-indent))
 
 (define-key ruby-mode-map (kbd "RET") 'ruby-reindent-then-newline-and-indent)
