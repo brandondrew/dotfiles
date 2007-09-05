@@ -25,7 +25,7 @@
   (keyboard-translate ?\C-h ?\C-?))
 
 (add-to-list 'comint-mode-hook 'ansi-color-for-comint-mode-on)
-(add-hook 'find-file-hook 'jao-toggle-selective-display)
+;(add-hook 'find-file-hook 'jao-toggle-selective-display)
 ;(add-hook 'elunit-done-running-hook 'play-test-sounds)
 
 (setq eshell-cmpl-cycle-completions nil)

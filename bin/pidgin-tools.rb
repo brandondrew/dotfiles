@@ -16,7 +16,7 @@ TwitterClient = Twitter::Client.new(:login => 'technomancy',
 
 class Pidgin
   attr_reader :purple # for debug
-  
+
   def initialize
     @service = DBus.session_bus.service("im.pidgin.purple.PurpleService")
     @purple = @service.object("/im/pidgin/purple/PurpleObject")

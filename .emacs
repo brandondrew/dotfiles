@@ -22,6 +22,16 @@
 ;; -http://programming.reddit.com/info/uw44/comments/cuze4
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; server singleton
+
+(unless (string-equal "root" (getenv "USER"))
+  (when (and (> emacs-major-version 22)
+	     (or (not (boundp 'server-process))
+		 (not (eq (process-status server-process)
+			  'listen))))
+    (server-start)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (toggle-debug-on-error)
 
