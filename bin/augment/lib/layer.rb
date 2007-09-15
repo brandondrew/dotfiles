@@ -1,7 +1,7 @@
 class Layer
   attr_accessor :lines, :color, :message
 
-  @layers = {}
+  @layers = Hash.new([])
   
   def self.layers; @layers; end
   
@@ -12,7 +12,10 @@ class Layer
   end
 
   def render(string)
-    # by default render to ANSI color
+    send("render_#{Options[:output]}", string)
+  end
+  
+  def render_ansi(string)
     string.colorize_lines(@lines.to_a, @color)
   end
   

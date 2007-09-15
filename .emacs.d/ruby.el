@@ -58,7 +58,7 @@
 
 (setq ri-ruby-script (expand-file-name "~/.emacs.d/ri-emacs.rb"))
 
-(when (= emacs-major-version 22)
+(when (> emacs-major-version 21)
   (ido-mode t)
   (ido-toggle-prefix)
   (setq ido-enable-flex-matching t)

@@ -1,0 +1,18 @@
+= Augment
+(c) Phil Hagelberg 2007
+
+== Purpose
+
+Augment provides a framework for gathering and displaying metadata
+about your code.
+
+== Usage
+
+== Supported Systems
+
+== Planned Support
+
+* autotest
+* flog
+* ruby warnings
+* rcov

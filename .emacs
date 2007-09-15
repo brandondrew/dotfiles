@@ -71,6 +71,7 @@
 (require 'flog)
 (require 'test-unit)
 (require 'show-wspace)
+;(require 'smooth-scrolling)
 (require 'esh-mode)
 
 (add-to-list 'auto-mode-alist '("\\.php$" . php-mode))

@@ -87,7 +87,7 @@
   (cond
    ((featurep 'xemacs)
     (require 'w3m-xmas))
-   ((>= emacs-major-version 23)
+   ((>= emacs-major-version 24)
     ;; Emacs-w3m of the released version does not support Emacs 23+.
     ;; We load w3m-e23.el(c) that exists in the same directory as
     ;; w3m.el(c) so as to exclude ones in other places.

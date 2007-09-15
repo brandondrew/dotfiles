@@ -40,12 +40,10 @@
 (global-set-key "\C-\M-r" 'isearch-backward)
 
 ; linear buffer-switching
-(global-set-key "\M-p" 'bs-cycle-next)
-(global-set-key "\M-n" 'bs-cycle-previous)
-(global-set-key [XF86Back] 'bs-cycle-next)
-(global-set-key [XF86Forward] 'bs-cycle-previous)
-(setq bs-cycle-configuration-name "files")
-(global-set-key (kbd "C-x C-b") 'bs-show)
+(global-set-key "\M-p" 'previous-buffer)
+(global-set-key "\M-n" 'next-buffer)
+(global-set-key (kbd "C-<next>") 'next-buffer)
+(global-set-key (kbd "C-<prior>") 'previous-buffer)
 
 ; just useful for learning new modes
 (global-set-key [f1] 'menu-bar-mode)
