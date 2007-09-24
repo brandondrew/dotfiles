@@ -33,6 +33,7 @@
 	  (to "rubyonrails-talk@googlegroups.com" junk)
 	  ("subject" "^\\[Rails\\]" junk)
 	  (to "obby-users@list.0x539.de" "obby-users")
+	  (from "rspec" junk)
 	  (any "darjeeling" "darjeeling")
 	  (any "conkeror" "conkeror")
 	  (any "zenspider\\.com" "seattle.rb")
