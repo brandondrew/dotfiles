@@ -12,7 +12,7 @@ require 'timeout'
 require 'dbus'
 require 'notify'
 
-TwitterClient = Twitter::Base.new('technomancy', File.read(File.expand_path("~/.twitter_password")))
+TwitterClient = Twitter::Base.new(*File.read(File.expand_path("~/.twitter_login"))) if File.exist?(File.expand_path("~/.twitter_login"))
 
 class Buddy
   class << self
@@ -115,7 +115,7 @@ class Pidgin
   end
 end
 
-Pidgin.watch_status
+Pidgin.watch_status if File.exist? File.expand_path("~/.twitter_login")
 Pidgin.notify_messages
 
 if __FILE__ == $0 and !ARGV.include?('--launch')
