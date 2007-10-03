@@ -23,7 +23,7 @@
 (setq message-kill-buffer-on-exit t)
 
 (setq gnus-message-archive-group "sent")
-
+(setq gnus-fetch-old-headers 'some)
 (setq nnmail-split-methods 'nnmail-split-fancy)
 (setq nnmail-crosspost nil)
 

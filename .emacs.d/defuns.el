@@ -163,6 +163,11 @@
   (tabbar-mode -1)
   (scroll-bar-mode -1))
 
+(defun big-fonts ()                                                                                                                                                          
+  (interactive)                                                                                                                                                              
+;  (set-default-font "-b&h-lucidatypewriter-bold-r-normal-sans-34-190-100-100-m-159-iso8859-1")                                                                              
+  (set-default-font "-b&h-lucidatypewriter-bold-r-normal-sans-34-240-100-100-m-200-iso8859-1")) 
+
 (defun pretty-lambdas ()
     (font-lock-add-keywords
      nil `(("(\\(lambda\\>\\)"

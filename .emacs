@@ -139,4 +139,7 @@
 ; mark with 'm', press 'Q' for multi-file find/replace
 ; C-j launch dired when ido-mode is enabled
 
+					; G G gnus keyword search
+; G T show context in keyword search
+
 ; list-colors-display

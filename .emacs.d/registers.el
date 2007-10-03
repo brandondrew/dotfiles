@@ -15,7 +15,6 @@
 (set-register ?r '(file . "~/.emacs.d/rinari/rinari.el"))
 (set-register ?y '(file . "~/.emacs.d/ebby.el"))
 (set-register ?g '(file . "~/.gnus.el"))
-(set-register ?t '(file . "~/.timecard"))
 (set-register ?b '(file . "~/.bashrc"))
 (set-register ?s '(file . "~/.screenrc"))
 (set-register ?c '(file . "~/.contacts"))
