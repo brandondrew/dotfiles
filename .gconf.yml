@@ -23,6 +23,7 @@
     command_8: urxvt -bg white +sb -bd white
     command_9: emacs
     command_10: /home/phil/bin/notify-mpc
+    command_11: /home/phil/projects/presentations/feedback/render.sh
   global_keybindings/: 
     run_command_1: <Alt>grave
     run_command_2: <Shift>F1
@@ -34,6 +35,7 @@
     run_command_8: <Alt><Shift>grave
     run_command_9: <Super>e
     run_command_10: <Control>F5
+    run_command_11: F12
     switch_to_workspace_1: <Control>1
     switch_to_workspace_2: <Control>2
     switch_to_workspace_3: <Control>3

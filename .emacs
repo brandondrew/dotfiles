@@ -69,7 +69,7 @@
 (require 'wrap-region)
 (require 'elunit)
 (require 'flog)
-(require 'test-unit)
+;(require 'test-unit)
 (require 'show-wspace)
 ;(require 'smooth-scrolling)
 (require 'esh-mode)
@@ -94,9 +94,6 @@
 (require 'helma)
 (require 'registers)
 (require 'misc)
-
-(if (functionp 'rcirc)
-    (load "rcirc-config"))
 
 (if (functionp 'jabber-connect)
     (load "jabber-config"))

@@ -67,9 +67,21 @@
         w3m-use-favicon
         w3m-use-toolbar))
 
+(setenv "PAGER" "cat")
+
 ;; bug me
-(setq yellow-tokens (delete ?\s "\\<\\(F IX\\|D OC\\|R ETIRE\\|T ODO\\|W ARN\\).*\\>"))
+(setq yellow-tokens (delete ?\s "\\<\\(F IX\\|D OC\\|R ETIRE\\|T ODO\\|W ARN\\|F IXME\\).*\\>"))
 (setq red-tokens (delete ?\s "\\<\\(H ACK\\|R EFACTOR\\).*\\>"))
+
+(defface my-red-face
+  '((t (:background "red")))
+  "A red face for warnings that are not quite that bad."
+ :group 'my-faces)
+
+(defface my-yellow-face
+  '((t (:background "yellow")))
+  "A yellow face for warnings that are not quite that bad."
+ :group 'my-faces)
 
 (mapcar (lambda (mode)
           (font-lock-add-keywords

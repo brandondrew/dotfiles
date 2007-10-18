@@ -24,7 +24,9 @@
   "Default inherited face for ERB tag delimeters"
   :group 'rhtml-faces)
 
+(require 'ruby-mode)
 (require 'ruby-electric)
+(require 'inf-ruby)
 ;; This isn't in my repo; so don't whine when I do a fresh checkout and
 ;; haven't symlinked in the dev checkout.
 (ignore-errors (require 'rails))
@@ -50,8 +52,8 @@
   (ruby-electric-mode)
   (pretty-lambdas)
   (define-key ruby-mode-map "\C-\M-h" 'backward-kill-word) ; ruby-mode redefines this badly
-  (when (featurep 'flymake)
-    (add-hook 'ruby-mode-hook 'flymake-ruby-load))
+;;   (when (featurep 'flymake)
+;;     (add-hook 'ruby-mode-hook 'flymake-ruby-load))
   (local-set-key (kbd "RET") 'ruby-reindent-then-newline-and-indent))
 
 (define-key ruby-mode-map (kbd "RET") 'ruby-reindent-then-newline-and-indent)

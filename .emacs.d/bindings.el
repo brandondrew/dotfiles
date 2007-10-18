@@ -27,11 +27,14 @@
 (global-set-key (kbd "C-c v") 'eval-buffer)
 (global-set-key (kbd "C-x m") 'eshell)
 (global-set-key (kbd "C-x M") (lambda () (interactive) (eshell t)))
+(global-set-key (kbd "C-x M-k") (lambda () (interactive) (kill-buffer (current-buffer)) (delete-window)))
 
 (global-set-key (kbd "M-\\") 'jao-toggle-selective-display)
 
 (global-set-key "\C-xh" 'view-url)
 (global-set-key (kbd "C-c l") (lambda () (interactive) (insert "lambda")))
+
+(global-set-key (kbd "C-c p") (lambda () (interactive) (message "%s" (point))))
 
 ; searching with regexes by default
 (global-set-key "\C-s" 'isearch-forward-regexp)
@@ -65,33 +68,7 @@
 (global-set-key [(control shift 2)] 'mark-string)
 (global-set-key [(shift f2)] 'color-theme-standard)
 
-; music management
-(global-set-key [f4] 'music-toggle)
-
-(global-set-key [(f5)] 'music-next)
-
-(global-set-key [(f3)] 'music-prev)
-
-(global-set-key [(control f3)] 'random-music)
-
-(global-set-key [(control f4)] 'music-play-dir)
-
-(global-set-key [(control f5)] 'music-add-file)
-
-;; For Ebby debugging, mostly
-(global-set-key [f7] (lambda () (interactive) (message "%s" (point))))
-
-; great for quick googles
-(global-set-key [f10] 'w3m)
-
-(global-set-key [(meta f10)] 'ruby-xmp-region)
-
 (global-set-key (kbd "C-h r") 'ri)
-
-(global-set-key [f12] '(lambda ()
-                         (interactive)
-                         (write-file "~/mjolnir/apps/technomancy/public/tmp/tmp.txt")))
-
 
 (add-hook 'c-mode-hook (lambda () (define-key c-mode-map "\C-\M-h" 'backward-kill-word)))
 
