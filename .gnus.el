@@ -1,10 +1,9 @@
-
 (setq gnus-select-method '(nnnil ""))
 (setq gnus-secondary-select-methods '((nnml ""
 					    (nnml-directory "~/Mail"))))
 
 (setq gnus-home-directory "~/.emacs.d")
-(setq user-mail-address "phil@hagelb.org")
+(setq user-mail-address "phil@evri.com")
 (setq user-full-name "Phil Hagelberg")
 (setq gnus-ignored-from-addresses "Phil Hagelberg")
 
@@ -28,45 +27,13 @@
 (setq nnmail-crosspost nil)
 
 (setq nnmail-split-fancy
-      '(| (to "ruby-talk@ruby-lang\\.org" "ruby-talk")
-	  (to "ruby_emacs_dev@yahoogroups\\.com" "emacs-rails")
-	  (to "rubyonrails-talk@googlegroups.com" junk)
-	  ("subject" "^\\[Rails\\]" junk)
-	  (to "obby-users@list.0x539.de" "obby-users")
-	  (from "rspec" junk)
-	  (any "darjeeling" "darjeeling")
-	  (any "conkeror" "conkeror")
-	  (any "zenspider\\.com" "seattle.rb")
-	  (any "mozlab" "mozlab")
-	  (any "dbus" "dbus")
-	  (any "cartographer" junk)
-	  (any "ocruby" junk)
-	  (any "helma" "helma")
-	  (any "utuprotocol" "utu")
-	  (any "emacs-devel" "emacs-devel")
-
-	  (any "team@circlebuilder\.com" junk)
-	  (any "philh@paxtel" junk)
-	  (any "cron" junk)
-
-	  (to "phil@localhost" "feeds")
-
-	  (any "zacchaeus.*" "friends")
-
-	  (any "alisha\\.e\\.hagelberg@biola\\.edu" "alisha")
-	  (from "agelberg" - "Alisha" "family")
-
-	  (any ".*hackelford.*" "friends")
-	  (any ".*peckham.*" "friends")
-	  (any ".*carroll.*" "friends")
-	  (any ".*guenther.*" "friends")
-	  (any ".*rowley.*" "friends")
-	  (any ".*malabuyo.*" "friends")
-	  (any ".*holloway.*" "friends")
-
-	  (any "Benjamin Bryan" "friends")
-	  (any "Arko" "friends")
-	  (any "Joel Watson" "friends")
+      '(| (from "repoman" "checkins")
+	  (from "JIRA" "jira")
+	  (from "zabbix" "zabbix")
+	  (from "infact" "infact")
+	  (any "articles@" "articles")
+	  (from "xplanner" junk)
+	  (from "Apple" junk)
 	  "inbox"))
 
 (setq mail-sources '((file :path "/var/mail/phil")))

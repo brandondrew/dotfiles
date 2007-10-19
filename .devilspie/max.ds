@@ -1,0 +1,5 @@
+(if (or (matches (window_name) "Firefox")
+	(matches (application_name) "macs"))
+    (begin        
+      (undecorate)
+      (maximize)))

@@ -42,6 +42,7 @@
 (add-to-list 'load-path "~/.emacs.d/jabber")
 (add-to-list 'load-path "~/.emacs.d/w3m")
 (add-to-list 'load-path "~/.emacs.d/dictionary")
+(add-to-list 'load-path "/usr/share/doc/git-core/contrib/emacs")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; loading modes
@@ -69,15 +70,10 @@
 (require 'wrap-region)
 (require 'elunit)
 (require 'flog)
-;(require 'test-unit)
 (require 'show-wspace)
-;(require 'smooth-scrolling)
 (require 'esh-mode)
-
-(add-to-list 'auto-mode-alist '("\\.php$" . php-mode))
-(add-to-list 'auto-mode-alist '("\\.css$" . css-mode))
-(add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
-(add-to-list 'auto-mode-alist '("\\.js$" . js-mode))
+(require 'git)
+(require 'buffer-stack)
 
 (add-hook 'js-mode-hook 'moz-minor-mode)
 (add-hook 'java-mode-hook 'moz-minor-mode)

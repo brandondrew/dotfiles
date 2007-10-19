@@ -1,8 +1,11 @@
 # .bashrc
 
 # User specific aliases and functions
+source ~/.profile
 
 [ "$EMACS" == "t" ] || alias ls="ls --color"
+export EDITOR="emacs -Q -nw"
+export PAGER=less
 
 alias emac="emacs -nw -q --no-site-file"
 alias ri="ri -f ansi -T"
@@ -26,6 +29,7 @@ alias saptc="apt-cache search"
 alias sapts="apt-cache show"
 
 alias xmlcurl="curl -H Accept:text/xml"
+alias feedconsole="ssh deploy@central /apps/feederator/current/script/console production"
 
 alias ml="ls ~/music"
 

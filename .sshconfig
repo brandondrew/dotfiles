@@ -31,3 +31,4 @@ Host *
   KeepAlive yes
 
   GSSAPIAuthentication no
+  HashKnownHosts no

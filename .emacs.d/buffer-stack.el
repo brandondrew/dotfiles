@@ -165,7 +165,7 @@ included in the stack."
 
 (defcustom buffer-stack-untracked
   '("KILL" "*Compile-Log*" "*Compile-Log-Show*"
-    "*Group*" "*Completions*" "*Messages*")
+    "*Completions*" "*Messages*")
   "The list of buffer names to hide when switching through the stack.
 This is used only with `buffer-stack-filter-exclusive', and is in
 addition to permanently-hidden buffers which start with a space."

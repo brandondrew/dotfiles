@@ -102,11 +102,11 @@
   (point))
   
 ;; well, we want to actually *use* this.
-(add-hook 'ruby-mode-hook 
-	  (lambda () (save-excursion
-		  (when (ruby-mode-test-p)
-		    (test-unit-mode)
-		    (test-unit-use-framework "ruby")))))
+;(add-hook 'ruby-mode-hook 
+;	  (lambda () (save-excursion
+;		  (when (ruby-mode-test-p)
+;		    (test-unit-mode)
+;		    (test-unit-use-framework "ruby")))))
 
 (defun ruby-mode-test-p ()
   (search-forward-regexp "class.*Test::Unit::TestCase" nil t))

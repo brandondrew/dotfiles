@@ -94,8 +94,22 @@ Key bindings:
               (c-shift-line-indentation -8))))
   )
 
-(define-key js-mode-map "\C-\M-h" 'backward-kill-word)
+(defun js-lambda () (interactive) (insert "function () {\n};")
+  (backward-char 6))
 
+(defun js-pretty-lambdas ()
+    (font-lock-add-keywords
+     nil `(("\\(function *\\)("
+            (0 (progn (compose-region (match-beginning 1) (match-end 1)
+                                      ,(make-char 'greek-iso8859-7 107))
+                      nil))))))
+
+(add-hook 'js-mode-hook 'js-pretty-lambdas)
+(define-key js-mode-map (kbd "C-c l") 'js-lambda)
+
+(define-key js-mode-map "\C-\M-h" 'backward-kill-word)
+(define-key js-mode-map (kbd "RET") 'newline-and-indent)
+ 
 
 (cc-provide 'js-mode)
 ;;; js-mode ends here
