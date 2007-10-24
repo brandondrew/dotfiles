@@ -28,8 +28,6 @@
 ;(add-hook 'find-file-hook 'jao-toggle-selective-display)
 ;(add-hook 'elunit-done-running-hook 'play-test-sounds)
 
-(setq eshell-cmpl-cycle-completions nil)
-(setq eshell-save-history-on-exit t)
 (setq visible-bell t)
 (setq font-lock-maximum-decoration t)
 (setq inhibit-startup-message t)
@@ -61,7 +59,7 @@
 (add-to-list 'auto-mode-alist '("\\.php$" . php-mode))
 (add-to-list 'auto-mode-alist '("\\.css$" . css-mode))
 (add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
-(add-to-list 'auto-mode-alist '("\\.js$" . js-mode))
+(add-to-list 'auto-mode-alist '("\\.js$" . javascript-mode))
 
 ;; w3m
 (setq w3m-use-cookies t)

@@ -129,6 +129,14 @@
       <outline text="Ola Bini"
 	       htmlUrl="http://ola-bini.blogspot.com/"
 	       xmlUrl="http://ola-bini.blogspot.com/atom.xml" />
+      <outline text="Ryan Davis"
+	       description="Zen Spider"
+	       htmlUrl="http://blog.zenspider.com/"
+	       xmlUrl="http://blog.zenspider.com/atom.xml" />
+      <outline text="Eric Hodel"
+	       description="Segment 7"
+	       htmlUrl="http://blog.segment7.net/"
+	       xmlUrl="http://feeds.feedburner.com/segment7/VjcA" />
       <outline text="Ryan Daigle"
 	       description="Ryan's Scraps"
 	       htmlUrl="http://www.ryandaigle.com"

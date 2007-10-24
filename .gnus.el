@@ -78,7 +78,6 @@
 (gnus-demon-init)
 
 ;; TODO:
-;; - ical integration: http://bc.tech.coop/blog/070306.html and https://zimbra.evri.com/home/phil/Calendar/
 ;; - what is gnu-registry?
 ;; - bbdb?
 ;; - sort group by

@@ -34,4 +34,4 @@
       (:foreground "grey55")))
    "Face used to dim parentheses.")
 
-(provide 'lisp)
+(provide 'my-lisp)

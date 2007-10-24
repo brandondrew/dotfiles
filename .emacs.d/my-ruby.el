@@ -90,4 +90,4 @@
           '(lambda ()
              (define-key ruby-mode-map (kbd "C-c C-a") 'autotest-switch)))
 
-(provide 'ruby)
+(provide 'my-ruby)
