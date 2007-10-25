@@ -31,7 +31,11 @@
 
 ;;; Defining convenience
 
-
+(defmacro with-test-buffer (&rest body)
+  `(save-excursion
+     (switch-to-buffer "*elunit-output*")
+     ,@body
+     (kill-buffer "*elunit-output*")))
 
 ;;; Running convenience
 

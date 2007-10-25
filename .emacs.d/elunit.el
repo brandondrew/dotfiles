@@ -3,7 +3,7 @@
 ;; Copyright (C) 2006 - 2007 Phil Hagelberg
 
 ;; Author: Phil Hagelberg
-;; URL: http://dev.technomancy.us/wiki/ElUnit
+;; URL: http://www.emacswiki.org/cgi-bin/wiki/ElUnit
 
 ;;; License:
 

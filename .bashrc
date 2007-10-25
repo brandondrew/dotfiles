@@ -24,6 +24,7 @@ alias saptu="sudo apt-get upgrade"
 alias saptd="sudo apt-get update"
 alias saptc="apt-cache search"
 alias sapts="apt-cache show"
+alias pgrep="ps awx | grep"
 
 alias xmlcurl="curl -H Accept:text/xml"
 

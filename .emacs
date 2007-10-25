@@ -78,6 +78,7 @@
 (add-to-list 'auto-mode-alist '("\\.css$" . css-mode))
 (add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
 (add-to-list 'auto-mode-alist '("\\.js$" . js-mode))
+(add-to-list 'auto-mode-alist '("\\.json$" . js-mode))
 
 (add-hook 'js-mode-hook 'moz-minor-mode)
 (add-hook 'java-mode-hook 'moz-minor-mode)

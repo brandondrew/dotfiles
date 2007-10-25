@@ -8,3 +8,4 @@ alias ll ls -l $*
 alias sapts apt-cache show $*
 alias saptc apt-cache search $*
 alias sapti sudo apt-get install $*
+alias pgrep ps awx | grep $*

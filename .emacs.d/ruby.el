@@ -46,6 +46,8 @@
  
 (add-hook 'ruby-mode-hook 'my-ruby-mode-hook)
 
+(defalias 'rr 'run-ruby)
+
 (defun my-ruby-mode-hook ()
   (highlight-trailing-whitespace)
   (highlight-tabs)

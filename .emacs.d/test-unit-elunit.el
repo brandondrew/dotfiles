@@ -54,10 +54,10 @@
 (defun elunit-test-filter (process output)
   )
 
-(add-hook 'emacs-lisp-mode-hook 
-	  (lambda () (save-excursion (when (search-forward-regexp "defsuite" nil t)
-				  (test-unit-mode)
-				  (test-unit-use-framework "elunit")))))
+;; (add-hook 'emacs-lisp-mode-hook 
+;; 	  (lambda () (save-excursion (when (search-forward-regexp "defsuite" nil t)
+;; 				  (test-unit-mode)
+;; 				  (test-unit-use-framework "elunit")))))
 
 (provide 'test-unit-elunit)
 ;;; test-unit-elunit.el ends here
