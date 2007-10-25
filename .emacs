@@ -38,6 +38,7 @@
 (add-to-list 'load-path "~/.emacs.d")
 (add-to-list 'load-path "~/.emacs.d/behave")
 (add-to-list 'load-path "~/.emacs.d/rails")
+(add-to-list 'load-path "~/.emacs.d/rinari/rhtml")
 (add-to-list 'load-path "~/.emacs.d/jabber")
 (add-to-list 'load-path "~/.emacs.d/w3m")
 (add-to-list 'load-path "~/.emacs.d/dictionary")
