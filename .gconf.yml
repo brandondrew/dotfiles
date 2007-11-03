@@ -73,7 +73,7 @@
   theme: standard
 /desktop/gnome/:
   font_rendering/:
-    dpi: 72.0
+    dpi: 85.0
     hinting: full
   interface/:
     can_change_accels: true

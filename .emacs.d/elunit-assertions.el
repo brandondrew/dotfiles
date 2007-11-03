@@ -103,5 +103,9 @@
   (unless (overlays-at pos)
     (fail "Expected overlay at position %d" pos)))
 
+(defun assert-no-overlay (pos)
+  (if (overlays-at pos)
+    (fail "Expected no overlay at position %d" pos)))
+
 (provide 'elunit-assertions)
 ;;; elunit-assertions.el ends here

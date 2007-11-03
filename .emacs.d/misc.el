@@ -26,9 +26,11 @@
 
 (add-to-list 'comint-mode-hook 'ansi-color-for-comint-mode-on)
 ;(add-hook 'find-file-hook 'jao-toggle-selective-display)
-;(add-hook 'elunit-done-running-hook 'play-test-sounds)
 
 (setq eshell-cmpl-cycle-completions nil)
+(setq eshell-save-history-on-exit t)
+;(set-face-attribute 'eshell-prompt nil :foreground "DeepSkyBlue")
+;(set-face-attribute 'eshell-prompt nil :background "white")
 (setq visible-bell t)
 (setq font-lock-maximum-decoration t)
 (setq inhibit-startup-message t)
@@ -40,9 +42,6 @@
 (setq color-theme-is-global nil)
 (put 'narrow-to-region 'disabled nil)
 (put 'downcase-region 'disabled nil)
-;(require 'eshell)
-;(set-face-attribute 'eshell-prompt nil :foreground "DeepSkyBlue")
-;(set-face-attribute 'eshell-prompt nil :background "white")
 (defalias 'yes-or-no-p 'y-or-n-p)
 (defalias 'qrr 'query-replace-regexp)
 (random t)
