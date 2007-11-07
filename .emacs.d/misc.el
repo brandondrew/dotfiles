@@ -32,6 +32,7 @@
 (setq font-lock-maximum-decoration t)
 (setq inhibit-startup-message t)
 (setq transient-mark-mode t)
+(setq indent-tabs-mode nil)
 (auto-compression-mode t) ; load .gz's automatically
 (global-font-lock-mode t)
 (menu-bar-mode -1) ; toggled by F1

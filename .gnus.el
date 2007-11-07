@@ -49,7 +49,7 @@
       mm-text-html-renderer 'w3m)
 
 (add-hook 'gnus-group-mode-hook 'gnus-topic-mode)
-(add-hook 'message-mode-hook 'auto-fill-mode)
+(add-hook 'message-mode-hook 'turn-on-auto-fill)
 (add-hook 'message-mode-hook 'flyspell-mode)
 
 (mailcap-add "image/jpeg" "display")

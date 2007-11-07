@@ -50,7 +50,6 @@
 (autoload 'php-mode "php-mode")
 (autoload 'yaml-mode "yaml-mode")
 (autoload 'css-mode "css-mode")
-(autoload 'javascript-mode "javascript" nil t)
 (autoload 'moz-minor-mode "moz" "Mozilla Minor and Inferior Mozilla Modes" t)
 (autoload 'lisppaste-paste-region "lisppaste" "" t)
 (autoload 'htmlize-region "htmlize" "" t)
@@ -61,6 +60,7 @@
 (autoload 'w3m "w3m" "" t)
 (autoload 'tail-file "tail.el" "Tail a file." t)
 
+(require 'javascript)
 (require 'toggle)
 (require 'compile)
 (require 'which-func)
@@ -72,6 +72,7 @@
 (require 'git)
 (require 'buffer-stack)
 
+(load "nxml/autostart.el")
 (load "dictionary-init")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

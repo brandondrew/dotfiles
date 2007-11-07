@@ -115,6 +115,56 @@
 		    `((equal ,expr ,(car c)) ,@(cdr c)))
 		    choices)))
 
+(defun browse-url-firefox (url &optional new-window)
+  "Ask the Firefox WWW browser to load URL.
+Default to the URL around or before point.  The strings in
+variable `browse-url-firefox-arguments' are also passed to
+Firefox.
+
+When called interactively, if variable
+`browse-url-new-window-flag' is non-nil, load the document in a
+new Firefox window, otherwise use a random existing one.  A
+non-nil interactive prefix argument reverses the effect of
+`browse-url-new-window-flag'.
+
+If `browse-url-firefox-new-window-is-tab' is non-nil, then
+whenever a document would otherwise be loaded in a new window, it
+is loaded in a new tab in an existing window instead.
+
+When called non-interactively, optional second argument
+NEW-WINDOW is used instead of `browse-url-new-window-flag'.
+
+On MS-Windows systems the optional `new-window' parameter is
+ignored.  Firefox for Windows does not support the \"-remote\"
+command line parameter.  Therefore, the
+`browse-url-new-window-flag' and `browse-url-firefox-new-window-is-tab'
+are ignored as well.  Firefox on Windows will always open the requested
+URL in a new window."
+  (interactive (browse-url-interactive-arg "URL: "))
+  (setq url (browse-url-encode-url url))
+  (let* ((process-environment (browse-url-process-environment))
+	 (process
+	  (apply 'start-process
+		 (concat "firefox-3.0 " url) nil
+		 browse-url-firefox-program
+		 (append
+		  browse-url-firefox-arguments
+		  (if (or (featurep 'dos-w32)
+			  (string-match "win32" system-configuration))
+		      (list url)
+		    (list "-remote"
+			  (concat "openURL("
+				  url
+				  (if (browse-url-maybe-new-window
+				       new-window)
+				      (if browse-url-firefox-new-window-is-tab
+					  ",new-tab"
+					",new-window"))
+				  ")")))))))
+    (set-process-sentinel process
+			  `(lambda (process change)
+			     (browse-url-firefox-sentinel process ,url)))))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; music
 
