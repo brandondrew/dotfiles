@@ -37,8 +37,6 @@
 
 (add-to-list 'load-path "~/.emacs.d")
 (add-to-list 'load-path "~/.emacs.d/behave")
-(add-to-list 'load-path "~/.emacs.d/rails")
-(add-to-list 'load-path "~/.emacs.d/rinari/rhtml")
 (add-to-list 'load-path "~/.emacs.d/jabber")
 (add-to-list 'load-path "~/.emacs.d/w3m")
 (add-to-list 'load-path "~/.emacs.d/dictionary")
@@ -72,8 +70,11 @@
 (require 'git)
 (require 'buffer-stack)
 
-(load "nxml/autostart.el")
+(add-to-list 'auto-mode-alist '("\\.css$" . css-mode))
+(add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
+
 (load "dictionary-init")
+(load "nxml/autostart.el")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; My support files and configurations
@@ -130,7 +131,7 @@
 ;;; mark with 'm', press 'Q' for multi-file find/replace
 ;;; C-j launch dired when ido-mode is enabled
 
-;;; 					G G gnus keyword search
+;;; G G gnus keyword search
 ;;; G T show context in keyword search
 
 ;;; list-colors-display

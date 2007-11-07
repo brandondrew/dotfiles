@@ -99,5 +99,13 @@
     (unless (equal (face (get-text-property (point) 'background)))
       (fail "%s expected to be displayed with face %s" target face))))
 
+(defun assert-overlay (pos)
+  (unless (overlays-at pos)
+    (fail "Expected overlay at position %d" pos)))
+
+(defun assert-no-overlay (pos)
+  (if (overlays-at pos)
+    (fail "Expected no overlay at position %d" pos)))
+
 (provide 'elunit-assertions)
 ;;; elunit-assertions.el ends here

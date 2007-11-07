@@ -7,7 +7,8 @@
 
 (setq eshell-cmpl-cycle-completions nil)
 (setq eshell-save-history-on-exit t)
-
+;;(add-hook 'eshell-mode-hook (lambda () 
+;;			      (set-face-attribute 'eshell-prompt nil :foreground "DeepSkyBlue")))
 ;; see pcmpl-cvs.el in ~/src/emacs/lisp
 
 ;; this variable seems to be ignored:

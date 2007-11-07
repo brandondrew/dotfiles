@@ -9,3 +9,5 @@ alias saptr sudo apt-get remove $*
 alias saptu sudo apt-get upgrade $*
 alias saptd sudo apt-get update $*
 alias xmlcurl curl -H Accept:text/xml $*
+alias pgrep ps awx | grep $*
+
