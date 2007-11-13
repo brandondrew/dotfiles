@@ -69,9 +69,7 @@
 (require 'wrap-region)
 (require 'elunit)
 (require 'flog)
-;(require 'test-unit)
 (require 'show-wspace)
-;(require 'smooth-scrolling)
 (require 'esh-mode)
 
 (add-to-list 'auto-mode-alist '("\\.php$" . php-mode))
@@ -79,9 +77,6 @@
 (add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
 (add-to-list 'auto-mode-alist '("\\.js$" . js-mode))
 (add-to-list 'auto-mode-alist '("\\.json$" . js-mode))
-
-(add-hook 'js-mode-hook 'moz-minor-mode)
-(add-hook 'java-mode-hook 'moz-minor-mode)
 
 (load "dictionary-init")
 
@@ -98,6 +93,7 @@
 
 (if (functionp 'jabber-connect)
     (load "jabber-config"))
+(load "rcirc-config")
 
 (let ((system-specific-config (concat "~/.emacs.d/" (substring (shell-command-to-string "hostname") 0 -1)".el")))
   (if (file-exists-p system-specific-config)
@@ -141,3 +137,6 @@
 ;;; G T show context in keyword search
 
 ;;; list-colors-display
+
+(custom-set-variables
+ '(indent-tabs-mode nil))

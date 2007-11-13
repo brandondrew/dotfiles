@@ -9,3 +9,7 @@ alias sapts apt-cache show $*
 alias saptc apt-cache search $*
 alias sapti sudo apt-get install $*
 alias pgrep ps awx | grep $*
+alias gst git status
+alias gb git branch --color
+alias gcm git commit -a -v
+alias gco git checkout $*

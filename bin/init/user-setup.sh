@@ -30,6 +30,14 @@ cd screen/src
 make
 sudo make install
 
+# grab ruby-dbus
+cd ~/src
+svn co svn://trac.luon.net/ruby-dbus/trunk ruby-dbus
+cd ruby-dbus
+ruby setup.rb config
+ruby setup.rb setup
+sudo ruby setup.rb install
+
 # mozlab and firebug installations must be by hand
 wget http://getfirebug.com/releases/firebug1.0-current.xpi
 firefox firebug1.0-current.xpi

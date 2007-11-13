@@ -15,6 +15,7 @@
 - firefox-3.0
 - firefox-themes-ubuntu
 - firefox-webdeveloper
+- gitk
 - git-core
 - git-svn
 - gmpc
@@ -43,6 +44,7 @@
 - netcat
 - nmap
 - openssh-server
+- pidgin-libnotify
 - rdoc1.8
 - rdoc1.8
 - ri1.8

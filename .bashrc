@@ -8,16 +8,11 @@ alias emac="emacs -nw -q --no-site-file"
 alias ri="ri -f ansi -T"
 alias devlog="tail -F log/development.log"
 
-#alias cd="cd \!*; ls"
 alias ll="ls -l -h"
 alias la="ls -a"
 alias l="ls"
 alias lla="ls -a -l"
 alias grep="grep --color=auto"
-alias svnci="rake test && svn ci"
-
-alias svnpx="svn up; svn up -r 656 config/database.yml"
-alias less="most"
 
 alias sapti="sudo apt-get install"
 alias saptr="sudo apt-get remove"
@@ -31,22 +26,13 @@ alias xmlcurl="curl -H Accept:text/xml"
 
 alias ml="ls ~/music"
 
-function cdgem {
-  cd /opt/local/lib/ruby/gems/1.8/gems/; cd `ls|grep $1|sort|tail -1`
-}
-
-tmpit () { cp "$*" ~/mjolnir/apps/technomancy/public/tmp/; }
-
-export SVN_EDITOR="zile"
-
 complete -C ~/bin/rake-complete.rb -o default rake
+
+export EDITOR=emacsclient
 
 # prompt coloring
 # see http://attachr.com/9288 for full-fledged craziness
-if [ `hostname` = "mjolnir" ] ; then
-  # mjolnir has a green prompt
-  export PS1="\[\033[0;32m\]\u@\h \w \$ \[\033[0m\]"
-elif [ `/usr/bin/whoami` = "root" ] ; then
+if [ `/usr/bin/whoami` = "root" ] ; then
   # root has a red prompt
   export PS1="\[\033[0;31m\]\u@\h \w \$ \[\033[0m\]"
 elif [ `hostname` = "vannevar" -o `hostname` = "puyo" -o `hostname` = "imp" ] ; then

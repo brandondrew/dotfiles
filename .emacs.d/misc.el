@@ -24,8 +24,10 @@
 (when (not window-system)
   (keyboard-translate ?\C-h ?\C-?))
 
-(add-to-list 'comint-mode-hook 'ansi-color-for-comint-mode-on)
-;(add-hook 'find-file-hook 'jao-toggle-selective-display)
+(add-hook 'comint-mode-hook 'ansi-color-for-comint-mode-on)
+(add-hook 'js-mode-hook 'moz-minor-mode)
+;;(add-hook 'find-file-hook 'jao-toggle-selective-display)
+(add-hook 'html-mode-hook 'auto-fill-mode)
 
 (setq eshell-cmpl-cycle-completions nil)
 (setq eshell-save-history-on-exit t)
@@ -88,6 +90,5 @@
            (list (list yellow-tokens 0 ''my-yellow-face 'prepend)
                  (list red-tokens    0 ''my-red-face    'prepend))))
         '(ruby-mode lisp-mode emacs-lisp-mode))
-
 
 (provide 'misc)

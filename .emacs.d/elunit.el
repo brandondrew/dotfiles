@@ -215,7 +215,8 @@
       (if (equal (car (test-problem test)) 'elunit-test-failed)
 	  "Failure:" "  Error:")
       (test-name test) (test-file test) (test-line test)
-      (elunit-test-docstring test) (test-message test) (test-body test))))))
+      (elunit-test-docstring test) (pp-to-string (test-message test))
+      (pp-to-string (test-body test)))))))
 
 (add-to-list 'compilation-error-regexp-alist '("\\[\\([^\]]*\\):\\([0-9]+\\)\\]" 1 2))
 
