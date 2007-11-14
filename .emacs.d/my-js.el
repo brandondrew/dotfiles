@@ -35,6 +35,7 @@
 (add-to-list 'auto-mode-alist '("\\.hac$" . js-mode))
 
 (require 'flymake-js)
-(add-hook 'javascript-mode-hook 'flymake-js-load)
+;; getting an error 100% of the time now.
+;;(add-hook 'javascript-mode-hook 'flymake-js-load)
 
 (provide 'my-js)

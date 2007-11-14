@@ -34,6 +34,7 @@
 	  (from "JIRA" "jira")
 	  (from "zabbix" "zabbix")
 	  (from "infact" "infact")
+	  (to "code-review" "review")
 	  (any "articles@" "articles")
 	  (to "phil@localhost" "feeds")
 	  (from "xplanner" junk)

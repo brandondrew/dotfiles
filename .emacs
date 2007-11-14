@@ -93,6 +93,8 @@
 (if (functionp 'jabber-connect)
     (load "jabber-config"))
 
+(load "rcirc-config")
+
 (let ((system-specific-config (concat "~/.emacs.d/" (substring (shell-command-to-string "hostname") 0 -1)".el")))
   (if (file-exists-p system-specific-config)
       (load system-specific-config)))

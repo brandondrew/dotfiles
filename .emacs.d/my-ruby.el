@@ -36,7 +36,11 @@
  
 (add-hook 'ruby-mode-hook 'my-ruby-mode-hook)
 
+(defalias 'rr 'run-ruby)
+
 (defun my-ruby-mode-hook ()
+  (highlight-trailing-whitespace)
+  (highlight-tabs)
   (ruby-electric-mode)
   (pretty-lambdas))
 
@@ -103,11 +107,11 @@
 (push '("Rakefile$" flymake-ruby-init) flymake-allowed-file-name-masks)
 (push '("^\\(.*\\):\\([0-9]+\\): \\(.*\\)$" 1 2 nil 3) flymake-err-line-patterns)
 
-(add-hook 'ruby-mode-hook
-          '(lambda ()
-	     ;; Don't want flymake mode for ruby regions in rhtml files and also on read only files
-	     (if (and (not (null buffer-file-name)) (file-writable-p buffer-file-name))
-		 (flymake-mode))))
+;;(add-hook 'ruby-mode-hook
+;;          '(lambda ()
+;;	     ;; Don't want flymake mode for ruby regions in rhtml files and also on read only files
+;;	     (if (and (not (null buffer-file-name)) (file-writable-p buffer-file-name))
+;;		 (flymake-mode))))
 	     
 ;; Thanks PragDave:
 
