@@ -1,8 +1,6 @@
-(require 'cl)
 (load "elunit")
 
-(make-local-variable 'after-save-hook)
-(add-hook 'after-save-hook (lambda () (elunit "meta-suite")))
+(add-hook (make-local-variable 'after-save-hook) (lambda () (elunit "meta-suite")))
 
 (elunit-clear-suites)
 
@@ -37,7 +35,6 @@
   (elunit-delete-suite 'sample-suite)
   ;; should just have default suite now
   (assert-equal 3 (length elunit-suites)))
-
 
 (deftest duplicate-suite meta-suite
   (defsuite sample-suite nil
@@ -101,7 +98,7 @@
   (search-forward "Error:")
   (search-forward "Failure:"))
 
-;; ;; should run a suite's tests plus a suite's children
+;; should run a suite's tests plus a suite's children
 
 (defsuite child-suite sample-suite)
 
@@ -110,9 +107,9 @@
    ;; must use princ to take advantage of with-output-to-temp-buffer
    (princ "some crap"))
 
-;;(save-window-excursion
-;;  (elunit "sample-suite")
-;;  (assert-in-buffer "some crap" "*elunit*"))
+(save-window-excursion
+ (elunit "sample-suite")
+ (assert-in-buffer "some crap" "*elunit*"))
 
 ;; report successes with dots
 

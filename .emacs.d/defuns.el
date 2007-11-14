@@ -115,6 +115,13 @@
 		    `((equal ,expr ,(car c)) ,@(cdr c)))
 		    choices)))
 
+(defun current-window ()
+  (get-buffer-window (current-buffer)))
+
+(defun toggle-dedicated-window ()
+  (interactive)
+  (set-window-dedicated-p (current-window) (not (window-dedicated-p (current-window)))))
+  
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; music
 

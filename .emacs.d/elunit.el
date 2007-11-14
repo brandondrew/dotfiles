@@ -46,7 +46,7 @@
 
 ;;; Todo:
 
-;;  * more helper functions
+;;  * more helper functions, specifically for more functional-test stuff.
 
 ;;; Usage:
 
@@ -92,10 +92,10 @@
 (defmacro* defsuite (suite-name suite-ancestor &key setup-hook teardown-hook)
   "Define a suite, which may be hierarchical."
   `(let ((suite (make-test-suite :name ',suite-name
-				 :setup-hook ,setup-hook :teardown-hook ,teardown-hook)))
+                                 :setup-hook ,setup-hook :teardown-hook ,teardown-hook)))
      (elunit-delete-suite ',suite-name)
      (if ',suite-ancestor
-	 (push suite (test-suite-children (elunit-get-suite ',suite-ancestor))))
+         (push suite (test-suite-children (elunit-get-suite ',suite-ancestor))))
      (add-to-list 'elunit-suites suite)))
 
 (defun elunit-get-suite (suite)
@@ -103,55 +103,53 @@
   (if (test-suite-p suite)
       suite
     (find suite elunit-suites :test (lambda (suite asuite)
-				     (equal suite (test-suite-name asuite))))))
+                                     (equal suite (test-suite-name asuite))))))
 
 (defun elunit-delete-suite (name)
   (setq elunit-suites (remove (elunit-get-suite name) elunit-suites)))
 
-
 (defmacro deftest (name suite &rest body)
-  ;; TODO: gensym
   (save-excursion
     (search-backward (symbol-name name) nil t)
     (let ((line (line-number-at-pos))
-	  (file buffer-file-name))
-      `(let ((suite (elunit-get-suite ',suite)))
-	 ;; not a foolproof heuristic to get line number, but good enough.
-	 (elunit-delete-test ',name suite)
-	 (push (make-test :name ',name :body (lambda () ,@body)
-				       :file ,file :line ,line)
-	       (test-suite-tests suite))))))
+          (file buffer-file-name)
+          (suite-sym (gensym)))
+      `(let ((,suite-sym (elunit-get-suite ',suite)))
+         ;; not a foolproof heuristic to get line number, but good enough.
+         (elunit-delete-test ',name ,suite-sym)
+         (push (make-test :name ',name :body (lambda () ,@body)
+                                       :file ,file :line ,line)
+               (test-suite-tests ,suite-sym))))))
 
 (defun elunit-get-test (name suite)
   (if (test-p name) name
     (find name (test-suite-tests (elunit-get-suite suite))
-	  :test (lambda (name test) (equal name (test-name test))))))
+          :test (lambda (name test) (equal name (test-name test))))))
 
 (defun elunit-delete-test (name suite)
   (let ((suite (elunit-get-suite suite)))
     (setf (test-suite-tests suite)
-	  (delete (elunit-get-test name suite) (test-suite-tests suite)))))
+          (delete (elunit-get-test name suite) (test-suite-tests suite)))))
 
-;; TODO: broken.
 (defun elunit-total-test-count (suite)
   (let ((suite (elunit-get-suite suite)))
     (if suite
-	(+ (apply #'+ (elunit-total-test-count (test-suite-children suite)))
-	   (length (test-suite-tests suite))))))
+        (+ (apply #'+ (elunit-total-test-count (test-suite-children suite)))
+           (length (test-suite-tests suite))))))
 
 (defun elunit-test-docstring (test)
   (if (equal (car (test-body test)) 'lambda)
       (if (stringp (caddr (test-body test)))
-	  (caddr (test-body test))
-	"")))
+          (caddr (test-body test))
+        "")))
 
-;;; Running the unit tests
+;;; Running the tests
 
 (defun elunit (suite)
   "Ask for a single suite, run all its tests, and display the results."
   (interactive (list (completing-read (concat "Run test suite (default " elunit-default-suite "): " )
-				      (mapcar (lambda (suite) (symbol-name (test-suite-name suite))) 
-					      elunit-suites) nil t nil nil elunit-default-suite)))
+                                      (mapcar (lambda (suite) (symbol-name (test-suite-name suite))) 
+                                              elunit-suites) nil t nil nil elunit-default-suite)))
  (setq elunit-default-suite suite)
  (setq elunit-test-count 0)
  (setq elunit-failures nil)
@@ -165,8 +163,8 @@
    (let ((start-time (cadr (current-time))))
      (elunit-run-suite (elunit-get-suite (intern suite)))
      (princ (format "\n\n%d tests with %d failures in %d seconds."
-		    elunit-test-count (length elunit-failures)
-		    (- (cadr (current-time)) start-time))))
+                    elunit-test-count (length elunit-failures)
+                    (- (cadr (current-time)) start-time))))
    (elunit-report-failures)))
 
 (defun elunit-run-suite (suite)
@@ -183,9 +181,9 @@
   "Run a single test."
   (condition-case err
       (progn
-	(incf elunit-test-count)
-	(funcall (test-body test))
-	(princ "."))
+        (incf elunit-test-count)
+        (funcall (test-body test))
+        (princ "."))
     (failure
      (elunit-failure test err "F"))
     (error
@@ -213,14 +211,30 @@
    Message: %s
       Form: %s" count
       (if (equal (car (test-problem test)) 'elunit-test-failed)
-	  "Failure:" "  Error:")
+          "Failure:" "  Error:")
       (test-name test) (test-file test) (test-line test)
       (elunit-test-docstring test) (pp-to-string (test-message test))
       (pp-to-string (test-body test)))))))
 
 (add-to-list 'compilation-error-regexp-alist '("\\[\\([^\]]*\\):\\([0-9]+\\)\\]" 1 2))
 
+;;; Helper functions
+
+(defmacro with-test-buffer (&rest body)
+  `(save-excursion
+     (switch-to-buffer "*elunit-output*")
+     ,@body
+     (kill-buffer "*elunit-output*")))
+
+(defun elunit-quiet (suite)
+  "Run a suite and display results in the minibuffer"
+  (interactive (list (completing-read (concat "Run test suite (default " elunit-default-suite "): " )
+				      (mapcar (lambda (suite) (symbol-name (test-suite-name suite))) 
+					      elunit-suites) nil t nil nil elunit-default-suite)))
+  (save-window-excursion
+    (elunit suite))
+  (message "%d tests with %d failures" elunit-test-count (length elunit-failures)))
+
 (require 'elunit-assertions)
-(require 'elunit-helpers)
 (provide 'elunit)
 ;;; elunit.el ends here
