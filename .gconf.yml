@@ -72,8 +72,8 @@
   theme: standard
 /desktop/gnome/:
   font_rendering/:
-    dpi: 85.0
     antialiasing: greyscale
+    dpi: 85.0
     hinting: full
   interface/:
     can_change_accels: true

@@ -27,11 +27,15 @@
 (define-key javascript-mode-map (kbd "RET") 'newline-and-indent)
 (add-hook 'javascript-mode-hook 'moz-minor-mode)
 
+(add-to-list 'auto-mode-alist '("\\.js$" . js-mode))
+(add-to-list 'auto-mode-alist '("\\.json$" . js-mode))
+
 ;; for helma
 (add-to-list 'auto-mode-alist '("\\.skin$" . html-mode))
 (add-to-list 'auto-mode-alist '("\\.hac$" . js-mode))
 
 (require 'flymake-js)
-(add-hook 'javascript-mode-hook 'flymake-js-load)
+;; getting an error 100% of the time now.
+;;(add-hook 'javascript-mode-hook 'flymake-js-load)
 
 (provide 'my-js)

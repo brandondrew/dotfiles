@@ -44,12 +44,9 @@
 	  (any "helma" "helma")
 	  (any "utuprotocol" "utu")
 	  (any "emacs-devel" "emacs-devel")
-
 	  (any "team@circlebuilder\.com" junk)
 	  (any "philh@paxtel" junk)
 	  (any "cron" junk)
-
-	  (to "phil@localhost" "feeds")
 
 	  (any "zacchaeus.*" "friends")
 

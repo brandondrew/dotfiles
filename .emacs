@@ -47,7 +47,6 @@
 (autoload 'php-mode "php-mode")
 (autoload 'yaml-mode "yaml-mode")
 (autoload 'css-mode "css-mode")
-(autoload 'javascript-mode "javascript" nil t)
 (autoload 'moz-minor-mode "moz" "Mozilla Minor and Inferior Mozilla Modes" t)
 (autoload 'lisppaste-paste-region "lisppaste" "" t)
 (autoload 'htmlize-region "htmlize" "" t)
@@ -58,6 +57,7 @@
 (autoload 'w3m "w3m" "" t)
 (autoload 'tail-file "tail.el" "Tail a file." t)
 
+(require 'javascript)
 (require 'toggle)
 (require 'compile)
 (require 'which-func)
@@ -69,11 +69,12 @@
 (require 'git)
 (require 'buffer-stack)
 
-(add-to-list 'auto-mode-alist '("\\.php$" . php-mode))
 (add-to-list 'auto-mode-alist '("\\.css$" . css-mode))
 (add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
 (add-to-list 'auto-mode-alist '("\\.js$" . js-mode))
 (add-to-list 'auto-mode-alist '("\\.json$" . js-mode))
+
+(load "nxml/autostart.el")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; My support files and configurations
@@ -92,6 +93,8 @@
 
 (if (functionp 'jabber-connect)
     (load "jabber-config"))
+(load "rcirc-config")
+
 (load "rcirc-config")
 
 (let ((system-specific-config (concat "~/.emacs.d/" (substring (shell-command-to-string "hostname") 0 -1)".el")))
@@ -130,5 +133,7 @@
 ;;; mark with 'm', press 'Q' for multi-file find/replace
 ;;; C-j launch dired when ido-mode is enabled
 
-;;; list-colors-display
+;;; G G gnus keyword search
+;;; G T show context in keyword search
 
+;;; list-colors-display

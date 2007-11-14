@@ -102,8 +102,6 @@ To check out the list, evaluate (list-colors-display rcirc-colors).")
           (when face
             (rcirc-add-face (match-beginning 0) (match-end 0) face)))))))
 
-;; (add-to-list 'rcirc-markup-text-functions 'rcirc-markup-nick-colors)
-
 (defun-rcirc-command color (args)
   "Change one of the nick colors."
   (interactive)
@@ -136,4 +134,5 @@ To check out the list, evaluate (list-colors-display rcirc-colors).")
     (when cell
       (puthash new-nick cell rcirc-color-mapping))))
 
+;;; rcirc-color.el ends here
 

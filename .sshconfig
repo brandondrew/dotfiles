@@ -7,6 +7,9 @@ Host technomancy.us
 Host rubyforge.org
   User technomancy
 
+Host zeeza-2
+  User deploy
+
 Host *
   User phil
   KeepAlive yes

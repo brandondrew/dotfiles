@@ -30,10 +30,17 @@
 (add-hook 'js-mode-hook 'moz-minor-mode)
 (add-hook 'html-mode-hook 'auto-fill-mode)
 
+<<<<<<< HEAD:.emacs.d/misc.el
+=======
+(setq eshell-cmpl-cycle-completions nil)
+(setq eshell-save-history-on-exit t)
+
+>>>>>>> remotes/imp/master:.emacs.d/misc.el
 (setq visible-bell t)
 (setq font-lock-maximum-decoration t)
 (setq inhibit-startup-message t)
 (setq transient-mark-mode t)
+(setq indent-tabs-mode nil)
 (auto-compression-mode t) ; load .gz's automatically
 (global-font-lock-mode t)
 (menu-bar-mode -1) ; toggled by F1
