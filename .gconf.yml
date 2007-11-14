@@ -1,5 +1,3 @@
-/apps/deskbar/:
-  keybinding: <Alt>space
 /apps/epiphany/general/:
   homepage: about:blank
 /apps/epiphany/general/:
@@ -10,7 +8,7 @@
     use_mnemonics: false
 /apps/metacity/: 
   general/:
-    num_workspaces: 6
+    num_workspaces: 4
     theme: Glossy
   keybinding_commands/: 
     command_1: urxvt -bg white +sb -bd white -e screen -xRR
@@ -25,6 +23,7 @@
     command_10: /home/phil/bin/notify-mpc
     command_11: /home/phil/projects/presentations/feedback/render.sh
   global_keybindings/: 
+    panel_run_dialog: <Alt>space
     run_command_1: <Alt>grave
     run_command_2: <Shift>F1
     run_command_3: <Shift>F2
@@ -74,12 +73,12 @@
 /desktop/gnome/:
   font_rendering/:
     dpi: 85.0
+    antialiasing: greyscale
     hinting: full
   interface/:
     can_change_accels: true
     toolbar_style: icons
     gtk_key_theme: Emacs
-  appications/browser:
-    exec: conkeror
+# this needs to be a list
 #  peripherals/keyboard/kbd/:
 #    options: ctrl:nocaps

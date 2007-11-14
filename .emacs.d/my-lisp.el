@@ -11,9 +11,9 @@
 ;; Lisp
 ;;
 
-(add-to-list 'load-path "~/.emacs.d/slime-2.0/")
-(setq inferior-lisp-program "/usr/bin/sbcl")
-(require 'slime)
+;; (add-to-list 'load-path "~/.emacs.d/slime-2.0/")
+;; (setq inferior-lisp-program "/usr/bin/sbcl")
+;; (require 'slime)
 
 (add-hook 'emacs-lisp-mode-hook 'pretty-lambdas)
 (add-hook 'emacs-lisp-mode-hook 'eldoc-mode)
@@ -34,4 +34,4 @@
       (:foreground "grey55")))
    "Face used to dim parentheses.")
 
-(provide 'lisp)
+(provide 'my-lisp)

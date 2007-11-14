@@ -54,6 +54,14 @@
 	       description="Platypope"
 	       htmlUrl="http://platypope.org/blog/syndicate"
 	       xmlUrl="http://platypope.org/blog/syndicate" />
+      <outline text="Giles Bowkett"
+	       description="Bad (and Nationwide)"
+	       htmlUrl="http://gilesbowkett.blogspot.com/"
+	       xmlUrl="http://feeds.feedburner.com/gilesbowkett" />
+      <outline text="James Clark"
+	       description="The other XML guy"
+	       htmlUrl="http://blog.jclark.com"
+	       xmlUrl="http://blog.jclark.com/feeds/posts/default" />
     </outline>
 
     <outline text="Friends">
@@ -88,16 +96,11 @@
       <outline text="Jason Wong"
 	       htmlUrl="http://jasonwong.org/"
 	       xmlUrl="http://jasonwong.org/feed/atom.xml" />
-
+      <outline text="Alex Vollmer"
+	       description="This is totally gonna work"
+	       htmlUrl="http://blog.livollmers.net/"
+	       xmlUrl="http://blog.livollmers.net/index.php/feed/atom" />
     </outline>
-<!--
-    <outline text="Caboose">
-      <outline text="Planet Caboose"
-	       description="Rails Masons"
-	       htmlUrl="http://planet.caboo.se/"
-	       xmlUrl="http://planet.caboo.se/rss.xml" />
-    </outline>
--->
 
     <outline text="Ruby Luminaries">
       <outline text="Dave Thomas"
@@ -126,38 +129,46 @@
       <outline text="Ola Bini"
 	       htmlUrl="http://ola-bini.blogspot.com/"
 	       xmlUrl="http://ola-bini.blogspot.com/atom.xml" />
+      <outline text="Ryan Davis"
+	       description="Zen Spider"
+	       htmlUrl="http://blog.zenspider.com/"
+	       xmlUrl="http://blog.zenspider.com/atom.xml" />
+      <outline text="Eric Hodel"
+	       description="Segment 7"
+	       htmlUrl="http://blog.segment7.net/"
+	       xmlUrl="http://feeds.feedburner.com/segment7/VjcA" />
       <outline text="Ryan Daigle"
 	       description="Ryan's Scraps"
 	       htmlUrl="http://www.ryandaigle.com"
 	       xmlUrl="http://feeds.feedburner.com/RyansScraps" />
-      <outline text="Giles Bowkett"
-	       htmlUrl="http://gilesbowkett.blogspot.com/"
-	       xmlUrl="http://feeds.feedburner.com/gilesbowkett" />
       <outline text="Hampton Catlin"
 	       htmlUrl="http://hamptoncatlin.com/"
 	       xmlUrl="http://hamptoncatlin.com/feed/atom.xml" />
-
+      <outline text="Josh Susser"
+	       description="has_many :through"
+	       htmlUrl="http://blog.hasmanythrough.com/"
+	       xmlUrl="http://feeds.feedburner.com/hasmanythrough" />
+      <outline text="Coda Hale"
+	       htmlUrl="http://blog.codahale.com/"
+	       xmlUrl="http://feeds.feedburner.com/codablog" />
+      <outline text="Pat Eyler"
+	       description="on ruby"
+	       htmlUrl="http://on-ruby.blogspot.com/"
+	       xmlUrl="http://on-ruby.blogspot.com/feeds/posts/default" />
+      <outline text="chris2"
+	       description="a weblog by christian neukirchen"
+	       htmlUrl="http://chneukirchen.org/blog/"
+	       xmlUrl="http://chneukirchen.org/blog/index.atom" />
       <outline text="RoR Podcast"
 	       description="Geoff's talks"
 	       htmlUrl="http://podcast.rubyonrails.org"
 	       xmlUrl="http://feeds.feedburner.com/rubyonrails_transcript" />
     </outline>
 
-    <outline text="Technomancy Comments"
-	     description="Comments on http://technomancy.us blog"
-	     htmlUrl="http://technomancy.us/"
-	     xmlUrl="http://technomancy.us/blog/comments" />
-
     <outline text="Philisha Comments"
 	     description="Comments on http://philisha.net blog"
 	     htmlUrl="http://philisha.net/"
 	     xmlUrl="http://philisha.net/comments/feed/" />
-<!--
-    <outline text="Technomancy Trac"
-	     description="Changes to my Trac"
-	     htmlUrl="http://dev.technomancy.us/"
-	     xmlUrl="http://dev.technomancy.us/index.cgi/timeline?milestone=on&amp;ticket=on&amp;changeset=on&amp;wiki=on&amp;max=50&amp;daysback=90&amp;format=rss" />
--->
 
     <outline text="Web Comics">
       <outline text="Achewood"
@@ -171,12 +182,10 @@
 	       description="A webcomic of romance, sarcasm, math, and language."
 	       htmlUrl="http://xkcd.com"
 	       xmlUrl="http://xkcd.com/rss.xml" />
-
       <outline text="Wondermark"
 	       description="An Illustrated Jocularity"
 	       htmlUrl="http://www.wondermark.com/"
 	       xmlUrl="http://www.wondermark.com/wondermarkrss.xml" />
-
     </outline>
 
   </body>

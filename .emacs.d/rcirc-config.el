@@ -3,6 +3,8 @@
 ;; example:
 ;(setq rcirc-authinfo '(("freenode" nickserv "technomancy" "password")))
 
+(setq rcirc-server-alist '(("irc.freenode.net" :channels ("#emacs" "#seattle.rb"))))
+(setq rcirc-fill-column 72)
 (add-hook 'rcirc-mode-hook (lambda () (rcirc-track-minor-mode 1)))
 
 ;; Turn on spell checking.

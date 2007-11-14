@@ -30,10 +30,6 @@
 (add-hook 'js-mode-hook 'moz-minor-mode)
 (add-hook 'html-mode-hook 'auto-fill-mode)
 
-(setq eshell-cmpl-cycle-completions nil)
-(setq eshell-save-history-on-exit t)
-;(set-face-attribute 'eshell-prompt nil :foreground "DeepSkyBlue")
-;(set-face-attribute 'eshell-prompt nil :background "white")
 (setq visible-bell t)
 (setq font-lock-maximum-decoration t)
 (setq inhibit-startup-message t)
@@ -41,6 +37,9 @@
 (auto-compression-mode t) ; load .gz's automatically
 (global-font-lock-mode t)
 (menu-bar-mode -1) ; toggled by F1
+(highlight-trailing-whitespace)
+(highlight-tabs)
+(winner-mode t)
 (show-paren-mode 1)
 (setq color-theme-is-global nil)
 (put 'narrow-to-region 'disabled nil)
@@ -54,6 +53,13 @@
 (setq auto-save-default nil)
 
 (add-to-list 'auto-mode-alist '("\\.ds$" . emacs-lisp-mode))
+(add-to-list 'auto-mode-alist '("\\.xml$" . nxml-mode))
+(add-to-list 'auto-mode-alist '("\\.xsd$" . nxml-mode))
+(add-to-list 'auto-mode-alist '("\\.xsl$" . nxml-mode))
+(add-to-list 'auto-mode-alist '("\\.php$" . php-mode))
+(add-to-list 'auto-mode-alist '("\\.css$" . css-mode))
+(add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
+(add-to-list 'auto-mode-alist '("\\.js$" . javascript-mode))
 
 ;; w3m
 (setq w3m-use-cookies t)

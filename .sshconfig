@@ -13,3 +13,5 @@ Host *
   controlmaster auto
   controlpath /tmp/ssh-%r@%h:%p
   GSSAPIAuthentication no
+  HashKnownHosts no
+
