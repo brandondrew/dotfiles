@@ -68,6 +68,7 @@
         w3m-use-toolbar))
 
 (setenv "PAGER" "cat")
+(setenv "EDITOR" "emacsclient")
 
 ;; bug me
 (setq yellow-tokens (delete ?\s "\\<\\(F IX\\|D OC\\|R ETIRE\\|T ODO\\|W ARN\\|F IXME\\).*\\>"))
