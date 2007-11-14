@@ -20,13 +20,13 @@
 (global-set-key "\C-x." (lambda () (interactive) (enlarge-window 1 t)))
 (global-set-key "\C-x," (lambda () (interactive) (shrink-window 1 t)))
 
-(global-set-key (kbd "C-c e") 'fc-eval-and-replace)
+(global-set-key (kbd "C-c e") 'my-eval-and-replace)
 (global-set-key (kbd "C-c v") 'eval-buffer)
 (global-set-key (kbd "C-x m") 'eshell)
 (global-set-key (kbd "C-x M") (lambda () (interactive) (eshell t)))
 (global-set-key (kbd "C-x M-k") (lambda () (interactive) (kill-buffer (current-buffer)) (delete-window)))
 
-(global-set-key (kbd "M-\\") 'jao-toggle-selective-display)
+(global-set-key (kbd "M-\\") 'my-selective-display)
 
 (global-set-key "\C-xh" 'view-url)
 (global-set-key (kbd "C-c l") (lambda () (interactive) (insert "lambda")))

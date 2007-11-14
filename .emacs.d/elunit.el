@@ -235,6 +235,9 @@
     (elunit suite))
   (message "%d tests with %d failures" elunit-test-count (length elunit-failures)))
 
+;; TODO: font-lock deftest and defsuite
+;; do this too? (put 'defsuite 'lisp-indent-function 1)
+
 (require 'elunit-assertions)
 (provide 'elunit)
 ;;; elunit.el ends here

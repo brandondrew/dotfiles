@@ -90,6 +90,7 @@
 (require 'helma)
 (require 'registers)
 (require 'misc)
+(require 'my-music)
 
 (if (functionp 'jabber-connect)
     (load "jabber-config"))

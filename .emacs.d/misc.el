@@ -10,6 +10,8 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;     misc things
 
+(setq emacs-wiki-name "PhilHagelberg")
+
 (when window-system
   (mouse-wheel-mode t)
   (global-hl-line-mode t)
@@ -26,7 +28,6 @@
 
 (add-hook 'comint-mode-hook 'ansi-color-for-comint-mode-on)
 (add-hook 'js-mode-hook 'moz-minor-mode)
-;;(add-hook 'find-file-hook 'jao-toggle-selective-display)
 (add-hook 'html-mode-hook 'auto-fill-mode)
 
 (setq eshell-cmpl-cycle-completions nil)
@@ -47,8 +48,6 @@
 (defalias 'yes-or-no-p 'y-or-n-p)
 (defalias 'qrr 'query-replace-regexp)
 (random t)
-;(add-to-list 'bs-configurations
-;	     '("gnus" nil nil "^[^#]" nil nil))
 
 ;; don't clutter directories!
 (setq backup-directory-alist `(("." . ,(expand-file-name "~/.emacs.d/backups"))))
