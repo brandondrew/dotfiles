@@ -33,10 +33,27 @@
 (add-to-list 'auto-mode-alist '("\\.mab$" . ruby-mode))
 
 (add-to-list 'interpreter-mode-alist '("ruby" . ruby-mode))
- 
-(add-hook 'ruby-mode-hook 'my-ruby-mode-hook)
 
-(defalias 'rr 'run-ruby)
+(add-hook 'ruby-mode-hook 'my-ruby-mode-hook)
+(add-hook 'ruby-mode-hook 'my-coding-hook)
+
+(defun rr ()
+  (interactive)
+  (run-ruby "irb"))
+
+(defun rails-root (&optional dir)
+  (or dir (setq dir default-directory))
+  (if (file-exists-p (concat dir "config/environment.rb"))
+      dir
+    (unless (equal dir "/")
+      (rails-root (expand-file-name (concat dir "../"))))))
+
+(defun rails-console ()
+  (interactive)
+  (run-ruby (concat (rails-root) "script/console")))
+
+(setq inferior-ruby-first-prompt-pattern ">>"
+      inferior-ruby-prompt-pattern ">>")
 
 (defun my-ruby-mode-hook ()
   (highlight-trailing-whitespace)
@@ -47,7 +64,7 @@
 (define-key ruby-mode-map "\C-\M-h" 'backward-kill-word) ; ruby-mode redefines this badly
 (define-key ruby-mode-map (kbd "RET") 'ruby-reindent-then-newline-and-indent)
 (define-key ruby-mode-map (kbd "C-c l") (lambda () (interactive) (insert "lambda")))
- 
+
 (setq ri-ruby-script (expand-file-name "~/.emacs.d/ri-emacs.rb"))
 
 (when (> emacs-major-version 21)
@@ -57,11 +74,11 @@
   (setq ido-create-new-buffer 'always)
   (file-name-shadow-mode t)
   (add-to-list 'hs-special-modes-alist
-	       (list 'ruby-mode
-		     (concat ruby-block-beg-re "\|{")
-		     (concat ruby-block-end-re "\|}")
-		     "#"
-		     'ruby-forward-sexp nil)))
+               (list 'ruby-mode
+                     (concat ruby-block-beg-re "\|{")
+                     (concat ruby-block-end-re "\|}")
+                     "#"
+                     'ruby-forward-sexp nil)))
 
 (define-key ruby-mode-map
   "\C-c\C-t" 'toggle-buffer)
@@ -71,14 +88,14 @@
 ;; only special background in submode
 (setq mumamo-chunk-coloring 'submode-colored)
 (setq nxhtml-skip-welcome t)
- 
+
 ;; do not turn on rng-validate-mode automatically, I don't like
 ;; the anoying red underlines
 (setq rng-nxml-auto-validate-flag nil)
- 
+
 ;; force to load another css-mode, the css-mode in nxml package
 ;; seems failed to load under my Emacs 23
- 
+
 (defun my-rhtml ()
   (nxhtml-mode)
   (make-local-variable 'cua-inhibit-cua-keys)
@@ -98,7 +115,7 @@
 (defun flymake-ruby-init ()
   (let* ((temp-file   (flymake-init-create-temp-buffer-copy
                        'flymake-create-temp-inplace))
-	 (local-file  (file-relative-name
+         (local-file  (file-relative-name
                        temp-file
                        (file-name-directory buffer-file-name))))
     (list "ruby" (list "-c" local-file))))
@@ -109,10 +126,10 @@
 
 ;;(add-hook 'ruby-mode-hook
 ;;          '(lambda ()
-;;	     ;; Don't want flymake mode for ruby regions in rhtml files and also on read only files
-;;	     (if (and (not (null buffer-file-name)) (file-writable-p buffer-file-name))
-;;		 (flymake-mode))))
-	     
+;;           ;; Don't want flymake mode for ruby regions in rhtml files and also on read only files
+;;           (if (and (not (null buffer-file-name)) (file-writable-p buffer-file-name))
+;;               (flymake-mode))))
+
 ;; Thanks PragDave:
 
 (defun ruby-xmp-region (reg-start reg-end)
@@ -120,7 +137,7 @@
      the region with the result."
   (interactive "r")
   (shell-command-on-region reg-start reg-end
-			   "ruby -r xmp -n -e 'xmp($_, \"%l\t\t# %r\n\")'" t))
+                           "ruby -r xmp -n -e 'xmp($_, \"%l\t\t# %r\n\")'" t))
 
 ;; Thanks Zenspider
 

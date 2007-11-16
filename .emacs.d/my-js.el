@@ -26,6 +26,7 @@
 (define-key javascript-mode-map "\C-\M-h" 'backward-kill-word)
 (define-key javascript-mode-map (kbd "RET") 'newline-and-indent)
 (add-hook 'javascript-mode-hook 'moz-minor-mode)
+(add-hook 'javascript-mode-hook 'my-coding-hook)
 
 (add-to-list 'auto-mode-alist '("\\.js$" . js-mode))
 (add-to-list 'auto-mode-alist '("\\.json$" . js-mode))

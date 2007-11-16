@@ -39,45 +39,7 @@
 (defun map-coords (lat lng)
   (interactive "BLatitude: \nBLongitude")
   (w3m-browse-url (concat "http://maps.yahoo.com/maps_result?mag=12&lat="
-			  lat "&lon=" lng)))
-
-;;; Lispy stuff
-
-(defun my-eval-and-replace ()
-  "Replace the preceding sexp with its value."
-  (interactive)
-  (backward-kill-sexp)
-  (condition-case nil
-      (prin1 (eval (read (current-kill 0)))
-             (current-buffer))
-    (error (message "Invalid expression")
-           (insert (current-kill 0)))))
-
-(defun my-recompile-init ()
-  (interactive)
-  (byte-recompile-directory (expand-file-name "~/.emacs.d") 0))
-
-(defun my-print-macro-expansion ()
-  "insert the expansion of a macro"
-  (interactive)
-  (backward-kill-sexp)
-  (undo)
-  (insert (concat "\n" (pp (cl-macroexpand (read (current-kill 0)))))))
-
-(defun line-count-lisp ()
-  (interactive)
-  (save-excursion
-    (flush-lines "^$")
-    (flush-lines "^;")
-    (end-of-buffer)
-    (let ((loc (line-number-at-pos)))
-      (message (number-to-string loc) " lines of code"))))
-
-(defmacro case-string (expr &rest choices)
-  "A variation on the case macro that uses equal rather than eql, and is thus suitable for strings."
-  `(cond ,@(mapcar (lambda (c)
-		    `((equal ,expr ,(car c)) ,@(cdr c)))
-		    choices)))
+                          lat "&lon=" lng)))
 
 ;;; Buffer/window stuff
 
@@ -108,7 +70,6 @@
   (get-buffer-window (current-buffer)))
 
 (defun toggle-dedicated-window ()
-  (interactive)
   (set-window-dedicated-p (current-window) (not (window-dedicated-p (current-window)))))
 
 (defun window-small-and-large ()
@@ -116,6 +77,19 @@
   (if (equal 1 (length (window-list)))
       (split-window))
   (set-window-text-height (first (window-list)) (- (frame-height) 20)))
+
+(defun my-coding-hook ()
+  (indent-buffer)
+  (toggle-trailing-whitespace-font-lock)
+  (toggle-tabs-font-lock))
+
+(defun untabify-buffer ()
+  (interactive)
+  (untabify (point-min) (point-max)))
+
+(defun indent-buffer ()
+  (interactive)
+  (indent-region (point-min) (point-max)))
 
 ;;; Cosmetic stuff
 
@@ -127,7 +101,7 @@
   (scroll-bar-mode -1))
 
 (defun bigish ()                                                                                                                                                          
-  (interactive)                                                                                                                                                              
+  (interactive)
   (set-default-font "-b&h-lucidatypewriter-bold-r-normal-sans-34-240-100-100-m-200-iso8859-1")) 
 
 (defun pretty-lambdas ()
@@ -140,6 +114,10 @@
 (defun terminus () (interactive) (set-default-font "-xos4-terminus-medium-r-normal--14-140-72-72-c-80-iso8859-1"))
 
 ;;; Random stuff
+
+(defun my-recompile-init ()
+  (interactive)
+  (byte-recompile-directory (expand-file-name "~/.emacs.d") 0))
 
 (defun lorem ()
   "Insert a lorem ipsum."
@@ -160,7 +138,7 @@
 
 (defun eshell-handle-ansi-color ()
   (ansi-color-apply-on-region eshell-last-output-start
-			      eshell-last-output-end))
+                              eshell-last-output-end))
 
 (add-to-list 'eshell-output-filter-functions 'eshell-handle-ansi-color)
 
@@ -169,9 +147,9 @@
   (let ((p (point)))
     (eshell-bol)
     (if (= p (point))
-	(beginning-of-line))))
+        (beginning-of-line))))
 
 (add-hook 'eshell-mode-hook
-	  '(lambda () (define-key eshell-mode-map "\C-a" 'eshell-maybe-bol)))
+          '(lambda () (define-key eshell-mode-map "\C-a" 'eshell-maybe-bol)))
 
 (provide 'defuns)

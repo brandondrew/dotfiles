@@ -29,13 +29,12 @@
 (add-hook 'comint-mode-hook 'ansi-color-for-comint-mode-on)
 (add-hook 'js-mode-hook 'moz-minor-mode)
 (add-hook 'html-mode-hook 'auto-fill-mode)
+(add-hook 'before-save-hook 'delete-trailing-whitespace)
+(add-hook 'before-save-hook 'untabify-buffer)
 
-<<<<<<< HEAD:.emacs.d/misc.el
-=======
 (setq eshell-cmpl-cycle-completions nil)
 (setq eshell-save-history-on-exit t)
 
->>>>>>> remotes/imp/master:.emacs.d/misc.el
 (setq visible-bell t)
 (setq font-lock-maximum-decoration t)
 (setq inhibit-startup-message t)

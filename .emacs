@@ -26,9 +26,9 @@
 
 (unless (string-equal "root" (getenv "USER"))
   (when (and (> emacs-major-version 22)
-	     (or (not (boundp 'server-process))
-		 (not (eq (process-status server-process)
-			  'listen))))
+             (or (not (boundp 'server-process))
+                 (not (eq (process-status server-process)
+                          'listen))))
     (server-start)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -56,6 +56,7 @@
 (autoload 'jabber-connect "jabber" "" t)
 (autoload 'w3m "w3m" "" t)
 (autoload 'tail-file "tail.el" "Tail a file." t)
+(autoload 'column-marker-1 "column-marker.el" "" t)
 
 (require 'javascript)
 (require 'toggle)
@@ -71,8 +72,7 @@
 
 (add-to-list 'auto-mode-alist '("\\.css$" . css-mode))
 (add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
-(add-to-list 'auto-mode-alist '("\\.js$" . js-mode))
-(add-to-list 'auto-mode-alist '("\\.json$" . js-mode))
+(add-to-list 'auto-mode-alist '("^COMMIT_EDITMSG$" . diff-mode))
 
 (load "nxml/autostart.el")
 
@@ -106,7 +106,7 @@
 
 ;;; M-z zap to char
 ;;; C-u C-SPC jump to previous edit
-;;; M-/ autocomplete word 
+;;; M-/ autocomplete word
 ;;; M-! insert output of shell command
 ;;; M-| replace region with shell output
 ;;; M-x thumbs
