@@ -238,6 +238,83 @@
 ;; TODO: font-lock deftest and defsuite
 ;; do this too? (put 'defsuite 'lisp-indent-function 1)
 
-(require 'elunit-assertions)
+(defun fail (&rest args)
+  "Like `error', but reported differently."
+    (signal 'elunit-test-failed (list (apply 'format args))))
+
+;;; General assertions
+
+;; These are preferred over stuff like (assert (equal [...] because
+;; they use the `fail' function, which reports errors nicely.
+
+(defun assert-that (actual)
+  (unless actual
+    (fail "%s expected to be non-nil" actual)))
+
+(defun assert-nil (actual)
+  (when actual
+    (fail "%s expected to be nil" actual)))
+
+(defun assert-equal (expected actual)
+  (unless (equal expected actual)
+    (fail "%s expected to be %s" actual expected)))
+
+(defun assert-not-equal (expected actual)
+  (when (equal expected actual)
+    (fail "%s expected to not be %s" actual expected)))
+
+(defun assert-member (elt list)
+  (unless (member elt list)
+    (fail "%s expected to include %s" list elt)))
+
+(defun assert-match (regex string)
+  (unless (string-match regex string)
+    (fail "%s expected to match %s" string regex)))
+
+(defmacro assert-error (&rest body)
+  `(condition-case err
+       (progn
+	 ,@body
+	 (fail "%s expected to signal an error" body))
+     (error t)))
+
+(defmacro assert-changed (form &rest body)
+  `(assert-not-equal (eval ,form)
+		     (progn
+		       ,@body
+		       (eval ,form))))
+
+(defmacro assert-not-changed (form &rest body)
+  `(assert-equal (eval ,form)
+		     (progn
+		       ,@body
+		       (eval ,form))))
+
+;; Buffer-specific assertions
+
+(defun assert-in-buffer (target &optional buffer)
+  (save-window-excursion
+    (if buffer (switch-to-buffer buffer))
+    (goto-char (point-min))
+    (unless (search-forward target nil t)
+      (fail "%s expected to be found in buffer %s" target buffer))))
+
+(defun assert-background (target face &optional buffer)
+  (save-window-excursion
+    (if buffer (switch-to-buffer buffer))
+    (goto-char (point-min))
+    (unless (search-forward target nil t)
+      (fail "%s expected to be found in buffer %s" target buffer))
+    (unless (equal (face (get-text-property (point) 'background)))
+      (fail "%s expected to be displayed with face %s" target face))))
+
+(defun assert-overlay (pos)
+  (unless (overlays-at pos)
+    (fail "Expected overlay at position %d" pos)))
+
+(defun assert-no-overlay (pos)
+  (if (overlays-at pos)
+    (fail "Expected no overlay at position %d" pos)))
+
 (provide 'elunit)
 ;;; elunit.el ends here

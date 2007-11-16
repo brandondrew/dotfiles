@@ -5,7 +5,7 @@
 ;; Much thanks to emacswiki.org and RMS.
 
 ;; Note: this relies on files found in my .emacs.d:
-;; http://dev.technomancy.us/phil/browser/dotfiles/.emacs.d
+;; http://git.caboo.se/?p=technomancy.git;a=summary
 
 ;; "Emacs outshines all other editing software in approximately the
 ;; same way that the noonday sun does the stars. It is not just bigger
@@ -47,18 +47,20 @@
 (autoload 'php-mode "php-mode")
 (autoload 'yaml-mode "yaml-mode")
 (autoload 'css-mode "css-mode")
+(autoload 'javascript-mode "javascript" "" t)
+
 (autoload 'moz-minor-mode "moz" "Mozilla Minor and Inferior Mozilla Modes" t)
 (autoload 'lisppaste-paste-region "lisppaste" "" t)
 (autoload 'htmlize-region "htmlize" "" t)
 (autoload 'htmlize-buffer "htmlize" "" t)
 (autoload 'color-theme-zenburn "zenburn")
 (autoload 'pastie-region "pastie" "" t)
-(autoload 'jabber-connect "jabber" "" t)
-(autoload 'w3m "w3m" "" t)
 (autoload 'tail-file "tail.el" "Tail a file." t)
 (autoload 'column-marker-1 "column-marker.el" "" t)
 
-(require 'javascript)
+(autoload 'jabber-connect "jabber" "" t)
+(autoload 'w3m "w3m" "" t)
+
 (require 'toggle)
 (require 'compile)
 (require 'which-func)
@@ -79,17 +81,17 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; My support files and configurations
 
+(require 'my-calendar)
+(require 'my-eshell)
+(require 'my-bindings)
+(require 'my-defuns)
+(require 'my-registers)
+(require 'my-misc)
+(require 'my-music)
+
 (require 'my-ruby)
 (require 'my-lisp)
 (require 'my-js)
-
-(require 'my-calendar)
-(require 'my-eshell)
-(require 'bindings)
-(require 'defuns)
-(require 'registers)
-(require 'misc)
-(require 'my-music)
 
 (if (functionp 'jabber-connect)
     (load "jabber-config"))
