@@ -27,9 +27,18 @@
   (shell-command (concat "display "
                          (thing-at-point 'filename))))
 
+(defun my-coding-hook ()
+  (indent-buffer)
+  (toggle-trailing-whitespace-font-lock)
+  (toggle-tabs-font-lock))
+
 (defun untabify-buffer ()
   (interactive)
   (untabify (point-min) (point-max)))
+
+(defun indent-buffer ()
+  (interactive)
+  (indent-region (point-min) (point-max)))
 
 (defun view-url (url) (interactive "MUrl: ")
                           (switch-to-buffer (url-retrieve-synchronously url))

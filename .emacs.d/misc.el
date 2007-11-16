@@ -27,8 +27,6 @@
 (add-hook 'comint-mode-hook 'ansi-color-for-comint-mode-on)
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 (add-hook 'before-save-hook 'untabify-buffer)
-(add-hook 'find-file-hook 'toggle-trailing-whitespace-font-lock)
-(add-hook 'find-file-hook 'toggle-tabs-font-lock)
 
 (setq eshell-cmpl-cycle-completions nil)
 (setq eshell-save-history-on-exit t)

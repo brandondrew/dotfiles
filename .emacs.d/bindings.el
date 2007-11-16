@@ -47,7 +47,7 @@
 (global-set-key "\M-n" 'next-buffer)
 (global-set-key (kbd "C-<next>") 'buffer-stack-up)
 (global-set-key (kbd "C-<prior>") 'buffer-stack-down)
- 
+
 (global-set-key [XF86Back] 'bs-cycle-next)
 (global-set-key [XF86Forward] 'bs-cycle-previous)
 (setq bs-cycle-configuration-name "files")
@@ -60,14 +60,14 @@
 
 (global-set-key [f2] (lambda () (interactive)
                        (set-default-font "-xos4-terminus-medium-r-normal--16-160-72-72-c-80-iso8859-9")
-		       (require 'flymake)
-		       (set-face-attribute 'mumamo-background-chunk-submode nil :background "grey18")
-		       (set-face-attribute 'flymake-errline nil :background "Maroon4")
-		       (set-face-background 'flymake-warnline "dark slate blue")
-		       (set-face-attribute 'test-unit-pass-face nil :background "PaleGreen4")
-		       (set-face-attribute 'test-unit-fail-face  nil :background "firebrick3")
-		       (set-face-attribute 'test-unit-error-face nil :background "sienna")
-		       (set-face-attribute 'test-unit-line-face nil :background "firebrick4")
+                       (require 'flymake)
+                       (set-face-attribute 'mumamo-background-chunk-submode nil :background "grey18")
+                       (set-face-attribute 'flymake-errline nil :background "Maroon4")
+                       (set-face-background 'flymake-warnline "dark slate blue")
+                       (set-face-attribute 'test-unit-pass-face nil :background "PaleGreen4")
+                       (set-face-attribute 'test-unit-fail-face  nil :background "firebrick3")
+                       (set-face-attribute 'test-unit-error-face nil :background "sienna")
+                       (set-face-attribute 'test-unit-line-face nil :background "firebrick4")
                        (color-theme-zenburn)))
 
 (global-set-key [(control shift 2)] 'mark-string)

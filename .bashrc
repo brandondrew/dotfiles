@@ -4,7 +4,7 @@
 source ~/.profile
 
 [ "$EMACS" == "t" ] || alias ls="ls --color"
-export EDITOR="emacs -Q -nw"
+
 export PAGER=less
 
 alias emac="emacs -nw -q --no-site-file"
@@ -62,7 +62,7 @@ fi
 
 # Source global definitions
 if [ -f /etc/bashrc ]; then
-	. /etc/bashrc
+        . /etc/bashrc
 fi
 
 # eterm-color causes screen problems

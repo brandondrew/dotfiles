@@ -1,4 +1,4 @@
-PATH=$PATH:/sbin:/usr/sbin:~/bin:/bin:/usr/bin:/usr/local/bin:/usr/local/sbin
-MPD_HOST="mjolnir"
-EDITOR="emacsclient"
+export PATH=$PATH:/sbin:/usr/sbin:~/bin:/bin:/usr/bin:/usr/local/bin:/usr/local/sbin
+export MPD_HOST="mjolnir"
+export EDITOR="emacsclient"
 export P4CONFIG=".p4config"
