@@ -20,7 +20,6 @@
 ;; haven't symlinked in the dev checkout.
 (ignore-errors (require 'rails))
 (require 'ri-ruby)
-(require 'test-unit)
 (require 'rcodetools)
 (require 'cheat)
 

@@ -222,8 +222,6 @@ problems table. Highlight the line if given."
   (set (make-local-variable 'test-filter-function) (intern (concat framework "-test-filter"))))
 
 (require 'test-unit-ruby)
-(require 'test-unit-autotest) ;; unfinished
-(require 'test-unit-elunit) ;; unfinished
 
 ;;; More languages later?
 

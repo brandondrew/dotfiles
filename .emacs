@@ -39,7 +39,6 @@
 (add-to-list 'load-path "~/.emacs.d/jabber")
 (add-to-list 'load-path "~/.emacs.d/w3m")
 (add-to-list 'load-path "~/.emacs.d/rinari/rhtml")
-(add-to-list 'load-path "/usr/share/doc/git-core/contrib/emacs")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; loading modes
@@ -66,7 +65,6 @@
 (require 'which-func)
 (require 'wrap-region)
 (require 'elunit)
-(require 'flog)
 (require 'show-wspace)
 (require 'esh-mode)
 (require 'git)
@@ -139,3 +137,9 @@
 ;;; G T show context in keyword search
 
 ;;; list-colors-display
+
+;;; TODO:
+
+;; publish
+;;  - elunit
+;;  - ebby
