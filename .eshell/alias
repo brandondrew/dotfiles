@@ -1,0 +1,16 @@
+alias nil  $*
+alias sapti sudo apt-get install $*
+alias saptc apt-cache search $*
+alias sapts apt-cache show $*
+alias saptr sudo apt-get remove $*
+alias saptu sudo apt-get upgrade $*
+alias saptd sudo apt-get update $*
+alias ll ls -l $*
+alias la ls -a $*
+alias l ls -a -l $*
+alias pgrep ps awx | grep $*
+alias gst git status
+alias gb git branch --color
+alias gcm git commit -a -v
+alias gco git checkout $*
+alias xmlcurl curl -H Accept:text/xml $*

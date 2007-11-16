@@ -1,0 +1,17 @@
+Technomancy Init
+by Phil Hagelberg
+
+This script should get you from a fresh installation to awesomely
+ready (as defined by what I use). Just run go.sh as root. go.sh
+should be able to fetch the other required files if it's run by
+itself.
+
+TODO: 
+- test on gutsy
+- get mozlab
+- sync music, movies, books, photos
+- set up git.technomancy.us
+- check out my projects?
+- install other important libs: ruby-dbus, ruby-wm?
+- panel config
+- lists in gconf.yml to support ctrl:nocaps

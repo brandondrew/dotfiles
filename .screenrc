@@ -1,0 +1,17 @@
+startup_message off
+defscrollback 3000
+msgwait 1
+nethack on
+
+escape ^Zz
+
+bindkey -d -k kb stuff "\010"
+
+shelltitle '@|'
+hardstatus alwayslastline '%-Lw%{= BW}%50>%n%f* %t%{-}%+Lw%<'
+
+# Last line is status: green hostname, window list in cyan, and time and date right aligned:
+# hardstatus alwayslastline "%{=b}%{G}%H: %{C}%w %=%{G}%D, %m/%d %C%a"
+
+##   Initial Windows   ##
+screen 0

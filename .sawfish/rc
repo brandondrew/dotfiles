@@ -1,0 +1,11 @@
+(require 'sawfish.wm.state.maximize)
+
+(defun maximize-position (x y)
+  (let ((window (input-focus)))
+    (unmaximize-window window)
+    (move-window-to window x y)
+    (maximize-window window)))
+
+(bind-keys global-keymap 
+	   "M-[" '(maximize-position 1 1)
+	   "M-]" '(maximize-position 1281 1))

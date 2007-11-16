@@ -1,0 +1,15 @@
+#!/bin/bash
+# -*-bash-*-
+# ete -- Errors to Emacs
+#
+# Written and placed into the Public Domain by
+# Christian Neukirchen <http://purl.org/net/chneukirchen>, 2004.
+
+# Unique temp file made of the current username.
+LOGFILE="${TMPDIR:-/tmp}/ete."`whoami`
+
+# Run program.
+# This is twisted.  First swap stdout and stderr, to save (tee)
+# stderr into the LOGFILE. Then swap again to make the program run as
+# usual.
+("$@" 3>&1 1>&2 2>&3 | tee "$LOGFILE") 3>&1 >&2 2>&3

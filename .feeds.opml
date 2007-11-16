@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<opml version="1.1">
+  <head>
+    <title>Phil Hagelberg's Feeds</title>
+    <ownerName>Phil Hagelberg</ownerName>
+    <ownerEmail>phil@localhost</ownerEmail>
+  </head>
+  <body>
+
+    <outline text="Tech Folks">
+      <outline text="ongoing"
+               description="Ongoing fragmented essay by Tim Bray."
+               htmlUrl="http://www.tbray.org/ongoing/"
+               xmlUrl="http://www.tbray.org/ongoing/ongoing.atom" />
+      <outline text="Mark Pilgrim"
+	       description="Dive into Mark"
+	       htmlUrl="http://diveintomark.org"
+	       xmlUrl="http://diveintomark.org/feed/" />
+      <outline text="Bruce Schneier"
+	       description="Schneier on Security"
+	       htmlUrl="http://www.schneier.com/blog/"
+	       xmlUrl="http://www.schneier.com/blog/index.rdf" />
+      <outline text="Martin Fowler"
+	       description="Bliki"
+	       htmlUrl="http://martinfowler.com/bliki/"
+	       xmlUrl="http://martinfowler.com/bliki/bliki.atom" />
+      <outline text="O'Reily Radar"
+	       htmlUrl="http://radar.oreilly.com/"
+	       xmlUrl="http://radar.oreilly.com/atom.xml" />
+      <outline text="Steve Yegge"
+	       htmlUrl="http://steve-yegge.blogspot.com/"
+	       xmlUrl="http://steve-yegge.blogspot.com/atom.xml" />
+      <outline text="minor emacs wizardry"
+	       htmlUrl="http://emacs.wordpress.com/"
+	       xmlUrl="http://emacs.wordpress.com/feed/" />
+      <outline text="programming musings"
+	       htmlUrl="http://jaortega.wordpress.com/"
+	       xmlUrl="http://jaortega.wordpress.com/feed/" />
+      <outline text="epistemologic"
+	       htmlUrl="http://epistemologic.com/"
+	       xmlUrl="http://epistemologic.com/feed/" />
+      <outline text="Intertwingly"
+	       htmlUrl="http://www.intertwingly.net/blog/"
+	       xmlUrl="http://www.intertwingly.net/blog/index.atom" />
+      <outline text="O'Reilly Radar"
+	       description="What's new in tech."
+	       htmlUrl="http://radar.oreilly.com/"
+	       xmlUrl="http://radar.oreilly.com/feed" />
+      <outline text="Hyperstruct"
+	       description="Creator of Mozlab"
+	       htmlUrl="http://hyperstruct.net/"
+	       xmlUrl="http://feeds.feedburner.com/hyperstruct" />
+      <outline text="Marshall Vandegrift"
+	       description="Platypope"
+	       htmlUrl="http://platypope.org/blog/syndicate"
+	       xmlUrl="http://platypope.org/blog/syndicate" />
+      <outline text="Giles Bowkett"
+	       description="Bad (and Nationwide)"
+	       htmlUrl="http://gilesbowkett.blogspot.com/"
+	       xmlUrl="http://feeds.feedburner.com/gilesbowkett" />
+      <outline text="James Clark"
+	       description="The other XML guy"
+	       htmlUrl="http://blog.jclark.com"
+	       xmlUrl="http://blog.jclark.com/feeds/posts/default" />
+    </outline>
+
+    <outline text="Friends">
+      <outline text="Andre Arko"
+	       description="nothingness incarnate"
+	       htmlUrl="http://arko.net/"
+	       xmlUrl="http://arko.net/feed/atom.xml" />
+      <outline text="Joel Watson"
+	       description="bitwise"
+	       htmlUrl="http://www.joelmwatson.com/blog/"
+	       xmlUrl="http://www.joelmwatson.com/blog/feed/" />
+      <outline text="Forrest Chang"
+	       description="Funkworks"
+	       htmlUrl="http://funkworks.blogspot.com/"
+	       xmlUrl="http://funkworks.blogspot.com/atom.xml" />
+      <outline text="Doug Alcorn"
+	       description="Lathi.net"
+	       htmlUrl="http://www.lathi.net/"
+	       xmlUrl="http://www.lathi.net/xml/rss20/feed.xml" />
+      <outline text="Tim Malabuyo"
+	       description="Intelligent Design"
+	       htmlUrl="http://webdesign.timches.com/"
+	       xmlUrl="http://feeds.feedburner.com/IntelligentDesign/" />
+      <outline text="Dave Bourgeois"
+	       description="Lessons from Babel"
+	       htmlUrl="http://lessonsfrombabel.blogspot.com/"
+	       xmlUrl="http://lessonsfrombabel.blogspot.com/atom.xml" />
+      <outline text="Planet Zacchaeus"
+	       description="We like to climb trees"
+	       htmlUrl="http://planet.philisha.net/"
+	       xmlUrl="http://planet.philisha.net/rss.xml" />
+      <outline text="Jason Wong"
+	       htmlUrl="http://jasonwong.org/"
+	       xmlUrl="http://jasonwong.org/feed/atom.xml" />
+      <outline text="Alex Vollmer"
+	       description="This is totally gonna work"
+	       htmlUrl="http://blog.livollmers.net/"
+	       xmlUrl="http://blog.livollmers.net/index.php/feed/atom" />
+    </outline>
+
+    <outline text="Ruby Luminaries">
+      <outline text="Dave Thomas"
+	       description="PragDave"
+	       htmlUrl="http://blogs.pragprog.com/cgi-bin/pragdave.cgi"
+	       xmlUrl="http://blogs.pragprog.com/cgi-bin/pragdave.cgi?rss" />
+      <outline text="Hackety Org"
+	       description="Why for kids"
+	       htmlUrl="http://hackety.org/"
+	       xmlUrl="http://feeds.feedburner.com/HacketyOrg" />
+      <outline text="Jim Weirich"
+	       description="{| one, step, back|}"
+	       htmlUrl="http://onestepback.org/"
+	       xmlUrl="http://onestepback.org/index.cgi/index.rss" />
+      <outline text="David Heinemeier Hannson"
+	       description="Loud Thinking"
+	       htmlUrl="http://www.loudthinking.com/"
+	       xmlUrl="http://feeds.feedburner.com/LoudThinking" />
+      <outline text="O'Reily Ruby"
+	       htmlUrl="http://www.oreillynet.com/ruby"
+	       xmlUrl="http://www.oreillynet.com/ruby/blog/index.xml" />
+      <outline text="Mauricio Fernandez"
+	       description="eigenclass.org"
+	       htmlUrl="http://eigenclass.org/"
+	       xmlUrl="http://eigenclass.org/hiki.rb?c=rss;format=1;tags=blog" />
+      <outline text="Ola Bini"
+	       htmlUrl="http://ola-bini.blogspot.com/"
+	       xmlUrl="http://ola-bini.blogspot.com/atom.xml" />
+      <outline text="Ryan Davis"
+	       description="Zen Spider"
+	       htmlUrl="http://blog.zenspider.com/"
+	       xmlUrl="http://blog.zenspider.com/atom.xml" />
+      <outline text="Eric Hodel"
+	       description="Segment 7"
+	       htmlUrl="http://blog.segment7.net/"
+	       xmlUrl="http://feeds.feedburner.com/segment7/VjcA" />
+      <outline text="Ryan Daigle"
+	       description="Ryan's Scraps"
+	       htmlUrl="http://www.ryandaigle.com"
+	       xmlUrl="http://feeds.feedburner.com/RyansScraps" />
+      <outline text="Hampton Catlin"
+	       htmlUrl="http://hamptoncatlin.com/"
+	       xmlUrl="http://hamptoncatlin.com/feed/atom.xml" />
+      <outline text="Josh Susser"
+	       description="has_many :through"
+	       htmlUrl="http://blog.hasmanythrough.com/"
+	       xmlUrl="http://feeds.feedburner.com/hasmanythrough" />
+      <outline text="Coda Hale"
+	       htmlUrl="http://blog.codahale.com/"
+	       xmlUrl="http://feeds.feedburner.com/codablog" />
+      <outline text="Pat Eyler"
+	       description="on ruby"
+	       htmlUrl="http://on-ruby.blogspot.com/"
+	       xmlUrl="http://on-ruby.blogspot.com/feeds/posts/default" />
+      <outline text="chris2"
+	       description="a weblog by christian neukirchen"
+	       htmlUrl="http://chneukirchen.org/blog/"
+	       xmlUrl="http://chneukirchen.org/blog/index.atom" />
+      <outline text="RoR Podcast"
+	       description="Geoff's talks"
+	       htmlUrl="http://podcast.rubyonrails.org"
+	       xmlUrl="http://feeds.feedburner.com/rubyonrails_transcript" />
+    </outline>
+
+    <outline text="Philisha Comments"
+	     description="Comments on http://philisha.net blog"
+	     htmlUrl="http://philisha.net/"
+	     xmlUrl="http://philisha.net/comments/feed/" />
+
+    <outline text="Web Comics">
+      <outline text="Achewood"
+	       description="A momentary diversion on the road to the grave"
+	       htmlUrl="http://achewood.com"
+	       xmlUrl="http://achewood.com/rss.php" />
+      <outline text="Penny Arcade"
+	       htmlUrl="http://www.penny-arcade.com/comic"
+	       xmlUrl="http://www.penny-arcade.com/rss.xml" />
+      <outline text="xkcd blagh"
+	       description="A webcomic of romance, sarcasm, math, and language."
+	       htmlUrl="http://xkcd.com"
+	       xmlUrl="http://xkcd.com/rss.xml" />
+      <outline text="Wondermark"
+	       description="An Illustrated Jocularity"
+	       htmlUrl="http://www.wondermark.com/"
+	       xmlUrl="http://www.wondermark.com/wondermarkrss.xml" />
+    </outline>
+
+  </body>
+</opml>
+
+<!--
+      <outline text=""
+	       description=""
+	       htmlUrl=""
+	       xmlUrl="" />
+
+    -->

@@ -1,0 +1,7 @@
+(if (or (matches (window_name) "Firefox")
+	(matches (window_name) "Gran Paradiso")
+	(matches (application_name) "macs")
+    	(matches (application_name) "rxvt"))
+    (begin        
+      (undecorate)
+      (maximize)))

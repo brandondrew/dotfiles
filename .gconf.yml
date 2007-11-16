@@ -1,0 +1,84 @@
+/apps/epiphany/general/:
+  homepage: about:blank
+/apps/epiphany/general/:
+  allow_popups: false
+/apps/gnome-terminal/:
+  global/:
+    use_menu_accelerators: false
+    use_mnemonics: false
+/apps/metacity/: 
+  general/:
+    num_workspaces: 4
+    theme: Glossy
+  keybinding_commands/: 
+    command_1: urxvt -bg white +sb -bd white -e screen -xRR
+    command_2: synergys
+    command_3: synergy_connect
+    command_4: fetchmail
+    command_5: mpc prev
+    command_6: mpc toggle
+    command_7: mpc next
+    command_8: urxvt -bg white +sb -bd white
+    command_9: emacs
+    command_10: /home/phil/bin/notify-mpc
+    command_11: /home/phil/projects/presentations/feedback/render.sh
+  global_keybindings/: 
+    panel_run_dialog: <Alt>space
+    run_command_1: <Alt>grave
+    run_command_2: <Shift>F1
+    run_command_3: <Shift>F2
+    run_command_4: <Shift>F12
+    run_command_5: F3
+    run_command_6: F4
+    run_command_7: F5
+    run_command_8: <Alt><Shift>grave
+    run_command_9: <Super>e
+    run_command_10: <Control>F5
+    run_command_11: F12
+    switch_to_workspace_1: <Control>1
+    switch_to_workspace_2: <Control>2
+    switch_to_workspace_3: <Control>3
+    switch_to_workspace_4: <Control>4
+    switch_to_workspace_5: <Control>5
+    switch_to_workspace_6: <Control>6
+  window_keybindings/: 
+    toggle_above: <Alt>Home
+    toggle_on_all_workspaces: <Alt>End
+    maximize_vertically: <Super>Page_Up
+    maximize_horizontally: <Super>Page_Down
+    toggle_maximized: <Alt>F10
+    switch_to_workspace_up: <Alt>bracketleft
+    switch_to_workspace_down: <Alt>bracketright
+    move_to_workspace_1: <Control><Alt>1
+    move_to_workspace_2: <Control><Alt>2
+    move_to_workspace_3: <Control><Alt>3
+    move_to_workspace_4: <Control><Alt>4
+    move_to_workspace_5: <Control><Alt>5
+    move_to_workspace_6: <Control><Alt>6
+    move_to_corner_nw: <Super>1
+    move_to_corner_ne: <Super>2
+    move_to_corner_se: <Super>o
+    move_to_corner_sw: <Super>a
+/apps/nautilus/:
+  desktop/: 
+    computer_icon_visible: true
+    trash_icon_visible: true
+  preferences/:
+    always_use_browser: false
+    always_use_location_entry: false
+    desktop_is_home_dir: true
+    no_ubuntu_spatial: true
+/apps/notification-daemon/:
+  theme: standard
+/desktop/gnome/:
+  font_rendering/:
+    antialiasing: greyscale
+    dpi: 85.0
+    hinting: full
+  interface/:
+    can_change_accels: true
+    toolbar_style: icons
+    gtk_key_theme: Emacs
+# this needs to be a list
+#  peripherals/keyboard/kbd/:
+#    options: ctrl:nocaps
