@@ -23,9 +23,13 @@
 
 (defun display-image ()
   "display images using imagemagick"
-  (interactive) 
-  (shell-command (concat "display " 
-			 (thing-at-point 'filename))))
+  (interactive)
+  (shell-command (concat "display "
+                         (thing-at-point 'filename))))
+
+(defun untabify-buffer ()
+  (interactive)
+  (untabify (point-min) (point-max)))
 
 (defun view-url (url) (interactive "MUrl: ")
                           (switch-to-buffer (url-retrieve-synchronously url))
@@ -54,7 +58,7 @@
 (defun map-coords (lat lng)
   (interactive "BLatitude: \nBLongitude")
   (w3m-browse-url (concat "http://maps.yahoo.com/maps_result?mag=12&lat="
-			  lat "&lon=" lng)))
+                          lat "&lon=" lng)))
 
 (defun mark-string ()
   (interactive)
@@ -93,7 +97,7 @@
 (defun ido-imenu ()
   (interactive)
   (flet ((completing-read (&rest params)
-			  (apply 'ido-completing-read params)))
+                          (apply 'ido-completing-read params)))
     (imenu)))
 
 (defun make-frame-on-host (host)
@@ -112,8 +116,8 @@
 (defmacro case-string (expr &rest choices)
   "A variation on the case macro that uses equal rather than eql, and is thus suitable for strings."
   `(cond ,@(mapcar (lambda (c)
-		    `((equal ,expr ,(car c)) ,@(cdr c)))
-		    choices)))
+                    `((equal ,expr ,(car c)) ,@(cdr c)))
+                    choices)))
 
 (defun browse-url-firefox (url &optional new-window)
   "Ask the Firefox WWW browser to load URL.
@@ -143,27 +147,27 @@ URL in a new window."
   (interactive (browse-url-interactive-arg "URL: "))
   (setq url (browse-url-encode-url url))
   (let* ((process-environment (browse-url-process-environment))
-	 (process
-	  (apply 'start-process
-		 (concat "firefox-3.0 " url) nil
-		 browse-url-firefox-program
-		 (append
-		  browse-url-firefox-arguments
-		  (if (or (featurep 'dos-w32)
-			  (string-match "win32" system-configuration))
-		      (list url)
-		    (list "-remote"
-			  (concat "openURL("
-				  url
-				  (if (browse-url-maybe-new-window
-				       new-window)
-				      (if browse-url-firefox-new-window-is-tab
-					  ",new-tab"
-					",new-window"))
-				  ")")))))))
+         (process
+          (apply 'start-process
+                 (concat "firefox-3.0 " url) nil
+                 browse-url-firefox-program
+                 (append
+                  browse-url-firefox-arguments
+                  (if (or (featurep 'dos-w32)
+                          (string-match "win32" system-configuration))
+                      (list url)
+                    (list "-remote"
+                          (concat "openURL("
+                                  url
+                                  (if (browse-url-maybe-new-window
+                                       new-window)
+                                      (if browse-url-firefox-new-window-is-tab
+                                          ",new-tab"
+                                        ",new-window"))
+                                  ")")))))))
     (set-process-sentinel process
-			  `(lambda (process change)
-			     (browse-url-firefox-sentinel process ,url)))))
+                          `(lambda (process change)
+                             (browse-url-firefox-sentinel process ,url)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; music
@@ -173,26 +177,26 @@ URL in a new window."
   (unless (boundp 'music-dirs)
     (setq music-dirs (split-string (shell-command-to-string "find /home/phil/music -type d | cut -c 18-") "\n")))
   (let ((dir (nth (random (length music-dirs)) music-dirs)))
-    (shell-command (concat 
-		    "mpc clear; "
-		    "mpc add " (shell-quote-argument dir) " > /dev/null"))
+    (shell-command (concat
+                    "mpc clear; "
+                    "mpc add " (shell-quote-argument dir) " > /dev/null"))
     (message dir)))
-    
+
 (defun music-play-dir (dir)
-  (interactive (list (completing-read "Play directory: " 
-				      (split-string 
-				       (shell-command-to-string "find /home/phil/music -type d | cut -c 18-") "\n"))))
-  (shell-command (concat 
-		  "mpc clear; "
-		  "mpc add " (shell-quote-argument dir)
-		  "; mpc play > /dev/null")))
+  (interactive (list (completing-read "Play directory: "
+                                      (split-string
+                                       (shell-command-to-string "find /home/phil/music -type d | cut -c 18-") "\n"))))
+  (shell-command (concat
+                  "mpc clear; "
+                  "mpc add " (shell-quote-argument dir)
+                  "; mpc play > /dev/null")))
 
 (defun music-add-file (file)
-  (interactive (list (completing-read "Add file: " 
-				      (split-string 
-				       (shell-command-to-string "find /home/phil/music -type f | cut -c 18-") "\n"))))
-  (shell-command (shell-quote-argument (concat 
-					"mpc add " file))))
+  (interactive (list (completing-read "Add file: "
+                                      (split-string
+                                       (shell-command-to-string "find /home/phil/music -type f | cut -c 18-") "\n"))))
+  (shell-command (shell-quote-argument (concat
+                                        "mpc add " file))))
 
 (defun music-toggle () (interactive)
   (shell-command "mpc toggle"))
@@ -202,7 +206,7 @@ URL in a new window."
 
 (defun music-prev () (interactive)
   (shell-command "mpc prev"))
-      
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;     cosmetics
@@ -213,10 +217,10 @@ URL in a new window."
   (tabbar-mode -1)
   (scroll-bar-mode -1))
 
-(defun big-fonts ()                                                                                                                                                          
-  (interactive)                                                                                                                                                              
-;  (set-default-font "-b&h-lucidatypewriter-bold-r-normal-sans-34-190-100-100-m-159-iso8859-1")                                                                              
-  (set-default-font "-b&h-lucidatypewriter-bold-r-normal-sans-34-240-100-100-m-200-iso8859-1")) 
+(defun big-fonts ()
+  (interactive)
+;  (set-default-font "-b&h-lucidatypewriter-bold-r-normal-sans-34-190-100-100-m-159-iso8859-1")
+  (set-default-font "-b&h-lucidatypewriter-bold-r-normal-sans-34-240-100-100-m-200-iso8859-1"))
 
 (defun pretty-lambdas ()
     (font-lock-add-keywords
@@ -240,7 +244,7 @@ URL in a new window."
 
 (defun eshell-handle-ansi-color ()
   (ansi-color-apply-on-region eshell-last-output-start
-			      eshell-last-output-end))
+                              eshell-last-output-end))
 
 (add-to-list 'eshell-output-filter-functions 'eshell-handle-ansi-color)
 
@@ -249,10 +253,10 @@ URL in a new window."
   (let ((p (point)))
     (eshell-bol)
     (if (= p (point))
-	(beginning-of-line))))
+        (beginning-of-line))))
 
 (add-hook 'eshell-mode-hook
-	  '(lambda () (define-key eshell-mode-map "\C-a" 'eshell-maybe-bol)))
+          '(lambda () (define-key eshell-mode-map "\C-a" 'eshell-maybe-bol)))
 
 (defun play-test-sounds (total fail-total)
   (if (= 0 fail-total)

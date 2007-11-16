@@ -36,7 +36,23 @@
  
 (add-hook 'ruby-mode-hook 'my-ruby-mode-hook)
 
-(defalias 'rr 'run-ruby)
+(defun rr ()
+  (interactive)
+  (run-ruby "irb"))
+
+(defun rails-root (&optional dir)
+  (or dir (setq dir default-directory))
+  (if (file-exists-p (concat dir "config/environment.rb"))
+      dir
+    (unless (equal dir "/")
+      (rails-root (expand-file-name (concat dir "../"))))))
+
+(defun rails-console ()
+  (interactive)
+  (run-ruby (concat (rails-root) "script/console")))
+
+ (setq inferior-ruby-first-prompt-pattern ">>"
+       inferior-ruby-prompt-pattern ">>")
 
 (defun my-ruby-mode-hook ()
   (highlight-trailing-whitespace)

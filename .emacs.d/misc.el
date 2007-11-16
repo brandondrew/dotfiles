@@ -24,8 +24,11 @@
 (when (not window-system)
   (keyboard-translate ?\C-h ?\C-?))
 
-(add-to-list 'comint-mode-hook 'ansi-color-for-comint-mode-on)
-;(add-hook 'find-file-hook 'jao-toggle-selective-display)
+(add-hook 'comint-mode-hook 'ansi-color-for-comint-mode-on)
+(add-hook 'before-save-hook 'delete-trailing-whitespace)
+(add-hook 'before-save-hook 'untabify-buffer)
+(add-hook 'find-file-hook 'toggle-trailing-whitespace-font-lock)
+(add-hook 'find-file-hook 'toggle-tabs-font-lock)
 
 (setq eshell-cmpl-cycle-completions nil)
 (setq eshell-save-history-on-exit t)
@@ -49,7 +52,7 @@
 (defalias 'qrr 'query-replace-regexp)
 (random t)
 ;(add-to-list 'bs-configurations
-;	     '("gnus" nil nil "^[^#]" nil nil))
+;            '("gnus" nil nil "^[^#]" nil nil))
 
 ;; don't clutter directories!
 (setq backup-directory-alist `(("." . ,(expand-file-name "~/.emacs.d/backups"))))
