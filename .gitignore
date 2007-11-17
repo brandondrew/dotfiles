@@ -1,1 +1,4 @@
 *elc
+!.emacs.d
+!.eshell
+!bin

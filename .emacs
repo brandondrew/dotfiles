@@ -56,6 +56,7 @@
 (autoload 'pastie-region "pastie" "" t)
 (autoload 'tail-file "tail.el" "Tail a file." t)
 (autoload 'column-marker-1 "column-marker.el" "" t)
+(autoload 'git-blame-mode "git-blame" "" t)
 
 (autoload 'jabber-connect "jabber" "" t)
 (autoload 'w3m "w3m" "" t)
@@ -69,10 +70,6 @@
 (require 'esh-mode)
 (require 'git)
 (require 'buffer-stack)
-
-(add-to-list 'auto-mode-alist '("\\.css$" . css-mode))
-(add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
-(add-to-list 'auto-mode-alist '("^COMMIT_EDITMSG$" . diff-mode))
 
 (load "nxml/autostart.el")
 
