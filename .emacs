@@ -71,6 +71,7 @@
 (require 'esh-mode)
 (require 'git)
 (require 'buffer-stack)
+(require 'install-elisp)
 
 (load "nxml/autostart.el")
 
