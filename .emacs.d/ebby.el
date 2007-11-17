@@ -1,8 +1,17 @@
+;;; ebby.el --- Collaborative editing
 
 ;; Copyright (C) 2006 Phil Hagelberg
 
 ;; Author: Phil Hagelberg
-;; URL: http://dev.technomancy.us/phil/wiki/ebby
+;; URL: http://www.emacswiki.org/cgi-bin/wiki/Ebby
+;; Keywords: collaborative gobby obby
+;; EmacsWiki: Ebby
+
+;; This file is NOT part of GNU Emacs.
+
+;; Last-Updated: Fri Nov 16 17:48:01 2007
+;; By: Phil Hagelberg
+;; Update #: 1
 
 ;;; License:
 
@@ -21,12 +30,12 @@
 ;; Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 ;; Boston, MA 02110-1301, USA.
 
-;;; Description:
+;;; Commentary:
 
-;; Obby is a protocol that allows for collaborative editing. (See
+;; Obby is a protocol that allows for collaborative editing.  (See
 ;; http://darcs.0x539.de/trac/obby/cgi-bin/trac.cgi) Currently the
 ;; only other editor that supports Obby is Gobby, a multiplatform GTK
-;; client. Ebby is meant to bring Obby client support to Emacs.  Note
+;; client.  Ebby is meant to bring Obby client support to Emacs.  Note
 ;; that Ebby currently supports version 0.3 of the protocol.
 
 ;;; Usage
@@ -52,12 +61,12 @@
 
 ;;; Not to do
 
-;;  * Become a server (unless someone else wants to write it) 
+;;  * Become a server (unless someone else wants to write it)
 ;;  * Multiple Obby servers (Even Gobby doesn't do this)
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Init
 
+;;; Code:
 (defgroup ebby nil
   "Implementation of the obby collaborative editing protocol"
   :version "22.1" ; not sure what to put here...
@@ -103,15 +112,16 @@
 Use the without-transmitting-changes macro to set this.")
 
 (defvar local-operations-cache ()
-  "A record of local operations so we can transform them against
-  incoming out-of-sync operations. This is implemented as an alist of
-  document ids where each id references a list of operations formatted
-  as (local-operation-coun string position)")
+  "A record of local operations.
+
+Used so we can transform them against incoming out-of-sync
+operations. This is implemented as an alist of document ids where
+each id references a list of operations formatted
+as (local-operation-coun string position)")
 
 ;; So we can use setf
-(require 'cl) 
+(require 'cl)
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Utilities (my first two macros!)
 
 (defmacro without-transmitting-changes (&rest body)
@@ -128,8 +138,6 @@ Use the without-transmitting-changes macro to set this.")
 		    `((equal ,expr ,(car c)) ,@(cdr c)))
 		    choices)))
 
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Connection:
 
 (defalias 'ebby 'ebby-connect)
@@ -145,8 +153,8 @@ Use the without-transmitting-changes macro to set this.")
 			    (if (stringp port)
 				(string-to-number port)
 			      port)
-			  (string-to-number 
-			   (read-string "Port: " 
+			  (string-to-number
+			   (read-string "Port: "
 					(number-to-string ebby-default-port)))))
            (process (open-network-stream server "*ebby*" server port-number)))
 
@@ -172,7 +180,7 @@ Use the without-transmitting-changes macro to set this.")
 (defun ebby-filter-line (process line)
   (let ((tokens (split-string line ":")))
     (case-string (car tokens)
-     ("obby_welcome" 
+     ("obby_welcome"
       (apply 'ebby-welcome (cdr tokens)))
      ("obby_sync_final"
       (message "Logged in."))
@@ -189,7 +197,7 @@ Use the without-transmitting-changes macro to set this.")
 
 (defun ebby-send-string (string)
   (unless (eq (process-status (get-buffer-process "*ebby*")) 'open)
-    (error "Network connection is not open."))
+    (error "Network connection is not open"))
   (when ebby-debug
     (set-buffer "*ebby*")
     (insert "sent: " string "\n"))
@@ -214,13 +222,11 @@ Use the without-transmitting-changes macro to set this.")
     (kill-buffer (concat "ebby-" (ebby-doc-id-to-name doc-id)))
     (ebby-subscribe doc-id)))
 
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; General Handlers
 
 (defun ebby-welcome (protocol-version &rest args)
-  (unless (equal "5" protocol-version) 
-    (message "Warning: incompatible version of obby protocol: %s" 
+  (unless (equal "5" protocol-version)
+    (message "Warning: incompatible version of obby protocol: %s"
 	     protocol-version)))
 
 
@@ -228,7 +234,7 @@ Use the without-transmitting-changes macro to set this.")
   "Add client to the client-table."
   (if (equal name ebby-user-name)
       (setq ebby-user-id obby-user-id)) ; only chance at getting our own user ID
-  (puthash net6-user-id (list :net6-id net6-user-id :name name 
+  (puthash net6-user-id (list :net6-id net6-user-id :name name
 			      :obby-id obby-user-id :color color) client-table))
 
 (defun ebby-client-part (net6-user-id)
@@ -239,7 +245,6 @@ Use the without-transmitting-changes macro to set this.")
   "Create document."
   (ebby-document-create obby-user-id doc-index doc-name))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Document Handlers
 
 (defun ebby-document-handler (doc-id command &rest args)
@@ -276,15 +281,15 @@ Use the without-transmitting-changes macro to set this.")
     (without-transmitting-changes
      (end-of-buffer)
      (incf line-count)
-     (ebby-document-record-ins doc-id nil 
-			       (concat line (unless 
+     (ebby-document-record-ins doc-id nil
+			       (concat line (unless
 						(= line-count total-lines) "\n"))))))
 
 
 (defun ebby-document-create (doc-owner-id doc-count doc-name)
   "Add document to document-table."
   (puthash (concat doc-owner-id " " doc-count) ; key
-	   (list :owner doc-owner-id :index doc-count :name doc-name :users () 
+	   (list :owner doc-owner-id :index doc-count :name doc-name :users ()
 		 :remote-count 0 :local-count 0)
 	   document-table))
 
@@ -293,11 +298,9 @@ Use the without-transmitting-changes macro to set this.")
   (beginning-of-buffer)
   (message "Subscribed to %s" (ebby-doc-id-to-name doc-id)))
 
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Document Record Handlers
 
-(defun ebby-document-record (doc-id user-id remote-count local-count 
+(defun ebby-document-record (doc-id user-id remote-count local-count
 				    command &rest args)
   "Handle record commands."
   (ebby-set-doc-remote-count doc-id (+ 1 (string-to-number remote-count 16)))
@@ -322,8 +325,6 @@ Use the without-transmitting-changes macro to set this.")
     (goto-char (+ (string-to-number position 16) 1))
     (delete-char (string-to-number char-count 16))))
 
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Document functions
 
 (defun ebby-doc-id-to-name (doc-id)
@@ -357,28 +358,27 @@ Use the without-transmitting-changes macro to set this.")
 (defun ebby-inc-doc-remote-count (doc-id)
   (ebby-set-doc-remote-count doc-id (+ (ebby-get-doc-remote-count doc-id) 1)))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Sending
 
 (defun ebby-send-ins (doc-id string position)
   "Transmit an insertion of characters to the buffer."
-  (ebby-send-string (concat "obby_document:" doc-id ":record:" 
-			    (format "%x" (ebby-get-doc-local-count doc-id)) 
-			    ":" (format "%x" (ebby-get-doc-remote-count doc-id)) 
-			    ":ins:" (format "%x" position) ":" 
+  (ebby-send-string (concat "obby_document:" doc-id ":record:"
+			    (format "%x" (ebby-get-doc-local-count doc-id))
+			    ":" (format "%x" (ebby-get-doc-remote-count doc-id))
+			    ":ins:" (format "%x" position) ":"
 			    string))
 ;  (ebby-store-insertion (doc-id string position))
-  (when ebby-debug (message "local: %s remote: %s" 
-			    (ebby-get-doc-local-count doc-id) 
+  (when ebby-debug (message "local: %s remote: %s"
+			    (ebby-get-doc-local-count doc-id)
 			    (ebby-get-doc-remote-count doc-id)))
   (ebby-inc-doc-local-count doc-id))
 
 (defun ebby-send-del (doc-id position &optional length)
   "Transmit a deletion."
-  (ebby-send-string (concat "obby_document:" doc-id ":record:" 
-			    (format "%x" (ebby-get-doc-local-count doc-id)) 
-			    ":" (format "%x" (ebby-get-doc-remote-count doc-id)) 
-			    ":del:" (format "%x" position) ":" 
+  (ebby-send-string (concat "obby_document:" doc-id ":record:"
+			    (format "%x" (ebby-get-doc-local-count doc-id))
+			    ":" (format "%x" (ebby-get-doc-remote-count doc-id))
+			    ":del:" (format "%x" position) ":"
 			    (format "%x" (or length 1))))
   (ebby-inc-doc-local-count doc-id))
 
@@ -389,8 +389,8 @@ Use the without-transmitting-changes macro to set this.")
 	;; deletion
 	(ebby-send-del this-doc-id (- begin 1) length)
       ;; insertion
-      (ebby-send-ins this-doc-id (ebby-escape 
-				  (buffer-substring begin end)) 
+      (ebby-send-ins this-doc-id (ebby-escape
+				  (buffer-substring begin end))
 		     (- begin 1)))))
 
 (defun ebby-store-insertion (doc-id string position)
@@ -402,3 +402,5 @@ Use the without-transmitting-changes macro to set this.")
 
 
 (provide 'ebby)
+
+;;; ebby.el ends here

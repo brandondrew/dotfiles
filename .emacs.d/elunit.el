@@ -4,6 +4,14 @@
 
 ;; Author: Phil Hagelberg
 ;; URL: http://www.emacswiki.org/cgi-bin/wiki/ElUnit
+;; Keywords: unit test tdd
+;; EmacsWiki: ElUnit
+
+;; This file is NOT part of GNU Emacs.
+
+;; Last-Updated: Fri Nov 16 16:23:06 2007 PST
+;; By: Phil Hagelberg
+;; Update #: 1
 
 ;;; License:
 
@@ -22,27 +30,27 @@
 ;; Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 ;; Boston, MA 02110-1301, USA.
 
-;;; Description:
+;;; Commentary:
 
 ;; Inspired by regress.el by Wayne Mesard and Tom Breton, Test::Unit
 ;; by Nathaniel Talbott, and xUnit by Kent Beck
 
-;; elunit exists to accomodate test-driven development of Emacs Lisp
-;; programs. Tests are divided up into suites. Each test makes a
+;; ElUnit exists to accomodate test-driven development of Emacs Lisp
+;; programs.  Tests are divided up into suites.  Each test makes a
 ;; number of assertions to ensure that things are going according to
-;; expected.  
+;; expected.
 
 ;; Tests are divided into suites for the purpose of hierarchical
-;; structure and hooks. The hierarchy allows suites to belong to
-;; suites, in essence creating test trees. The hooks are meant to
+;; structure and hooks.  The hierarchy allows suites to belong to
+;; suites, in essence creating test trees.  The hooks are meant to
 ;; allow for extra setup that happens once per test, for both before
 ;; and after it runs.
 
 ;; The file `elunit-assertions.el' provides a number of helpful
-;; assertions for ensuring that things are going properly. You may use
-;; emacs' built-in `assert' function for checking such things, but the
+;; assertions for ensuring that things are going properly.  You may use
+;; Emacs' built-in `assert' function for checking such things, but the
 ;; assertions in that file provide much better reporting if you use
-;; them. Using `assert-that' is preferred over built-in `assert'.
+;; them.  Using `assert-that' is preferred over built-in `assert'.
 
 ;;; Todo:
 
@@ -59,9 +67,14 @@
 ;; (add-hook 'after-save-hook (lambda () (elunit "meta-suite")))
 ;; to the file containing your tests for convenient auto-running.
 
+
+;;; History:
+
+;; 2007-11-16 - First release to EmacsWiki
+
 ;;; Code:
 
-(eval-when-compile 
+(eval-when-compile
   (require 'cl)
   (require 'compile))
 
@@ -72,7 +85,7 @@
 
 (defvar elunit-default-suite
   "default-suite"
-  "Choice to use for default suite to run (gets updated to last suite run)")
+  "Choice to use for default suite to run (gets updated to last suite run).")
 
 (defvar elunit-suites (list (make-test-suite :name 'default-suite))
   "A list of every suite that's been defined.")
@@ -85,6 +98,8 @@
   "Runs when the tests are finished; passed a total test count and a failure count.")
 
 (defun elunit-clear-suites ()
+  "Reset the internal suite list."
+  (interactive)
   (setq elunit-suites (list (make-test-suite :name 'default-suite))))
 
 ;;; Defining tests
@@ -99,16 +114,18 @@
      (add-to-list 'elunit-suites suite)))
 
 (defun elunit-get-suite (suite)
-  "Fetch a suite by its name."
+  "Fetch a SUITE by its name."
   (if (test-suite-p suite)
       suite
     (find suite elunit-suites :test (lambda (suite asuite)
                                      (equal suite (test-suite-name asuite))))))
 
 (defun elunit-delete-suite (name)
+  "Remove a suite named NAME."
   (setq elunit-suites (remove (elunit-get-suite name) elunit-suites)))
 
 (defmacro deftest (name suite &rest body)
+  "Define a test NAME in SUITE with BODY."
   (save-excursion
     (search-backward (symbol-name name) nil t)
     (let ((line (line-number-at-pos))
@@ -122,22 +139,26 @@
                (test-suite-tests ,suite-sym))))))
 
 (defun elunit-get-test (name suite)
+  "Return a test given a NAME and SUITE."
   (if (test-p name) name
     (find name (test-suite-tests (elunit-get-suite suite))
           :test (lambda (name test) (equal name (test-name test))))))
 
 (defun elunit-delete-test (name suite)
+  "Delete test named NAME in SUITE."
   (let ((suite (elunit-get-suite suite)))
     (setf (test-suite-tests suite)
           (delete (elunit-get-test name suite) (test-suite-tests suite)))))
 
 (defun elunit-total-test-count (suite)
+  "Return the total number of tests in a SUITE."
   (let ((suite (elunit-get-suite suite)))
     (if suite
         (+ (apply #'+ (elunit-total-test-count (test-suite-children suite)))
            (length (test-suite-tests suite))))))
 
 (defun elunit-test-docstring (test)
+  "Return a `TEST's docstring."
   (if (equal (car (test-body test)) 'lambda)
       (if (stringp (caddr (test-body test)))
           (caddr (test-body test))
@@ -146,9 +167,9 @@
 ;;; Running the tests
 
 (defun elunit (suite)
-  "Ask for a single suite, run all its tests, and display the results."
+  "Ask for a single SUITE, run all its tests, and display the results."
   (interactive (list (completing-read (concat "Run test suite (default " elunit-default-suite "): " )
-                                      (mapcar (lambda (suite) (symbol-name (test-suite-name suite))) 
+                                      (mapcar (lambda (suite) (symbol-name (test-suite-name suite)))
                                               elunit-suites) nil t nil nil elunit-default-suite)))
  (setq elunit-default-suite suite)
  (setq elunit-test-count 0)
@@ -168,7 +189,7 @@
    (elunit-report-failures)))
 
 (defun elunit-run-suite (suite)
-  "Run a suite's tests and children."
+  "Run a SUITE's tests and children."
   (dolist (test (reverse (test-suite-tests suite)))
     (if (test-suite-setup-hook suite) (funcall (test-suite-setup-hook suite)))
     (elunit-run-test test)
@@ -178,7 +199,7 @@
   (run-hook-with-args 'elunit-done-running-hook elunit-test-count (length elunit-failures)))
 
 (defun elunit-run-test (test)
-  "Run a single test."
+  "Run a single `TEST'."
   (condition-case err
       (progn
         (incf elunit-test-count)
@@ -190,7 +211,9 @@
      (elunit-failure test err "E"))))
 
 (defun elunit-failure (test err output)
-  "Display and store failure info."
+  "Display and store failure info.
+
+In `TEST' store error data `ERR' structure and print `OUTPUT'."
   (princ output)
   (setf (test-problem test) err)
   ;; color overlays are GNU-only IIRC
@@ -221,15 +244,16 @@
 ;;; Helper functions
 
 (defmacro with-test-buffer (&rest body)
+  "Execute BODY in a test buffer named `*elunit-output*'."
   `(save-excursion
      (switch-to-buffer "*elunit-output*")
      ,@body
      (kill-buffer "*elunit-output*")))
 
 (defun elunit-quiet (suite)
-  "Run a suite and display results in the minibuffer"
+  "Run a SUITE and display results in the minibuffer."
   (interactive (list (completing-read (concat "Run test suite (default " elunit-default-suite "): " )
-				      (mapcar (lambda (suite) (symbol-name (test-suite-name suite))) 
+				      (mapcar (lambda (suite) (symbol-name (test-suite-name suite)))
 					      elunit-suites) nil t nil nil elunit-default-suite)))
   (save-window-excursion
     (elunit suite))
@@ -239,7 +263,9 @@
 ;; do this too? (put 'defsuite 'lisp-indent-function 1)
 
 (defun fail (&rest args)
-  "Like `error', but reported differently."
+  "Signal a test failure in a way that elunit understands.
+
+Takes the same ARGS as `error'."
     (signal 'elunit-test-failed (list (apply 'format args))))
 
 ;;; General assertions
@@ -248,30 +274,37 @@
 ;; they use the `fail' function, which reports errors nicely.
 
 (defun assert-that (actual)
+  "Fails if ACTUAL is nil."
   (unless actual
     (fail "%s expected to be non-nil" actual)))
 
 (defun assert-nil (actual)
+  "Fails if ACTUAL is non-nil."
   (when actual
     (fail "%s expected to be nil" actual)))
 
 (defun assert-equal (expected actual)
+  "Fails if EXPECTED is not equal to ACTUAL."
   (unless (equal expected actual)
     (fail "%s expected to be %s" actual expected)))
 
 (defun assert-not-equal (expected actual)
+  "Fails if EXPECTED is equal to ACTUAL."
   (when (equal expected actual)
     (fail "%s expected to not be %s" actual expected)))
 
 (defun assert-member (elt list)
+  "Fails if ELT is not a member of LIST."
   (unless (member elt list)
     (fail "%s expected to include %s" list elt)))
 
 (defun assert-match (regex string)
+  "Fails if REGEX does not match STRING."
   (unless (string-match regex string)
     (fail "%s expected to match %s" string regex)))
 
 (defmacro assert-error (&rest body)
+  "Fails if BODY does not signal an error."
   `(condition-case err
        (progn
 	 ,@body
@@ -279,12 +312,14 @@
      (error t)))
 
 (defmacro assert-changed (form &rest body)
+  "Fails if FORM does not return a different value after BODY is evaled."
   `(assert-not-equal (eval ,form)
 		     (progn
 		       ,@body
 		       (eval ,form))))
 
 (defmacro assert-not-changed (form &rest body)
+  "Fails if FORM returns a different value after BODY is evaled."
   `(assert-equal (eval ,form)
 		     (progn
 		       ,@body
@@ -293,6 +328,7 @@
 ;; Buffer-specific assertions
 
 (defun assert-in-buffer (target &optional buffer)
+  "Fails if TARGET is not a string found in current buffer or BUFFER."
   (save-window-excursion
     (if buffer (switch-to-buffer buffer))
     (goto-char (point-min))
@@ -300,6 +336,9 @@
       (fail "%s expected to be found in buffer %s" target buffer))))
 
 (defun assert-background (target face &optional buffer)
+  "Fails if TARGET is not rendered in FACE face.
+
+May be passed BUFFER, otherwise defaults to current buffer."
   (save-window-excursion
     (if buffer (switch-to-buffer buffer))
     (goto-char (point-min))
@@ -309,12 +348,15 @@
       (fail "%s expected to be displayed with face %s" target face))))
 
 (defun assert-overlay (pos)
+  "Fails if overlay is not present at POS."
   (unless (overlays-at pos)
     (fail "Expected overlay at position %d" pos)))
 
 (defun assert-no-overlay (pos)
+  "Fails if overlay is present at POS."
   (if (overlays-at pos)
     (fail "Expected no overlay at position %d" pos)))
 
 (provide 'elunit)
+
 ;;; elunit.el ends here

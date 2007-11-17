@@ -164,14 +164,14 @@
   nodes)
 
 (when nil ; for eval'ing live
-(setq utu-process (make-network-process :name "utu"
-					:host 'local :family 'local
-						     :service "/tmp/hate-el-manual"
-						     :server t
-						     :buffer "*utu*"
-						     :coding 'raw-text
-;						     :filter 'utu-filter
-))
+  (setq utu-process (make-network-process :name "utu"
+					  :host 'local :family 'local
+					  :service "/tmp/hate-el-manual"
+					  :server t
+					  :buffer "*utu*"
+					  :coding 'raw-text
+;;						     :filter 'utu-filter
+					  ))
 (process-send-string (get-process "utu <*1*>" "\"technomancy\" name my")
 ;; how to get processes from accepted clients?
-)
+))

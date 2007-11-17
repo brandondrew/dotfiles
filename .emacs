@@ -61,6 +61,7 @@
 (autoload 'jabber-connect "jabber" "" t)
 (autoload 'w3m "w3m" "" t)
 
+(require 'cl)
 (require 'toggle)
 (require 'compile)
 (require 'which-func)
@@ -138,5 +139,4 @@
 ;;; TODO:
 
 ;; publish
-;;  - elunit
 ;;  - ebby
