@@ -9,8 +9,6 @@
 
 ;;; misc things
 
-(setq emacs-wiki-name "PhilHagelberg")
-
 (when window-system
   (mouse-wheel-mode t)
   (global-hl-line-mode t)
@@ -32,8 +30,6 @@
       color-theme-is-global nil
       indent-tabs-mode nil)
 
-(setq install-elisp-repository-directory "~/.emacs.d/")
-
 (auto-compression-mode t)
 (global-font-lock-mode t)
 (menu-bar-mode -1)
@@ -45,6 +41,13 @@
 (defalias 'yes-or-no-p 'y-or-n-p)
 (defalias 'qrr 'query-replace-regexp)
 (random t)
+
+(setq emacs-wiki-name "PhilHagelberg"
+      oddmuse-username "PhilHagelberg")
+
+(setq oddmuse-wikis
+      '(("Technomancy" "http://dev.technomancy.us" utf-8)
+	("EmacsWiki" "http://www.emacswiki.org/cgi-bin/emacs" utf-8)))
 
 (setenv "PAGER" "cat")
 (setenv "EDITOR" "emacsclient")
