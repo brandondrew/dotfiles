@@ -2,8 +2,10 @@
 
 ;; Copyright (C) 2006 - 2007 Phil Hagelberg
 
-;; Author: Phil Hagelberg
+;; Author: Phil Hagelberg <technomancy@gmail.com>
 ;; URL: http://www.emacswiki.org/cgi-bin/wiki/ElUnit
+;; Version: 1.0
+;; Created: 2006-08-17
 ;; Keywords: unit test tdd
 ;; EmacsWiki: ElUnit
 

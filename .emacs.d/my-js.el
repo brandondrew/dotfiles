@@ -5,7 +5,7 @@
 ;; Much thanks to emacswiki.org and RMS.
 
 ;; Note: this relies on files found in my dotfiles repository:
-;; http://dev.technomancy.us/phil/browser/dotfiles/
+;; http://git.caboo.se/?p=technomancy.git;a=summary
 
 (require 'javascript)
 

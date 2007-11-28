@@ -216,6 +216,33 @@ For example: (setq install-elisp-repository-directory \"~/emacs/lisp/\")"))
         (format "%s: Type C-c C-c to install!"
                 (file-name-nondirectory install-elisp-filename))))
 
+;; This stuff requires the oddmuse library:
+;; (install-elisp-from-emacswiki "oddmuse.el")
+
+(if (featurep 'oddmuse)
+    (defun install-elisp-from-emacswiki (filename)
+      "Install Emacs Lisp program from the EmacsWiki."
+      (interactive (list (completing-read "Library: " (oddmuse-elisp-pages))))
+      (funcall (install-elisp-from "http://www.emacswiki.org/cgi-bin/wiki/download/") filename))
+
+  (defun install-elisp-update-installed-libraries ()
+    "Update all libraries you've got installed with the latest from the wiki."
+    (interactive)
+    (dolist (library (install-elisp-my-libraries-in-emacswiki))
+      (install-elisp-from-emacswiki library)))
+
+  (defun install-elisp-my-libraries-in-emacswiki ()
+    "List all elisp libs you've got installed that are hosted on the wiki."
+    (let ((elisp-pages (oddmuse-elisp-pages)))
+      (remove-if-not
+       (lambda (file) (member (list file) elisp-pages))
+       (directory-files install-elisp-repository-directory))))
+
+  (defun oddmuse-elisp-pages ()
+    "Returns a list of EmacsWiki pages containing elisp."
+    (remove-if-not
+     (lambda (page) (string-match "\\.el$" (car page)))
+     (oddmuse-make-completion-table "EmacsWiki"))))
 
 (provide 'install-elisp)
 

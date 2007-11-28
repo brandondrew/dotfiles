@@ -68,13 +68,12 @@
 (require 'toggle)
 (require 'compile)
 (require 'which-func)
-(require 'wrap-region)
-(require 'elunit)
 (require 'show-wspace)
 (require 'esh-mode)
 (require 'git)
 (require 'buffer-stack)
 (require 'install-elisp)
+(require 'elunit)
 
 (load "nxml/autostart.el")
 
@@ -87,6 +86,7 @@
 (require 'my-defuns)
 (require 'my-registers)
 (require 'my-misc)
+(require 'my-hook-setup)
 (require 'my-music)
 
 (require 'my-ruby)
@@ -95,7 +95,6 @@
 
 (if (functionp 'jabber-connect)
     (load "jabber-config"))
-(load "rcirc-config")
 
 (load "rcirc-config")
 
@@ -144,3 +143,7 @@
 
 ;; publish
 ;;  - ebby
+
+;; install-elisp.el
+;;  - do something about metadata: description, author, version, url
+;;  - make sure each installation buffer gets focus/attention

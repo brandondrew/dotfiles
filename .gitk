@@ -11,11 +11,4 @@ set bgcolor white
 set fgcolor black
 set colors {green red blue magenta darkgrey brown orange}
 set diffcolors {red "#00a000" blue}
-set geometry(main) 1388x986+194+25
-set geometry(topwidth) 1384
-set geometry(topheight) 375
-set geometry(pwsash0) "497 2"
-set geometry(pwsash1) "745 2"
-set geometry(botwidth) 620
-set geometry(botheight) 591
 set permviews {}
