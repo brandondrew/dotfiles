@@ -1,9 +1,13 @@
 #!/usr/bin/env bash
 
 cd ~
-#git clone ssh://dev.technomancy.us/git/dotfiles
+
+# we git cloned this in go.sh
+mv dotfiles/* ~
+mv dotfiles/.* ~
+
 ln -s .sshconfig .ssh/config
-ln -s /usr/lib/ruby/gems/1.8/gems ~/gems
+ln -s /usr/lib/ruby/gems/1.8/gems ~/gems # elsewhere on other platforms
 
 rm -rf Music
 rm -rf Pictures

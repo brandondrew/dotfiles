@@ -31,4 +31,13 @@ class Array
     self.each_with_index{ |elt, i| h[i] = elt}
     h
   end
+
+  # jQuery-style implicit iteration
+  def method_missing(method, *args)
+    begin
+      self.map{ |i| i.send method, *args }
+    rescue NoMethodError
+      raise "Not all elements of array responded to #{method}"
+    end
+  end
 end

@@ -54,7 +54,7 @@
 (setq inferior-ruby-first-prompt-pattern ">>"
       inferior-ruby-prompt-pattern ">>")
 
-(defun my-ruby-mode-hook ()
+(defun my-ruby-mode-hook () 
   (highlight-trailing-whitespace)
   (highlight-tabs)
   (ruby-electric-mode)

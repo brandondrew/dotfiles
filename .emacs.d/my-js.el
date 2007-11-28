@@ -28,12 +28,12 @@
 (add-hook 'javascript-mode-hook 'moz-minor-mode)
 (add-hook 'javascript-mode-hook 'my-coding-hook)
 
-(add-to-list 'auto-mode-alist '("\\.js$" . js-mode))
-(add-to-list 'auto-mode-alist '("\\.json$" . js-mode))
+(add-to-list 'auto-mode-alist '("\\.js$" . javascript-mode))
+(add-to-list 'auto-mode-alist '("\\.json$" . javascript-mode))
 
 ;; for helma
 (add-to-list 'auto-mode-alist '("\\.skin$" . html-mode))
-(add-to-list 'auto-mode-alist '("\\.hac$" . js-mode))
+(add-to-list 'auto-mode-alist '("\\.hac$" . javascript-mode))
 
 (require 'flymake-js)
 ;; getting an error 100% of the time now.

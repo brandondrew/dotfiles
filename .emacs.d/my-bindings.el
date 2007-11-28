@@ -11,6 +11,7 @@
 
 (global-set-key "\C-\M-h" 'backward-kill-word)
 (global-set-key (kbd "C-c l") (lambda () (interactive) (insert "lambda")))
+(global-set-key (kbd "C-x \\") 'align-regexp)
 
 ;;; Navigation
 
@@ -56,6 +57,10 @@
 (global-set-key (kbd "C-x m") 'eshell)
 (global-set-key (kbd "C-x M") (lambda () (interactive) (eshell t)))
 
+;; Web
+
+(global-set-key (kbd "C-x w") 'w3m)
+
 ;;; Display
 
 (global-set-key (kbd "M-\\") 'my-selective-display)
@@ -65,10 +70,6 @@
                        (set-face-attribute 'mumamo-background-chunk-submode nil :background "grey18")
                        (set-face-attribute 'flymake-errline nil :background "Maroon4")
                        (set-face-background 'flymake-warnline "dark slate blue")
-                       (set-face-attribute 'test-unit-pass-face nil :background "PaleGreen4")
-                       (set-face-attribute 'test-unit-fail-face  nil :background "firebrick3")
-                       (set-face-attribute 'test-unit-error-face nil :background "sienna")
-                       (set-face-attribute 'test-unit-line-face nil :background "firebrick4")
                        (color-theme-zenburn)))
 
 ;;; Utility

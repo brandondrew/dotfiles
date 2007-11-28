@@ -7,7 +7,10 @@ fi
 
 # enable universe
 cp /etc/apt/sources.list /etc/apt/sources.list.orig
+# Enable all disabled sources
 sed -i -e "s/# deb/deb/g" /etc/apt/sources.list
+# We don't want backports though
+sed -i -e "s/^.*backports.*$//g" /etc/apt/sources.list
 apt-get update
 
 # get the minimum
@@ -20,6 +23,6 @@ if [ -r install.rb ] ; then
 fi
 
 # if we are running a bare go.sh
-git clone git://git.technomancy.us/technomancy-init
-cd technomancy-init
+git clone git://git.caboo.se/technomancy.git dotfiles
+cd dotfiles/bin/init
 ./go.sh

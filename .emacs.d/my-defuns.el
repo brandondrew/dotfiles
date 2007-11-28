@@ -73,10 +73,8 @@
 
 (defun my-coding-hook ()
   "Enable things I consider convenient across all coding buffers."
-  (column-marker-1 80)
-  (indent-buffer)
-  (toggle-trailing-whitespace-font-lock)
-  (toggle-tabs-font-lock))
+;  (column-marker-1 80)
+  (indent-buffer))
 
 (defun untabify-buffer ()
   (interactive)

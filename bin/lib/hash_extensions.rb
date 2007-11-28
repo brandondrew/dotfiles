@@ -21,4 +21,13 @@ class Hash
     h = {}
     ary.each{ |elt| h[elt.first] = elt.last }
   end
+
+  # jQuery-style implicit iteration
+  def method_missing(method, *args)
+    begin
+      self.map{ |k, v| v.send method, *args }
+    rescue NoMethodError
+      raise "Not all elements of hash responded to #{method}"
+    end
+  end
 end
