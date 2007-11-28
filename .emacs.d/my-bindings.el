@@ -64,6 +64,7 @@
 ;;; Display
 
 (global-set-key (kbd "M-\\") 'my-selective-display)
+(global-set-key (kbd "C-c o") 'longlines-mode)
 (global-set-key [f2] (lambda () (interactive)
                        (set-default-font "-xos4-terminus-medium-r-normal--16-160-72-72-c-80-iso8859-9")
                        (require 'flymake)
