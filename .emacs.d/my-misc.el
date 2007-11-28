@@ -5,7 +5,7 @@
 ;; Much thanks to emacswiki.org and RMS.
 
 ;; Note: this relies on files found in my dotfiles repository:
-;; http://dev.technomancy.us/phil/browser/dotfiles/
+;; http://git.caboo.se/?p=technomancy.git;a=summary
 
 ;;; misc things
 
@@ -36,6 +36,14 @@
 (winner-mode t)
 (show-paren-mode 1)
 
+(when (> emacs-major-version 21)
+  (ido-mode t)
+  (setq ido-enable-prefix nil
+        ido-enable-flex-matching t
+        ido-create-new-buffer 'always
+        ido-max-prospects 10)
+  (file-name-shadow-mode t))
+
 (put 'narrow-to-region 'disabled nil)
 (put 'downcase-region 'disabled nil)
 (defalias 'yes-or-no-p 'y-or-n-p)
@@ -47,7 +55,7 @@
 
 (setq oddmuse-wikis
       '(("Technomancy" "http://dev.technomancy.us" utf-8)
-	("EmacsWiki" "http://www.emacswiki.org/cgi-bin/emacs" utf-8)))
+        ("EmacsWiki" "http://www.emacswiki.org/cgi-bin/emacs" utf-8)))
 
 (setenv "PAGER" "cat")
 (setenv "EDITOR" "emacsclient")

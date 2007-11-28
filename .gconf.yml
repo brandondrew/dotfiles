@@ -6,11 +6,11 @@
   global/:
     use_menu_accelerators: false
     use_mnemonics: false
-/apps/metacity/: 
+/apps/metacity/:
   general/:
     num_workspaces: 4
     theme: Glossy
-  keybinding_commands/: 
+  keybinding_commands/:
     command_1: urxvt -bg white +sb -bd white -e screen -xRR
     command_2: synergys
     command_3: synergy_connect
@@ -22,7 +22,7 @@
     command_9: emacs
     command_10: /home/phil/bin/notify-mpc
     command_11: /home/phil/projects/presentations/feedback/render.sh
-  global_keybindings/: 
+  global_keybindings/:
     panel_run_dialog: <Alt>space
     run_command_1: <Alt>grave
     run_command_2: <Shift>F1
@@ -41,7 +41,7 @@
     switch_to_workspace_4: <Control>4
     switch_to_workspace_5: <Control>5
     switch_to_workspace_6: <Control>6
-  window_keybindings/: 
+  window_keybindings/:
     toggle_above: <Alt>Home
     toggle_on_all_workspaces: <Alt>End
     maximize_vertically: <Super>Page_Up
@@ -55,12 +55,14 @@
     move_to_workspace_4: <Control><Alt>4
     move_to_workspace_5: <Control><Alt>5
     move_to_workspace_6: <Control><Alt>6
+    switch_to_workspace_right: <Control><Alt>right
+    switch_to_workspace_left: <Control><Alt>left
     move_to_corner_nw: <Super>1
     move_to_corner_ne: <Super>2
     move_to_corner_se: <Super>o
     move_to_corner_sw: <Super>a
 /apps/nautilus/:
-  desktop/: 
+  desktop/:
     computer_icon_visible: true
     trash_icon_visible: true
   preferences/:

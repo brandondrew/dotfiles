@@ -5,7 +5,7 @@
 ;; Much thanks to emacswiki.org and RMS.
 
 ;; Note: this relies on files found in my dotfiles repository:
-;; http://dev.technomancy.us/phil/browser/dotfiles/
+;; http://git.caboo.se/?p=technomancy.git;a=summary
 
 ;;; hooks
 
@@ -14,3 +14,5 @@
 (add-hook 'html-mode-hook 'auto-fill-mode)
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 (add-hook 'before-save-hook 'untabify-buffer)
+
+(provide 'my-hook-setup)

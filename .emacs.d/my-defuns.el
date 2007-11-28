@@ -5,7 +5,7 @@
 ;; Much thanks to emacswiki.org and RMS.
 
 ;; Note: this relies on files found in my dotfiles repository:
-;; http://dev.technomancy.us/phil/browser/dotfiles/
+;; http://git.caboo.se/?p=technomancy.git;a=summary
 
 ;;;; defuns
 
@@ -75,8 +75,7 @@
   "Enable things I consider convenient across all coding buffers."
   (column-marker-1 80)
   (indent-buffer)
-  (toggle-trailing-whitespace-font-lock)
-  (toggle-tabs-font-lock))
+  (untabify-buffer))
 
 (defun untabify-buffer ()
   (interactive)
@@ -95,9 +94,9 @@
   (tabbar-mode -1)
   (scroll-bar-mode -1))
 
-(defun bigish ()                                                                                                                                                          
+(defun bigish ()
   (interactive)
-  (set-default-font "-b&h-lucidatypewriter-bold-r-normal-sans-34-240-100-100-m-200-iso8859-1")) 
+  (set-default-font "-b&h-lucidatypewriter-bold-r-normal-sans-34-240-100-100-m-200-iso8859-1"))
 
 (defun pretty-lambdas ()
     (font-lock-add-keywords
@@ -127,9 +126,9 @@
 
 (defun display-image ()
   "display images using imagemagick"
-  (interactive) 
-  (shell-command (concat "display " 
-			 (thing-at-point 'filename))))
+  (interactive)
+  (shell-command (concat "display "
+                         (thing-at-point 'filename))))
 
 (defun eshell-handle-ansi-color ()
   (ansi-color-apply-on-region eshell-last-output-start

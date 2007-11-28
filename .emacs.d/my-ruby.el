@@ -5,7 +5,7 @@
 ;; Much thanks to emacswiki.org and RMS.
 
 ;; Note: this relies on files found in my dotfiles repository:
-;; http://dev.technomancy.us/phil/browser/dotfiles/
+;; http://git.caboo.se/?p=technomancy.git;a=summary
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Ruby help
@@ -55,8 +55,6 @@
       inferior-ruby-prompt-pattern ">>")
 
 (defun my-ruby-mode-hook ()
-  (highlight-trailing-whitespace)
-  (highlight-tabs)
   (ruby-electric-mode)
   (pretty-lambdas))
 
@@ -66,19 +64,6 @@
 (global-set-key (kbd "C-h r") 'ri)
 
 (setq ri-ruby-script (expand-file-name "~/.emacs.d/ri-emacs.rb"))
-
-(when (> emacs-major-version 21)
-  (ido-mode t)
-  (ido-toggle-prefix)
-  (setq ido-enable-flex-matching t)
-  (setq ido-create-new-buffer 'always)
-  (file-name-shadow-mode t)
-  (add-to-list 'hs-special-modes-alist
-               (list 'ruby-mode
-                     (concat ruby-block-beg-re "\|{")
-                     (concat ruby-block-end-re "\|}")
-                     "#"
-                     'ruby-forward-sexp nil)))
 
 (define-key ruby-mode-map
   "\C-c\C-t" 'toggle-buffer)
