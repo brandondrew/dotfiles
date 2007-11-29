@@ -62,6 +62,7 @@
 (autoload 'w3m "w3m" "" t)
 
 (require 'cl)
+(require 'saveplace)
 (require 'toggle)
 (require 'compile)
 (require 'which-func)

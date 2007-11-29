@@ -37,7 +37,7 @@
 ;; If you use Emacs21 and under, you must have wget or other
 ;; command-line HTTP client.
 
-;; You need to add to .emacs:  
+;; You need to add to .emacs:
 ;;   (require 'install-elisp)
 ;;   (setq install-elisp-repository-directory "~/.emacs.d/")
 
@@ -249,3 +249,6 @@ For example: (setq install-elisp-repository-directory \"~/emacs/lisp/\")"))
 ;; How to save (DO NOT REMOVE!!)
 ;; (emacswiki-post "install-elisp.el")
 ;;; install-elisp.el ends here
+
+;; todo: make installation buffers font-lock
+;;  show first line description in a buffer

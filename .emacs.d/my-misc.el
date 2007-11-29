@@ -28,6 +28,8 @@
       inhibit-startup-message t
       transient-mark-mode t
       color-theme-is-global nil
+      indicate-empty-lines t
+      save-place t
       indent-tabs-mode nil)
 
 (auto-compression-mode t)
@@ -41,8 +43,7 @@
   (setq ido-enable-prefix nil
         ido-enable-flex-matching t
         ido-create-new-buffer 'always
-        ido-max-prospects 10)
-  (file-name-shadow-mode t))
+        ido-max-prospects 10))
 
 (put 'narrow-to-region 'disabled nil)
 (put 'downcase-region 'disabled nil)
@@ -75,9 +76,9 @@
 (add-to-list 'auto-mode-alist '("^COMMIT_EDITMSG$" . diff-mode))
 
 ;; w3m
-(setq w3m-use-cookies t)
-(setq w3m-default-save-directory "~/")
-(setq w3m-default-display-inline-images t)
+(setq w3m-use-cookies t
+      w3m-default-save-directory "~/"
+      w3m-default-display-inline-images t)
 
 (mapc (lambda (v) (set v nil))
       '(w3m-show-graphic-icons-in-header-line
