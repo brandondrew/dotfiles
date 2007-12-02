@@ -49,6 +49,9 @@
 (autoload 'javascript-mode "javascript" "" t)
 
 (autoload 'moz-minor-mode "moz" "Mozilla Minor and Inferior Mozilla Modes" t)
+;;(autoload 'irbsh "irbsh" "irbsh - IRB.extend ShellUtilities" t)
+;;(autoload 'irbsh-oneliner-with-completion "irbsh" "irbsh oneliner" t)
+
 (autoload 'lisppaste-paste-region "lisppaste" "" t)
 (autoload 'htmlize-region "htmlize" "" t)
 (autoload 'htmlize-buffer "htmlize" "" t)

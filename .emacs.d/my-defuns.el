@@ -73,9 +73,8 @@
 
 (defun my-coding-hook ()
   "Enable things I consider convenient across all coding buffers."
-  (column-marker-1 80)
-  (indent-buffer)
-  (untabify-buffer))
+;  (column-marker-1 80)
+  (indent-buffer))
 
 (defun untabify-buffer ()
   (interactive)

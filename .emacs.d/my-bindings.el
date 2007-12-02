@@ -11,6 +11,7 @@
 
 (global-set-key "\C-\M-h" 'backward-kill-word)
 (global-set-key (kbd "C-c l") (lambda () (interactive) (insert "lambda")))
+(global-set-key (kbd "C-x \\") 'align-regexp)
 
 ;;; Navigation
 
@@ -56,9 +57,14 @@
 (global-set-key (kbd "C-x m") 'eshell)
 (global-set-key (kbd "C-x M") (lambda () (interactive) (eshell t)))
 
+;; Web
+
+(global-set-key (kbd "C-x w") 'w3m)
+
 ;;; Display
 
 (global-set-key (kbd "M-\\") 'my-selective-display)
+(global-set-key (kbd "C-c o") 'longlines-mode)
 (global-set-key [f2] (lambda () (interactive)
                        (set-default-font "-xos4-terminus-medium-r-normal--16-160-72-72-c-80-iso8859-9")
                        (require 'flymake)

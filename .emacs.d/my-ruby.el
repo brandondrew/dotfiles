@@ -65,8 +65,7 @@
 
 (setq ri-ruby-script (expand-file-name "~/.emacs.d/ri-emacs.rb"))
 
-(define-key ruby-mode-map
-  "\C-c\C-t" 'toggle-buffer)
+(global-set-key "\C-c\C-t" 'toggle-buffer)
 
 ;; From http://pluskid.lifegoo.com/?p=59
 
