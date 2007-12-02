@@ -112,6 +112,14 @@
   (interactive)
   (byte-recompile-directory (expand-file-name "~/.emacs.d") 0))
 
+(defun my-generate-elisp-tags ()
+  (interactive)
+  (shell-command "find ~/.emacs.d ~/src/emacs -name \\*el | xargs etags -o ~/.emacs.d/TAGS"))
+
+(defun my-generate-rails-tags ()
+  (interactive)
+  (shell-command (concat "find " (rails-root) " -name \\*rb | xargs etags -o " (rails-root) "/TAGS")))
+
 (defun lorem ()
   "Insert a lorem ipsum."
   (interactive)
