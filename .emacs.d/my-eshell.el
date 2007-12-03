@@ -1,5 +1,4 @@
 ;;; TODO
-;; Rake auto-complete
 ;; PID completion for kill/killall
 ;; git auto-complete
 ;; apt-get
