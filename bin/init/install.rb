@@ -18,6 +18,7 @@ if !File.exist?('/usr/bin/gem')
   system "tar xzf rubygems-0.9.4.tgz"
   system "cd rubygems-0.9.4"
   system "ruby setup.rb"
+  system "gem update --system"
 end
 
 system "gem install rake" # sometimes we get a false start

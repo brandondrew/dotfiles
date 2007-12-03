@@ -65,6 +65,7 @@
 (autoload 'w3m "w3m" "" t)
 
 (require 'cl)
+(require 'saveplace)
 (require 'toggle)
 (require 'compile)
 (require 'which-func)
@@ -147,3 +148,17 @@
 ;; install-elisp.el
 ;;  - do something about metadata: description, author, version, url
 ;;  - make sure each installation buffer gets focus/attention
+
+;; set up rcodetools
+
+;; get my-red-face and friends (my-misc.el) highlighting in ruby-mode
+
+;; fix flymake for JS and Ruby
+
+;; fix mumamo for rhtml
+
+;; make an emacs peepcode
+
+;; submit pcmpl-ssh.el to emacs?
+
+;; fix that rcirc completion
