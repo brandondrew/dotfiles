@@ -148,3 +148,15 @@
 ;; install-elisp.el
 ;;  - do something about metadata: description, author, version, url
 ;;  - make sure each installation buffer gets focus/attention
+
+;; set up pcomplete for rake; ssh hosts
+
+;; set up rcodetools
+
+;; get my-red-face and friends (my-misc.el) highlighting in ruby-mode
+
+;; fix flymake for JS and Ruby
+
+;; fix mumamo for rhtml
+
+;; make an emacs peepcode
