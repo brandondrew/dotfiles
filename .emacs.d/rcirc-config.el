@@ -31,3 +31,4 @@
 (add-hook 'rcirc-print-hooks 'rcirc-notify-nick)
 
 (require 'rcirc-color)
+(require 'rcirc-completion)

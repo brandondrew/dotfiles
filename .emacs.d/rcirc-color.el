@@ -101,5 +101,5 @@ To check out the list, evaluate (list-colors-display rcirc-colors).")
     (when cell
       (puthash new-nick cell rcirc-color-mapping))))
 
+(provide 'rcirc-color)
 ;;; rcirc-color.el ends here
-

@@ -29,7 +29,7 @@
 ;; Since text formatting rules depend on the wiki you're writing for,
 ;; the font-locking can only be an approximation.
 
-;; Put this file in a directory on your `load-path' and 
+;; Put this file in a directory on your `load-path' and
 ;; add this to your init file:
 ;; (require 'oddmuse)
 ;; (setq url-proxy-services '(("http" . "your.proxy.host:portnumber")) ; if needed
@@ -124,6 +124,7 @@
 (require 'cl)
 (eval-when-compile  (require 'sgml-mode) (require 'skeleton))
 (require 'url)
+(require 'url-http)
 
 (defcustom oddmuse-directory "~/emacs/oddmuse"
   "Directory to store oddmuse pages."

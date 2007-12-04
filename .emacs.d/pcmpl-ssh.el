@@ -3,17 +3,17 @@
 ;; Copyright (C) 2007 Phil Hagelberg
 
 ;; Author: Phil Hagelberg <technomancy@gmail.com>
-;; URL: http://www.emacswiki.org/cgi-bin/wiki/PcompleteSSH
-;; Version: 0.1
+;; URL: http://www.emacswiki.org/cgi-bin/wiki/pcmpl-ssh.el
+;; Version: 0.2
 ;; Created: 2007-12-02
 ;; Keywords: shell completion ssh
 ;; EmacsWiki: PcompleteSSH
 
 ;; This file is NOT part of GNU Emacs.
 
-;; Last-Updated: Sun Dec 02 15:58:06 2007 PST
+;; Last-Updated: Sun Dec 04 11:51:06 2007 PST
 ;; By: Phil Hagelberg
-;; Update #: 1
+;; Update #: 2
 
 ;;; License:
 
@@ -55,22 +55,27 @@
 ;;;###autoload
 (defun pcomplete/ssh ()
   "Completion rules for the `ssh' command."
+  (pcomplete-opt "1246AaCfgKkMNnqsTtVvXxYbcDeFiLlmOopRSw" nil t)
   (pcomplete-here (pcmpl-ssh-hosts)))
 
+;;;###autoload
+(defun pcomplete/scp ()
+  "Completion rules for the `scp' command.
+
+Includes files as well as host names followed by a colon."
+  (pcomplete-opt "1246BCpqrvcFiloPS")
+  (while t (pcomplete-here (append (pcomplete-all-entries)
+                                   (mapcar (lambda (host) (concat host ":")) (pcmpl-ssh-hosts))))))
+
 (defun pcmpl-ssh-hosts ()
+  "Returns a list of hosts found in the users `known_hosts' file."
   (with-temp-buffer
     (insert-file-contents-literally "~/.ssh/known_hosts")
-    (goto-char (point-min))
-    (pcmpl-build-ssh-host-list)))
-
-(defun pcmpl-build-ssh-host-list ()
-  (when (not (eobp))
-    (cons (pcmpl-host-at-point)
-          (progn (forward-line)
-                 (pcmpl-build-ssh-host-list)))))
-
-(defun pcmpl-host-at-point ()
-  (buffer-substring (point) (- (search-forward ",") 1)))
+    (let ((ssh-hosts-list) '())
+      (while (not (eobp))
+        (add-to-list 'ssh-hosts-list (buffer-substring (point) (- (search-forward ",") 1)))
+        (forward-line))
+      ssh-hosts-list)))
 
 (provide 'pcmpl-ssh)
 ;;; pcmpl-ssh.el ends here
