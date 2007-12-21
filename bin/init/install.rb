@@ -14,9 +14,9 @@ system "apt-get install #{debs.join(' ')}"
 
 # install rubygems
 if !File.exist?('/usr/bin/gem')
-  system "wget http://rubyforge.org/frs/download.php/20989/rubygems-0.9.4.tgz"
-  system "tar xzf rubygems-0.9.4.tgz"
-  system "cd rubygems-0.9.4"
+  system "wget http://rubyforge.org/frs/download.php/29548/rubygems-1.0.1.tgz"
+  system "tar xzf rubygems-1.0.1.tgz"
+  system "cd rubygems-1.0.1"
   system "ruby setup.rb"
   system "gem update --system"
 end

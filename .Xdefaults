@@ -1,0 +1,6 @@
+emacs*font: -xos4-terminus-medium-r-normal--20-200-72-72-c-100-iso8859-1
+Emacs.menuBar: off
+Emacs.toolBar: off
+emacs.BorderWidth: 0
+urxvt*font: -xos4-terminus-medium-r-normal--20-200-72-72-c-100-iso8859-1
+urxvt*scrollbar: off

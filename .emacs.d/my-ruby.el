@@ -34,7 +34,7 @@
 (add-to-list 'interpreter-mode-alist '("ruby" . ruby-mode))
 
 (add-hook 'ruby-mode-hook 'my-ruby-mode-hook)
-(add-hook 'ruby-mode-hook 'my-coding-hook)
+;; (add-hook 'ruby-mode-hook 'my-coding-hook)
 
 (defun rr ()
   (interactive)
@@ -123,7 +123,7 @@
   (shell-command-on-region reg-start reg-end
                            "ruby -r xmp -n -e 'xmp($_, \"%l\t\t# %r\n\")'" t))
 
-;; Thanks Zenspider
+;;; ;; Thanks Zenspider
 
 (autoload 'autotest-switch "autotest" "doco" t)
 (autoload 'autotest "autotest" "doco" t)

@@ -1,13 +1,25 @@
 ---
-cvs:
-- "-z3 -d:pserver:anonymous@cvs.savannah.gnu.org:/cvsroot/emacs co emacs"
-- "-z3 -d:pserver:anonymous@cvs.savannah.gnu.org:/sources/screen co screen"
-svn:
-- "co http://svn.ruby-lang.org/repos/ruby/trunk ruby"
-- "co svn://trac.luon.net/ruby-dbus/trunk ruby-dbus"
-- "co svn://rubyforge.org/var/svn/ruby-tp-dw-gram"
-git:
-- "clone git://git.rubini.us/code rubinius"
-wget:
-- "http://getfirebug.com/releases/firebug1.0-current.xpi"
-- "http://repo.hyperstruct.net/mozlab/mozlab-current.xpi"
+- - cvs
+  - -z3 -d:pserver:anonymous@cvs.savannah.gnu.org:/cvsroot/emacs
+  - co
+  - emacs
+- - cvs
+  - -z3 -d:pserver:anonymous@cvs.savannah.gnu.org:/sources/screen
+  - co
+  - screen
+- - svn
+  - co
+  - http://svn.ruby-lang.org/repos/ruby/trunk
+  - ruby
+- - svn
+  - co
+  - svn://trac.luon.net/ruby-dbus/trunk
+  - ruby-dbus
+- - git
+  - clone
+  - git://git.rubini.us/code
+  - rubinius
+- - wget
+  - http://getfirebug.com/releases/firebug1.0-current.xpi
+- - wget
+  - http://repo.hyperstruct.net/mozlab/mozlab-current.xpi

@@ -63,8 +63,8 @@
     move_to_corner_sw: <Super>a
 /apps/nautilus/:
   desktop/:
-    computer_icon_visible: true
-    trash_icon_visible: true
+    computer_icon_visible: false
+    trash_icon_visible: false
   preferences/:
     always_use_browser: false
     always_use_location_entry: false
