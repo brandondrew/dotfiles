@@ -1,12 +1,13 @@
 #!/usr/bin/env ruby
 
+raise "Usage: media_sync.rb HOSTNAME" unless ARGV.size == 1
 PEER = ARGV.first
 
-DIRS = ['documents', 'music', 'Photos']
+DIRS = ['Photos', 'documents', 'music']
 FILES = ['~/.gnome2/f-spot/photos.db']
 
 def copy_file(to, from)
-  system("scp \"#{to}\" \"#{from}\"")
+  system("scp \"#{to.gsub(' ', "\\ ")}\" \"#{from.gsub(' ', "\\ ")}\"")
 end
 
 def copy_file_to_peer(file)
@@ -19,8 +20,8 @@ end
 
 # for directories, we assume if a file exists at the same path in both systems, it's identical.
 DIRS.each do |dir|
-  local_files = system("find #{dir} -type f").split("\n")
-  remote_files = system("ssh #{PEER} find #{dir} -type f").split("\n")
+  local_files = `find #{dir} -type f`.split("\n")
+  remote_files = `ssh #{PEER} find #{dir} -type f`.split("\n")
 
   local_only = local_files - remote_files
   remote_only = remote_files - local_files

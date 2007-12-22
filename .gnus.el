@@ -1,10 +1,10 @@
 
 (setq gnus-select-method '(nnnil ""))
 (setq gnus-secondary-select-methods '((nnml ""
-					    (nnml-directory "~/Mail"))))
+                                            (nnml-directory "~/Mail"))))
 
 (setq gnus-home-directory "~/.emacs.d")
-(setq user-mail-address "phil@evri.com")
+(setq user-mail-address "phil@hagelb.org")
 (setq user-full-name "Phil Hagelberg")
 (setq gnus-ignored-from-addresses "Phil Hagelberg")
 
@@ -16,9 +16,9 @@
       message-send-mail-function 'smtpmail-send-it
       smtpmail-smtp-service 587
       smtpmail-auth-credentials '(("mail.hagelb.org"
-				   587
-				   "m7139145"
-				   "testyy")))
+                                   587
+                                   "m7139145"
+                                   "testyy")))
 
 (setq message-kill-buffer-on-exit t)
 
@@ -29,15 +29,15 @@
 
 (setq nnmail-split-fancy
       '(| (from "repoman" "checkins")
- 	  (from "JIRA" "jira")
- 	  (from "zabbix" "zabbix")
- 	  (from "infact" "infact")
- 	  (to "code-review" "review")
- 	  (any "articles@" "articles")
- 	  (to "phil@localhost" "feeds")
- 	  (from "xplanner" junk)
- 	  (from "Apple" junk)
-	  "inbox"))
+          (from "JIRA" "jira")
+          (from "zabbix" "zabbix")
+          (from "infact" "infact")
+          (to "code-review" "review")
+          (any "articles@" "articles")
+          (to "phil@localhost" "feeds")
+          (from "xplanner" junk)
+          (from "Apple" junk)
+          "inbox"))
 
 (setq mail-sources '((file :path "/var/mail/phil")))
 
@@ -74,9 +74,9 @@
 
 (mailcap-add "image/jpeg" "display")
 
-;; (setq gnus-buffer-configuration 
+;; (setq gnus-buffer-configuration
 ;;       '((group (vertical 1.0 (group 1.0 point)))
-;; 	(summary (vertical 1.0 (summary 1.0 point)))
-;; 	(article (horizontal 1.0 (summary 1.0 point)
-;; 			   (article 80)))))
+;;      (summary (vertical 1.0 (summary 1.0 point)))
+;;      (article (horizontal 1.0 (summary 1.0 point)
+;;                         (article 80)))))
 
