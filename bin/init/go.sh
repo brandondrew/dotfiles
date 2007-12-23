@@ -18,7 +18,7 @@ apt-get install git-core ruby zile
 
 if [ -r install.rb ] ; then
     ruby install.rb
-    su phil ./user-setup.sh
+    su phil ruby user-setup.rb
     exit 0
 fi
 
