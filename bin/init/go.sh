@@ -18,12 +18,13 @@ apt-get install git-core ruby zile
 
 if [ -r install.rb ] ; then
     ruby install.rb
-    su phil ruby user-setup.rb
+    su $USER ruby user-setup.rb
     exit 0
 fi
 
 # if we are running a bare go.sh
 cd ~
 git clone git://git.caboo.se/technomancy.git dotfiles
+chown -R $USER dotfiles
 cd dotfiles/bin/init
 ./go.sh
