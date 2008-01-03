@@ -28,15 +28,38 @@
 (setq nnmail-crosspost nil)
 
 (setq nnmail-split-fancy
-      '(| (from "repoman" "checkins")
-          (from "JIRA" "jira")
-          (from "zabbix" "zabbix")
-          (from "infact" "infact")
-          (to "code-review" "review")
-          (any "articles@" "articles")
+      '(| (to "ruby_emacs_dev@yahoogroups\\.com" "emacs-rails")
+          (to "obby-users@list.0x539.de" "obby-users")
+          (any "conkeror" "conkeror")
+          (any "zenspider\\.com" "seattle.rb")
+          (any "mozlab" "mozlab")
+          (any "dbus" "dbus")
+          (any "cartographer" junk)
+          (any "Fyreball" junk)
+          (any "ocruby" junk)
+          (any "helma" "helma")
+          (any "utuprotocol" "utu")
+          (any "emacs-devel" "emacs-devel")
+          (any "laptop-devel" "ubuntu")
+
+          (any "cron" junk)
           (to "phil@localhost" "feeds")
-          (from "xplanner" junk)
-          (from "Apple" junk)
+
+          (any "zacchaeus.*" "friends")
+
+          (any "alisha\\.e\\.hagelberg@biola\\.edu" "alisha")
+          (from "agelberg" - "Alisha" "family")
+
+          (any ".*hackelford.*" "friends")
+          (any ".*peckham.*" "friends")
+          (any ".*carroll.*" "friends")
+          (any ".*guenther.*" "friends")
+          (any ".*rowley.*" "friends")
+          (any ".*malabuyo.*" "friends")
+          (any ".*holloway.*" "friends")
+
+          (any "Arko" "friends")
+          (any "Joel Watson" "friends")
           "inbox"))
 
 (setq mail-sources '((file :path "/var/mail/phil")))

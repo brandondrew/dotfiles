@@ -1,0 +1,61 @@
+#!/usr/bin/perl -w
+use strict;
+my $XRANDR="/usr/bin/xrandr";
+my $OUTPUT="LVDS";
+
+my @out = `$XRANDR -q`;
+my $cur;
+my @opts;
+
+my $newcur = $ARGV[0]; 
+
+foreach my $line (@out) { 
+    if($line =~ /^$OUTPUT\ connected\s+\S+\s([a-z]*)\s*\((.+)\)/) {
+#	print("Found it!");
+	$cur = $1;
+	@opts = split /\s+/, $2;
+	if(!$cur) { $cur = $opts[0]; }
+    }
+}
+
+my $i = 0;
+while($i <= @opts && $cur ne $opts[$i]) {
+    $i++;
+}
+$i < @opts || die;
+
+if(!defined $newcur) { 
+    if( $i == 0 ) { 
+	$newcur = 3; 
+    } else { 
+	$newcur = 0;
+    }
+}
+
+
+
+#my $newcur = ($i + 1) % @opts;
+
+print "$cur -> $opts[$newcur]\n";
+
+#system "$XRANDR -o $opts[$newcur]";
+system "$XRANDR --output $OUTPUT --rotate $opts[$newcur]";
+#normal left inverted right
+my @wacopts = qw( NONE CCW HALF CW );
+
+system "xsetwacom set stylus Rotate $wacopts[$newcur]";
+system "xsetwacom set eraser Rotate $wacopts[$newcur]";
+
+#my @raw = qw ( 71 6e 6f 6d );
+#my @arrows = qw ( 103 105 108 106 );
+
+my @raw = qw ( 6d 6f 6e 71 );
+my @arrows = qw ( 106 108 105 103 );
+
+for(my $i = 0; $i < 4; $i++) {
+  system "sudo setkeycodes $raw[$i] " . $arrows[($i + $newcur) % 4];
+}
+#setkeycodes 71 103
+#setkeycodes 6e 105
+#setkeycodes 6f 108
+#setkeycodes 6d 106

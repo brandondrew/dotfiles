@@ -8,33 +8,19 @@
     use_mnemonics: false
 /apps/metacity/:
   general/:
-    num_workspaces: 4
+    num_workspaces: 6
     theme: Glossy
   keybinding_commands/:
     command_1: urxvt -bg white +sb -bd white -e screen -xRR
-    command_2: synergys
-    command_3: synergy_connect
-    command_4: fetchmail
-    command_5: mpc prev
-    command_6: mpc toggle
-    command_7: mpc next
-    command_8: urxvt -bg white +sb -bd white
-    command_9: emacs
-    command_10: /home/phil/bin/notify-mpc
-    command_11: /home/phil/projects/presentations/feedback/render.sh
+    command_2: emacs
+    command_3: /home/phil/bin/rotate
+    command_4: cellwriter
   global_keybindings/:
     panel_run_dialog: <Alt>space
     run_command_1: <Alt>grave
-    run_command_2: <Shift>F1
-    run_command_3: <Shift>F2
-    run_command_4: <Shift>F12
-    run_command_5: F3
-    run_command_6: F4
-    run_command_7: F5
-    run_command_8: <Alt><Shift>grave
-    run_command_9: <Super>e
-    run_command_10: <Control>F5
-    run_command_11: F12
+    run_command_2: <Super>e
+    run_command_3: XF86RotateWindows
+    run_command_4: XF86Launch1
     switch_to_workspace_1: <Control>1
     switch_to_workspace_2: <Control>2
     switch_to_workspace_3: <Control>3

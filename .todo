@@ -1,0 +1,26 @@
+-*- org -*-
+
+* Copy photos over from puyo, flickr
+* Laptop fixes
+** Set up fingerprint scanner
+** Backlight on resume
+** Network on resume
+* Test setup on a VM
+* Typeset resumé
+* Submit PDF fonts bug report to Manning
+* Grab SVN version of mpd for powersaving
+
+* Work into Ubuntu
+** Cellwriter package?
+** Thinkfinger?
+** Proper binding for rotate key
+** Wacom device enabled by default
+** Rotate script
+** Rotate on swivel
+** Network on resume
+** Backlight on resume
+* Projects
+** Emaculate Strike Force
+** rcirc completion
+** bus scheme closures
+** augment

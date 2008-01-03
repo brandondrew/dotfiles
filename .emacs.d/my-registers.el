@@ -14,6 +14,7 @@
 (set-register ?d '(file . "~/.emacs.d"))
 (set-register ?g '(file . "~/.gnus.el"))
 (set-register ?b '(file . "~/.bashrc"))
+(set-register ?t '(file . "~/.todo"))
 (set-register ?s '(file . "~/.screenrc"))
 (set-register ?c '(file . "~/.contacts"))
 (set-register ?f '(file . "~/.feeds.opml"))
