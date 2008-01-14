@@ -54,6 +54,11 @@
 (setq inferior-ruby-first-prompt-pattern ">>"
       inferior-ruby-prompt-pattern ">>")
 
+(defun rake (task)
+  (interactive (list (completing-read "Rake: "
+				      (pcmpl-rake-tasks))))
+  (shell-command-to-string (concat "rake " (if (= 0 (length task)) "default" task))))
+
 (defun my-ruby-mode-hook ()
   (ruby-electric-mode)
   (pretty-lambdas))
