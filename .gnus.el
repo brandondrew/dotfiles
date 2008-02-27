@@ -40,7 +40,7 @@
           (any "helma" "helma")
           (any "utuprotocol" "utu")
           (any "emacs-devel" "emacs-devel")
-          (any "laptop-devel" "ubuntu")
+          (any "bus-scheme" "bus-scheme")
 
           (any "cron" junk)
           (to "phil@localhost" "feeds")
@@ -50,6 +50,8 @@
           (any "alisha\\.e\\.hagelberg@biola\\.edu" "alisha")
           (from "agelberg" - "Alisha" "family")
 
+	  (any "David Morton" "xpoint")
+	  (any "John Gaitan" "xpoint")
           (any ".*hackelford.*" "friends")
           (any ".*peckham.*" "friends")
           (any ".*carroll.*" "friends")

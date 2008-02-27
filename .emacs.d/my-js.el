@@ -35,6 +35,8 @@
 (add-to-list 'auto-mode-alist '("\\.skin$" . html-mode))
 (add-to-list 'auto-mode-alist '("\\.hac$" . javascript-mode))
 
+(setq javascript-indent-level 2)
+
 (require 'flymake-js)
 ;; getting an error 100% of the time now.
 ;;(add-hook 'javascript-mode-hook 'flymake-js-load)

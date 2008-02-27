@@ -140,6 +140,10 @@
 
 ;;; list-colors-display
 
+;;; C-x v g - blame
+;;; C-x v d - dired (v t to show all files)
+;;; C-x v = - diff
+
 ;;; TODO:
 
 ;; publish

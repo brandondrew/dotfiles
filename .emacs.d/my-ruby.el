@@ -33,12 +33,18 @@
 
 (add-to-list 'interpreter-mode-alist '("ruby" . ruby-mode))
 
+(add-to-list 'completion-ignored-extensions ".rbc")
+ 
 (add-hook 'ruby-mode-hook 'my-ruby-mode-hook)
 ;; (add-hook 'ruby-mode-hook 'my-coding-hook)
 
 (defun rr ()
   (interactive)
   (run-ruby "irb"))
+
+(defun rbx ()
+  (interactive)
+  (run-ruby "~/src/rubinius/shotgun/rubinius"))
 
 (defun rails-root (&optional dir)
   (or dir (setq dir default-directory))
@@ -55,7 +61,7 @@
       inferior-ruby-prompt-pattern ">>")
 
 (defun rake (task)
-  (interactive (list (completing-read "Rake: "
+  (interactive (list (completing-read "Rake (default: default): "
 				      (pcmpl-rake-tasks))))
   (shell-command-to-string (concat "rake " (if (= 0 (length task)) "default" task))))
 
@@ -71,6 +77,7 @@
 (setq ri-ruby-script (expand-file-name "~/.emacs.d/ri-emacs.rb"))
 
 (global-set-key "\C-c\C-t" 'toggle-buffer)
+(setq toggle-mapping-style 'ruby)
 
 ;; From http://pluskid.lifegoo.com/?p=59
 

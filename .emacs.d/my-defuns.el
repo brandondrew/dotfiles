@@ -153,4 +153,6 @@
 (add-hook 'eshell-mode-hook
           '(lambda () (define-key eshell-mode-map "\C-a" 'eshell-maybe-bol)))
 
+(defun ss () (interactive) (server-start))
+
 (provide 'my-defuns)
