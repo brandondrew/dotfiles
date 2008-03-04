@@ -14,9 +14,7 @@
 - exuberant-ctags
 - f-spot
 - fetchmail
-- firefox-3.0
 - firefox-themes-ubuntu
-- firefox-webdeveloper
 - gitk
 - git-core
 - git-cvs
@@ -59,6 +57,7 @@
 - rxvt-unicode
 - screen
 - service-discovery-applet
+- snes9x-x
 - sqlite3
 - sshfs
 - subversion

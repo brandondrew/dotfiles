@@ -150,7 +150,7 @@ exec-to-string command, but it works and seems fast"
 	nil
       (rails-root (expand-file-name (concat dir "../"))))))
 
-(defun rinari-console ()
+(defun rails-console ()
   (interactive)
   (run-ruby (concat (rails-root) "/script/console")))
 

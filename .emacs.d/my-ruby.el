@@ -57,8 +57,15 @@
   (interactive)
   (run-ruby (concat (rails-root) "script/console")))
 
+;; TODO: fix for rubinius?
 (setq inferior-ruby-first-prompt-pattern ">>"
       inferior-ruby-prompt-pattern ">>")
+
+(autoload 'inf-ruby-keys "inf-ruby"
+  "Set local key defs for inf-ruby in ruby-mode")
+(add-hook 'ruby-mode-hook
+          '(lambda () (inf-ruby-keys)))
+             
 
 (defun rake (task)
   (interactive (list (completing-read "Rake (default: default): "

@@ -52,14 +52,13 @@
 ;;(autoload 'irbsh "irbsh" "irbsh - IRB.extend ShellUtilities" t)
 ;;(autoload 'irbsh-oneliner-with-completion "irbsh" "irbsh oneliner" t)
 
-(autoload 'lisppaste-paste-region "lisppaste" "" t)
 (autoload 'htmlize-region "htmlize" "" t)
 (autoload 'htmlize-buffer "htmlize" "" t)
-(autoload 'color-theme-zenburn "zenburn")
-(autoload 'pastie-region "pastie" "" t)
 (autoload 'tail-file "tail.el" "Tail a file." t)
-(autoload 'column-marker-1 "column-marker.el" "" t)
-(autoload 'git-blame-mode "git-blame" "" t)
+(autoload 'color-theme-zenburn "zenburn")
+(autoload 'lisppaste-paste-region "lisppaste" "" t)
+(autoload 'rafb-paste "rafb-paste" "" t)
+(autoload 'pastie-region "pastie" "" t)
 
 (autoload 'jabber-connect "jabber" "" t)
 (autoload 'w3m "w3m" "" t)
@@ -71,7 +70,6 @@
 (require 'which-func)
 (require 'show-wspace)
 (require 'esh-mode)
-(require 'git)
 (require 'buffer-stack)
 (require 'install-elisp)
 (require 'elunit)
@@ -143,6 +141,7 @@
 ;;; C-x v g - blame
 ;;; C-x v d - dired (v t to show all files)
 ;;; C-x v = - diff
+;;; C-x v ~ - diff against specific version
 
 ;;; TODO:
 

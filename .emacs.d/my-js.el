@@ -29,7 +29,7 @@
 (add-hook 'javascript-mode-hook 'my-coding-hook)
 
 (add-to-list 'auto-mode-alist '("\\.js$" . javascript-mode))
-(add-to-list 'auto-mode-alist '("\\.json$" . javascript-mode))
+(add-to-list 'auto-mode-alist '("\\.json$" . yaml-mode))
 
 ;; for helma
 (add-to-list 'auto-mode-alist '("\\.skin$" . html-mode))
