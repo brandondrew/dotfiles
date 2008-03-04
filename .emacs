@@ -70,7 +70,6 @@
 (require 'which-func)
 (require 'show-wspace)
 (require 'esh-mode)
-(require 'buffer-stack)
 (require 'install-elisp)
 (require 'elunit)
 
@@ -161,7 +160,5 @@
 ;; fix mumamo for rhtml
 
 ;; make an emacs peepcode
-
-;; submit pcmpl-ssh.el to emacs?
 
 ;; fix that rcirc completion
