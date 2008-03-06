@@ -4,9 +4,15 @@
 
 ;; Author: Y. Hayamizu <y.hayamizu@gmail.com>
 ;; Created: Sep 4, 2007
-;; Version: SVN-HEAD
+;; Version: 0.2.0
 ;; Keywords: twitter web
 ;; URL: http://hayamin.com/
+
+;; Contributors:
+;;  naoya_t
+;;  * the templete string system for status
+;;  id:masa_edw
+;;  * twittering-scroll-mode
 
 ;; This file is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -47,8 +53,6 @@
 (defvar twittering-password nil)
 
 (defvar twittering-scroll-mode nil)
-
-(defvar twittering-jojo-mode nil)
 
 (defvar twittering-status-format nil)
 (setq twittering-status-format "%i %s,  %@:\n  %t // from %f%L")
@@ -127,13 +131,6 @@
 	  (not twittering-scroll-mode)
         (> (prefix-numeric-value arg) 0))))
 
-(defun twittering-jojo-mode (&optional arg)
-  (interactive)
-  (setq twittering-jojo-mode
-      (if (null arg)
-	  (not twittering-jojo-mode)
-        (> (prefix-numeric-value arg) 0))))
-
 (defvar twittering-image-stack nil)
 
 (defun twittering-image-type (file-name)
@@ -210,7 +207,6 @@
   (set-face-attribute 'twittering-uri-face nil :underline t)
   (add-to-list 'minor-mode-alist '(twittering-icon-mode " tw-icon"))
   (add-to-list 'minor-mode-alist '(twittering-scroll-mode " tw-scroll"))
-  (add-to-list 'minor-mode-alist '(twittering-jojo-mode " tw-jojo"))
   )
 
 (defmacro case-string (str &rest clauses)
@@ -531,9 +527,6 @@ If STATUS-DATUM is already in DATA-VAR, return nil. If not, return t."
 		    (eql id (cdr (assq 'id item))))
 		  (symbol-value data-var))))
 	(progn
-	  (if twittering-jojo-mode
-	      (twittering-update-jojo (cdr (assq 'user-screen-name status-datum))
-				      (cdr (assq 'text status-datum))))
 	  (set data-var (cons status-datum (symbol-value data-var)))
 	  t)
       nil)))
@@ -731,17 +724,6 @@ If STATUS-DATUM is already in DATA-VAR, return nil. If not, return t."
    "statuses" "update"
    `(("status" . "\xd34b\xd22b\xd26f\xd224\xd224\xd268\xd34b")
      ("source" . "twmode"))))
-
-(defun twittering-update-jojo (usr msg)
-  (if (string-match "\xde21\xd24b\\(\xd22a\xe0b0\\|\xdaae\xe6cd\\)\xd24f\xd0d6\\([^\xd0d7]+\\)\xd0d7\xd248\xdc40\xd226"
-		    msg)
-      (twittering-http-post
-       "statuses" "update"
-       `(("status" . ,(concat
-		       "@" usr " "
-		       (match-string-no-properties 2 msg)
-		       "\xd0a1\xd24f\xd243!?"))
-	 ("source" . "twmode")))))
 
 ;;;
 ;;; Commands

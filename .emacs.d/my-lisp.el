@@ -67,4 +67,8 @@
                     `((equal ,expr ,(car c)) ,@(cdr c)))
                     choices)))
 
+(defun bus ()
+  (interactive)
+  (run-scheme "~/projects/bus_scheme/bin/bus"))
+
 (provide 'my-lisp)
