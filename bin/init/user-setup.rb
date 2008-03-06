@@ -1,4 +1,5 @@
-system "cd"
+require 'fileutils'
+FileUtils.cd File.expand_path("~")
 system "mv dotfiles/* ~"
 system "mv dotfiles/.* ~"
 
