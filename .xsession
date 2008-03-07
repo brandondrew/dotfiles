@@ -1,5 +1,6 @@
 #!/bin/bash
 
+xmodmap ~/.xmodmap
 devilspie &
 unclutter -idle 0.5 &
 

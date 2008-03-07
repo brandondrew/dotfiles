@@ -7,11 +7,22 @@ should be able to fetch the other required files if it's run by
 itself.
 
 TODO: 
-- test on gutsy
-- get mozlab
-- sync music, movies, books, photos
-- set up git.technomancy.us
+- firefox extensions:
+ - mozlab
+ - firebug
+ - firecookie
+ - flashblock
+ - greasemonkey
+- sync music, movies, books, photos from external drive
 - check out my projects?
-- install other important libs: ruby-dbus, ruby-wm?
+- install other important from-source projects:
+ - emacs
+ - rubinius
+ - git
+ - ruby (1.8 + 1.9)
+ - ruby-dbus
+ - screen
 - panel config
 - lists in gconf.yml to support ctrl:nocaps
+- mpd.conf
+- dmenu-driven mpc
