@@ -10,7 +10,9 @@ end
 debs = YAML.load(File.read('debs.yml'))
 gems = YAML.load(File.read('gems.yml'))
 
-system "apt-get install #{debs.join(' ')}"
+if !system "apt-get install #{debs.join(' ')}"
+  raise "Couldn't install packages"
+end
 
 # install rubygems
 if !File.exist?('/usr/bin/gem')
@@ -23,4 +25,4 @@ end
 system "gem install rake" # sometimes we get a false start
 system "gem install -y #{gems.join(' ')}"
 
-%w(irb ri rdoc ruby).each { |p| system "update-alternatives --install /usr/bin/#{p} #{p} /usr/bin/#{p}1.8 10" }
+%w(irb ri rdoc ruby gem).each { |p| system "update-alternatives --install /usr/bin/#{p} #{p} /usr/bin/#{p}1.8 10" }
