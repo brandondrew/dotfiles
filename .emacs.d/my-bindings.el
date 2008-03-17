@@ -25,13 +25,9 @@
 
 ;;; Buffer management
 
+(global-set-key (kbd "C-x M-f") 'ido-find-file-other-window)
 (global-set-key "\M-p" 'previous-buffer)
 (global-set-key "\M-n" 'next-buffer)
-(global-set-key (kbd "C-<next>") 'buffer-stack-up)
-(global-set-key (kbd "C-<prior>") 'buffer-stack-down)
-
-(global-set-key [XF86Back] 'buffer-stack-up)
-(global-set-key [XF86Forward] 'buffer-stack-down)
 (global-set-key (kbd "C-x C-b") 'bs-show)
 
 ;;; Window management
@@ -79,6 +75,7 @@
 (global-set-key (kbd "C-c p") (lambda () (interactive) (message "%s" (point))))
 (global-set-key [f1] 'menu-bar-mode)
 (global-set-key (kbd "C-h a") 'apropos)
+(define-key read-expression-map (kbd "TAB") #'lisp-complete-symbol)
 
 (define-key isearch-mode-map (kbd "C-o") ; occur easily inside isearch
   (lambda ()

@@ -105,3 +105,6 @@
 ;;      (article (horizontal 1.0 (summary 1.0 point)
 ;;                         (article 80)))))
 
+(let ((system-specific-config (concat "~/.emacs.d/" (substring (shell-command-to-string "hostname") 0 -1)".el")))
+  (if (file-exists-p system-specific-config)
+      (load system-specific-config)))
