@@ -14,15 +14,7 @@ TODO:
  - flashblock
  - greasemonkey
 - sync music, movies, books, photos from external drive
-- check out my projects?
-- install other important from-source projects:
- - emacs
- - rubinius
- - git
- - ruby (1.8 + 1.9)
- - ruby-dbus
- - screen
 - panel config
 - lists in gconf.yml to support ctrl:nocaps
-- mpd.conf
-- dmenu-driven mpc
+- tell mpd.conf to look in ~/music
+- dmenu-driven music control

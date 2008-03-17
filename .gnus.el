@@ -17,7 +17,7 @@
       smtpmail-smtp-service 587
       smtpmail-auth-credentials '(("mail.hagelb.org"
                                    587
-                                   "m7139145"
+                                   "m7139145" ;; throwaway send-only account
                                    "testyy")))
 
 (setq message-kill-buffer-on-exit t)

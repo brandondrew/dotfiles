@@ -137,10 +137,13 @@
 
 ;;; list-colors-display
 
-;;; C-x v g - blame
+;;; C-x v g - blame (V to toggle committer data)
 ;;; C-x v d - dired (v t to show all files)
 ;;; C-x v = - diff
 ;;; C-x v ~ - diff against specific version
+
+;;; Eshell piping
+;;; ifconfig > #<buffer interfaces>
 
 ;;; TODO:
 
