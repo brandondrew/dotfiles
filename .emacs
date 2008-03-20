@@ -38,7 +38,6 @@
 (add-to-list 'load-path "~/.emacs.d")
 (add-to-list 'load-path "~/.emacs.d/jabber")
 (add-to-list 'load-path "~/.emacs.d/w3m")
-(add-to-list 'load-path "~/.emacs.d/rinari/rhtml")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; loading modes
@@ -47,10 +46,7 @@
 (autoload 'yaml-mode "yaml-mode")
 (autoload 'css-mode "css-mode")
 (autoload 'javascript-mode "javascript" "" t)
-
 (autoload 'moz-minor-mode "moz" "Mozilla Minor and Inferior Mozilla Modes" t)
-;;(autoload 'irbsh "irbsh" "irbsh - IRB.extend ShellUtilities" t)
-;;(autoload 'irbsh-oneliner-with-completion "irbsh" "irbsh oneliner" t)
 
 (autoload 'htmlize-region "htmlize" "" t)
 (autoload 'htmlize-buffer "htmlize" "" t)
@@ -91,12 +87,12 @@
 (require 'my-lisp)
 (require 'my-js)
 
-(if (functionp 'jabber-connect)
-    (load "jabber-config"))
-
+(load "jabber-config")
 (load "rcirc-config")
 
-(let ((system-specific-config (concat "~/.emacs.d/" (substring (shell-command-to-string "hostname") 0 -1)".el")))
+(let ((system-specific-config (concat "~/.emacs.d/"
+				      (substring (shell-command-to-string "hostname") 0 -1)
+				      ".el")))
   (if (file-exists-p system-specific-config)
       (load system-specific-config)))
 
@@ -146,6 +142,9 @@
 ;;; ifconfig > #<buffer interfaces>
 
 ;;; TODO:
+
+;; steal ZSS defadvice in setup-aliases.el for find-file-at-point
+;; steal ZSS greying out lines that get too long
 
 ;; publish
 ;;  - ebby
