@@ -56,6 +56,7 @@
 ;; Web
 
 (global-set-key (kbd "C-x w") 'w3m)
+(global-set-key "\C-xh" 'view-url)
 
 ;;; Display
 
@@ -71,7 +72,6 @@
 
 ;;; Utility
 
-(global-set-key "\C-xh" 'view-url)
 (global-set-key (kbd "C-c p") (lambda () (interactive) (message "%s" (point))))
 (global-set-key [f1] 'menu-bar-mode)
 (global-set-key (kbd "C-h a") 'apropos)
