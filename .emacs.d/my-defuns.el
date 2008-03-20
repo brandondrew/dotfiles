@@ -120,6 +120,10 @@
   (interactive)
   (shell-command (concat "find " (rails-root) " -name \\*rb | xargs etags -o " (rails-root) "/TAGS")))
 
+(defun sudo-edit ()
+  (interactive)
+  (find-alternate-file (concat "/sudo:root@localhost:" buffer-file-name)))
+
 (defun lorem ()
   "Insert a lorem ipsum."
   (interactive)
