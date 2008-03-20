@@ -1,4 +1,4 @@
-emacs*font: -xos4-terminus-medium-r-normal--20-200-72-72-c-100-iso8859-1
+emacs*font: -xos4-terminus-medium-r-normal--16-160-72-72-c-80-iso8859-9
 Emacs.menuBar: off
 Emacs.toolBar: off
 emacs.BorderWidth: 0

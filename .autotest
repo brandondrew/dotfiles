@@ -1,3 +1,5 @@
+# -*- ruby -*-
+
 require 'autotest/redgreen'
 require 'autotest/timestamp'
 
