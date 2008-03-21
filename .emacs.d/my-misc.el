@@ -17,8 +17,7 @@
   (setq browse-url-firefox-new-window-is-tab t)
   (tooltip-mode -1)
   (tool-bar-mode -1)
-  (blink-cursor-mode -1)
-  (ignore-errors (set-default-font "terminus-16")))
+  (blink-cursor-mode -1))
 
 (when (not window-system)
   (keyboard-translate ?\C-h ?\C-?))
