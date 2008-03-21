@@ -20,7 +20,8 @@ apt-get install git-core ruby zile
 
 if [ -r install.rb ] ; then
     ruby install.rb
-    su $USER ruby user-setup.rb
+    chown -R $USER $HOME
+    su $USER ruby user-setup.rb # TODO: this breaks... huh?
     exit 0
 fi
 
