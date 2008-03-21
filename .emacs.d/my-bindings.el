@@ -29,6 +29,7 @@
 (global-set-key "\M-p" 'previous-buffer)
 (global-set-key "\M-n" 'next-buffer)
 (global-set-key (kbd "C-x C-b") 'bs-show)
+(global-set-key (kbd "C-x M-r") 'revert-buffer)
 
 ;;; Window management
 

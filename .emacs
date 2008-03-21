@@ -64,7 +64,6 @@
 (require 'toggle)
 (require 'compile)
 (require 'which-func)
-(require 'show-wspace)
 (require 'esh-mode)
 (require 'install-elisp)
 (require 'elunit)

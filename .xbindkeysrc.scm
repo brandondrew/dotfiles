@@ -60,7 +60,7 @@
 
 (xbindkey '(mod4 e) "emacs")
 (xbindkey '(mod4 f) "firefox")
-(xbindkey '("m:0x0" "c:43") "urxvt -bg white +sb -bd white -e screen -xRR")
+(xbindkey '(mod4 grave) "urxvt -bg white +sb -bd white -e screen -xRR")
 
 ;;;; Tablet-specific stuff
 
