@@ -105,34 +105,50 @@
 ;;; M-! insert output of shell command
 ;;; M-| replace region with shell output
 ;;; M-x thumbs
-;;; C-x r k Rectangle kill
+;;; M-x follow-mode
 
-;;; temp macros
+;;;; Rectangles
+;;; C-x r k Rectangle kill
+;;; C-x r y Rectangle yank
+;;; C-x r c Rectangle clear (replace with space)
+;;; C-x r o Insert space rectangle
+;;; C-x r t Replace rectangle with string
+
+;;;; temp macros
 ;;; C-m C-m to start recording
 ;;; C-m C-s to stop
 ;;; C-m C-p to play
 
-;;; Macros
+;;;; Macros
 ;;; C-m C-r to begin
 ;;; name it, and do stuff
 ;;; C-s to save
 
-
+;;;; Ruby
 ;;; M-C-p, M-C-n back and forward blocks
 ;;; C-c C-s irb when in ruby-mode
+;;; C-c C-r Send region to inf-ruby
+;;; C-c M-r Send region to inf-ruby and switch to buffer
+;;; C-c C-l Load file in ruby
+;;; C-c C-x Send definition
 
+;;;; Display
+;;; C-u N C-x $ only display lines with less than N spaces of indentation
+;;; C-x $ disable above
 ;;; C-x n n narrow visibility of buffer to region
 ;;; C-x n w widen to full buffer
 
-;;; Dired
+;;;; Dired
 ;;; mark with 'm', press 'Q' for multi-file find/replace
 ;;; C-j launch dired when ido-mode is enabled
 
+;;;; Gnus Namazu
 ;;; G G gnus keyword search
 ;;; G T show context in keyword search
 
 ;;; list-colors-display
 
+;;;; VC
 ;;; C-x v g - blame (V to toggle committer data)
 ;;; C-x v d - dired (v t to show all files)
 ;;; C-x v = - diff

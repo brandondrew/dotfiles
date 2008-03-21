@@ -73,7 +73,8 @@
 
 (defun my-coding-hook ()
   "Enable things I consider convenient across all coding buffers."
-;  (column-marker-1 80)
+					;  (column-marker-1 80)
+  (setq show-trailing-whitespace t)
   (indent-buffer))
 
 (defun untabify-buffer ()
