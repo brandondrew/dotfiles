@@ -5,6 +5,7 @@
 - avahi-utils
 - bittorrent
 - build-essential
+- cellwriter
 - console-terminus
 - cvs
 - devilspie
@@ -69,6 +70,7 @@
 - w3m-img
 - wmctrl
 - wxvlc
+- xbindkeys
 - xfonts-terminus
 - xulrunner
 - zile

@@ -3,8 +3,8 @@
 xmodmap ~/.xmodmap
 devilspie &
 unclutter -idle 0.5 &
+xbindkeys &
 
-gmpc &
 pidgin &
 
 exec gnome-session
