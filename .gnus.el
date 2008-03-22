@@ -33,12 +33,9 @@
           (any "conkeror" "conkeror")
           (any "zenspider\\.com" "seattle.rb")
           (any "mozlab" "mozlab")
-          (any "dbus" "dbus")
           (any "cartographer" junk)
           (any "Fyreball" junk)
           (any "ocruby" junk)
-          (any "helma" "helma")
-          (any "utuprotocol" "utu")
           (any "emacs-devel" "emacs-devel")
           (any "bus-scheme" "bus-scheme")
 
@@ -52,6 +49,7 @@
 
 	  (any "David Morton" "xpoint")
 	  (any "John Gaitan" "xpoint")
+	  (any "crosspoint" "xpoint")
           (any ".*hackelford.*" "friends")
           (any ".*peckham.*" "friends")
           (any ".*carroll.*" "friends")

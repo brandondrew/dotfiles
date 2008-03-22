@@ -150,4 +150,14 @@
           '(lambda ()
              (define-key ruby-mode-map (kbd "C-c C-a") 'autotest-switch)))
 
+(defun rdoc-browse-gems (gem)
+  (interactive "MGem: ")
+  (if (equal (shell-command-to-string "ps awx | grep \"gem [s]erver\"")
+	     "")
+      (shell-command "gem server &"))
+  (w3m-browse-url "http://localhost:8808")
+  (ignore-errors
+    (search-forward-regexp (concat "^" gem ".*\[rdoc\]"))))
+
+
 (provide 'my-ruby)

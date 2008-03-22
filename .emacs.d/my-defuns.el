@@ -124,6 +124,10 @@
   (interactive)
   (find-alternate-file (concat "/sudo:root@localhost:" buffer-file-name)))
 
+(defun insert-timestamp ()
+  (interactive)
+  (insert (time-stamp-string)))
+
 (defun lorem ()
   "Insert a lorem ipsum."
   (interactive)
