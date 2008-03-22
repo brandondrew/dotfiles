@@ -11,26 +11,12 @@
     num_workspaces: 6
     theme: Glossy
   keybinding_commands/:
-    command_1: urxvt -bg white +sb -bd white -e screen -xRR
-    command_2: emacs
     command_3: /home/phil/bin/rotate
     command_4: cellwriter
-    command_5: /home/phil/bin/mpc-choose
-    command_6: mpc toggle
-    command_7: mpc prev
-    command_8: mpc next
-    command_9: /home/phil/bin/mpc-random
   global_keybindings/:
     panel_run_dialog: <Alt>space
-    run_command_1: <Alt>grave
-    run_command_2: <Super>e
     run_command_3: XF86RotateWindows
     run_command_4: XF86Launch1
-    run_command_5: F7
-    run_command_6: F8
-    run_command_7: F9
-    run_command_8: F10
-    run_command_9: F6
     switch_to_workspace_1: <Control>1
     switch_to_workspace_2: <Control>2
     switch_to_workspace_3: <Control>3

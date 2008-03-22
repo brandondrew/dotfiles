@@ -8,7 +8,7 @@ if `whoami`.chomp != "root"
 end
 
 debs = YAML.load(File.read('debs.yml'))
-gems = YAML.load(File.read('gems.yml'))
+gems = YAML.load(File.read('gems.yml')) # TODO: parsetree is called something else; as is redcloth
 
 if !system "apt-get install #{debs.join(' ')}"
   raise "Couldn't install packages"

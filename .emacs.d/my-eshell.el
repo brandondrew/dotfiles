@@ -5,7 +5,6 @@
 
 (eval-after-load 'eshell
   '(progn
-     (require 'pcmpl-ssh)
      (require 'pcmpl-rake)
      (require 'em-prompt)
      (require 'em-cmpl)

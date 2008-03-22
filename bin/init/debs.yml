@@ -5,6 +5,7 @@
 - avahi-utils
 - bittorrent
 - build-essential
+- cellwriter
 - console-terminus
 - cvs
 - devilspie
@@ -64,11 +65,13 @@
 - swig
 - synergy
 - tree
+- ttf-inconsolata
 - unclutter
 - unzip
 - w3m-img
 - wmctrl
 - wxvlc
+- xbindkeys
 - xfonts-terminus
 - xulrunner
 - zile

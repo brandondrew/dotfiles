@@ -1,4 +1,5 @@
+*
+!.emacs.d*
 *elc
-!.emacs.d
-!.eshell
-!bin
+!.eshell*
+!bin*
