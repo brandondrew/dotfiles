@@ -1,4 +1,4 @@
-emacs*font: Inconsolata-10
+emacs*font: Inconsolata-11
 Emacs.menuBar: off
 Emacs.toolBar: off
 emacs.BorderWidth: 0

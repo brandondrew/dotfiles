@@ -51,7 +51,7 @@ export EDITOR=emacsclient
 if [ `/usr/bin/whoami` = "root" ] ; then
   # root has a red prompt
   export PS1="\[\033[0;31m\]\u@\h \w \$ \[\033[0m\]"
-elif [ `hostname` = "vannevar" -o `hostname` = "puyo" -o `hostname` = "imp" -o `hostname` = "dynabook" ] ; then
+elif [ `hostname` = "vannevar" -o `hostname` = "puyo" -o `hostname` = "pdp10" -o `hostname` = "dynabook" ] ; then
   export PS1="\[\033[0;36m\]\u@\h \w \$ \[\033[0m\]"
 else
   # purple by default
