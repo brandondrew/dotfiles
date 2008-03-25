@@ -3,7 +3,7 @@
 ;; Author: Lennart Borgman
 ;; Maintainer:
 ;; Created: Tue Dec 19 14:59:01 2006
-(defconst nxml-where:version "0.51");; Version:
+(defconst nxml-where:version "0.52");; Version:
 ;; Lxast-Updated: Thu Mar 01 23:16:35 2007 (3600 +0100)
 ;; Keywords:
 ;; Compatibility:
@@ -57,31 +57,34 @@
 
 (defvar nxml-where-once-update-timer nil)
 (make-variable-buffer-local 'nxml-where-once-update-timer)
+(put 'nxml-where-once-update-timer 'permanent-local t)
 
 (defvar nxml-where-ovls nil)
 (make-variable-buffer-local 'nxml-where-ovls)
+(put 'nxml-where-ovls 'permanent-local t)
 
-(defun nxml-where-cancel-once()
+(defun nxml-where-cancel-once ()
   (when (timerp nxml-where-once-update-timer)
     (cancel-timer nxml-where-once-update-timer)
     (setq nxml-where-once-update-timer nil)))
 
-(defun nxml-where-update-once()
+(defun nxml-where-update-once ()
   (condition-case err
       (progn
         (nxml-where-cancel-once)
         (setq nxml-where-once-update-timer
-              (run-with-idle-timer 0 nil
+              (run-with-idle-timer idle-update-delay nil
                                    'nxml-where-update
                                    (current-buffer))))
     (error
      (message "%s" (error-message-string err)))))
+(put 'nxml-where-update-once 'permanent-local-hook t)
 
-(defun nxml-where-stop-updating()
+(defun nxml-where-stop-updating ()
   (remove-hook 'post-command-hook 'nxml-where-update-once t)
   (nxml-where-update-once))
 
-(defun nxml-where-restart-updating()
+(defun nxml-where-restart-updating ()
   (nxml-where-update-once)
   (add-hook 'post-command-hook 'nxml-where-update-once nil t))
 
@@ -97,20 +100,20 @@ If nil show only tag names."
 
 (define-toggle nxml-where-header t
   "Show header with XML-path if non-nil."
-  :set (lambda(sym val)
+  :set (lambda (sym val)
          (set-default sym val)
          (nxml-where-update-once))
   :group 'nxml-where)
 
 (define-toggle nxml-where-marks t
   "Show marks in buffer for XML-path if non-nil."
-  :set (lambda(sym val)
+  :set (lambda (sym val)
          (set-default sym val)
          (nxml-where-update-once))
   :group 'nxml-where)
 
 (defface nxml-where-marking
-  '((t (:inherit 'secondary-selection)))
+  '((t (:inherit secondary-selection)))
   "The default face used for marking tags in path."
   :group 'nxml-where)
 
@@ -119,30 +122,54 @@ If nil show only tag names."
   :type 'face
   :group 'nxml-where)
 
+(defcustom nxml-where-header-attributes '("id" "name")
+  "List of attributes `nxml-where-header' should display."
+  :type '(repeat string)
+  :group 'nxml-where)
+
+(defcustom nxml-where-widen t
+  "If non-nil and narrowed widen before getting XML path."
+  :type 'boolean
+  :group 'nxml-where)
+
 
 (defvar nxml-where-saved-header-line-format nil)
 (make-variable-buffer-local 'nxml-where-saved-header-line-format)
+(put 'nxml-where-saved-header-line-format 'permanent-local t)
 
-(defun nxml-where-save-header-line-format()
+(defun nxml-where-save-header-line-format ()
   (unless nxml-where-saved-header-line-format
     (setq nxml-where-saved-header-line-format header-line-format)))
 
-(defun nxml-where-restore-header-line-format()
+(defun nxml-where-restore-header-line-format ()
   (setq header-line-format nxml-where-saved-header-line-format))
 
 (defvar nxml-where-modes '(nxml-mode nxhtml-mode))
 
-(defun nxml-where-mode-start()
-  (unless (derived-mode-p 'nxml-mode)
+(defun nxml-where-is-nxml ()
+  (or (derived-mode-p 'nxml-mode)
+      (and (featurep 'mumamo)
+           mumamo-multi-major-mode
+           (let ((major-mode (mumamo-main-major-mode)))
+             (derived-mode-p 'nxml-mode)))))
+
+(defun nxml-where-mode-start ()
+  (unless (nxml-where-is-nxml)
     (error "Can't display XML path since major mode is not nxml-mode child."))
+  (add-hook 'after-change-major-mode-hook 'nxml-where-turn-off-unless-nxml nil t)
   (nxml-where-save-header-line-format)
   (nxml-where-restart-updating))
 
-(defun nxml-where-mode-stop()
+(defun nxml-where-mode-stop ()
   (nxml-where-stop-updating)
   (nxml-where-restore-header-line-format)
   (dolist (o nxml-where-ovls)
     (delete-overlay o)))
+
+(defun nxml-where-turn-off-unless-nxml ()
+  (unless (nxml-where-is-nxml)
+    (nxml-where-mode-stop)))
+(put 'nxml-where-turn-off-unless-nxml 'permanent-local-hook t)
 
 (define-minor-mode nxml-where-mode
   "Shows path in mode line."
@@ -154,11 +181,9 @@ If nil show only tag names."
     ;; Turn it off
     (nxml-where-mode-stop)
     ))
-(when (and nxml-where-mode
-           (not (boundp 'define-globa-minor-mode-bug)))
-  (nxml-where-mode 1))
+(put 'nxml-where-mode 'permanent-local t)
 
-(defun nxml-where-turn-on-in-nxml-child()
+(defun nxml-where-turn-on-in-nxml-child ()
   "Turn on `nxml-where-mode' if possible.
 This is possible if `major-mode' in the buffer is derived from
 `nxml-mode'."
@@ -173,8 +198,14 @@ This is possible if `major-mode' in the buffer is derived from
            (not (boundp 'define-global-minor-mode-bug)))
   (nxml-where-global-mode 1))
 
-
 (defun nxml-where-update (buffer)
+  (if nxml-where-widen
+      (save-restriction
+        (widen)
+        (nxml-where-update-1 buffer))
+    (nxml-where-update-1 buffer)))
+
+(defun nxml-where-update-1 (buffer)
   (with-current-buffer buffer
     (unless nxml-where-marks
       (when nxml-where-ovls
@@ -196,7 +227,7 @@ This is possible if `major-mode' in the buffer is derived from
 
 (defvar nxml-where-get-id-pattern
          (rx space
-             "id"
+             (eval (cons 'or nxml-where-header-attributes))
              (0+ space)
              ?=
              (0+ space)
@@ -209,7 +240,7 @@ This is possible if `major-mode' in the buffer is derived from
          ;;(insert ;; -------------------
           (rx ?<
               (submatch
-               (1+ (char "a-z0-9:"))
+               (1+ (char "-a-z0-9:"))
                )
               (0+ (1+ space)
                   (1+ (any "a-z"))
@@ -226,7 +257,7 @@ This is possible if `major-mode' in the buffer is derived from
           ;;) ;; -------------------
          )
 
-(defun nxml-where()
+(defun nxml-where ()
   (let (path
         start
         end

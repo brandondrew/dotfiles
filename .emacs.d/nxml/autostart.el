@@ -3,7 +3,7 @@
 ;; Author: By: Lennart Borgman
 ;; Created: Fri Dec 15 10:22:41 2006
 ;; Version:
-;; Last-Updated: Sat May 05 20:14:42 2007 (7200 +0200)
+;; Last-Updated: 2008-03-06T23:49:43+0100 Thu
 ;; Keywords:
 ;; Compatibility:
 ;;
@@ -48,25 +48,22 @@
 
 (unless (featurep 'nxml-nxhtml-autostart)
   (provide 'nxml-nxhtml-autostart)
-  (let ((this-dir (file-name-directory
-                   (if load-file-name load-file-name buffer-file-name))))
-    ;; Try to see if this is the zipped version. If so then add the
-    ;; sudir zipped-utils. Use a little bit overkill here to avoid
-    ;; some problems in the future.
-    (unless
-        (and
-         (or (featurep 'ourcomments-util)
-             (locate-library "ourcomments-util"))
-         (or (featurep 'mlinks)
-             (locate-library "mlinks"))
-         (or (featurep 'mumamo)
-             (locate-library "mumamo")))
-      (let ((zipped-dir (file-name-as-directory
-                         (expand-file-name "zipped-utils"
-                                           this-dir))))
-        (when (file-directory-p zipped-dir)
-          (add-to-list 'load-path zipped-dir))))
-    (load (expand-file-name "nxml-mode-20041004/rng-auto" this-dir))
+  ;; Use the css-mode that comes with Emacs if there is one.
+  ;; Fix-me: remove this loading later:
+  (when (fboundp 'css-mode) (require 'css-mode))
+  (let* ((this-dir (file-name-directory
+                    (if load-file-name load-file-name buffer-file-name)))
+         (util-dir (file-name-as-directory
+                    (expand-file-name "util"
+                                      this-dir)))
+         (related-dir (file-name-as-directory
+                       (expand-file-name "related"
+                                      this-dir))))
+    (add-to-list 'load-path util-dir)
+    (add-to-list 'load-path related-dir)
+    ;; Nxml-mode is not yet ready in cvs for Emacs 23
+    (unless (fboundp 'nxml-mode)
+      (load (expand-file-name "nxml-mode-20041004/rng-auto" this-dir)))
     (load (expand-file-name "nxhtml/nxhtml-autoload" this-dir))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

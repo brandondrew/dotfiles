@@ -1,7 +1,7 @@
 (require 'wid-edit)
 (require 'help-mode)
 
-(defun test-widget-formats()
+(defun test-widget-formats ()
   (interactive)
   (let ((widget-button-prefix "<<<<")
         (widget-button-suffix ""))
@@ -50,7 +50,7 @@
                        ;;:format "%[[%v]%]"
                        :value "Six"
                        ;;:value-create 'widget-browse-value-create
-                       :value-create (lambda(widget) (insert (widget-get widget :value)))
+                       :value-create (lambda (widget) (insert (widget-get widget :value)))
                        )
         (widget-setup)
         ))))

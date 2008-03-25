@@ -70,7 +70,7 @@
   :type 'directory
   :group 'html-chklnk)
 
-(defun html-chklnk-check-site-links(start-file)
+(defun html-chklnk-check-site-links (start-file)
   "Check local file web site links.
 Currently only internal links are checked."
   (interactive
@@ -106,7 +106,7 @@ Currently only internal links are checked."
                                           )
                                 "")))
          (compilation-buffer-name-function
-          '(lambda(dummy) (concat "** Checking links in site "
+          '(lambda (dummy) (concat "** Checking links in site "
                                   html-site-current " **")))
          (compilation-scroll-output t)
          (compilation-error-regexp-alist-alist
@@ -142,7 +142,7 @@ Currently only internal links are checked."
 ;;              (w32shell-set-shell "msys"))))
     ))
 
-(defun html-chklnk-convert-file-name(filename)
+(defun html-chklnk-convert-file-name (filename)
   (let ((uses-cygwin (and (featurep 'w32shell)
                           (string= w32shell-current-shell-path
                                    w32shell-cygwin-bin)))

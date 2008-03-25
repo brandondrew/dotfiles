@@ -62,7 +62,7 @@
 (defconst html-toc-mark-middle "<!-- html-toc MIDDLE -->")
 (defconst html-toc-mark-end    "<!-- html-toc END -->")
 
-(defun html-toc-create-pages-file()
+(defun html-toc-create-pages-file ()
   "Write a list of pages to be used for table of contents.
 Return the file name."
   (interactive)
@@ -78,7 +78,7 @@ Return the file name."
          (pages-text)
          )
     (setq sub-files
-          (sort (mapcar (lambda(full-file)
+          (sort (mapcar (lambda (full-file)
                           (assert (file-exists-p full-file))
                           (file-relative-name full-file page-file-dir))
                         sub-files)
@@ -95,7 +95,7 @@ Return the file name."
                            (substring (file-name-directory full-file) 0 -1)))
           (setq title (html-toc-get-title full-file))
           (setq this-level 0)
-          (mapc (lambda(c) (when (eq c ?/) (setq this-level (1+ this-level)))) file)
+          (mapc (lambda (c) (when (eq c ?/) (setq this-level (1+ this-level)))) file)
           (insert (format "%s ### %s ### %s\n" this-level title file))))
       (setq pages-text (buffer-string)))
     (with-current-buffer (find-file page-file)
@@ -114,7 +114,7 @@ Return the file name."
                 )
             (message "Keeping old list of pages.")))))
     page-file))
-(defun html-toc-dir()
+(defun html-toc-dir ()
   (let* ((this-file (if load-file-name
                        load-file-name
                       buffer-file-name))
@@ -133,7 +133,7 @@ Return the file name."
   :group 'html-toc)
 
 
-(defun html-toc-write-toc-file()
+(defun html-toc-write-toc-file ()
   "Write a table of contents for a web site.
 Build the table of content from the information in
 `html-site-current-page-list'.  Write it to the file
@@ -180,7 +180,7 @@ expanded/collapsed (if JavaScript is allowed)."
       toc-file))
 
 
-(defun html-toc-insert-toc(page-lines toc-file)
+(defun html-toc-insert-toc (page-lines toc-file)
   (let* ((curr-level)
          (min-level 100)
          div-levels
@@ -236,7 +236,7 @@ expanded/collapsed (if JavaScript is allowed)."
       (insert "</div>\n")
       (setq div-levels (cdr div-levels)))))
 
-(defun html-toc-get-title(file)
+(defun html-toc-get-title (file)
   (save-excursion
     (with-temp-buffer
       (insert-file-contents file nil 0 1000)
@@ -244,19 +244,19 @@ expanded/collapsed (if JavaScript is allowed)."
       (when (search-forward-regexp "<title>\\(.*\\)</title>" nil t)
         (match-string 1)))))
 
-(defun html-toc-parse-toc(toc-str)
+(defun html-toc-parse-toc (toc-str)
   (let ((nodes))
     (with-temp-buffer
       (insert toc-str)
       (setq nodes (xml-parse-region (point-min) (point-max))))
     ))
 
-(defun html-toc-get-hrefs(nodes)
+(defun html-toc-get-hrefs (nodes)
   (let ((atags (html-toc-get-atags nodes)))
-    (mapcar (lambda(atag)
+    (mapcar (lambda (atag)
               (xml-get-attribute atag 'href))
             atags)))
-(defun html-toc-get-atags(nodes)
+(defun html-toc-get-atags (nodes)
   (let ((atags))
     (dolist (node nodes)
       (when (listp node)
@@ -291,7 +291,7 @@ expanded/collapsed (if JavaScript is allowed)."
 </html>
 ")
 
-(defun html-toc-view-frames-file()
+(defun html-toc-browse-frames-file ()
   "View frames file written by `html-toc-write-frames-file'."
   (interactive)
   (html-site-current-ensure-site-defined)
@@ -303,12 +303,12 @@ expanded/collapsed (if JavaScript is allowed)."
       (html-toc-write-frames-file))
     (browse-url-of-file frames-file)))
 
-;; (defun html-toc-frames-file-name()
+;; (defun html-toc-frames-file-name ()
 ;;   "Return name of file written by `html-toc-write-frames-file'."
 ;;   (html-toc-get-site)
 ;;   (expand-file-name html-toc-frames-default-name html-move-site-directory))
 
-(defun html-toc-write-frames-file()
+(defun html-toc-write-frames-file ()
   "Write a frames file.
 This frames file should load the table of contents build by
 `html-toc-write-toc-file' in one frame and shows the documents in
@@ -343,8 +343,8 @@ You may also want to look at `html-wtoc-write-pages-with-toc'."
 
 (defconst html-toc-menu-map
   (let ((map (make-sparse-keymap)))
-    (define-key map [html-toc-view-frames-file]
-      (list 'menu-item "View Frames File" 'html-toc-view-frames-file))
+    (define-key map [html-toc-browse-frames-file]
+      (list 'menu-item "Browse Frames File" 'html-toc-browse-frames-file))
     (define-key map [html-toc-write-frames-file]
       (list 'menu-item "Write Frames File" 'html-toc-write-frames-file))
     (define-key map [html-toc-write-toc-file]

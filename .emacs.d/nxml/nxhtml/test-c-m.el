@@ -8,7 +8,7 @@
 </html>
 ") ;; Stop-here
 
-(defun temp-c-m()
+(defun temp-c-m ()
   (let* ((temp-buffer (get-buffer-create "temp-c-m"))
          (start (save-excursion
                   (goto-char (point-min))

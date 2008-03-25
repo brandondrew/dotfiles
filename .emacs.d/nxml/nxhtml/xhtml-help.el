@@ -4,7 +4,7 @@
 
 ;; Author:  Lennart Borgman <lennart DOT borgman DOT 073 AT student DOT lu DOT se>
 ;; Created: 2005-08-16
-;; Last-Updated: Tue Apr 10 04:06:51 2007 (7200 +0200)
+;; Last-Updated: Wed Aug 01 14:24:07 2007 (7200 +0200)
 (defconst xhtml-help:version "0.57") ;; Version:
 ;; Keywords: languages
 
@@ -54,13 +54,14 @@
 ;;
 ;;; Code:
 
-(defun xhtml-help-css-prop-at-point()
+(defun xhtml-help-css-prop-at-point ()
   "Get possible css name property at point."
   (save-excursion
     (let ((ch (char-after))
           (in-word))
       (when (and (not (bolp))
-                 (member ch '(10 9 32 ?\:)))
+                 (or (not ch)
+                     (member ch '(10 9 32 ?\:))))
         (backward-char)
         (setq ch (char-after)))
       (while (string-match "[a-z-]" (char-to-string ch))
@@ -73,7 +74,7 @@
           (match-string-no-properties 0))))))
 
 
-(defun xhtml-help-show-css-ref()
+(defun xhtml-help-show-css-ref ()
   "Show css reference for css property name at point."
   (interactive)
   (let ((css-prop (xhtml-help-css-prop-at-point)))
@@ -81,7 +82,7 @@
     (when css-prop
       (xhtml-help-browse-css css-prop))))
 
-(defun xhtml-help-tag-at-point()
+(defun xhtml-help-tag-at-point ()
   "Get xhtml tag name at or before point."
   (save-excursion
     (when (eq (following-char) ?<)
@@ -90,7 +91,7 @@
                (looking-at "</?\\([[:alnum:]]+\\)"))
       (match-string-no-properties 1))))
 
-(defun xhtml-help-show-tag-ref()
+(defun xhtml-help-show-tag-ref ()
   "Show xhtml reference for tag name at or before point."
   (interactive)
   (let ((tag (xhtml-help-tag-at-point)))
@@ -119,7 +120,7 @@ This is used in `xhtml-help-browse-tag' and `xhtml-help-browse-css'."
   :type 'boolean
   :group 'xhtml-help)
 
-(defun xhtml-help-query-refurl(prompt &optional notvalid)
+(defun xhtml-help-query-refurl (prompt &optional notvalid)
   (let ((choices (get 'xhtml-help-refurl 'custom-type))
         (default xhtml-help-refurl))
     (unless (eq 'choice (car choices))
@@ -142,20 +143,20 @@ This is used in `xhtml-help-browse-tag' and `xhtml-help-browse-css'."
                      default
                      '(choices . 1))))
 
-(defun xhtml-match(target str)
+(defun xhtml-match (target str)
   (let ((len (length target)))
     (when (<= len (length str))
       (equal target (substring str 0 len)))))
 
-(defun xhtml-match-member(target str-list)
+(defun xhtml-match-member (target str-list)
   (let (m)
-    (mapc (lambda(elt)
+    (mapc (lambda (elt)
             (when (xhtml-match elt target)
               (setq m t)))
           str-list)
     m))
 
-(defun xhtml-help-browse-css(css-prop)
+(defun xhtml-help-browse-css (css-prop)
   (let* ((refurl (if xhtml-help-query-refurl
                      (xhtml-help-query-refurl (concat "CSS property '" css-prop "'")
                                               (list "http://xhtml.com/"))
@@ -275,7 +276,7 @@ This is used in `xhtml-help-browse-tag' and `xhtml-help-browse-css'."
 
 
 
-(defun xhtml-help-browse-tag(tag)
+(defun xhtml-help-browse-tag (tag)
   (let* ((refurl (if xhtml-help-query-refurl
                      (xhtml-help-query-refurl (concat "XHTML tag '" tag "'")
                                               (list "http://www.w3.org/"))

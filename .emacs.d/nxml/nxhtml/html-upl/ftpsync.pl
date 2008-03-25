@@ -1,8 +1,8 @@
 #!/usr/bin/perl
 #
 # ftpsync.pl
-# 
-# See attached README file for any details, or call 
+#
+# See attached README file for any details, or call
 # ftpsync.pl -h
 # for quick start.
 #
@@ -22,7 +22,7 @@
 #    along with this program; if not, write to the Free Software
 #    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
-# FTPSync.pl (ftpsync) is also eMail-Ware, which means that the initial author 
+# FTPSync.pl (ftpsync) is also eMail-Ware, which means that the initial author
 # (Christoph Lechleitner) would like to get an eMail at ftpsync@ibcl.at, if
 # - if anyone uses the script on production level,
 # - if anyone distributes or advertises it in any way,
@@ -83,7 +83,7 @@ my $curopt;
 my @cloptions=();
 for $curopt (@ARGV) {
   if ($curopt =~ /^cfg=/) {
-    $configfile=$'; 
+    $configfile=$';
     if (! -r $configfile) { print "Config file does not exist: ".$configfile."\n"; $returncode+=1; }
   } else {
     push @cloptions, $curopt;
@@ -148,20 +148,20 @@ for $curopt (@cfgfoptions, @cloptions) {
     elsif ($fname eq "ftpuser")   { $ftpuser    =$fvalue;
                                     if ( $syncdirection eq "" ) { $syncdirection="get"; }
                                   }
-    elsif ($fname eq "localdir")  { $localdir   =$fvalue; $localdir=~s/\/$//; 
+    elsif ($fname eq "localdir")  { $localdir   =$fvalue; $localdir=~s/\/$//;
                                     if ( $syncdirection eq "" ) { $syncdirection="put"; }
                                   }
     elsif ($fname eq "timeout")   { if ($fvalue>0) { $ftptimeout =$fvalue; } }
-  }  
+  }
   else {
     if ($localdir eq "") {
       $localdir = $curopt;
       if ( $syncdirection eq "" )
       { $syncdirection="put"; }
-    } else {  
-      print "ERROR: Unknown parameter: \"".$curopt."\"\n"; $returncode+=1 
+    } else {
+      print "ERROR: Unknown parameter: \"".$curopt."\"\n"; $returncode+=1
     }
-  }      
+  }
 }
 if ($noofopts == 0) { print_syntax(); exit 0; }
 
@@ -216,7 +216,7 @@ if ($dodebug) { print "Remote directory is now ".$ftpc->pwd()."\n"; }
 if (! $doquiet) { print "\nDetermine s offset.\n"; }
 if ($syncdirection eq "put") { clocksync($ftpc,"syncfile"); }
 
-#  local & remote tree vars 
+#  local & remote tree vars
 #chdir $localdir;
 my $ldl=length($localdir) + 1;
 #my $ldl=length($localdir);
@@ -256,7 +256,7 @@ if ($docheckfirst)
   }
   else
   { print "OK, exiting without actions.\n";
-    exit 1; 
+    exit 1;
   }
 }
 if ($doinfoonly)   { print "\nSimulating synchronization.\n"; }
@@ -287,18 +287,18 @@ sub buildlocaltree() {
       if ($dodebug) { print "Directory: ".$File::Find::name."\n"; }
       elsif (! $doquiet) { print ":"; }
       $localdirs{$relfilename}="$relfilename";
-    } 
+    }
     elsif (-f $_) {
       #my @curfilestat=lstat $File::Find::name;
       my @curfilestat=lstat $_;
       my $curfilesize=$curfilestat[7];
       my $curfilemdt=$curfilestat[9];
-      if ($dodebug) { print "File: ".$File::Find::name."\n"; 
+      if ($dodebug) { print "File: ".$File::Find::name."\n";
                       print "Modified ".$curfilemdt."\nSize ".$curfilesize." bytes\n"; }
       elsif (! $doquiet) { print "."; }
       $localfiledates{$relfilename}=$curfilemdt;
       $localfilesizes{$relfilename}=$curfilesize;
-    } 
+    }
     elsif (-l $_) {
       if ($dodebug) { print "Link: ".$File::Find::name."\n"; }
       elsif (! $doquiet) { print ","; }
@@ -319,19 +319,19 @@ sub buildlocaltree() {
     my $curlocalfile="";
     foreach $curlocalfile (keys(%localfiledates))
     { print $curlocalfile."\n"; }
-  }  
+  }
 }
 
 
 sub buildremotetree() {
   my @currecursedirs=();
-  #$ftpc->ls() 
+  #$ftpc->ls()
   #  or die $ftpc->message . "\nCannot ls remote dir " . $ftpc->pwd();
   my @rfl = $ftpc->dir();
   # or @rfl=(); # we have to survive empty remote directories !!!
   my $currf="";
   my $curyear = (gmtime(time))[5] + 1900;
-  my %monthtonr=(); 
+  my %monthtonr=();
   $monthtonr{"Jan"}=1; $monthtonr{"Feb"}=2; $monthtonr{"Mar"}=3; $monthtonr{"Apr"}=4; $monthtonr{"May"}=5; $monthtonr{"Jun"}=6;
   $monthtonr{"Jul"}=7; $monthtonr{"Aug"}=8; $monthtonr{"Sep"}=9; $monthtonr{"Oct"}=10; $monthtonr{"Nov"}=11; $monthtonr{"Dec"}=12;
   if ($dodebug) { print "Remote pwd is ".$ftpc->pwd()."\nDIRing.\n"; }
@@ -349,7 +349,7 @@ sub buildremotetree() {
         $remotelinks{$curnrl}=$cfname;
         if ($dodebug) { print "Link: ".$curnrl." -> ".$cfname."\n"; }
       }
-      elsif ($cftype eq 'd') { 
+      elsif ($cftype eq 'd') {
         my $curnewrsd;
         if ($curremotesubdir eq "") { $curnewrsd = $cfname; }
         else                        { $curnewrsd = $curremotesubdir."/".$cfname; }
@@ -387,9 +387,9 @@ sub buildremotetree() {
     else
     { $curcwddir=$ftpdir."/".$curremotesubdir; }
     if ($dodebug) { print "Change dir: ".$curcwddir."\n"; }
-    $ftpc->cwd($curcwddir) 
+    $ftpc->cwd($curcwddir)
       or die "Cannot cwd to $curcwddir :\n\t" . $ftpc->message ;
-    if ($ftpc->pwd() ne $curcwddir) { 
+    if ($ftpc->pwd() ne $curcwddir) {
       die "Could not cwd to $curcwddir :\n\t" . $ftpc->message ; }
     if (! $doquiet) { print "\n"; }
     buildremotetree();
@@ -436,12 +436,12 @@ sub clocksync {
     }
 
     $conn->delete($fn);
-    
+
     my $hrs = int(abs($syncoff)/3600);
     my $mins = int(abs($syncoff)/60) - $hrs*60;
     my $secs = abs($syncoff) - $hrs*3600 - $mins*60;
-    if (! $doquiet) { 
-      printf("Clock sync offset: %d:%02d:%02d\n", $hrs, $mins, $secs); 
+    if (! $doquiet) {
+      printf("Clock sync offset: %d:%02d:%02d\n", $hrs, $mins, $secs);
     }
     unlink ($fn) unless $fndidexist;
 }
@@ -469,21 +469,21 @@ sub dosync()
     my $curlocalfile;
     foreach $curlocalfile (sort { return length($b) <=> length($a); } keys(%localfiledates))
     { my $dorefresh=0;
-      if    (! exists $remotefiledates{$curlocalfile}) { 
-        $dorefresh=1; 
+      if    (! exists $remotefiledates{$curlocalfile}) {
+        $dorefresh=1;
         $infotext="New: ".$curlocalfile." (".$localfilesizes{$curlocalfile}." bytes)\n";
         if ($doinfoonly)   { print $infotext; next; }
         elsif ($doverbose) { print $infotext; }
         elsif (! $doquiet) { print "n"; }
       }
-      elsif ($remotefiledates{$curlocalfile} < $localfiledates{$curlocalfile}) { 
+      elsif ($remotefiledates{$curlocalfile} < $localfiledates{$curlocalfile}) {
         $dorefresh=1;
         $infotext="Newer: ".$curlocalfile." (".$localfilesizes{$curlocalfile}." bytes, ".$localfiledates{$curlocalfile}." versus ".$remotefiledates{$curlocalfile}.")\n";
         if ($doinfoonly) { print $infotext; next; }
         if ($doverbose)  { print $infotext; }
         elsif (! $doquiet) { print "u"; }
       }
-      elsif ($remotefilesizes{$curlocalfile} != $localfilesizes{$curlocalfile}) { 
+      elsif ($remotefilesizes{$curlocalfile} != $localfilesizes{$curlocalfile}) {
         $dorefresh=1;
         $infotext="Changed (different sized): ".$curlocalfile." (".$localfilesizes{$curlocalfile}."  versus ".$remotefilesizes{$curlocalfile}." bytes)\n";
         if ($doinfoonly) { print $infotext; next; }
@@ -507,7 +507,7 @@ sub dosync()
     if    ($doinfoonly) { print "\nWould delete obsolete remote files.\n"; }
     elsif (! $doquiet)  { print "\nDeleting obsolete remote files.\n"; }
     my $curremotefile;
-    foreach $curremotefile (keys(%remotefiledates)) 
+    foreach $curremotefile (keys(%remotefiledates))
     { if (not exists $localfiledates{$curremotefile})
       { if ($doinfoonly) { print $curremotefile."\n"; next; }
         if ($doverbose)  { print $curremotefile."\n"; }
@@ -546,21 +546,21 @@ sub dosync()
     my $curremotefile;
     foreach $curremotefile (sort { return length($b) <=> length($a); } keys(%remotefiledates))
     { my $dorefresh=0;
-      if    (! exists $localfiledates{$curremotefile}) { 
-        $dorefresh=1; 
+      if    (! exists $localfiledates{$curremotefile}) {
+        $dorefresh=1;
         $infotext="New: ".$curremotefile." (".$remotefilesizes{$curremotefile}." bytes)\n";
         if ($doinfoonly) { print $infotext; next; }
         if ($doverbose)  { print $infotext; }
         elsif (! $doquiet) { print "n"; }
       }
-      elsif ($remotefiledates{$curremotefile} > $localfiledates{$curremotefile}) { 
+      elsif ($remotefiledates{$curremotefile} > $localfiledates{$curremotefile}) {
         $dorefresh=1;
         $infotext="Newer: ".$curremotefile." (".$remotefilesizes{$curremotefile}." bytes, ".$remotefiledates{$curremotefile}." versus ".$localfiledates{$curremotefile}.")\n";
         if ($doinfoonly) { print $infotext; next; }
         if ($doverbose)  { print $infotext; }
         elsif (! $doquiet) { print "u"; }
       }
-      elsif ($remotefilesizes{$curremotefile} != $localfilesizes{$curremotefile}) { 
+      elsif ($remotefilesizes{$curremotefile} != $localfilesizes{$curremotefile}) {
         $dorefresh=1;
         $infotext="Changed (different sized): ".$curremotefile." (".$remotefilesizes{$curremotefile}." bytes)\n";
         if ($doinfoonly) { print $infotext; next; }
@@ -585,7 +585,7 @@ sub dosync()
     if    ($doinfoonly) { print "\nWould delete obsolete local files.\n"; }
     elsif (! $doquiet)  { print "\nDeleting obsolete local files.\n"; }
     my $curlocalfile;
-    foreach $curlocalfile (sort { return length($b) <=> length($a); } keys(%localfiledates)) 
+    foreach $curlocalfile (sort { return length($b) <=> length($a); } keys(%localfiledates))
     { if (not exists $remotefiledates{$curlocalfile})
       { if ($doinfoonly) { print $curlocalfile."\n"; next; }
         if ($doverbose)  { print $curlocalfile."\n"; }
@@ -623,7 +623,7 @@ sub listremotedirs() {
     my $curremotelink="";
     foreach $curremotelink (keys(%remotelinks))
     { print $curremotelink." -> ".$remotelinks{$curremotelink}."\n"; }
-  }  
+  }
 }
 sub parseRemoteURL() {
   if ($remoteURL =~ /^ftp:\/\/(([^@\/\\\:]+)(:([^@\/\\\:]+))?@)?([a-zA-Z01-9\.]+)\/(.*)/) {

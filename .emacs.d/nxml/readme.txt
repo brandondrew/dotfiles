@@ -1,4 +1,4 @@
-To install nxhtml-mode and nxml-mode you can put this in your .emacs:
+To install nxhtml-mode and nxml-mode put this in your .emacs:
 
    (load "your-path/autostart.el")
 

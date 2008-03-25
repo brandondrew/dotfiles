@@ -44,7 +44,7 @@
 ;;
 ;;; Code:
 
-(defun nxhtml-add-link(type src silent)
+(defun nxhtml-add-link (type src silent)
   ;;<script type="text/javascript" src="EmacsW32.js"></script>
   (catch 'exit
     (save-excursion
@@ -88,7 +88,7 @@
           (beginning-of-line 0)
           (indent-according-to-mode))))))
 
-(defun nxhtml-smoothgallery-add-base(silent)
+(defun nxhtml-smoothgallery-add-base (silent)
   "Add links to javascript and style sheets.
 This command add links to the javascript and style sheets that
 comes with SmoothGallery, see URL
@@ -115,7 +115,7 @@ comes with nXhtml are linked to directly."
     ))
 
 (defconst nxhtml-smoothgallery-mark "<!-- SmoothGallery -->")
-(defun nxhtml-smoothgallery-find()
+(defun nxhtml-smoothgallery-find ()
   (save-excursion
     (save-restriction
       (widen)
@@ -134,15 +134,15 @@ comes with nXhtml are linked to directly."
            (buffer-substring-no-properties
            (match-beginning 1) (match-end 1))))))))
 
-(defun nxhtml-smoothgallery-mk-jsmark(name)
+(defun nxhtml-smoothgallery-mk-jsmark (name)
   (concat "new gallery($('" name "'), {"))
 
-(defun nxhtml-smoothgallery-find-script(name)
+(defun nxhtml-smoothgallery-find-script (name)
   (let ((jsmark (nxhtml-smoothgallery-mk-jsmark name)))
     (goto-char (point-min))
     (search-forward jsmark nil t)))
 
-(defun nxhtml-smoothgallery-add(point-name)
+(defun nxhtml-smoothgallery-add (point-name)
   (interactive (list
                 (let ((old-name (nxhtml-smoothgallery-find)))
                   (if old-name
@@ -181,7 +181,7 @@ comes with nXhtml are linked to directly."
       (indent-according-to-mode))
     (goto-char where)))
 
-(defun nxhtml-smoothgallery-add-img(imgsrc thumbsrc title description)
+(defun nxhtml-smoothgallery-add-img (imgsrc thumbsrc title description)
   (interactive (let ((gallery (nxhtml-smoothgallery-find)))
                  (when gallery
                    (goto-char (car gallery)))
@@ -214,7 +214,7 @@ comes with nXhtml are linked to directly."
 ;;         ))
     ))
 
-(defun insert-and-indent(&rest lines)
+(defun insert-and-indent (&rest lines)
   (let ((lines (split-string (apply 'concat lines) "[\n\r]")))
     (dolist (line lines)
         (insert "\n" line)

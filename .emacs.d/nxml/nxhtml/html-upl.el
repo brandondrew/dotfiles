@@ -4,14 +4,15 @@
 
 ;; Author: Lennart Borgman <lennartDOTborgmanDOT073ATstudentDOTluDOTse>
 ;; Created: Mon Mar 06 19:09:19 2006
-(defconst html-upl:version "0.2") ;; Version:
-;; Last-Updated: Tue Apr 10 04:17:02 2007 (7200 +0200)
+(defconst html-upl:version "0.3") ;; Version:
+;; Last-Updated: 2008-03-22T01:23:01+0100 Sat
 ;; Keywords:
 ;; Compatibility:
 ;;
 ;; Features that might be required by this library:
 ;;
-;;   None
+;;   `cl', `html-site', `html-upl', `mail-prsvr', `mm-util', `timer',
+;;   `url-c', `url-parse', `url-vars'.
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -66,23 +67,32 @@ The tools for html-upl includes:
   :type 'directory
   :group 'html-upl)
 
-(defun html-upl-view-remote()
+(defun html-upl-browse-remote ()
   (interactive)
-  (let ((url (html-site-local-to-web html-site-current buffer-file-name nil)))
+  (let ((url (html-site-local-to-web html-site-current
+                                     ;;buffer-file-name
+                                     (html-site-buffer-or-dired-file-name)
+                                     nil)))
     (browse-url url)))
-(defun html-upl-view-remote-with-toc()
+(defun html-upl-browse-remote-with-toc ()
   (interactive)
-  (let ((url (html-site-local-to-web html-site-current buffer-file-name t)))
+  (let ((url (html-site-local-to-web html-site-current
+                                     ;;buffer-file-name
+                                     (html-site-buffer-or-dired-file-name)
+                                     t)))
     (browse-url url)))
-(defun html-upl-view-remote-frames()
+(defun html-upl-browse-remote-frames ()
   (interactive)
-  (let ((url (html-site-local-to-web (html-site-current-frames-file) buffer-file-name nil)))
+  (let ((url (html-site-local-to-web (html-site-current-frames-file)
+                                     ;;buffer-file-name
+                                     (html-site-buffer-or-dired-file-name)
+                                     nil)))
     (browse-url url)))
 
-(defun html-upl-upload-site-with-toc()
+(defun html-upl-upload-site-with-toc ()
   (interactive)
   (html-upl-upload-site1 t))
-(defun html-upl-upload-site()
+(defun html-upl-upload-site ()
   (interactive)
   (html-upl-upload-site1 nil))
 (defun html-upl-upload-site1(with-toc)
@@ -124,15 +134,61 @@ The tools for html-upl includes:
              opt
              ))))
 
-(defun html-upl-ensure-site-has-host()
+(defun html-upl-ensure-site-has-host ()
   (let ((host (html-site-current-ftp-host)))
     (unless (and host (< 0 (length host)))
       (error "Site %s has no ftp host defined" html-site-current))))
 
-(defun html-upl-upload-file(filename)
-  "Upload a single file in a site."
+(defun html-upl-remote-dired (dirname)
+  "Start dired for remote directory or its parent/ancestor."
   (interactive (list
-                (let ((f (file-relative-name buffer-file-name)))
+                (read-directory-name "Local directory: " nil nil t)))
+  (html-site-current-ensure-file-in-site dirname)
+  (html-upl-ensure-site-has-host)
+  (let* ((local-dir dirname)
+         (remote-dir (html-site-current-local-to-remote local-dir nil))
+         to-parent
+         res
+         msg)
+    (while (not res)
+      (condition-case err
+          (progn
+            (dired remote-dir)
+            (setq res t))
+        (error ;;(lwarn 't :warning "err=%s" err)
+               (setq msg (error-message-string err))))
+      (unless res
+        ;; 450  Requested file action not taken File unavailable (e.g. file busy).
+        ;; 550  Requested action not taken File unavailable (e.g. file not found, no access).
+        (if (save-match-data (string-match " \\(?:550\\|450\\) " msg))
+            (progn
+              (if (not to-parent)
+                  (setq to-parent (concat
+                                   (file-name-nondirectory remote-dir)
+                                   "/.."))
+                (setq to-parent (concat
+                                 (file-name-nondirectory remote-dir)
+                                 "/"
+                                 to-parent "/..")))
+              ;;(setq local-dir (directory-file-name (file-name-directory (directory-file-name local-dir))))
+              ;;(html-site-current-ensure-file-in-site local-dir)
+              ;;(setq remote-dir (html-site-current-local-to-remote local-dir nil))
+              (setq remote-dir (directory-file-name (file-name-directory remote-dir)))
+              )
+          (setq res msg))))
+    (if (stringp res)
+       (error "%s" msg)
+      (when to-parent
+        (message "Remote dir not found, showing ancestor %s" to-parent)))))
+
+(defun html-upl-upload-file (filename)
+  "Upload a single file in a site.
+For the definition of a site see `html-site-current'."
+  (interactive (list
+                (let ((f (file-relative-name
+                          ;;(if (derived-mode-p 'dired-mode) (dired-get-file-for-visit) buffer-file-name)
+                          (html-site-buffer-or-dired-file-name)
+                          )))
                   (read-file-name "File: " nil nil t f))
                 ))
   (html-site-current-ensure-file-in-site filename)
@@ -148,6 +204,8 @@ The tools for html-upl includes:
                (with-current-buffer buffer
                  (save-buffer)
                  (not (buffer-modified-p)))))
+      (when (= ?~ (string-to-char local-file))
+        (setq local-file (expand-file-name local-file)))
       (when (and (fboundp 'w32-short-file-name)
                  (string-match " " local-file))
         (setq local-file (w32-short-file-name local-file)))
@@ -160,10 +218,10 @@ The tools for html-upl includes:
       (message "Upload ready")
       )))
 
-(defun html-upl-edit-remote-file()
+(defun html-upl-edit-remote-file ()
   (interactive)
   (html-upl-edit-remote-file1 nil))
-(defun html-upl-edit-remote-file-with-toc()
+(defun html-upl-edit-remote-file-with-toc ()
   (interactive)
   (html-upl-edit-remote-file1 t))
 
@@ -184,10 +242,13 @@ The tools for html-upl includes:
          )
     (find-file remote-file)))
 
-(defun html-upl-ediff-file(filename)
+(defun html-upl-ediff-file (filename)
   "Run ediff on local and remote file.
 FILENAME could be either the remote or the local file."
-  (interactive "fFile (local or remote): ")
+  ;;(interactive "fFile (local or remote): ")
+  (interactive (list
+                (or (html-site-buffer-or-dired-file-name)
+                    (read-file-name "File: "))))
   (html-upl-ensure-site-has-host)
   (let* ((is-local (html-site-file-is-local filename))
          remote-name
@@ -204,17 +265,18 @@ FILENAME could be either the remote or the local file."
           (remote-buf (find-file remote-name)))
       (ediff-buffers local-buf remote-buf))))
 
-(defun html-upl-ediff-buffer()
-  "Run ediff on local and remote buffer file.
-The current buffer must contain either the local or the remote file."
-  (interactive)
-  (html-upl-ediff-file (buffer-file-name)))
+;;(defun html-site-buffer-or-dired-file-name ()
+;; (defun html-upl-ediff-buffer ()
+;;   "Run ediff on local and remote buffer file.
+;; The current buffer must contain either the local or the remote file."
+;;   (interactive)
+;;   (html-upl-ediff-file (buffer-file-name)))
 
 (provide 'html-upl)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; html-upl.el ends here
 
-;; (defun html-site-local-to-remote-path(local-file protocol with-toc)
+;; (defun html-site-local-to-remote-path (local-file protocol with-toc)
 ;;   (let ((remote-dir (if (eq protocol 'ftp)
 ;;                         (if with-toc
 ;;                             (html-site-current-ftp-wtoc-dir)
@@ -225,7 +287,7 @@ The current buffer must contain either the local or the remote file."
 ;;     (html-site-path-in-mirror
 ;;      (html-site-current-site-dir) local-file remote-dir)))
 
-;; (defun html-site-local-to-web(local-file with-toc)
+;; (defun html-site-local-to-web (local-file with-toc)
 ;;   (let ((web-file (html-site-local-to-remote-path local-file 'http with-toc))
 ;;         (web-host (html-site-current-web-host)))
 ;;     (save-match-data
@@ -237,12 +299,12 @@ The current buffer must contain either the local or the remote file."
 ;;     ))
 ;;
 ;;; Use tramp-tramp-file-p instead:
-;; (defun html-upl-file-name-is-local(file-name)
+;; (defun html-upl-file-name-is-local (file-name)
 ;;   "Return nil unless FILE-NAME is a Tramp file name."
 ;;   (save-match-data
 ;;     (not (string-match "^/[a-z]+:" file-name))))
 
-;; (defun html-upl-remote-to-local(remote-file)
+;; (defun html-upl-remote-to-local (remote-file)
 ;;   (let ((remote-site-dir (html-site-current-web-dir)))
 ;;     (unless (html-site-dir-contains remote-site-dir remote-file)
 ;;       (error "")))

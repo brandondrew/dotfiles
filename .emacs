@@ -156,6 +156,10 @@
 ;;; Eshell piping
 ;;; ifconfig > #<buffer interfaces>
 
+;;; Well, we already have `C-x r w R' (window-configuration-to-register)
+;;; and `C-x r f R' (frame-configuration-to-register) for saving window
+;;; configurations, and `C-x r j R' for restoring them.
+
 ;;; TODO:
 
 ;; steal ZSS defadvice in setup-aliases.el for find-file-at-point

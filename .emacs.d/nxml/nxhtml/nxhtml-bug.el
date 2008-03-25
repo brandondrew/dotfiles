@@ -44,6 +44,8 @@
 ;;
 ;;; Code:
 
+(require 'sendmail)
+
 ;;(require 'emacsbug)
 (autoload 'report-emacs-bug-info "emacsbug" "Go to the Info node on reporting Emacs bugs." t)
 
@@ -65,19 +67,19 @@ will take over the job (with your help)."
   ;; If there are four numbers in emacs-version, this is a pretest
   ;; version.
   (let* ((pretest-p (string-match "\\..*\\..*\\." emacs-version))
-	(from-buffer (current-buffer))
-	;;(reporting-address "emacs-nxml-mode@yahoogroups.com")
-	(reporting-address "lennart.borgman@gmail.com")
+        (from-buffer (current-buffer))
+        ;;(reporting-address "lennart.borgman@gmail.com")
+        (reporting-address "emacs-nxml-mode@yahoogroups.com")
         ;; Put these properties on semantically-void text.
         (prompt-properties '(field nxhtml-bug-prompt
                                    intangible but-helpful
                                    rear-nonsticky t))
-	user-point message-end-point)
+        user-point message-end-point)
     (setq message-end-point
-	  (with-current-buffer (get-buffer-create "*Messages*")
-	    (point-max-marker)))
+          (with-current-buffer (get-buffer-create "*Messages*")
+            (point-max-marker)))
     (compose-mail reporting-address
-		  topic)
+                  topic)
     ;; The rest of this does not execute
     ;; if the user was asked to confirm and said no.
     (rfc822-goto-eoh)
@@ -92,20 +94,21 @@ will take over the job (with your help)."
     (unless nxhtml-report-bug-no-explanations
       ;; Insert warnings for novice users.
       (when (string-match "nxml-mode" reporting-address)
-	(insert "This bug report will be sent to the nXhtml maintainer,\n")
-	(let ((pos (point)))
-	  (insert "not to your local site managers!\n")
-	  (put-text-property pos (point) 'face 'highlight)))
+        (insert "This bug report will be sent to the nXhtml maintainers,\n")
+        (let ((pos (point)))
+          (insert "not to your local site managers!\n")
+          (put-text-property pos (point) 'face 'highlight)))
       (insert "\nPlease write in ")
       (let ((pos (point)))
-	(insert "English")
-	(put-text-property pos (point) 'face 'highlight))
-      (insert " if possible, because the nXhtml maintainer
+        (insert "English")
+        (put-text-property pos (point) 'face 'highlight))
+      (insert " if possible, because the nXhtml maintainers
 usually do not have translators to read other languages for them.\n\n")
       )
 
     (insert "Please describe exactly what actions triggered the bug\n"
-	    "and the precise symptoms of the bug:\n\n")
+            "and the precise symptoms of the bug (it may also be\n"
+            "helpful to include an *EXAMPLE FILE*!):\n\n")
     (add-text-properties (point) (save-excursion (mail-text) (point))
                          prompt-properties)
 
@@ -114,38 +117,38 @@ usually do not have translators to read other languages for them.\n\n")
 
     (insert "\n\nnXhtml version " nxhtml:version ", " (emacs-version) "\n\n")
     (insert (format "Major mode: %s\n"
-		    (buffer-local-value 'mode-name from-buffer)))
+                    (buffer-local-value 'mode-name from-buffer)))
     (insert "\n")
     (insert "Minor modes in effect:\n")
     (dolist (mode minor-mode-list)
       (and (boundp mode) (buffer-local-value mode from-buffer)
-	   (insert (format "  %s: %s\n" mode
-			   (buffer-local-value mode from-buffer)))))
+           (insert (format "  %s: %s\n" mode
+                           (buffer-local-value mode from-buffer)))))
     (insert "\n")
     (let ((message-buf (get-buffer "*Messages*")))
       (if message-buf
-	  (let (beg-pos
-		(end-pos message-end-point))
-	    (with-current-buffer message-buf
-	      (goto-char end-pos)
-	      (forward-line -10)
-	      (setq beg-pos (point)))
-	    (insert "\n\nRecent messages:\n")
-	    (insert-buffer-substring message-buf beg-pos end-pos))))
+          (let (beg-pos
+                (end-pos message-end-point))
+            (with-current-buffer message-buf
+              (goto-char end-pos)
+              (forward-line -10)
+              (setq beg-pos (point)))
+            (insert "\n\nRecent messages:\n")
+            (insert-buffer-substring message-buf beg-pos end-pos))))
     ;; This is so the user has to type something
     ;; in order to send easily.
     (use-local-map (nconc (make-sparse-keymap) (current-local-map)))
     (define-key (current-local-map) "\C-c\C-i" 'report-emacs-bug-info)
     (unless nxhtml-report-bug-no-explanations
       (with-output-to-temp-buffer "*Bug Help*"
-	(if (eq mail-user-agent 'sendmail-user-agent)
-	    (princ (substitute-command-keys
-		    "Type \\[mail-send-and-exit] to send the bug report.\n")))
-	(princ (substitute-command-keys
-		"Type \\[kill-buffer] RET to cancel (don't send it).\n"))
-	(terpri)
-	(princ (substitute-command-keys
-		"Type \\[report-emacs-bug-info] to visit in Info the Emacs Manual section
+        (if (eq mail-user-agent 'sendmail-user-agent)
+            (princ (substitute-command-keys
+                    "Type \\[mail-send-and-exit] to send the bug report.\n")))
+        (princ (substitute-command-keys
+                "Type \\[kill-buffer] RET to cancel (don't send it).\n"))
+        (terpri)
+        (princ (substitute-command-keys
+                "Type \\[report-emacs-bug-info] to visit in Info the Emacs Manual section
 about when and how to write a bug report,
 and what information to supply so that the bug can be fixed.
 
@@ -171,38 +174,38 @@ apply."))))
       (goto-char (point-max))
       (skip-chars-backward " \t\n")
       (if (and (= (- (point) (point-min))
-		  (length nxhtml-report-bug-orig-text))
-	       (equal (buffer-substring (point-min) (point))
-		      nxhtml-report-bug-orig-text))
-	  (error "No text entered in bug report")))
+                  (length nxhtml-report-bug-orig-text))
+               (equal (buffer-substring (point-min) (point))
+                      nxhtml-report-bug-orig-text))
+          (error "No text entered in bug report")))
 
     ;; Check the buffer contents and reject non-English letters.
     (save-excursion
       (goto-char (point-min))
       (skip-chars-forward "\0-\177")
       (if (not (eobp))
-	  (if (or nxhtml-report-bug-no-confirmation
-		  (y-or-n-p "Convert non-ASCII letters to hexadecimal? "))
-	      (while (progn (skip-chars-forward "\0-\177")
-			    (not (eobp)))
-		(let ((ch (following-char)))
-		  (delete-char 1)
-		  (insert (format "=%02x" ch)))))))
+          (if (or nxhtml-report-bug-no-confirmation
+                  (y-or-n-p "Convert non-ASCII letters to hexadecimal? "))
+              (while (progn (skip-chars-forward "\0-\177")
+                            (not (eobp)))
+                (let ((ch (following-char)))
+                  (delete-char 1)
+                  (insert (format "=%02x" ch)))))))
 
     ;; The last warning for novice users.
     (if (or nxhtml-report-bug-no-confirmation
-	    (yes-or-no-p
-	     "Send this bug report to the nXhtml maintainer? "))
-	;; Just send the current mail.
-	nil
+            (yes-or-no-p
+             "Send this bug report to the nXhtml maintainer? "))
+        ;; Just send the current mail.
+        nil
       (goto-char (point-min))
       (if (search-forward "To: ")
-	  (let ((pos (point)))
-	    (end-of-line)
-	    (delete-region pos (point))))
+          (let ((pos (point)))
+            (end-of-line)
+            (delete-region pos (point))))
       (kill-local-variable 'mail-send-hook)
       (with-output-to-temp-buffer "*Bug Help*"
-	(princ (substitute-command-keys "\
+        (princ (substitute-command-keys "\
 You invoked the command nxhtml-report-bug,
 but you decided not to mail the bug report to the nXhtml maintainer.
 

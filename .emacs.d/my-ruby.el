@@ -32,6 +32,7 @@
 (add-to-list 'auto-mode-alist '("\\.mab$" . ruby-mode))
 
 (add-to-list 'interpreter-mode-alist '("ruby" . ruby-mode))
+(add-to-list 'interpreter-mode-alist '("ruby1.9" . ruby-mode))
 
 (add-to-list 'completion-ignored-extensions ".rbc")
  

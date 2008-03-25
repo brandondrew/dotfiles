@@ -58,7 +58,7 @@
 (require 'html-site)
 (require 'url-parse)
 
-(defun html-move-make-new-url(old-url from-dir to-dir)
+(defun html-move-make-new-url (old-url from-dir to-dir)
   "Make new relative url.
 If OLD-URL is an absolute path then return it.  Otherwise OLD-URL
 is assumed to be relative FROM-DIR. Return a new url relative
@@ -76,12 +76,12 @@ TO-DIR that gives the same absolute path."
       new-url)))
 
 
-(defun html-move-in-dir-tree(file tree)
+(defun html-move-in-dir-tree (file tree)
   (let ((rel-path (file-relative-name file tree)))
     (or (string= "." rel-path)
         (not (string= ".." (substring rel-path 0 2))))))
 
-(defun html-move-buffer-file(to)
+(defun html-move-buffer-file (to)
   "Move current buffer file to another directory and/or name.
 Correct the affected relative links in the moved file and the
 links to the file moved in the directory tree
@@ -169,7 +169,7 @@ links to the file moved in the directory tree
       (lwarn '(html-move) :warning "Moved to %s" new-file)
       )))
 
-(defun html-move-fix-site-backlinks(to-moved-file to-dir from-dir)
+(defun html-move-fix-site-backlinks (to-moved-file to-dir from-dir)
   "Fix all links back to TO-MOVED-FILE.
 This is called by `html-move-buffer-file' to fix all links back
 to the moved file.  TO-MOVED-FILE is the old location of the
@@ -181,7 +181,7 @@ directory for the move."
     (lwarn '(html-move-fix-site-backlinks) :warning "Page list for site TOC changed. You need to update TOC.")
     ))
 
-(defun html-move-fix-all-backlinks(to-moved-file for-dir to-dir from-dir)
+(defun html-move-fix-all-backlinks (to-moved-file for-dir to-dir from-dir)
   ;;(message "for-dir=%s" for-dir);(sit-for 2)
   (let ((html-files (directory-files                for-dir t ".*\\.html?$"))
         (sub-dirs   (directory-files-and-attributes for-dir t)))
@@ -195,7 +195,7 @@ directory for the move."
                    (not (string= ".." sub-name)))
           (html-move-fix-all-backlinks to-moved-file sub-dir to-dir from-dir))))))
 
-(defun html-move-fix-backlinks(to-moved-file for-file to-dir from-dir)
+(defun html-move-fix-backlinks (to-moved-file for-file to-dir from-dir)
   (when (file-exists-p for-file)
     (let ((old-file-buffer (get-file-buffer for-file))
           (buffer (find-file-noselect for-file)))
@@ -219,7 +219,7 @@ directory for the move."
         (unless old-file-buffer
           (kill-this-buffer))))))
 
-(defun html-move-fix-page-list(to-moved-file to-dir from-dir)
+(defun html-move-fix-page-list (to-moved-file to-dir from-dir)
   (let ((for-file (html-site-current-page-list))
         some-change)
     (when (file-exists-p for-file)

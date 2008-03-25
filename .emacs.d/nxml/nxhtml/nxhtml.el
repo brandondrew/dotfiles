@@ -1,16 +1,25 @@
 ;;; nxhtml.el --- Edit XHTML files
 
-;; Copyright (C) 2005 by Lennart Borgman
+;; Copyright (C) 2005-2008 by Lennart Borgman
 ;; Parts are from Peter Heslin (see below)
 
 ;; Author:  Lennart Borgman <lennart DOT borgman DOT 073 AT student DOT lu DOT se>
 ;; Created: 2005-08-05
-(defconst nxhtml:version "1.03") ;;Version:
-;; Lxast-Updated: Wed Apr 11 02:42:30 2007 (7200 +0200)
+(defconst nxhtml:version "1.26") ;;Version:
+;; Last-Updated: 2008-03-22T01:21:55+0100 Sat
 ;; Keywords: languages
-;; Fxeatures that might be required by this library:
+;; Features that might be required by this library:
 ;;
-;;   None
+;;   `button', `cl', `compile', `flymake', `flymake-js',
+;;   `flymake-php', `hexcolor', `html-quote', `loadhist',
+;;   `mail-prsvr', `mm-util', `mumamo', `nxhtml-menu',
+;;   `nxhtml-mumamo', `nxml-enc', `nxml-glyph', `nxml-mode',
+;;   `nxml-ns', `nxml-outln', `nxml-parse', `nxml-rap', `nxml-util',
+;;   `ourcomments-util', `popcmp', `rng-dt', `rng-loc', `rng-match',
+;;   `rng-parse', `rng-pttrn', `rng-uri', `rng-util', `rng-valid',
+;;   `rngalt', `sgml-mode', `timer', `tool-bar', `typesetter',
+;;   `url-expand', `url-methods', `url-parse', `url-util',
+;;   `url-vars', `xhtml-help', `xmltok'.
 ;;
 
 
@@ -94,8 +103,10 @@
 (require 'popcmp)
 (require 'rngalt)
 (require 'nxhtml-menu)
+(require 'html-quote)
+(require 'nxhtml-mumamo)
 
-(defun nxhtml-version()
+(defun nxhtml-version ()
   "Show nxthml version."
   (interactive)
   (message "nXhtml mode version %s" nxhtml-menu:version))
@@ -108,53 +119,55 @@
   (let ((req-features
          '(
            (html-site    "Web sites you define"
-                         "html-site.el" "0.1")
+                         "html-site.el" "0.2")
            (html-chklnk  "Checking links in site"
                          "html-chklnk.el" "0.2")
            (html-move    "Moving files in web sites"
                          "html-move.el" "0.31")
            (html-pagetoc "Page TOC"
-                         "html-pagetoc.el" "0.84")
+                         "html-pagetoc.el" "0.85")
            (html-toc     "Web site TOC"
                          "html-toc.el" "0.4")
            (html-wtoc    "Merge pages and web Site TOC"
                          "html-wtoc.el" "0.2")
            (html-upl     "Upload web sites"
                          "html-upl.el" "0.2")
-;;            (html-inlined "Editing of inlined code"
-;;                          "html-inlined.el" "2.2")
-;;            (xhtml-multi  "Editing of embedded <?MODE...?>"
-;;                          "xhtml-multi.el" "0.50")
            (mumamo       "Multiple major modes in buffer"
-                         "mumamo.el" "0.5")
-;;            (xmlpe        "Editing of XHTML fragments"
-;;                          "xmlpe.el" "0.56")
+                         "mumamo.el" "0.73")
            (tidy-xhtml   "Run HTML tidy program"
-                         "tidy-xhtml.el")
+                         "tidy-xhtml.el" "2.24")
            (xhtml-help   "HTML+CSS help"
-                         "xhtml-help.el" "0.56")
+                         "xhtml-help.el" "0.57")
            (hexcolor     "Hex color help functions"
-                         "hexcolor.el" "0.5")
+                         "hexcolor.el" "0.51")
            (fold-dwim    "Folding on headers and tags"
-                         "fold-dwim.el")
+                         "fold-dwim.el" "1.3")
            (appmenu      "Popup menu"
-                         "appmenu.el" "0.51")
+                         "appmenu.el" "0.53")
            (appmenu-fold "Popup menu entries for folding"
                          "appmenu-fold.el" "0.51" appmenu fold-dwim)
            (nxml-where   "Shows XML path"
-                         "nxml-where.el" "0.1")
+                         "nxml-where.el" "0.52")
            (mlinks       "Live XHTML links"
-                         "mlinks.el" "0.25")
+                         "mlinks.el" "0.28")
+           (nxhtml-strval "Allow attr=\"<?php...?>\" etc"
+                         "nxhtml-strval.el" "0.3")
+           (as-external  "Emacs as an external editor"
+                         "as-external.el" "0.5")
+           (gimp         "Edit images with GIMP"
+                         "gimp.el" "0.2")
+           (html-imenu   "Table of content in menus"
+                         "html-imenu.el" "0.9")
+           (tabkey2      "Tab completion"
+                         "tabkey2.el" "1.12")
            )
          ))
     (dolist (extf req-features)
       (require (car extf) nil t))
-    (when (featurep 'html-inlined)
-      (html-inlined-add-key-to-modes))
     req-features))
 
 
-(defun nxhtml-make-library-link(beg end)
+(defun nxhtml-make-library-link (beg end)
   (let ((library (buffer-substring-no-properties beg end)))
     (make-text-button beg end
                       'action (lambda (button)
@@ -163,7 +176,7 @@
                       'lib-name library
                       'face 'button)))
 
-(defun nxhtml-feature-insert(ok msg)
+(defun nxhtml-feature-insert (ok msg)
   (put-text-property 0 (length msg)
                      'face (list
                             (cons 'foreground-color
@@ -172,7 +185,7 @@
                      msg)
   (insert msg))
 
-(defun nxhtml-feature-check(feat-entry silent)
+(defun nxhtml-feature-check (feat-entry silent)
   (let ((feature     (nth 0 feat-entry))
         (description (nth 1 feat-entry))
         (file        (nth 2 feat-entry))
@@ -198,9 +211,13 @@
           (unless silent
             (nxhtml-feature-insert
              ok
-             (concat (format "%31s -- " description)
+             (concat (format "%34s -- " description)
                      (if ok
-                         (format "supported by %s\n" file)
+                         (format "supported by %s%s\n"
+                                 file
+                                 (if (string= feat-ver need-ver)
+                                     (format " (%s)" feat-ver)
+                                   (format " (%s/%s)" feat-ver need-ver)))
                        (concat "found " file
                                " but needs"
                                (if feat-vok ""
@@ -211,14 +228,14 @@
                                "\n"))))
             (unless (string= file
                              (file-name-nondirectory (feature-file feature)))
-              (insert (make-string (+ 31 4) ?\ ) "** Bad file name: " file "\n"))))
+              (insert (make-string (+ 34 4) ?\ ) "** Bad file name: " file "\n"))))
       (unless silent
         (nxhtml-feature-insert
-         nil (format "%31s -- support missing, can't find %s\n"
+         nil (format "%34s -- support missing, can't find %s\n"
                      description file))))
     ok))
 
-(defun nxhtml-features-check()
+(defun nxhtml-features-check ()
   "Check if external modules used by `nxhtml-mode' are found.
 See this function for more information."
   (interactive)
@@ -242,7 +259,7 @@ See this function for more information."
     (goto-char (point-min)))
   (set-buffer-modified-p nil))
 
-(defun nxhtml-all-features-found()
+(defun nxhtml-all-features-found ()
   (let ((all t))
     (dolist (feat-entry nxhtml-req-features)
       ;;(unless (featurep (car extf))
@@ -304,17 +321,17 @@ See this function for more information."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
-(defun nxhtml-find-base-href()
+(defun nxhtml-find-base-href ()
   "Return base href found in the current file."
   (let ((base-href))
     (save-excursion
       (goto-char (point-min))
       (while (and (not base-href)
-		  (search-forward-regexp "<!--[^!]*-->\\|<base[[:space:]]" nil t))
-	(when (equal " " (char-to-string (char-before)))
-	  (backward-char 6)
-	  (when (looking-at "<base [^>]*href *= *\"\\(.*?\\)\"")
-	    (setq base-href (match-string-no-properties 1))))))
+                  (search-forward-regexp "<!--[^!]*-->\\|<base[[:space:]]" nil t))
+        (when (equal " " (char-to-string (char-before)))
+          (backward-char 6)
+          (when (looking-at "<base [^>]*href *= *\"\\(.*?\\)\"")
+            (setq base-href (match-string-no-properties 1))))))
     base-href))
 
 
@@ -324,7 +341,7 @@ See this function for more information."
   "Saved anchor name for use in `nxhtml-paste-link'.")
 
 ;; Fix-me: same line???
-(defun nxhtml-save-link-to-here()
+(defun nxhtml-save-link-to-here ()
   "Save buffer file name+anchor for `nxhtml-paste-link'."
   (interactive)
   (if (not buffer-file-name)
@@ -344,7 +361,7 @@ See this function for more information."
                  (concat "#" nxhtml-saved-link-anchor)
                ""))))
 
-(defun nxhtml-paste-link-as-a-tag()
+(defun nxhtml-paste-link-as-a-tag ()
   "Paste link saved by `nxhtml-save-link-to-here' as an <a> tag.
 Takes into account the relative position of the saved link."
   (interactive)
@@ -353,7 +370,7 @@ Takes into account the relative position of the saved link."
       (let ((link-text (read-string "Link text: ")))
         (insert "<a href=\"" paste-text "\">" link-text "</a>")))))
 
-(defun nxhtml-paste-link()
+(defun nxhtml-paste-link ()
   "Paste link saved by `nxhtml-save-link-to-here'.
 Takes into account the relative position of the saved link."
   (interactive)
@@ -361,23 +378,28 @@ Takes into account the relative position of the saved link."
     (when paste-text
       (insert paste-text))))
 
-(defun nxhtml-get-saved-link()
+(defun nxhtml-get-saved-link ()
   (if nxhtml-saved-link-file
       (let* (
-	     (base-href (nxhtml-find-base-href))
-	     (rel (file-relative-name nxhtml-saved-link-file
-				      (if base-href
-					  base-href
-					(file-name-directory (buffer-file-name)))))
-	     (to-file (file-name-nondirectory (buffer-file-name)))
-	     (anchor nxhtml-saved-link-anchor)
-	     )
-	(when (equal to-file rel) (setq rel ""))
-	(when anchor (setq rel (concat rel "#" anchor)))
-	rel)
+             (base-href (nxhtml-find-base-href))
+             (rel (file-relative-name nxhtml-saved-link-file
+                                      (if base-href
+                                          base-href
+                                        (file-name-directory (buffer-file-name)))))
+             (to-file (file-name-nondirectory (buffer-file-name)))
+             (anchor nxhtml-saved-link-anchor)
+             )
+        (when (equal to-file rel) (setq rel ""))
+        (when anchor (setq rel (concat rel "#" anchor)))
+        rel)
     (message "There is no saved link")
     nil))
 
+
+(defcustom nxhtml-use-imenu t
+  "Use imenu in nxhtml-mode."
+  :type 'boolean
+  :group 'nxhtml)
 
 
 
@@ -386,17 +408,18 @@ Takes into account the relative position of the saved link."
   :type 'coding-system
   :group 'nxhtml)
 
-(defun nxhtml-insert-empty-frames-page()
+(defun nxhtml-insert-empty-frames-page ()
   "Insert an empty frames page."
   (interactive)
-  (unless (= 0 (buffer-size))
+  ;;(unless (= 0 (buffer-size))
+  (unless (nxhtml-can-insert-page-here)
     (error "Buffer is not empty"))
   (insert
    "<?xml version=\"1.0\" encoding=\""
    (symbol-name nxhtml-default-encoding)
    "\"?>
-<!DOCTYPE HTML PUBLIC \"-//W3C//DTD XHTML 1.0 Frameset//EN\"
-\"http://www.w3.org/xhtml1/DTD/xhtml1-frameset.dtd\">
+<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Frameset//EN\"
+          \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd\">
 <html xmlns=\"http://www.w3.org/1999/xhtml\">
   <head>
     <title></title>
@@ -408,10 +431,11 @@ Takes into account the relative position of the saved link."
 </html>")
   (search-backward "</title>"))
 
-(defun nxhtml-insert-empty-page()
+(defun nxhtml-insert-empty-page ()
   "Insert an empty XHTML page."
   (interactive)
-  (unless (= 0 (buffer-size))
+  ;;(unless (= 0 (buffer-size))
+  (unless (nxhtml-can-insert-page-here)
     (error "Buffer is not empty"))
   (insert
    "<?xml version=\"1.0\" encoding=\""
@@ -428,17 +452,24 @@ Takes into account the relative position of the saved link."
 </html>")
   (search-backward "</title>"))
 
-(defun nxhtml-empty-page-completion()
-  (unless (= 0 (buffer-size)) (error "Buffer is not empty"))
+(defun nxhtml-empty-page-completion ()
+  ;;(unless (= 0 (buffer-size)) (error "Buffer is not empty"))
   (let* ((frames "Frameset page")
          (normal "Normal page")
-         (hist (list normal frames))
+         (vlhead "Validation header")
+         ;;popcmp-popup-completion
+         (initial (unless popcmp-popup-completion normal))
+         (hist (if mumamo-multi-major-mode
+                   (list vlhead frames normal)
+                 (list frames normal)))
          res)
-    (setq res (completing-read "Insert empty page: " hist nil t normal (cons 'hist 1)))
+    (setq res (popcmp-completing-read "Insert: " hist nil t initial (cons 'hist (length hist))))
     (cond ((string= res frames)
            (nxhtml-insert-empty-frames-page))
           ((string= res normal)
            (nxhtml-insert-empty-page))
+          ((string= res vlhead)
+           (nxhtml-validation-header-mode))
           (t
            (error "Bad res=%s" res))))
   (rng-auto-set-schema))
@@ -448,23 +479,36 @@ Takes into account the relative position of the saved link."
 (defvar nxhtml-mode-hook nil)
 ;;(add-hook 'nxhtml-mode-hook 'nxml-fontify-buffer)
 
-(defun nxhtml-help()
+(defun nxhtml-help ()
   (interactive)
   (describe-function 'nxhtml-mode))
 
 
-(defun nxhtml-view-file()
+(defun nxhtml-browse-file (file)
   "View file in web browser."
+  (interactive (list
+                (or (html-site-buffer-or-dired-file-name)
+                    (read-file-name "File: "))))
+  (let* ((buf (if (buffer-file-name)
+                  (current-buffer)
+                (find-buffer-visiting file)))
+         (use-temp (and (buffer-file-name)
+                        (or nxhtml-current-validation-header
+                            (buffer-modified-p)
+                            (not buffer-file-name)
+                            (not (file-exists-p buffer-file-name))))))
+    (if use-temp
+        (browse-url (nxhtml-save-browseable-temp-file nil nil use-temp))
+      (browse-url-of-file file))))
+
+(defun nxhtml-browse-region ()
+  "View region in web browser."
   (interactive)
-  (if (eq major-mode 'nxhtml-part-mode)
-      (nxhtml-part-view)
-    (browse-url-of-file)))
+  (unless mark-active
+    (error "The region is not active"))
+  (browse-url (nxhtml-save-browseable-temp-file (region-beginning) (region-end))))
 
-(defun nxhtml-buffer-file-possibly-viewable()
-  (and buffer-file-name
-       (eq major-mode 'nxhtml-mode)))
-
-(defun nxhtml-customize()
+(defun nxhtml-customize ()
   "Customize nXhtml."
   (interactive)
   (customize-group 'nxhtml))
@@ -474,95 +518,77 @@ Takes into account the relative position of the saved link."
   (tidy-build-menu))
 
 
-(defvar nxhtml-mode-map
-  (let ((map (make-sparse-keymap)))
-    (define-key map [(control ?c) (control ?h) ?c]    'nxhtml-save-link-to-here)
-    (define-key map [(control ?c) (control ?h) ?v]    'nxhtml-paste-link-as-a-tag)
-    (define-key map [(control ?c) (control ?h) ?b ?f] 'nxhtml-view-file)
-    (define-key map [(control ?c) (control ?h) ?b ?b] 'browse-url-of-buffer)
-    (define-key map [(control ?c) tab]         'nxhtml-next-href)
-    (define-key map [(control ?c) (shift tab)] 'nxhtml-prev-href)
-    ;;(define-key map [C-return] 'nxhtml-complete-and-insert)
-    ;;(define-key map [M-return] 'nxhtml-complete-and-insert)
-    ;;(define-key map [(meta tab)] 'nxhtml-complete-and-insert)
-    (define-key map [(meta tab)] 'nxml-complete)
-;;    (when (featurep 'xhtmlin)
-;;       (define-key map [(control ?c) (control ?h) ?i ?j] 'nxhtml-insert-javascript)
-;;       (define-key map [(control ?c) (control ?h) ?i ?i] 'nxhtml-insert-img)
-;;       (define-key map [(control ?c) (control ?h) ?i ?c] 'nxhtml-insert-css)
-;;       (define-key map [(control ?c) (control ?h) ?i ?a] 'nxhtml-insert-a)
-;;      )
-    (when (featurep 'html-pagetoc)
-      (define-key map [(control ?c) (control ?h) ?i ?t ?t] 'html-pagetoc-insert-toc)
-      (define-key map [(control ?c) (control ?h) ?i ?t ?r] 'html-pagetoc-rebuild-toc)
-      (define-key map [(control ?c) (control ?h) ?i ?t ?s] 'html-pagetoc-insert-style-guide)
-      )
-    (when (featurep 'xhtml-help)
-      (define-key map [(control ?c) (f1) ?x] 'nxhtml-short-tag-help)
-      (define-key map [(control ?c) (f1) ?c] 'xhtml-help-show-css-ref)
-      )
-;;     (define-key map [menu-bar nxhtml-mode]
-;;       (list 'menu-item "nXhtml" nxhtml-mode-menu-map))
-    map))
-
 ;; (eval-after-load 'css-mode
 ;;   '(when (featurep 'xhtml-help)
-;;     (define-key css-mode-map [(control ?c) (f1) ?c] 'xhtml-help-show-css-ref)
+;;     (define-key css-mode-map [(control ?c) ?? ?c] 'xhtml-help-show-css-ref)
 ;;     ))
-(add-hook 'css-mode-hook
-          (lambda ()
-            (and (featurep 'xhtml-help)
-                 (boundp 'css-mode-map)
-                 (define-key css-mode-map [(control ?c) (f1) ?c]
-                   'xhtml-help-show-css-ref))))
+;; (add-hook 'css-mode-hook
+;;           (lambda ()
+;;             (and (featurep 'xhtml-help)
+;;                  (boundp 'css-mode-map)
+;;                  (define-key css-mode-map [(control ?c) ?? ?c]
+;;                    'xhtml-help-show-css-ref))))
 
 ;; This should be run in `change-major-mode-hook'."
-(defun nxhtml-change-mode()
+(defun nxhtml-change-mode ()
   (when (featurep 'mlinks)
     (mlinks-mode 0)))
 
 ;; This should be run in `change-major-mode-hook'."
 ;; Should be part of nxml.el IMO
-(defun nxml-change-mode()
+(defun nxml-change-mode ()
   ;; Remove overlays used by nxml-mode.
   (save-excursion
-    (unless (and (= (point-min) 1)
-                 (= (point-max) (1+ (buffer-size))))
-      (widen))
-;;     (let ((overlays (overlays-in (point-min) (point-max))))
-;;       (mapc (lambda(ovl)
-;;               (let ((cat (overlay-get ovl 'category)))
-;;                 (when (memq cat '(nxml-dependent rng-dependent rng-error))
-;;                   (delete-overlay ovl)
-;;                   )))
-;;             overlays))
-    (rng-validate-mode 0)
-    (let ((inhibit-read-only t)
-          (buffer-undo-list t)
-          (modified (buffer-modified-p)))
-      (nxml-with-invisible-motion
-        (remove-text-properties (point-min) (point-max) '(face nil)))
-      (set-buffer-modified-p modified))))
+    (save-restriction
+      (widen)
+      (rng-validate-mode 0)
+      (let ((inhibit-read-only t)
+            (buffer-undo-list t)
+            (modified (buffer-modified-p)))
+        (nxml-with-invisible-motion
+          (remove-text-properties (point-min) (point-max) '(face nil)))
+        (set-buffer-modified-p modified)))))
 
+(defcustom nxhtml-heading-element-name-regexp "[a-z]*"
+  "Used for `nxml-heading-element-name-regexp."
+  :type 'regexp
+  :group 'nxhtml)
+
+(put 'nxhtml-mode 'flyspell-mode-predicate 'sgml-mode-flyspell-verify)
 (define-derived-mode nxhtml-mode nxml-mode "nXhtml"
   "Major mode for editing XHTML documents.
 It is based on `nxml-mode' and adds some features that are useful
-when editing XHTML files. \\<nxhtml-mode-map>
+when editing XHTML files.\\<nxhtml-mode-map>
 
-To see an overview do \\[nxhtml-overview].
+To see an overview in html format do \\[nxhtml-overview].
 
-Some of the features supported by this mode are optional and
-available only if other Emacs modules are found.  Use
-\\[nxhtml-features-check] to get a list of these optional
-features and modules needed.
+* Note: Please observe that when loading nXhtml some file
+  associations are done, see `nxhtml-auto-mode-alist'.
 
-The most important feature is probably completion, which is
-inherited from `nxml-mode' with some small addtions.  In very
-many situation you can use completion. To access it type
-\\[nxml-complete]. Completion has been enhanced in the following way:
+The nXhtml menu is added by this mode \(or actually the minor
+mode `nxhtml-minor-mode') and gives quick access and an overview
+of some other important features. These includes:
+
+- multiple major modes, see `define-mumamo-multi-major-mode'
+- easy uploading and viewing of files, see for example
+  `html-upl-upload-file'
+- validation in XHTML part for php etc, see
+  `nxhtml-validation-header-mode' (you probably also want to know about
+  `nxhtml-toggle-visible-warnings' for this!)
+- converting of html to xhtml, see `tidy-buffer'
+
+The XML menu contains functionality added by `nxml-mode' \(on
+which this major mode is based).  There is also a popup menu
+added to the \[apps] key.
+
+The most important features are probably completion and
+validation, which is inherited from `nxml-mode' with some small
+addtions.  In very many situation you can use completion. To
+access it type \\[nxml-complete]. Completion has been enhanced in
+the following way:
 
 - If region is active and visible then completion will surround the
-  region with the choosen tag's start and end tag.  However only the
+  region with the chosen tag's start and end tag.  However only the
   starting point is checked for validity. If something is wrong after
   insertion you will however immediately see it if you have validation
   on.
@@ -573,44 +599,132 @@ many situation you can use completion. To access it type
   * You can get a short help text shown for each alternative.
 - There does not have to be a '<' before point for tag name
   completion. (`nxml-mode' requires a '<' before point for tag name
-  completion.) CURRENTLY OUT OF FUNCTION.
+  completion.)
 - Completes xml version and encoding.
-- Completes an empty file, ie inserts a skeleton.
+- Completes in an empty buffer, ie inserts a skeleton.
 
-Another feature you may find useful is the handling of links.
-The href and src attribute names are underlined and a special
-keymap is bound to them:
+Some smaller, useful, but easy-to-miss features:
 
-  Tab, S-Tab        Move between underlined href/src attributes
-  C-c RET, Mouse-1  Follow link inside Emacs (if possible)
+* Following links. The href and src attribute names are
+  underlined and a special keymap is bound to
+  them:\\<mlinks-mode-map>
 
-If the link is not into a file you can edit (a mailto link for
-example) you will be prompted for an alternative action.
+    \\[mlinks-backward-link], \\[mlinks-forward-link] Move
+        between underlined href/src attributes
 
-If you are on an id or on a name attribute C-c c will copy the id
-or name and remember the file name.  C-c v will paste this as an
-a-tag.
+    \\[mlinks-goto], Mouse-1 Follow link inside Emacs
+        (if possible)
 
-The XHTML menu is added by this mode and gives quick access and
-an overview of some important features.  There is also a popup
-menu added to the \[apps] key.
+  It is even a little bit quicker when the links are in an active
+  state (marked with the face `isearch'):\\<mlinks-active-hilight-keymap>
 
-See also the XML menu which is added by `nxml-mode'.
+    \\[mlinks-backward-link], \\[mlinks-forward-link] Move
+        between underlined href/src attributes
+    \\[mlinks-goto], Mouse-1  Follow link inside Emacs (if possible)
 
-Note that Tidy has its own menu."
+  If the link is not into a file that you can edit (a mailto link
+  for example) you will be prompted for an alternative action.
+
+* Creating links. To make it easier to create links to id/name
+  attribute in different files there are two special
+  functions:\\<nxhtml-mode-map>
+
+    \\[nxhtml-save-link-to-here] copy link to id/name (you must
+        be in the tag to get the link)
+    \\[nxhtml-paste-link-as-a-tag] paste this as an a-tag.
+
+Here are all key bindings in nxhtml-mode itself:
+
+\\{nxhtml-mode-map}
+
+The minor mode `nxhtml-minor-mode' adds some bindings:
+
+\\{nxhtml-minor-mode-map}
+
+Notice that other minor mode key bindings may also be active, as
+well as emulation modes. Do \\[describe-bindings] to get a list
+of all active key bindings. Also, *VERY IMPORTANT*, if mumamo is
+used in the buffer each mumamo chunk has a different major mode
+with different key bindings. You can however still see all
+bindings with \\[describe-bindings], but you have to do that with
+point in the mumamo chunk you want to know the key bindings in.
+
+---------
+* Note: Some of the features supported by this mode are optional
+  and available only if other Emacs modules are found.  Use
+  \\[nxhtml-features-check] to get a list of these optional
+  features and modules needed. You should however have no problem
+  with this if you have followed the installation instructions
+  for nXhtml."
+  (set (make-local-variable 'nxml-heading-element-name-regexp)
+       nxhtml-heading-element-name-regexp)
   (add-hook 'change-major-mode-hook 'nxml-change-mode nil t)
   (add-hook 'change-major-mode-hook 'nxhtml-change-mode nil t)
   (when (featurep 'rngalt)
     (add-hook 'nxml-completion-hook 'rngalt-complete nil t))
-  ;; Fails. why? Maybe because of the autoload? Use a timer instead:
-  ;;(run-with-idle-timer 1 nil 'nxhtml-add-appmenu)
   ;;(define-key nxhtml-mode-map [(meta tab)] 'nxml-complete)
   (nxhtml-minor-mode 1)
+  (when (and nxhtml-use-imenu
+             (featurep 'html-imenu))
+    (html-imenu-setup))
   (when (featurep 'mlinks)
     (mlinks-mode 1))
   (when (featurep 'fold-dwim)
-    (nxhtml-setup-for-fold-dwim)))
+    (nxhtml-setup-for-fold-dwim))
+  (when (featurep 'rngalt)
+    (set (make-local-variable 'rngalt-completing-read-tag) 'nxhtml-completing-read-tag)
+    (set (make-local-variable 'rngalt-completing-read-attribute-name) 'nxhtml-completing-read-attribute-name)
+    (set (make-local-variable 'rngalt-completing-read-attribute-value) 'nxhtml-completing-read-attribute-value)
+    (set (make-local-variable 'rngalt-complete-first-try) 'nxhtml-complete-first-try)
+    (set (make-local-variable 'rngalt-complete-last-try) 'nxhtml-complete-last-try)
+    ))
 
+;; Fix-me: The nxhtml-mode-map is define by define-derived-mode, but
+;; how should keys be added?
+
+;; Replace the Insert End Tag function:
+(define-key nxhtml-mode-map [(control ?c) (control ?f)] 'rngalt-finish-element)
+
+;; Put completion on the normal key?
+(define-key nxhtml-mode-map [(meta tab)] 'nxml-complete)
+;; Paragraphs (C-p mnemonic for paragraph)
+(define-key nxhtml-mode-map [(control ?c) (control ?p) ?l] 'longlines-mode)
+(define-key nxhtml-mode-map [(control ?c) (control ?p) ?f] 'fill-paragraph)
+(define-key nxhtml-mode-map [(control ?c) (control ?p) ?u] 'unfill-paragraph)
+;; Html related (C-h mnemonic for html)
+(define-key nxhtml-mode-map [(control ?c) (control ?h) ?c] 'nxhtml-save-link-to-here)
+(define-key nxhtml-mode-map [(control ?c) (control ?h) ?v] 'nxhtml-paste-link-as-a-tag)
+(define-key nxhtml-mode-map [(control ?c) (control ?h) ?b] 'nxhtml-browse-file)
+(define-key nxhtml-mode-map [(control ?c) ?<] 'nxml-untag-element)
+(when (featurep 'html-quote)
+  (define-key nxhtml-mode-map [(control ?c) (control ?q)] 'nxhtml-quote-html)
+  )
+;; Fix-me: Is pagetoc really that important to have its own keybindings?
+(when (featurep 'html-pagetoc)
+  (define-key nxhtml-mode-map [(control ?c) (control ?h) ?t ?i] 'html-pagetoc-insert-toc)
+  (define-key nxhtml-mode-map [(control ?c) (control ?h) ?t ?r] 'html-pagetoc-rebuild-toc)
+  (define-key nxhtml-mode-map [(control ?c) (control ?h) ?t ?s] 'html-pagetoc-insert-style-guide)
+  )
+
+(defun nxhtml-quote-html()
+  "Quote character(s) unsafe in html text parts.
+If region is visible quote all characters in region. Otherwise
+just quote current char.
+
+Note to CUA users: See `cua-mode' for how to prevent CUA from
+just copying region when you press C-c."
+  (interactive)
+  (if (and mark-active
+           transient-mark-mode)
+      (let* ((rb (region-beginning))
+             (re (region-end))
+             (qr (html-quote-html-string
+                  (buffer-substring-no-properties rb re))))
+        (delete-region rb re)
+        (insert qr))
+    (let ((cs (html-quote-html-char (char-after))))
+      (delete-char 1)
+      (insert cs))))
 
 (defvar nxhtml-single-tags
   '("base"
@@ -624,7 +738,7 @@ Note that Tidy has its own menu."
     "option"
     "param"))
 
-(defun nxthml-is-single-tag(tag)
+(defun nxthml-is-single-tag (tag)
   (member tag nxhtml-single-tags))
 
 (defvar nxhtml-help-attribute-name
@@ -814,7 +928,7 @@ Note that Tidy has its own menu."
 
 (defvar nxhtml-predicate-error nil)
 
-(defun nxhtml-find-ids(file)
+(defun nxhtml-find-ids (file)
   (let ((buf (find-file-noselect file)))
     (when buf
       (with-current-buffer buf
@@ -838,7 +952,7 @@ Note that Tidy has its own menu."
                 (add-to-list 'ids (match-string-no-properties 1)))
               ids)))))))
 
-(defun nxhtml-read-url(&optional allowed-types initial-contents extra-predicate prompt-prefix)
+(defun nxhtml-read-url (&optional allowed-types initial-contents extra-predicate prompt-prefix)
   (popcmp-mark-completing initial-contents)
   (let ((local-ovl popcmp-mark-completing-ovl))
     (setq popcmp-mark-completing-ovl nil)
@@ -855,7 +969,9 @@ Note that Tidy has its own menu."
                                   ((eq url-type 'any-url)
                                    "Any URL-type: ")
                                   (t
-                                   (error "Internal error: bad url-type=%s" url-type))))
+                                   ;;(error "Internal error: bad url-type=%s" url-type)
+                                   "Unknown URL-type: ")
+                                  ))
                prompt
                type-predicate
                url
@@ -912,25 +1028,43 @@ Note that Tidy has its own menu."
       (delete-overlay local-ovl)
       )))
 
-(defun nxhtml-read-url-type(allowed url-beginning)
-  (let ((prompt "URL-type: ")
-        (beg-type (elt (url-generic-parse-url url-beginning) 0))
-        choices
-        choice)
+(defun nxhtml-read-url-type (allowed url-beginning)
+  (let* ((prompt "URL-type: ")
+         (parsed-url (url-generic-parse-url url-beginning))
+         (beg-type (url-type parsed-url))
+         (allowed-u allowed)
+         choices
+         choice)
+    ;; (url-type (url-generic-parse-url "#some-id"))
+    ;;(lwarn t :warning "url-type=%s, pu=%s" (url-type parsed-url) parsed-url)
+    ;; Emacs 23 bug workaround Sat Jan 26 2008
+    ;;(when (eq beg-type 'cl-struct-url) (setq beg-type (elt parsed-url 1)))
     (cond ((string= "mailto" beg-type)
-           (setq allowed '(?m)))
+           (setq allowed-u '(?m)))
           ((or (string= "http"  beg-type)
                (string= "https" beg-type)
                (string= "ftp"   beg-type))
-           (setq allowed '(?w)))
+           (setq allowed-u '(?w)))
           ((= 1 (length beg-type)) ;; w32
-           (setq allowed '(?f)))
+           (setq allowed-u '(?f)))
+          ((and (null beg-type)
+                url-beginning
+                (= ?# (string-to-char url-beginning)))
+           (setq allowed-u '(?i)))
           )
-    (if allowed
-        (when (eq allowed t)
-          (setq allowed '(?f ?i ?w ?m)))
-      (setq allowed '(?f ?w)))
-    (dolist (a allowed)
+    ;; Be a bit picky and hopefully helpful, check if really allowed:
+    (unless (or (eq allowed t)
+                (equal allowed allowed-u))
+      (let ((temp-u (copy-sequence allowed-u)))
+        (dolist (a allowed)
+          (setq temp-u (delq a temp-u)))
+        (dolist (u temp-u)
+          (setq allowed-u (delq u allowed-u)))))
+    (if allowed-u
+        (when (eq allowed-u t)
+          (setq allowed-u '(?f ?i ?w ?m)))
+      (setq allowed-u '(?f ?w)))
+    (dolist (a allowed-u)
       (cond
        ((= a ?f)
         (setq choices (cons "File" choices)))
@@ -968,7 +1102,7 @@ Note that Tidy has its own menu."
    t
    t))
 
-(defun nxhtml-mailto-predicate(url)
+(defun nxhtml-mailto-predicate (url)
   "Tries to match a mailto url.
 This is not supposed to be entirely correct."
   (setq nxhtml-predicate-error nil)
@@ -991,7 +1125,7 @@ This is not supposed to be entirely correct."
   :type 'regexp
   :group 'nxhtml)
 
-(defun nxhtml-image-url-predicate(url)
+(defun nxhtml-image-url-predicate (url)
   (setq nxhtml-predicate-error nil)
   (if (or (file-directory-p url)
           (string-match nxhtml-image-completion-pattern url))
@@ -1006,7 +1140,7 @@ This is not supposed to be entirely correct."
   :type 'regexp
   :group 'nxhtml)
 
-(defun nxhtml-script-url-predicate(url)
+(defun nxhtml-script-url-predicate (url)
   (setq nxhtml-predicate-error nil)
   (if (or (file-directory-p url)
           (string-match nxhtml-script-completion-pattern url))
@@ -1015,14 +1149,14 @@ This is not supposed to be entirely correct."
     nil
     ))
 
-(defun nxhtml-coding-systems-complete(init default)
+(defun nxhtml-coding-systems-complete (init default)
   (let (coding-systems
         hist-num
         (n 0)
         hist)
     (unless (and init (< 0 (length init)))
       (setq init default))
-    (mapc (lambda(coding-system)
+    (mapc (lambda (coding-system)
             (let ((mime-charset (coding-system-get coding-system 'mime-charset)))
               (when mime-charset
                 (setq coding-systems (cons
@@ -1030,7 +1164,7 @@ This is not supposed to be entirely correct."
                                       coding-systems)))))
           (coding-system-list t))
     (setq coding-systems (sort coding-systems 'string=))
-    (mapc (lambda(coding-system)
+    (mapc (lambda (coding-system)
             (unless (< 0 (length coding-system))
               (error "len=0"))
             (setq n (1+ n))
@@ -1046,12 +1180,12 @@ This is not supposed to be entirely correct."
 ;; Note: This function does not currently use the state provided by
 ;; the nxml and rng functions directly.  Instead it searches the
 ;; environment near point to decide what to do.
-;; (defun nxhtml-complete-and-insert()
+;; (defun nxhtml-complete-and-insert ()
 ;;   "Perform XHTML completion at point.
 ;; This is merely an extended version of `nxml-complete' with the following changes:
 
 ;; - If region is visible and active then completion will surround the
-;;   region with the choosen tag's start and end tag.  However only the
+;;   region with the chosen tag's start and end tag.  However only the
 ;;   starting point is checked for validity. If something is wrong after
 ;;   insertion you will however immediately see it if you have validation
 ;;   on.
@@ -1116,8 +1250,8 @@ This is not supposed to be entirely correct."
    t
    t))
 
-(defun nxhtml-check-where()
-  "Get a state for `nxhtml-complete-and-insert'."
+(defun nxhtml-check-where ()
+  "Get a state for `nxhtml-complete-last-try'."
   (let ((p (point))
         (lt-pos (save-excursion (search-backward "<" nil t)))
         res)
@@ -1400,8 +1534,9 @@ This is not supposed to be entirely correct."
             (insert val)
             t)
           )))
-       ((or (eq where 'in-text)
-            (eq where 'after-validation-header))
+       ((or (memq where '(in-text
+                          after-validation-header
+                          in-empty-page)))
         (rngalt-complete-tag-region-prepare)
         (insert "<")
         (condition-case err
@@ -1417,7 +1552,7 @@ This is not supposed to be entirely correct."
         nil)
        ))))
 
-(defun nxhtml-img-tag-do-also()
+(defun nxhtml-img-tag-do-also ()
   (insert "alt=\"")
   (rngalt-validate)
   (insert (read-string "Alt attribute: ")
@@ -1428,7 +1563,7 @@ This is not supposed to be entirely correct."
     (insert src)
     (insert "\"")
     (when (file-exists-p src)
-           (let ((sizes (image-size (create-image src) t)))
+           (let ((sizes (image-size (create-image (expand-file-name src)) t)))
              (insert
               " width=\""  (format "%d" (car sizes)) "\""
               " height=\"" (format "%d" (cdr sizes)) "\"")
@@ -1436,7 +1571,7 @@ This is not supposed to be entirely correct."
   (unless (save-match-data (looking-at "[^<]\\{,200\\}>"))
     (insert " />")))
 
-(defun nxhtml-redisplay-complete()
+(defun nxhtml-redisplay-complete ()
   (rngalt-validate)
   (rng-cancel-timers)
   (message "")
@@ -1444,7 +1579,7 @@ This is not supposed to be entirely correct."
   (nxml-complete)
   (rng-activate-timers))
 
-(defun nxhtml-read-from-minibuffer(prompt &optional
+(defun nxhtml-read-from-minibuffer (prompt &optional
                                           initial-contents keymap
                                           read hist default-value
                                           inherit-input-method)
@@ -1455,7 +1590,7 @@ This is not supposed to be entirely correct."
     (rng-activate-timers)
     res))
 
-(defun nxhtml-meta-tag-do-also()
+(defun nxhtml-meta-tag-do-also ()
   (let ((type (popcmp-completing-read
                "Type: "
                '(
@@ -1482,7 +1617,7 @@ This is not supposed to be entirely correct."
       (insert (nxhtml-read-from-minibuffer "Content: "))
       (insert "\" />")))))
 
-(defun nxhtml-style-tag-do-also()
+(defun nxhtml-style-tag-do-also ()
   (insert "type=\"text/css\"")
   (insert " media=\"")
   (nxhtml-redisplay-complete)
@@ -1499,7 +1634,7 @@ This is not supposed to be entirely correct."
   (insert "\n")
   (end-of-line -2))
 
-(defun nxhtml-script-tag-do-also()
+(defun nxhtml-script-tag-do-also ()
   (let ((type (popcmp-completing-read
                "Type: "
                '("Inlined"
@@ -1523,7 +1658,7 @@ This is not supposed to be entirely correct."
       (nxhtml-redisplay-complete)
       (insert "></script>")))))
 
-(defun nxhtml-link-tag-do-also()
+(defun nxhtml-link-tag-do-also ()
   (let ((type (popcmp-completing-read "Type: "
                           '(
                             "Other"
@@ -1549,7 +1684,7 @@ This is not supposed to be entirely correct."
       (nxhtml-redisplay-complete)
       ))))
 
-(defun nxhtml-input-tag-do-also()
+(defun nxhtml-input-tag-do-also ()
   (insert " ")
   (rngalt-validate)
   ;; type=
@@ -1640,13 +1775,13 @@ This is not supposed to be entirely correct."
     ;;(message "type=%s" choice)(sit-for 2)
   ))
 
-(defun nxhtml-do-also-value(label)
+(defun nxhtml-do-also-value (label)
   (let ((v (read-string (concat label " (value): "))))
     (when (and v
                (< 0 (length v)))
       (insert " value=\"" v "\" "))))
 
-(defun nxhtml-form-tag-do-also()
+(defun nxhtml-form-tag-do-also ()
   (insert "action=\"")
   (rngalt-validate)
   (let ((src (nxhtml-read-url nil nil nil "Action")))
@@ -1655,7 +1790,7 @@ This is not supposed to be entirely correct."
 
 (defconst nxhtml-complete-tag-do-also
   '(("a"
-     (lambda()
+     (lambda ()
        (insert " href=\"")
        (rngalt-validate)
        (insert (nxhtml-read-url t))
@@ -1681,18 +1816,18 @@ The list is handled as an association list, ie only the first
 occurence of a tag name is used.")
 
 
-(defun nxhtml-complete-tag-do-also(tag)
+(defun nxhtml-complete-tag-do-also (tag)
   ;; First required attributes:
   (let ((tagrec (assoc tag nxhtml-complete-tag-do-also)))
     (when tagrec
       (funcall (cadr tagrec))))
   )
 
-(defun nxhtml-check-tag-do-also()
+(defun nxhtml-check-tag-do-also ()
   (when nxhtml-tag-do-also
     (nxhtml-turn-onoff-tag-do-also t)))
 
-(defun nxhtml-turn-onoff-tag-do-also(on)
+(defun nxhtml-turn-onoff-tag-do-also (on)
   (add-hook 'nxhtml-mode-hook 'nxhtml-check-tag-do-also)
   (dolist (b (buffer-list))
     (when (with-current-buffer b
@@ -1718,10 +1853,19 @@ You can add additional elisp code for completing to
          (set-default symbol value))
   :group 'nxhtml)
 
-
+(defun nxhtml-can-insert-page-here ()
+   (and (not nxhtml-validation-header-mode)
+        (= 1 (point))
+       (or (= 0 (buffer-size))
+           (save-restriction
+             (widen)
+             (save-match-data
+               (looking-at (rx buffer-start
+                               (0+ space)
+                               buffer-end)))))))
 
 (defun nxhtml-complete-first-try ()
-  (when (= 0 (buffer-size))
+  (when (nxhtml-can-insert-page-here)
     (nxhtml-empty-page-completion)))
 
 (defun nxhtml-completing-read-tag (prompt
@@ -1735,7 +1879,7 @@ You can add additional elisp code for completing to
                           nxhtml-help-tag
                           nxhtml-tag-sets))
 
-(defun nxhtml-add-required-to-attr-set(tag)
+(defun nxhtml-add-required-to-attr-set (tag)
   (let ((missing (when tag
                    (rngalt-get-missing-required-attr
                     (nxthml-is-single-tag tag)))))
@@ -1744,7 +1888,7 @@ You can add additional elisp code for completing to
       (cons (cons "Required" missing)
             nxhtml-attr-sets))))
 
-(defun nxhtml-get-tag-specific-attr-help(tag)
+(defun nxhtml-get-tag-specific-attr-help (tag)
   (append (cdr (assoc tag nxhtml-help-attribute-name-tag)) nxhtml-help-attribute-name)
   )
 
@@ -1875,7 +2019,7 @@ You can add additional elisp code for completing to
           nil)
       val)))
 
-(defun nxhtml-read-link-type()
+(defun nxhtml-read-link-type ()
   (require 'mailcap)
   (let ((types (when (boundp 'mailcap-mime-extensions)
                  (mapcar (lambda (elt)
@@ -1883,7 +2027,7 @@ You can add additional elisp code for completing to
                          mailcap-mime-extensions))))
   (completing-read "Link type: " types nil t)))
 
-(defun nxhtml-read-link-media()
+(defun nxhtml-read-link-media ()
   (let ((types '(
                  "screen"
                  "tty"
@@ -1897,7 +2041,7 @@ You can add additional elisp code for completing to
                  )))
     (popcmp-completing-read "For media type: " types nil t)))
 
-(defun nxhtml-read-link-rel()
+(defun nxhtml-read-link-rel ()
   (let ((predefined-linktypes '(
                                "Alternate"
                                "Appendix"
@@ -1918,7 +2062,7 @@ You can add additional elisp code for completing to
                                )))
     (popcmp-completing-read "Predefined LinkTypes: " predefined-linktypes nil t)))
 
-(defun nxhtml-read-meta-name()
+(defun nxhtml-read-meta-name ()
   (let ((types '(
                  "author"
                  "description"
@@ -1929,13 +2073,13 @@ You can add additional elisp code for completing to
                  )))
     (popcmp-completing-read "Meta name: " types nil t)))
 
-(defun nxhtml-read-meta-content()
+(defun nxhtml-read-meta-content ()
   (nxhtml-read-from-minibuffer "Meta content: "))
 
-(defun nxhtml-read-meta-scheme()
+(defun nxhtml-read-meta-scheme ()
   (nxhtml-read-from-minibuffer "Meta scheme: "))
 
-(defun nxhtml-read-meta-http-equiv()
+(defun nxhtml-read-meta-http-equiv ()
   (let ((types '(
                  "content-type"
                  "expires"
@@ -1944,13 +2088,6 @@ You can add additional elisp code for completing to
                  )))
     (popcmp-completing-read "Meta http-equiv: " types nil t)))
 
-(when (featurep 'rngalt)
-  (setq rngalt-completing-read-tag 'nxhtml-completing-read-tag)
-  (setq rngalt-completing-read-attribute-name 'nxhtml-completing-read-attribute-name)
-  (setq rngalt-completing-read-attribute-value 'nxhtml-completing-read-attribute-value)
-  (setq rngalt-complete-first-try 'nxhtml-complete-first-try)
-  (setq rngalt-complete-last-try 'nxhtml-complete-last-try)
-  )
 (when nil
   (setq rngalt-completing-read-tag nil)
   (setq rngalt-complete-last-try nil)
@@ -1959,7 +2096,7 @@ You can add additional elisp code for completing to
 
 (require 'typesetter nil t)
 (when (featurep 'typesetter)
-  (defun typesetter-init-nxhtml-mode()
+  (defun typesetter-init-nxhtml-mode ()
     (typesetter-init-html-mode))
   )
 
@@ -1974,7 +2111,7 @@ You can add additional elisp code for completing to
 \"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd\">
 <html xmlns=\"http://www.w3.org/1999/xhtml\">
   <head>
-    <title>rngalt-xhtml-header</title>
+    <title>Fictive XHTML Validation Header</title>
   </head>
   <body>
 "
@@ -2011,7 +2148,7 @@ You can add additional elisp code for completing to
 \"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd\">
 <html xmlns=\"http://www.w3.org/1999/xhtml\">
   <head>
-    <title>rngalt-xhtml-header</title>
+    <title>Fictive XHTML Validation Header</title>
   </head>
   <body>
 "
@@ -2022,6 +2159,16 @@ You can add additional elisp code for completing to
 \"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd\">
 <html xmlns=\"http://www.w3.org/1999/xhtml\">
   <head>
+"
+     )
+    ("head-closed-utf-8" .
+     "<?xml version=\"1.0\" encoding=\"utf-8\"?>
+<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.1//EN\"
+\"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd\">
+<html xmlns=\"http://www.w3.org/1999/xhtml\">
+  <head>
+    <title></title>
+  </head>
 "
      )
     ("html-utf-8" .
@@ -2042,13 +2189,13 @@ You can add additional elisp code for completing to
 ;; "
 ;;      )
     )
-  "Extra XHTML validation headers.
+  "Fictive XHTML validation headers.
 Used by `nxhtml-set-validation-header'."
   :type '(alist :key-type string :value-type string)
   :group 'nxhtml)
 
 (defcustom nxhtml-default-validation-header nil
-  "Default extra XHTML validation header.
+  "Default Fictive XHTML validation header.
 Must be nil or one of the key values in
 `nxhtml-validation-headers'."
   :type 'string
@@ -2057,10 +2204,10 @@ Must be nil or one of the key values in
                  (assoc val nxhtml-validation-headers))
              (set-default sym val)
            (lwarn 'nxhtml-default-validation-header
-                  :warning "There is no Extra XHTML Validation Header named %s" val)))
+                  :warning "There is no Fictive XHTML Validation Header named %s" val)))
   :group 'nxhtml)
 
-(defun nxhtml-must-have-validation-headers()
+(defun nxhtml-must-have-validation-headers ()
   (unless nxhtml-validation-headers
     (error
      "No XHTML validation headers. Please customize nxhtml-validation-headers.")))
@@ -2074,18 +2221,19 @@ Must be nil or one of the key values in
 (defcustom nxhtml-guess-validation-header-alist
   ;;(rx line-start (0+ blank) "<body")
   '(
-    ("^[[:blank:]]*<body" . "body-utf-8")
-    ("^[[:blank:]]*<head" . "head-utf-8")
-    ("^[[:blank:]]*<html" . "html-utf-8")
+    ("^[[:blank:]]*<body"   . "body-utf-8")
+    ("^[[:blank:]]*</head>" . "head-closed-utf-8")
+    ("^[[:blank:]]*<head"   . "head-utf-8")
+    ("^[[:blank:]]*<html"   . "html-utf-8")
     )
   "Alist used by `nxhtml-guess-validation-header'.
 Alternatives are tried from top to bottom until one fits."
   :type '(alist :key-type (regexp :tag "If NOT found in buffer")
-                :value-type (string :tag "Use Extra XHTML Validation Header"))
+                :value-type (string :tag "Use Fictive XHTML Validation Header"))
   :group 'nxhtml)
 
-(defun nxhtml-guess-validation-header()
-  "Return extra XHTML validation that could fit current buffer.
+(defun nxhtml-guess-validation-header ()
+  "Return Fictive XHTML validation that could fit current buffer.
 This guess is made by matching the entries in
 `nxhtml-guess-validation-header-alist' against the buffer."
   (nxhtml-must-have-validation-headers)
@@ -2108,34 +2256,145 @@ This guess is made by matching the entries in
               (setq guesses (cdr guesses))
               (setq regexp (car rec))
               (goto-char (point-min))
-              (unless (re-search-forward regexp 2000 t)
-                (setq key (cdr rec)))))
+              ;; Fix-me: check for chunk and check if in string.
+              (let (found)
+                (while (and (not found)
+                            (re-search-forward regexp nil t))
+                  ;; ensure fontified, but how?
+                  (when mumamo-multi-major-mode
+                    (let ((mumamo-just-changed-major nil))
+                      (unless (and (mumamo-get-existing-chunk-at (point))
+                                   (eq t (get-text-property (point) 'fontified)))
+                        (mumamo-fontify-region (point-min) (+ 1000 (point))))))
+                  (unless (memq (get-text-property (point) 'face)
+                                '(font-lock-comment-face
+                                  font-lock-comment-delimiter-face
+                                  font-lock-doc-face
+                                  font-lock-string-face
+                                  ))
+                    (setq found t)))
+                (unless found
+                  (setq key (cdr rec))))))
+          ;;(unless (re-search-forward regexp nil t) (setq key (cdr rec)))))
           key)))))
 
-(defun nxhtml-get-default-validation-header()
-  "Return default extra XHTML validation header key for current buffer.
+(defun nxhtml-open-dir-saved-validation-headers (must-exist)
+  "Open file with saved validation headers and return buffer."
+  ;;(lwarn 't :warning "must-exist=%s" must-exist)
+  (when (buffer-file-name)
+    (let* ((dir-name (file-name-directory (buffer-file-name)))
+           (file-name (expand-file-name "nxhtml-val-headers.el"))
+           emacs-lisp-mode-hook)
+      (when (or (not must-exist)
+                (file-exists-p file-name))
+        (find-file-noselect file-name)))))
+
+(defun nxhtml-get-saved-validation-header ()
+  (when (buffer-file-name)
+    (let* ((val-buf (nxhtml-open-dir-saved-validation-headers t))
+           (file-name (file-name-nondirectory (buffer-file-name)))
+           validation-headers)
+      (when val-buf
+        (with-current-buffer val-buf
+          (eval-buffer))
+        (cadr (assoc file-name validation-headers))))))
+
+(defun nxhtml-remove-saved-validation-header ()
+  "Removed the saved validation header.
+Reverse the action done by `nxhtml-save-validation-header'."
+  (interactive)
+  (nxhtml-update-saved-validation-header nil))
+
+(defun nxhtml-save-validation-header ()
+  "Save the current validation header.
+The current validation is saved for the next time you open the
+current file.  It is then used by `nxhtml-validation-header-mode'
+and `nxhtml-set-validation-header'. This means that if you have
+turned on `nxhtml-global-validation-header-mode' this validation
+header will be set automatically.
+
+The saved validation header can be removed with
+`nxhtml-remove-saved-validation-header'.
+
+* Note: There is normally no need to save the validation headers
+  since `nxhtml-global-validation-header-mode' will add
+  validation headers as needed most of the time."
+  (interactive)
+  (nxhtml-update-saved-validation-header t))
+
+(defun nxhtml-update-saved-validation-header (save)
+  (unless (buffer-file-name)
+    (error "Validation Header can only be saved if buffer contains a file."))
+  (let* ((val-buf (nxhtml-open-dir-saved-validation-headers nil))
+          ;;(get-buffer-create "temp val head"))
+         validation-headers
+         (file-name (file-name-nondirectory (buffer-file-name)))
+         (entry (list file-name nxhtml-current-validation-header))
+         ;;entry-list
+         removed
+         )
+    ;; Get old headers
+    (with-current-buffer val-buf
+      (eval-buffer))
+    ;; Remove old value
+    (setq validation-headers
+          (delq nil
+                (mapcar (lambda (elt)
+                          (if (string= file-name (car elt))
+                              (progn
+                                (setq removed t)
+                                nil)
+                            elt))
+                        validation-headers)))
+    ;; Add new value
+    (when save
+      (setq validation-headers (cons entry validation-headers)))
+    (with-current-buffer val-buf
+      (erase-buffer)
+      ;;(print file-name val-buf)
+      ;;(print nxhtml-current-validation-header val-buf)
+      ;;(print entry val-buf)
+      (insert "(setq validation-headers (quote")
+      (print validation-headers val-buf)
+      (insert "))")
+      (basic-save-buffer)
+      )
+    (if save
+        (message "Current validation header for file saved")
+      (if removed
+          (message "Removed saved validation header")
+        (message "There was no saved validation header")))))
+
+(defun nxhtml-get-default-validation-header ()
+  "Return default Fictive XHTML validation header key for current buffer.
 If `nxhtml-default-validation-header' is non-nil then return
-this.  Otherwise return `nxhtml-guess-validation-header'."
+this.  Otherwise return saved validation header if there is one
+or guess using `nxhtml-guess-validation-header'."
   (or nxhtml-default-validation-header
+      (nxhtml-get-saved-validation-header)
       (nxhtml-guess-validation-header)))
 
-(defun nxhtml-set-validation-header(&optional key)
-  "Set an extra \(fictive) XHTML validation header in the buffer.
-This header is not inserted in the buffer, but is only used by
-validation and XHTML completion.
+(defun nxhtml-set-validation-header (&optional key)
+  "Set a Fictive XHTML validation header in the buffer.
+Such a header is not inserted in the buffer, but is only used by
+validation and XHTML completion by `nxhtml-mode'.
 
-The header is active if and only if
+The header is active for validation and completion if and only if
 `nxhtml-validation-header-mode' is on.
 
-The header is choosen from `nxhtml-validation-headers'. If there
-is more than one you will be prompted. To set the default extra
+Note that Fictive XHTML Validation Headers are normally chosen
+automatically, but you can use this function to override that choice.
+
+The header is chosen from `nxhtml-validation-headers'. If there
+is more than one you will be prompted. To set the default fictive
 XHTML validation header customize `nxhtml-validation-headers'.
 
 If called non-interactive then the header corresponding to key
 KEY will be used.  If KEY is nil then it is set to
 `nxhtml-default-validation-header'.
 
-For more information see `rngalt-show-validation-header'."
+This header can be visible or invisible in the buffer, for more
+information see `rngalt-show-validation-header'."
   (interactive
    (list
     (let ((nh (length nxhtml-validation-headers))
@@ -2147,7 +2406,7 @@ For more information see `rngalt-show-validation-header'."
                            t
                            default
                            nxhtml-set-validation-header-hist)
-        (if (not (y-or-n-p) "Only one XHTML validation header is defined. Define more? ")
+        (if (not (y-or-n-p "Only one XHTML validation header is defined. Define more? "))
             default
           (customize-option 'nxhtml-validation-headers)
           'adding)))))
@@ -2160,10 +2419,10 @@ For more information see `rngalt-show-validation-header'."
     (nxhtml-validation-header-mode 1)
     (nxhtml-apply-validation-header)))
 
-(defun nxhtml-apply-validation-header()
+(defun nxhtml-apply-validation-header ()
   (when nxhtml-current-validation-header
     (setq rngalt-major-mode
-          (if mumamo-mode
+          (if mumamo-multi-major-mode
               (mumamo-main-major-mode)
             major-mode))
     (let* ((key nxhtml-current-validation-header)
@@ -2173,18 +2432,34 @@ For more information see `rngalt-show-validation-header'."
       (if (listp key)
           (let ((schema-file (rng-locate-schema-file (cdr key))))
             (unless schema-file
-              (error "Could not locate schema for type id `%s'" type-id))
+              (error "Could not locate schema for type id `%s'" key)) ;type-id))
             (rng-set-schema-file-1 schema-file))
         ;; FIX-ME: I do not understand this, but there is an error at
         ;; loading this file, have to test here:
         ;;(when (functionp 'nxhtml-global-validation-header-mode-cmhh)
-          (rngalt-set-validation-header header)
-          ;;)
+        (rngalt-set-validation-header header)
+        ;;)
         ))))
 
+(defun nxhtml-update-validation-header ()
+  "Update the validation header in the buffer as needed."
+  (interactive)
+  (let ((mode-on nxhtml-validation-header-mode))
+    (when mode-on (nxhtml-validation-header-mode 0))
+    (setq nxhtml-current-validation-header nil)
+    (when mode-on (nxhtml-validation-header-mode 1))))
+
 (define-minor-mode nxhtml-validation-header-mode
-  "If on use an extra XHTML validation header for the buffer.
-See `nxhtml-set-validation-header' for further information."
+  "If on use a Fictive XHTML Validation Header for the buffer.
+See `nxhtml-set-validation-header' for information about Fictive XHTML Validation Headers.
+
+This mode may be turned on automatically in two ways:
+- If you try to do completion of a XHTML tag or attribute then
+  `nxthml-mode' may ask you if you want to turn this mode on if
+  needed.
+- You can also choose to have it turned on automatically whenever
+  mumamo is used, see `nxhtml-validation-header-if-mumamo' for
+  further information."
   :global nil
   :lighter " VH"
   :group 'nxhtml
@@ -2193,14 +2468,96 @@ See `nxhtml-set-validation-header' for further information."
         (unless nxhtml-current-validation-header
           (setq nxhtml-current-validation-header
                 (nxhtml-get-default-validation-header)))
-        (nxhtml-apply-validation-header)
-        (when (featurep 'mumamo)
-          (add-hook 'mumamo-change-major-mode-hook 'nxhtml-vhm-mumamo-change-major nil t)
-          (add-hook 'mumamo-after-change-major-mode-hook 'nxhtml-vhm-mumamo-after-change-major nil t))
-        )
-    (rngalt-set-validation-header nil)))
+        ;;(message "nxhtml-current-validation-header=%s" nxhtml-current-validation-header)
+        (if nxhtml-current-validation-header
+            (progn
+              (nxhtml-apply-validation-header)
+              (when (featurep 'mumamo)
+                (add-hook 'mumamo-change-major-mode-hook 'nxhtml-vhm-mumamo-change-major nil t)
+                (add-hook 'mumamo-after-change-major-mode-hook 'nxhtml-vhm-mumamo-after-change-major nil t)))
+          (run-with-idle-timer 0 nil 'nxhtml-validation-header-empty)))
+    (rngalt-set-validation-header nil)
+    (setq nxhtml-current-validation-header nil)
+    (when (featurep 'mumamo)
+      (remove-hook 'mumamo-change-major-mode-hook 'nxhtml-vhm-mumamo-change-major t)
+      (remove-hook 'mumamo-after-change-major-mode-hook 'nxhtml-vhm-mumamo-after-change-major t))))
 
-(defun nxhtml-vhm-mumamo-change-major()
+(defun nxhtml-recheck-validation-header ()
+  "Just turn off and on again `nxhtml-validation-header-mode'.
+This will adjust the XHTML validation to the code currently in
+the buffer."
+  (interactive)
+  (nxhtml-validation-header-mode -1)
+  (nxhtml-validation-header-mode 1))
+
+(defun nxhtml-validation-header-empty ()
+  "Turn off validation header mode.
+This is called because there was no validation header."
+  (unless nxhtml-current-validation-header
+    (message "nxhtml-validation-header-empty")
+    (nxhtml-validation-header-mode -1)
+    (message "No validation header was needed")
+    ))
+
+(defun nxhtml-turn-on-validation-header-mode ()
+  "Turn on `nxhtml-validation-header-mode'."
+  (nxhtml-validation-header-mode 1))
+
+;;(defvar nxhtml-browseable-buffer-name "*nXhtml Browsing Buffer*")
+(defvar nxhtml-browseable-buffer-file "~/.temp-nxhtml-browse.htm")
+;; Fix-me: Handle base href here!
+(defun nxhtml-save-browseable-temp-file (start end &optional doit-anyway)
+  "Return a temporary file for viewing in web browser."
+  ;; When using this either region should be active or there should be
+  ;; a validation header or both.
+  (or doit-anyway
+      (and start end) ;mark-active
+      (and nxhtml-validation-header-mode
+           nxhtml-current-validation-header)
+      (error "Neither region nor validation header"))
+  (save-excursion
+    (let ((curbuf (current-buffer))
+          (view-buffer (find-file-noselect nxhtml-browseable-buffer-file))
+          header
+          content)
+      ;; Get header and content
+      (save-restriction
+        (widen)
+        (setq header
+              (if nxhtml-validation-header-mode
+                  (let* ((key nxhtml-current-validation-header)
+                         (rec (unless (listp key)
+                                (assoc key nxhtml-validation-headers)))
+                         (header (cdr rec)))
+                    header)
+                (goto-char (point-min))
+                (save-match-data
+                  (let ((body (re-search-forward "<body[^>]*>")))
+                    (if body
+                        (buffer-substring-no-properties (point-min) (match-end 0))
+                      "")))))
+        (setq content
+              (if start
+                  (buffer-substring-no-properties start end)
+                (buffer-substring-no-properties (point-min) (point-max))))
+        )
+      ;; Switch to view buffer
+      (set-buffer view-buffer)
+;;       (unless buffer-file-name
+;;         (set-visited-file-name nxhtml-browseable-buffer-file)
+;;         (rename-buffer nxhtml-valhead-view-buffer-name))
+      (erase-buffer)
+      (insert header content)
+      ;;(when (fboundp 'emacsw32-eol-set) (emacsw32-eol-set nil))
+      (nxhtml-mode)
+      (save-buffer)
+      ;;(current-buffer)
+      (kill-buffer view-buffer)
+      (expand-file-name nxhtml-browseable-buffer-file)
+      )))
+
+
+(defun nxhtml-vhm-mumamo-change-major ()
   (put 'rngalt-validation-header 'permanent-local t)
   (put 'nxhtml-validation-header-mode 'permanent-local t)
   (put 'nxhtml-current-validation-header 'permanent-local t)
@@ -2208,121 +2565,274 @@ See `nxhtml-set-validation-header' for further information."
   (setq nxhtml-validation-header-mode-major-mode mumamo-set-major-running)
   )
 
-(defun nxhtml-vhm-mumamo-after-change-major()
+(defun nxhtml-vhm-mumamo-after-change-major ()
   (put 'rngalt-validation-header 'permanent-local nil)
   (put 'nxhtml-validation-header-mode 'permanent-local nil)
   (put 'nxhtml-current-validation-header 'permanent-local nil)
   (put 'nxhtml-validation-header-mode-major-mode 'permanent-local nil)
   )
 
-(defcustom nxhtml-validation-header-filename-alist
-  '(
-    ("\.php$" . nil)
-    )
-  "Alist for turning on `nxhtml-validation-mode'.
-If buffer file name matches the an entry in the list then
-`nxhtml-global-validation-header-mode' will turn on
-`nxhtml-validation-header-mode' in buffer.
-
-The car if each element is used as a regexp to match the file
-name.  The second element is the name of the extra XHTML
-validation header to use. If this is nil the default extra XHTML
-validation header is used."
-  :type '(alist :key-type string :value-type (choice (const :tag "Default" nil)
-                                                     string))
+(defcustom nxhtml-validation-headers-check 'html
+  "Defines what check the function with the same name does.
+The function returns true if the condition here is met."
+  :type '(choice :tag "Add Fictive XHTML Validation Header if:"
+                (const :tag "If buffer contains html" html)
+                (const :tag "If buffer contains html or is empty" html-empty))
   :group 'nxhtml)
 
-(defun nxhtml-maybe-turn-on-validation-header()
-  (or (and (or (and mumamo-mode
-                    (eq (mumamo-main-major-mode) 'nxhtml-mode))
-               (eq major-mode 'nxhtml-mode))
-           rngalt-validation-header
-           nxhtml-current-validation-header
-           nxhtml-validation-header-mode
-           (progn
-             ;;(lwarn 'maybe :warning "quick, buffer=%s" (current-buffer))
-             (nxhtml-validation-header-mode 1)
-             t))
-      (when (buffer-file-name)
-        (unless (or ;;nxhtml-validation-header-mode
-                 (minibufferp (current-buffer))
-                 (string= " " (substring (buffer-name) 0 1))
-                 (string= "*" (substring (buffer-name) 0 1))
-                 )
-          (save-match-data
-            (when (catch 'turn-on
-                    (dolist (rec nxhtml-validation-header-filename-alist)
-                      (when (string-match (car rec) (buffer-file-name))
-                        (throw 'turn-on t))))
-              ;;(lwarn 't :warning "turn on %s, buffer=%s" major-mode (current-buffer))
-              (nxhtml-validation-header-mode 1)))))))
+;; (defun nxhtml-validation-headers-check (buffer)
+;;   "Return non-nil if buffer contains a html tag or is empty.
+;; This is for use with `nxhtml-validation-header-filenames'.
 
-;; FIXME: Problem with non-local rng-variables:
-(defconst nxhtml-global-validation-header-mode2 nil
-  "See function `nxhtml-global-validation-header-mode'.")
-(defun nxhtml-global-validation-header-mode2(&optional dummy)
-  "Not available in this version.
-This is not available in this version due to some nasty problems
-I discovered. As soon as I have domesticed those it will be put
-back in."
-  (interactive)
-  (describe-function 'nxhtml-global-validation-header-mode)
-  nil)
+;; The variable `nxhtml-validation-headers-check' determines how the
+;; check is made."
+;;   (if (= 0 (buffer-size buffer))
+;;       (eq 'html-empty nxhtml-validation-headers-check)
+;;     (save-match-data
+;;       (save-restriction
+;;         (let ((here (point))
+;;               (html nil))
+;;           (goto-char (point-min))
+;;           (setq html (re-search-forward "</?[a-z]+>" nil t))
+;;           (goto-char here)
+;;           html)))))
 
-(define-globalized-minor-mode nxhtml-global-validation-header-mode
-  nxhtml-validation-header-mode
-  nxhtml-maybe-turn-on-validation-header
+;; (defcustom nxhtml-validation-header-filenames
+;;   '(
+;;     ("\.php\\'" nxhtml-validation-headers-check)
+;;     ("\.rhtml\\'" nxhtml-validation-headers-check)
+;;     ("\.jsp\\'" nxhtml-validation-headers-check)
+;;     )
+;;   "Alist for turning on `nxhtml-validation-mode'.
+;; The entries in the list should have the form
+
+;;   \(FILE-REGEXP CHECK-FUNCION)
+
+;; If buffer file name matches the regexp FILE-REGEXP and the
+;; function CHECK-FUNCTION returns non-nil when called with the
+;; buffer as an argument \(or CHECK-FUNCTION is nil) then
+;; `nxhtml-global-validation-header-mode' will turn on
+;; `nxhtml-validation-header-mode' in buffer.
+
+;; The function `nxhtml-validation-headers-check' may be a useful
+;; value for CHECK-FUNCTION.
+
+;; See also `nxhtml-maybe-turn-on-validation-header'."
+;;   :type '(alist :key-type regexp :tag "File name regexp"
+;;                 :value-type (group (choice (const :tag "No more check" nil)
+;;                                            (function :tag "Check buffer with"))))
+;;   :group 'nxhtml)
+
+
+
+;; (defun nxhtml-maybe-turn-on-validation-header ()
+;;   "Maybe turn on `nxhtml-validation-header-mode' in buffer.
+;; This is called by `nxhtml-global-validation-header-mode'.
+
+;; See `nxhtml-validation-header-filenames' for how the check
+;; is made."
+;;   (or (and (or (and mumamo-mode
+;;                     (eq (mumamo-main-major-mode) 'nxhtml-mode))
+;;                (eq major-mode 'nxhtml-mode))
+;;            rngalt-validation-header
+;;            nxhtml-current-validation-header
+;;            nxhtml-validation-header-mode
+;;            (progn
+;;              ;;(lwarn 'maybe :warning "quick, buffer=%s" (current-buffer))
+;;              (nxhtml-validation-header-mode 1)
+;;              t))
+;;       (when (buffer-file-name)
+;;         (unless (or ;;nxhtml-validation-header-mode
+;;                  (minibufferp (current-buffer))
+;;                  (string= " " (substring (buffer-name) 0 1))
+;;                  (string= "*" (substring (buffer-name) 0 1))
+;;                  )
+;;           (when (catch 'turn-on
+;;                   (save-match-data
+;;                     (dolist (rec nxhtml-validation-header-filenames)
+;;                       (when (string-match (car rec) (buffer-file-name))
+;;                         (let ((fun (nth 1 rec)))
+;;                           (if (not fun)
+;;                               (progn
+;;                                 ;;(lwarn 't :warning "matched %s to %s, nil" (car rec) (buffer-file-name))
+;;                                 (throw 'turn-on t))
+;;                             (when (funcall fun (current-buffer))
+;;                               ;;(lwarn 't :warning "matched %s to %s" (car rec) (buffer-file-name))
+;;                               (throw 'turn-on t))))))))
+;;             ;;(lwarn 't :warning "turn on %s, buffer=%s" major-mode (current-buffer))
+;;             (nxhtml-validation-header-mode 1))))))
+
+
+;; ;; Fix-me: Is this really the way to do it? Would it not be better to
+;; ;; tie this to mumamo-mode in the turn on hook there? After all
+;; ;; validation headers are probably not used unless mumamo-mode is on.
+;; (define-globalized-minor-mode nxhtml-global-validation-header-mode
+;;   nxhtml-validation-header-mode
+;;   nxhtml-maybe-turn-on-validation-header
+;;   :group 'nxhtml)
+;; ;; The problem with global minor modes:
+;; (when (and nxhtml-global-validation-header-mode
+;;            (not (boundp 'define-global-minor-mode-bug)))
+;;   (nxhtml-global-validation-header-mode 1))
+
+
+(defcustom nxhtml-validation-header-mumamo-modes
+  '(nxhtml-mode)
+  "Main major modes for which to turn on validation header.
+Turn on Fictive XHTML Validation Header if main major mode for the
+used mumamo chunk family is any of those in this list.
+
+See `mumamo-set-chunk-family' for information about mumamo chunk
+families."
+  :type '(repeat (function :tag "Main major mode in mumamo"))
   :group 'nxhtml)
-;; The problem with global minor modes:
-(when (and nxhtml-global-validation-header-mode
-           (not (boundp 'define-global-minor-mode-bug)))
-  (nxhtml-global-validation-header-mode 1))
 
-(defun nxhtml-warnings-are-visible()
+(defun nxhtml-add-validation-header-if-mumamo ()
+  "Maybe turn on validation header.
+See `nxhtml-validation-header-if-mumamo' for more information."
+  ;;(nxhtml-validation-headers-check (current-buffer))
+  (when (memq (mumamo-main-major-mode) nxhtml-validation-header-mumamo-modes)
+    (nxhtml-validation-header-mode 1)))
+
+(define-toggle nxhtml-validation-header-if-mumamo nil
+  "Add a fictive validation header when mumamo is used.
+If this variable is t then add a Fictive XHTML Validation Header
+\(see `nxhtml-validation-header-mode') in buffer when mumamo is
+used. However do this only if `mumamo-main-major-mode' is one of
+those in `nxhtml-validation-header-mumamo-modes'.
+
+Changing this variable through custom adds/removes the function
+`nxhtml-add-validation-header-if-mumamo' to
+`mumamo-turn-on-hook'."
+  :set '(lambda (sym val)
+          (set-default sym val)
+          (if val
+              (add-hook 'mumamo-turn-on-hook 'nxhtml-add-validation-header-if-mumamo)
+            (remove-hook 'mumamo-turn-on-hook 'nxhtml-add-validation-header-if-mumamo)))
+  :group 'nxhtml)
+
+(defun nxhtml-warnings-are-visible ()
   (get 'rng-error 'face))
 
-(defun nxhtml-toggle-visible-warnings()
+(defvar nxhtl-old-rng-error-face nil)
+(defun nxhtml-toggle-visible-warnings ()
+  "Toggle the red underline on validation errors.
+Those can be quite disturbing when using mumamo because there
+will probably be many validation errors in for example a php
+buffer, since unfortunately the validation routines in
+`rng-validate-mode' from `nxml-mode' tries to validate the whole
+buffer as XHTML.
+
+Also, because of a \(normally unimportant) bug in Emacs 22,
+the red underline that marks an error will sometimes span several
+lines instead of just marking a single character as it
+should. \(This bug is a problem with overlays in Emacs 22.)"
   (interactive)
-  "Toggle the red underline on validation errors."
   (let ((face (get 'rng-error 'face)))
     (if face
-        (put 'rng-error 'face nil)
-      (put 'rng-error 'face 'rng-error-face))))
+        (progn
+          (setq nxhtl-old-rng-error-face (get 'rng-error 'face))
+          (put 'rng-error 'face nil))
+      (put 'rng-error 'face nxhtl-old-rng-error-face))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Bug corrections
-(defun nxml-indent-line ()
-  "Indent current line as XML."
-  (let ((indent (nxml-compute-indent))
-	(from-end (- (point-max) (point))))
-    (when indent
-      (beginning-of-line)
-      (let ((bol (point)))
-	(skip-chars-forward " \t")
-        ;; There is a problem with some lines, try a quick fix:
-        (when (and (= 0 indent)
-                   (not (eq (char-after) ?<)))
-          (save-excursion
-            (save-match-data
-              (when (re-search-backward "^<" nil t)
-                (when (search-forward " ")
-                  (setq indent (current-column))))))
-          (when (= 0 indent)
-            (setq indent nxml-child-indent)))
-        ;; And sometimes nxml-compute-indent get very upset, check for
-        ;; that:
-        (let ((here (point)))
-          (beginning-of-line 0)
-          (back-to-indentation)
-          (when (and (= indent (current-column))
-                     (eq (char-after) ?\"))
-            (setq indent 0))
-          (goto-char here))
-        (unless (= (current-column) indent)
-          (delete-region bol (point))
-          (indent-to indent)))
-      (when (> (- (point-max) from-end) (point))
-	(goto-char (- (point-max) from-end))))))
+;; (defun nxml-indent-line ()
+;;   "Indent current line as XML."
+;;   (let ((indent (nxml-compute-indent))
+;;         (from-end (- (point-max) (point))))
+;;     (when indent
+;;       (beginning-of-line)
+;;       (let ((bol (point)))
+;;         (skip-chars-forward " \t")
+;;         ;; There is a problem with some lines, try a quick fix:
+;;         (when (and (= 0 indent)
+;;                    (not (eq (char-after) ?<)))
+;;           (save-excursion
+;;             (save-match-data
+;;               (when (re-search-backward "^<" nil t)
+;;                 (when (search-forward " ")
+;;                   (setq indent (current-column))))))
+;;           (when (= 0 indent)
+;;             (setq indent nxml-child-indent)))
+;;         ;; And sometimes nxml-compute-indent get very upset, check for
+;;         ;; that:
+;;         (let ((here (point)))
+;;           (beginning-of-line 0)
+;;           (back-to-indentation)
+;;           (when (and (= indent (current-column))
+;;                      (eq (char-after) ?\"))
+;;             (setq indent 0))
+;;           (goto-char here))
+;;         (unless (= (current-column) indent)
+;;           (delete-region bol (point))
+;;           (indent-to indent)))
+;;       (when (> (- (point-max) from-end) (point))
+;;         (goto-char (- (point-max) from-end))))))
+
+
+;; FIX-ME: untag should be in nxml-mode.el since it is in no way
+;; specific to nxhtml-mode, but I do not want to change nxml-mode.el
+;; at the moment.
+
+(defcustom nxml-untag-select 'yes
+  "Decide whether to select an element untagged by `nxml-untag-element'.
+If this variable is 'yes the element is selected after untagging
+the element. The mark is set at the end of the element and point
+at the beginning of the element.
+
+If this variable is 'no then the element is not selected and
+point is not moved. If it is 'ask the user is asked what to do."
+  :type '(choice (const :tag "Yes" yes)
+                 (const :tag "No" no)
+                 (const :tag "Ask" ask))
+  :group 'nxml)
+
+(defun nxml-untag-element (arg)
+  "Remove start and end tag from current element.
+The mark is by default set to the end of the former element and
+point is moved to the beginning. Mark is also activated so that
+it is easy to surround the former element with a new tag.
+
+Whether to select the old element is controlled by
+`nxml-untag-select'. The meaning of the values 'yes and 'no for
+this variable is flipped by using a universal argument.
+
+Note: If you want to `undo' the untag and you use
+`transient-mark-mode' then you must first do something so that
+the region is not highlighted (for example C-g)."
+  (interactive "*P")
+  (let ((here (point-marker))
+        el-start
+        el-start-end
+        el-end
+        el-end-end
+        (select t))
+    (nxml-backward-up-element)
+    (setq el-start (point))
+    (nxml-forward-balanced-item)
+    (setq el-start-end (point))
+    (goto-char el-start)
+    (nxml-forward-element)
+    (setq el-end-end (point-marker))
+    (nxml-backward-single-balanced-item)
+    (setq el-end (point))
+    (delete-region el-end el-end-end)
+    (delete-region el-start el-start-end)
+    ;; Select the element or not?
+    (if (eq nxml-untag-select 'ask)
+        (setq select (y-or-n-p "Select the old element? "))
+      (when (eq nxml-untag-select 'no)
+        (setq select nil))
+      (when arg
+        (setq select (not select))))
+    (if (not select)
+        (goto-char here)
+      (goto-char el-end-end)
+      (push-mark nil t t)
+      (setq mark-active t)
+      (setq deactivate-mark nil)
+      (goto-char el-start))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (provide 'nxhtml)

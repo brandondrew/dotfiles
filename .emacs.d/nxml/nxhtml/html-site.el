@@ -4,14 +4,19 @@
 
 ;; Author: Lennart Borgman <lennartDOTborgmanDOT073ATstudentDOTluDOTse>
 ;; Created: Wed Mar 01 17:25:52 2006
-(defconst html-site:version "0.2");; Version:
-;; Last-Updated: Mon Apr 16 23:12:04 2007 (7200 +0200)
+(defconst html-site:version "0.3");; Version:
+;; Last-Updated: 2008-03-22T03:32:06+0100 Sat
 ;; Keywords:
 ;; Compatibility:
 ;;
 ;; Features that might be required by this library:
 ;;
-;;   None
+;;   `cl', `html-site', `html-upl', `ietf-drums', `mail-parse',
+;;   `mail-prsvr', `mailcap', `mm-util', `qp', `rfc2045', `rfc2047',
+;;   `rfc2231', `time-date', `timer', `timezone', `tls', `url',
+;;   `url-auth', `url-c', `url-cookie', `url-expand', `url-gw',
+;;   `url-history', `url-http', `url-methods', `url-parse',
+;;   `url-privacy', `url-proxy', `url-util', `url-vars'.
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -52,12 +57,35 @@
 (defvar html-site-list) ;; Silence compiler
 (defvar html-site-current) ;; Silence compiler
 
-(defun html-site-dir-contains (dir file)
-  (let ((d (file-name-as-directory dir)))
-    (when (< (length d) (length file))
-      (string= d (substring file 0 (length d))))))
+;; (html-site-looks-like-local-url "http://www.some.where/")
+;; (html-site-looks-like-local-url "/unix/file")
+;; (html-site-looks-like-local-url "c:/w32/file")
+(defun html-site-looks-like-local-url (file)
+  "Return t if this looks like a web something url."
+  (require 'url-parse)
+  (let ((url-type (url-type (url-generic-parse-url file))))
+    (not
+     (and url-type
+          ;; Test if it really is an url, the is 1 for w32 drive
+          ;; letters
+          (or (not (memq system-type '(ms-dos windows-nt)))
+              (< 1 (length url-type)))))))
 
-(defun html-site-chk-wtocdir(out-dir site-dir)
+(defun html-site-dir-contains (dir file)
+  ;;(when (= ?~ (string-to-char file)) (setq file (expand-file-name file)))
+  ;;
+  ;; It is not possible to unconditionally expand the file name here
+  ;; since url file names can be involved.
+  ;; (url-type (url-generic-parse-url "c:/some/file.txt"))
+  (when (html-site-looks-like-local-url file)
+    (setq file (expand-file-name file)))
+  (let ((d (file-name-as-directory dir)))
+    (if (< (length d) (length file))
+        (string= d (substring file 0 (length d)))
+      (when (file-directory-p file)
+        (string= d (file-name-as-directory file))))))
+
+(defun html-site-chk-wtocdir (out-dir site-dir)
   (or
    (unless (file-name-absolute-p out-dir)
      (lwarn '(html-site) :error "Output directory is not absolute: %s" out-dir))
@@ -72,24 +100,30 @@
      (lwarn '(html-site) :error "Site dir must not contain ouput directory for pages with TOC."))))
 
 
+(defun html-site-buffer-or-dired-file-name ()
+  "Return buffer file name or file pointed to in dired."
+  (if (derived-mode-p 'dired-mode)
+      (dired-get-file-for-visit)
+    buffer-file-name))
 
-(defun html-site-set-site(name)
+(defun html-site-set-site (name)
   (interactive
    (let ((site-names)
          must-contain
+         (file (html-site-buffer-or-dired-file-name))
          (use-dialog-box nil))
      (unless (< 0 (length html-site-list))
        (error "No sites defined yet"))
-     (when (and buffer-file-name
+     (when (and file
                 ;;(string-match "ml" (symbol-name major-mode))
                 )
        (when (y-or-n-p "Should site contain current file? ")
-         (setq must-contain buffer-file-name)))
+         (setq must-contain file)))
      (dolist (m html-site-list)
        (let* ((name (elt m 0))
               (dir  (html-site-site-dir name)))
          (when (or (not must-contain)
-                   (html-site-dir-contains dir buffer-file-name))
+                   (html-site-dir-contains dir file))
            (setq site-names (cons name site-names)))))
      (unless site-names
        (when must-contain
@@ -107,105 +141,110 @@
     (customize-save-variable 'html-site-current html-site-current)))
 
 
-(defun html-site-ensure-site-defined(site-name)
+(defun html-site-ensure-site-defined (site-name)
   (unless html-site-list
     (error "No sites defined. Please customize `html-site-list'."))
   (unless (file-directory-p (html-site-site-dir site-name))
     (error "Local file web site directory does not exists: %s"
            (html-site-site-dir site-name))))
-(defun html-site-current-ensure-site-defined()
+(defun html-site-current-ensure-site-defined ()
   (unless (and (< 0 (length html-site-current))
                (assoc html-site-current html-site-list))
     (error "No current site set"))
   (html-site-ensure-site-defined html-site-current))
 
-(defun html-site-remote-contains(site-name url with-toc)
+(defun html-site-remote-contains (site-name url with-toc)
   (html-site-dir-contains (html-site-remote-root site-name with-toc) url))
-(defun html-site-current-remote-contains(url with-toc)
+(defun html-site-current-remote-contains (url with-toc)
   (html-site-remote-contains html-site-current url with-toc))
 
-(defun html-site-ensure-file-in-site(site-name file-name)
+(defun html-site-ensure-file-in-site (site-name file-name)
   (html-site-ensure-site-defined site-name)
   (unless (html-site-contains site-name file-name)
     (error "This file is not in site %s" site-name)))
-(defun html-site-current-ensure-file-in-site(file-name)
+(defun html-site-current-ensure-file-in-site (file-name)
   (html-site-ensure-file-in-site html-site-current file-name))
 
-(defun html-site-ensure-buffer-in-site(site-name)
+(defun html-site-ensure-buffer-in-site (site-name)
   (unless buffer-file-name
     (error "This buffer is not visiting a file"))
   (html-site-ensure-file-in-site site-name buffer-file-name))
-(defun html-site-current-ensure-buffer-in-site()
+(defun html-site-current-ensure-buffer-in-site ()
   (html-site-ensure-buffer-in-site html-site-current))
 
 
-(defun html-site-site-dir(site-name)
+(defun html-site-site-dir (site-name)
   (file-name-as-directory
    (nth 1 (assoc site-name html-site-list))))
-(defun html-site-current-site-dir() (html-site-site-dir html-site-current))
+(defun html-site-current-site-dir () (html-site-site-dir html-site-current))
 
-(defun html-site-contains(site-name file)
+(defun html-site-contains (site-name file)
   (html-site-dir-contains (html-site-site-dir site-name) file))
-(defun html-site-current-contains(file)
+(defun html-site-current-contains (file)
   (html-site-contains html-site-current file))
 
-(defun html-site-page-list(site-name)
-  (nth 2 (assoc site-name html-site-list)))
-(defun html-site-current-page-list() (html-site-page-list html-site-current))
+(defun html-site-page-list (site-name)
+  (let ((page-list (nth 2 (assoc site-name html-site-list))))
+    (when (< 0 (length page-list))
+      page-list)))
 
-(defun html-site-frames-file(site-name)
+(defun html-site-current-page-list () (html-site-page-list html-site-current))
+
+(defun html-site-frames-file (site-name)
   (nth 3 (assoc site-name html-site-list)))
-(defun html-site-current-frames-file() (html-site-frames-file html-site-current))
+(defun html-site-current-frames-file () (html-site-frames-file html-site-current))
 
-(defun html-site-toc-file(site-name)
+(defun html-site-toc-file (site-name)
   (nth 4 (assoc site-name html-site-list)))
-(defun html-site-current-toc-file() (html-site-toc-file html-site-current))
+(defun html-site-current-toc-file () (html-site-toc-file html-site-current))
 
-(defun html-site-merge-dir(site-name)
-  (nth 5 (assoc site-name html-site-list)))
-(defun html-site-current-merge-dir() (html-site-merge-dir html-site-current))
+(defun html-site-merge-dir (site-name)
+  (let ((dir (nth 5 (assoc site-name html-site-list))))
+    (when (< 0 (length dir))
+      dir)))
+(defun html-site-current-merge-dir () (html-site-merge-dir html-site-current))
 
-(defun html-site-merge-template(site-name)
+(defun html-site-merge-template (site-name)
   (nth 6 (assoc site-name html-site-list)))
-(defun html-site-current-merge-template() (html-site-merge-template html-site-current))
+(defun html-site-current-merge-template () (html-site-merge-template html-site-current))
 
-(defun html-site-extra-fun(site-name)
+(defun html-site-extra-fun (site-name)
   (nth 7 (assoc site-name html-site-list)))
-(defun html-site-current-extra-fun() (html-site-extra-fun html-site-current))
+(defun html-site-current-extra-fun () (html-site-extra-fun html-site-current))
 
-(defun html-site-ftp-host(site-name)
+(defun html-site-ftp-host (site-name)
   (nth 8 (assoc site-name html-site-list)))
-(defun html-site-current-ftp-host() (html-site-ftp-host html-site-current))
+(defun html-site-current-ftp-host () (html-site-ftp-host html-site-current))
 
-(defun html-site-ftp-user(site-name)
+(defun html-site-ftp-user (site-name)
   (nth 9 (assoc site-name html-site-list)))
-(defun html-site-current-ftp-user() (html-site-ftp-user html-site-current))
+(defun html-site-current-ftp-user () (html-site-ftp-user html-site-current))
 
-(defun html-site-ftp-password(site-name)
+(defun html-site-ftp-password (site-name)
   (nth 10 (assoc site-name html-site-list)))
-(defun html-site-current-ftp-password() (html-site-ftp-password html-site-current))
+(defun html-site-current-ftp-password () (html-site-ftp-password html-site-current))
 
-(defun html-site-ftp-dir(site-name)
+(defun html-site-ftp-dir (site-name)
   (nth 11 (assoc site-name html-site-list)))
-(defun html-site-current-ftp-dir() (html-site-ftp-dir html-site-current))
+(defun html-site-current-ftp-dir () (html-site-ftp-dir html-site-current))
 
-(defun html-site-ftp-wtoc-dir(site-name)
+(defun html-site-ftp-wtoc-dir (site-name)
   (nth 12 (assoc site-name html-site-list)))
-(defun html-site-current-ftp-wtoc-dir() (html-site-ftp-wtoc-dir html-site-current))
+(defun html-site-current-ftp-wtoc-dir () (html-site-ftp-wtoc-dir html-site-current))
 
-(defun html-site-web-host(site-name)
+(defun html-site-web-host (site-name)
   (nth 13 (assoc site-name html-site-list)))
-(defun html-site-current-web-host() (html-site-web-host html-site-current))
+(defun html-site-current-web-host () (html-site-web-host html-site-current))
 
-(defun html-site-web-dir(site-name)
+(defun html-site-web-dir (site-name)
   (nth 14 (assoc site-name html-site-list)))
-(defun html-site-current-web-dir() (html-site-web-dir html-site-current))
+(defun html-site-current-web-dir () (html-site-web-dir html-site-current))
 
-(defun html-site-web-wtoc-dir(site-name)
+(defun html-site-web-wtoc-dir (site-name)
   (nth 15 (assoc site-name html-site-list)))
-(defun html-site-current-web-wtoc-dir() (html-site-web-wtoc-dir html-site-current))
+(defun html-site-current-web-wtoc-dir () (html-site-web-wtoc-dir html-site-current))
 
-(defun html-site-web-full(site-name with-toc)
+(defun html-site-web-full (site-name with-toc)
   (let ((host (html-site-web-host site-name)))
     (unless (and host
                  (< 0 (length host)))
@@ -217,11 +256,11 @@
             (if with-toc
                 (html-site-web-wtoc-dir site-name)
               (html-site-web-dir site-name)))))
-(defun html-site-current-web-full(with-toc)
+(defun html-site-current-web-full (with-toc)
   (html-site-web-full html-site-current with-toc))
 
 (defvar html-site-ftp-temporary-passwords nil)
-(defun html-site-get-ftp-pw()
+(defun html-site-get-ftp-pw ()
   (let ((pw (html-site-current-ftp-password)))
     (unless (< 0 (length pw))
       (let* ((user-site (concat (html-site-current-ftp-user)
@@ -246,38 +285,48 @@
 
 
 
-(defun html-site-path-in-mirror(site-root path-in-site mirror-root)
-  (assert (html-site-dir-contains site-root path-in-site))
+(defun html-site-path-in-mirror (site-root path-in-site mirror-root)
+  (assert (html-site-dir-contains site-root path-in-site) t)
   (let ((rel-path (file-relative-name path-in-site site-root)))
-    (concat (file-name-as-directory mirror-root) rel-path)))
+    (if (string= rel-path ".")
+        (directory-file-name mirror-root)
+      (concat (file-name-as-directory mirror-root) rel-path))))
 
 ;; Some checks to see if html-site-path-in-mirror works:
 (when t
-  (assert (string=
-           "http://some.site/tempmirror/in/hej.html"
-           (html-site-path-in-mirror "c:/temp"
-                                     "c:/temp/in/hej.html"
-                                     "http://some.site/tempmirror")))
-  (assert (string=
-           "c:/temp/in/hej.html"
-           (html-site-path-in-mirror "http://some.site/tempmirror"
-                                     "http://some.site/tempmirror/in/hej.html"
-                                     "c:/temp")))
-  (assert (string=
-           "in/hej.html"
-           (file-relative-name "http:/temp/in/hej.html" "http:/temp")))
-  )
+  (let ((local-file "/temp/in/hej.html")
+        (local-dir  "/temp"))
+    (when (memq system-type '(ms-dos windows-nt))
+      (setq local-file (concat "c:" local-file))
+      (setq local-dir  (concat "c:" local-dir )))
+    (assert (string=
+             "http://some.site/tempmirror/in/hej.html"
+             (html-site-path-in-mirror local-dir
+                                       local-file
+                                       "http://some.site/tempmirror"))
+            t)
+    (assert (string=
+             local-file
+             (html-site-path-in-mirror "http://some.site/tempmirror"
+                                       "http://some.site/tempmirror/in/hej.html"
+                                       local-dir))
+            t)
+    (assert (string=
+             "in/hej.html"
+             (file-relative-name "http:/temp/in/hej.html" "http:/temp"))
+            t)
+    ))
 
 
-(defun html-site-local-to-web(site-name local-file with-toc)
+(defun html-site-local-to-web (site-name local-file with-toc)
   (html-site-ensure-file-in-site site-name local-file)
   (html-site-path-in-mirror (html-site-site-dir site-name)
                             local-file
                             (html-site-web-full site-name with-toc)))
-(defun html-site-current-local-to-web(local-file with-toc)
+(defun html-site-current-local-to-web (local-file with-toc)
   (html-site-local-to-web html-site-current local-file with-toc))
 
-(defun html-site-remote-root(site-name with-toc)
+(defun html-site-remote-root (site-name with-toc)
   (concat "/ftp:"
           (html-site-ftp-user site-name)
           "@" (html-site-ftp-host site-name)
@@ -285,37 +334,37 @@
           (if with-toc
               (html-site-ftp-wtoc-dir site-name)
             (html-site-ftp-dir site-name))))
-(defun html-site-current-remote-root(with-toc)
+(defun html-site-current-remote-root (with-toc)
   (html-site-remote-root html-site-current with-toc))
 
-(defun html-site-local-to-remote(site-name local-file with-toc)
+(defun html-site-local-to-remote (site-name local-file with-toc)
   (html-site-ensure-file-in-site site-name local-file)
   (html-site-path-in-mirror (html-site-site-dir site-name)
                             local-file
                             (html-site-remote-root site-name with-toc)))
-(defun html-site-current-local-to-remote(local-file with-toc)
+(defun html-site-current-local-to-remote (local-file with-toc)
   (html-site-local-to-remote html-site-current local-file with-toc))
 
-(defun html-site-remote-to-local(site-name remote-file with-toc)
+(defun html-site-remote-to-local (site-name remote-file with-toc)
   ;;(html-site-ensure-file-in-site remote-file)
   ;; Fix-me above
   (html-site-path-in-mirror (html-site-remote-root site-name with-toc)
                             remote-file
                             (html-site-site-dir site-name)))
-(defun html-site-current-remote-to-local(remote-file with-toc)
+(defun html-site-current-remote-to-local (remote-file with-toc)
   (html-site-remote-to-local html-site-current remote-file with-toc))
 
 
 (defvar html-site-files-re "\.x?html?$")
 
-(defun html-site-edit-pages-file()
+(defun html-site-edit-pages-file ()
   "Edit the list of pages to be used for table of contents."
   (interactive)
   (html-site-current-ensure-site-defined)
   (find-file (html-site-current-page-list))
   )
 
-(defun html-site-get-sub-files(dir file-patt)
+(defun html-site-get-sub-files (dir file-patt)
   (let ((sub-files)
         (sub-dirs)
         (dir-files (directory-files dir t "^[^.]")))
@@ -329,7 +378,7 @@
       )
     sub-files))
 
-(defun html-site-file-is-local(filename)
+(defun html-site-file-is-local (filename)
   "Return t if FILENAME is a local file name.
 No check is done that the file exists."
   ;;(find-file-name-handler "/ftp:c:/eclean/" 'file-exists-p)
@@ -380,7 +429,7 @@ Each element in the list is a list containing:
            (string :tag "Web directory root")
            (string :tag "Web directory root for pages with TOC")
            ))
-  :set (lambda(symbol value)
+  :set (lambda (symbol value)
          (let ((ok t))
            (dolist (e value)
              (let (
@@ -425,9 +474,9 @@ Each element in the list is a list containing:
 (defcustom html-site-current ""
   "Current site name.
 Use the entry with this name in `html-site-list'."
-  :set (lambda(symbol value)
+  :set (lambda (symbol value)
          (or (when (= 0 (length value))
-               (message "html-site-current (informatio): No current site set"))
+               (message "html-site-current (information): No current site set"))
              (let ((site-names))
                (dolist (m html-site-list)
                  (setq site-names (cons (elt m 0) site-names)))
@@ -439,14 +488,16 @@ Use the entry with this name in `html-site-list'."
                     (lwarn '(html-site-current) :error "Can't find site directory: %s" value))))))
          (set-default symbol value))
   :type 'string
+  :set-after '(html-site-list)
   :group 'html-site)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Put subprocess here at the moment ...
 
 (defconst noshell-procbuf-name "*Noshell process buffer*")
 
 (defvar noshell-proc-name nil)
-(defun noshell-procbuf-setup(procbuf-name)
+(defun noshell-procbuf-setup (procbuf-name)
   (unless procbuf-name
     (setq procbuf-name noshell-procbuf-name))
   (with-current-buffer (get-buffer-create procbuf-name)
@@ -471,7 +522,7 @@ Use the entry with this name in `html-site-list'."
     (sit-for 0.01) ;; Display update
     (current-buffer)))
 
-(defun noshell-procbuf-teardown(proc)
+(defun noshell-procbuf-teardown (proc)
     (with-current-buffer (process-buffer proc)
       (goto-char (point-max))
       (let ((inhibit-read-only t)
@@ -483,7 +534,7 @@ Use the entry with this name in `html-site-list'."
                            s)
         (insert s))))
 
-(defun noshell-procbuf-run(buffer prog &rest args)
+(defun noshell-procbuf-run (buffer prog &rest args)
   (with-current-buffer buffer
     (let ((inhibit-read-only t)
           (proc nil)
@@ -505,7 +556,7 @@ Use the entry with this name in `html-site-list'."
       proc)
     )
   )
-(defun noshell-sentinel(process event)
+(defun noshell-sentinel (process event)
   (with-current-buffer (process-buffer process)
     (let ((inhibit-read-only t))
       ;;(insert (format "Process: %s recieved %s\n" process event))
@@ -522,7 +573,7 @@ Use the entry with this name in `html-site-list'."
             (t
              (insert event))))))
 
-(defun noshell-procbuf-syncrun(prog &rest args)
+(defun noshell-procbuf-syncrun (prog &rest args)
   (with-current-buffer (get-buffer noshell-procbuf-name)
     (let ((inhibit-read-only t)
           (sts nil))
@@ -551,11 +602,11 @@ Use the entry with this name in `html-site-list'."
   )
 (define-key noshell-process-mode-map [(control ?c)(control ?k)] 'noshell-kill-subprocess)
 (define-key noshell-process-mode-map [(control ?g)] 'noshell-quit)
-(defun noshell-quit()
+(defun noshell-quit ()
   (interactive)
   (noshell-kill-subprocess)
   (keyboard-quit))
-(defun noshell-kill-subprocess()
+(defun noshell-kill-subprocess ()
   (interactive)
   (when (eq major-mode 'noshell-process-mode)
     (if (get-buffer-process (current-buffer))
@@ -579,7 +630,7 @@ Use the entry with this name in `html-site-list'."
         (define-key upl-map [html-site-upl-edit-remote]
           (list 'menu-item "Edit Remote File" 'html-upl-edit-remote-file))
         (define-key upl-map [html-site-upl-ediff-buffer]
-          (list 'menu-item "Ediff Remote/Local Files" 'html-upl-ediff-buffer))
+          (list 'menu-item "Ediff Remote/Local Files" 'html-upl-ediff-file))
         (define-key upl-map [html-site-upl-sep] (list 'menu-item "--"))
         (define-key upl-map [html-site-upl-upload-site-with-toc]
           (list 'menu-item "Upload Site with TOC" 'html-upl-upload-site-with-toc))
@@ -593,7 +644,7 @@ Use the entry with this name in `html-site-list'."
       (define-key map [html-site-site-map]
         (list 'menu-item "Site" site-map))
       (define-key site-map [html-site-customize-site-list]
-        (list 'menu-item "Edit Sites" (lambda() (interactive)
+        (list 'menu-item "Edit Sites" (lambda () (interactive)
                                         (customize-option 'html-site-list))))
       (define-key site-map [html-site-set-site]
         (list 'menu-item "Set Current Site" 'html-site-set-site))
@@ -619,7 +670,7 @@ Use the entry with this name in `html-site-list'."
   '(nxhtml-mode))
 
 (define-global-minor-mode html-site-global-mode html-site-mode
-  (lambda()
+  (lambda ()
     (html-site-mode 1)
     (when t ;buffer-file-name
       (unless (memq major-mode html-site-mode-off-list)

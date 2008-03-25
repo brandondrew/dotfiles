@@ -26,8 +26,10 @@
           <span class="tochead">On THIS Page:</span>
           <ul>
             <li><a href="#summary">Introduction to nXhtml</a></li>
-            <li><a href="#featsum">Features</a></li>
-            <li><a href="#qg">The Quick Guide</a></li>
+            <li class="liul"><ul>
+              <li><a href="#featsum">Features</a></li>
+              <li><a href="#qg">The Quick Guide</a></li>
+            </ul></li>
             <li><a href="#completion">Completion</a></li>
             <li class="liul"><ul>
               <li><a href="#complex-compl">More Helpful Completion</a></li>
@@ -82,7 +84,7 @@
           You may find it less perfect, but I was glad for the enthusiasm that Drew showed.
         </p>
 
-        <h2 id="featsum">Features</h2>
+        <h3 id="featsum">Features</h3>
         <p>
           One of the main parts of nXhtml is nxhtml-mode, a GNU <a
           href="http://en.wikipedia.org/wiki/Emacs">Emacs</a> major
@@ -114,7 +116,7 @@
             </ul>
           </li>
           <li>
-            Multiple major modes, which means it can handle for example PHP and JSP while allowing XHTML completion.
+            Multiple major modes, which means it can handle for example PHP, JSP, eRuby and Django while allowing XHTML completion.
           </li>
           <li>
             Link handling:
@@ -162,15 +164,15 @@
           <!-- <li> Adding a popup menu to [apps] to access these features.</li> -->
         </ul>
 
-        <h2 id="qg">The Quick Guide</h2>
+        <h3 id="qg">The Quick Guide</h3>
         <p>
           Short notes to get you started using nXhtml.
         </p>
         <dl>
-          <dt>GNU Eamcs 22</dt>
+          <dt>GNU Emacs 22</dt>
           <dd>
             <p>
-            You need GNU Emacs 22 (yet in beta test).
+            You need GNU Emacs 22 (which was released 2007-06-02).
             </p>
           </dd>
           <dt>Installation</dt>
@@ -202,13 +204,19 @@
           <dd>
             <p>
               To reach many of the features in nXhtml you can use the
-              nXhtml menu.  If you do not see that when in a buffer
+              <b>nXhtml menu</b>.  If you do not see that when in a buffer
               then you can always do <em>M-x nxhtml-minor-mode</em> which
               will turn it on (or off) for that buffer.
             </p>
+            <p>
+              But please notice also the <b>XML menu</b> which
+              contains the nXml menu! (Remember that nXhtml is based
+              on nXml.) When you are using nxhtml-mode this menu is
+              visible when you are in the XHTML parts of a buffer.
+            </p>
           </dd>
 
-          <dt>Turn on Some Things</dt>
+          <dt id="turn-on-some">Turn on Some Things</dt>
           <dd>
             <p>
               There is a good chance that you want to turn on some
@@ -269,10 +277,10 @@
             </p>
             <p>
               For files mixing XHTML with codes, like PHP, you can use
-              something I call <a href="#dtd-needed">XHTML Validation
-              Headers</a>.  That allows you to use XHTML completion
-              even if those files does not have the XHTML headers
-              needed.
+              something I call <a href="#dtd-needed">Fictive XHTML
+              Validation Headers</a>.  That allows you to use XHTML
+              completion even if those files does not have the XHTML
+              headers needed.
             </p>
           </dd>
           <dt>Multiple Major Modes</dt>
@@ -280,18 +288,22 @@
             <p>
               nXhtml can automatically divide the buffer into chunks
               with relevant different major modes (i e languages, like
-              PHP, XHTML etc). This may be useful for editing PHP code
-              and similar.  You can turn on this feature in the <a
-              href="#nxhtml-menu">nXhtml menu</a>: <em>nXhtml -
-              Multiple Major Modes</em>.  You then turn on
-              <em>mumamo-mode</em>, a minor mode that can support
-              multiple major modes in a buffer.
+              PHP, XHTML etc). This may be useful for editing PHP,
+              JSP, eRuby, Django and similar.  If you have done the
+              <i>Quick Customize nXhtml</i> (see <a
+              href="#turn-on-some">Turn On Some Things</a>) then the
+              dividing of chunks will be turned on automatically - if
+              your file extensions match my assumptions. Otherwise you
+              may have to customize that bit (see the <a
+              href="#nxhtml-menu">nXhtml menu</a>: for that).  In the
+              menus you can also found more entries for <em>Multiple
+              Major Modes</em>.
             </p>
             <p>
-              The chunk you are in decide what major mode is
-              used. Inside <em>&lt;?php ... ?php></em> the major mode
-              is normally <em>php-mode</em> for PHP etc.  Outside it may be 
-              <em>nxhtml-mode</em> for XHTML.
+              The chunk you are in decide what major mode is used. For
+              example inside <em>&lt;?php ... ?php></em> the major
+              mode is normally <em>php-mode</em> for PHP etc.  Outside
+              it may be <em>nxhtml-mode</em> for XHTML.
             </p>
           </dd>
           <dt>Links</dt>
@@ -626,20 +638,20 @@
           quite nicely now.  The first time you do completion of XHTML
           code in a buffer where you do not have the needed XHTML
           headers nXhtml mode will ask you for what it calls a
-          <em>XHTML validation header</em>.  After that completion
-          should work as usual.  An XHTML validation header in nXhtml
+          <em>fictive XHTML validation header</em>.  After that completion
+          should work as usual.  A fictive XHTML validation header in nXhtml
           mode is something that is used in the background for
           validation. It is not inserted in the buffer, but may be shown on the screen like this:
         </p>
-        <img alt="XHTML validation header" src="img/xml-validation-header.png" width="448" height="374" />
+        <img alt="fictive XHTML validation header" src="img/xml-validation-header.png" width="448" height="374" />
         <p>
-          nXhtml does its best to guess what XHTML Validation Header
-          the buffer needs, but if the default XHTML validation header
+          nXhtml does its best to guess what fictive XHTML Validation Header
+          the buffer needs, but if the default fictive XHTML validation header
           does not fit you can customize the choices.
         </p>
         <p>
           Note: Do not try to set the XML schema directly when the XHTML
-          headers are missing in the buffer. Use an XHTML
+          headers are missing in the buffer. Use a fictive XHTML
           validation header instead.
         </p>
 
@@ -695,7 +707,7 @@
         <pre>
           &lt;?php
             echo '&lt;'?xml version="1.0" encoding="utf-8"?'>';
-          ?>
+          ?&gt;
         </pre>
         <p>
           it will get very, very confused. If you are not fond of that
@@ -704,8 +716,11 @@
         <pre>
           &lt;?php
             echo '&lt;'; echo '?xml version="1.0" encoding="utf-8"?'; echo '>';
-          ?>
+          ?&gt;
         </pre>
+        <p>
+          For a similar problem <a href="nxhtml-changes.html#php-attribute-values">attribute values computed by PHP</a>.
+        </p>
         <p>
           When editing PHP sometimes the validation of the XHTML part
           gets quite upset.  You may even think that it is unuseful
@@ -714,10 +729,10 @@
         </p>
         <ul>
           <li>
-            Turn on <em>Extra XHTML Validation Header</em> from
+            Turn on <em>Fictive XHTML Validation Header</em> from
             menus. (In <em>nXhtml - Completion</em>.)  That will try
             to guess a how to start validation. It shows a fictive
-            header at the top of the buffer to show you waht is goind
+            header at the top of the buffer to show you what is goind
             on (nothing is inserted in the buffer).
           </li>
           <li>
@@ -730,6 +745,7 @@
           And maybe you do not think the background colors when using Multiple Major Modes is very smart?
           Then just go ahead and remove them. Customize.
           <em>M-x customize-group RET mumamo RET</em>.
+        </p>
 
         <h2 id="file-assoc">File Associations within Emacs</h2>
         <p>
@@ -780,7 +796,7 @@
 
       <hr align="left" class="footer" />
       <p class="footer">
-        Copyright &copy; 2007 OurComments.org
+        Copyright &copy; 2008 OurComments.org
         <br style="margin:0; padding:0; line-height: 0;" />
         Design thanks to <a href="http://www.oswd.org/">OSWD</a>
         <br />

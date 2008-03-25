@@ -5,7 +5,7 @@
 ;; Author: Lennart Borgman <lennartDOTborgmanDOT073ATstudentDOTluDOTse>
 ;; Created: Sat Feb 11 00:06:14 2006
 (defconst html-wtoc:version "0.2") ;; Version:
-;; Last-Updated: Tue Apr 10 04:10:08 2007 (7200 +0200)
+;; Last-Updated: Sun Nov 04 21:49:34 2007 (3600 +0100)
 ;; Keywords:
 ;; Compatibility:
 ;;
@@ -74,7 +74,7 @@ The tools for html-wtoc includes:
   :type 'directory
   :group 'html-wtoc)
 
-;; (defun html-wtoc-get-parsed-html-toc()
+;; (defun html-wtoc-get-parsed-html-toc ()
 ;;   (save-excursion
 ;;     (let ((toc-file (html-toc-file)))
 ;;       (unless (file-exists-p toc-file)
@@ -90,7 +90,7 @@ The tools for html-wtoc includes:
 ;;                             (buffer-substring-no-properties
 ;;                              toc-begin toc-middle))))))))
 
-;; (defun html-wtoc-get-atags(parsed-ul level)
+;; (defun html-wtoc-get-atags (parsed-ul level)
 ;;   (assert (eq 'ul (car parsed-ul)))
 ;;   (let (atags)
 ;;     (dolist (l parsed-ul)
@@ -116,11 +116,11 @@ The tools for html-wtoc includes:
 ;; This file is located in the same directory as `html-toc-file'."
 ;;   :type 'string)
 
-;; (defun html-wtoc-pages-file()
+;; (defun html-wtoc-pages-file ()
 ;;   (expand-file-name html-wtoc-pages-default-name
 ;;                     (file-name-directory (html-toc-file))))
 
-(defun html-wtoc-view-page-with-toc()
+(defun html-wtoc-browse-page-with-toc ()
   (interactive)
   (unless buffer-file-name
     (error "This buffer is not visiting a file"))
@@ -146,11 +146,11 @@ The tools for html-wtoc includes:
     (browse-url-of-file merged-file)))
 
 
-(defun html-wtoc-write-pages-with-toc(allow-overwrite)
+(defun html-wtoc-write-pages-with-toc (allow-overwrite)
   "Merge the TOC with the pages.
 
 If an entry with the name MERGE-NAME exists in `html-wtoc-merges'
-then this is choosen.  Otherwise a new entry is created and added
+then this is chosen.  Otherwise a new entry is created and added
 to `html-wtoc-merges'.  The entry has all necessary information to
 do the merge.
 
@@ -158,7 +158,7 @@ If `html-move-site-directory' has a non-nil value then the list
 of completions when prompting for MERGE-NAME contains only those
 merge names from `html-wtoc-merges' where the site directory has
 the same value.  Otherwise the completion list contains all merge
-names and `html-move-site-directory' will be set to the choosen
+names and `html-move-site-directory' will be set to the chosen
 merge's site directory.
 
 The merging of the pages and the table of contents is done in a

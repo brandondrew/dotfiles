@@ -2,14 +2,17 @@
 ;;
 ;; Author: Lennart Borgman
 ;; Created: Wed Jan 10 17:17:18 2007
-(defconst rngalt:version "0.50") ;;Version:
-;; Lxast-Updated: Tue Apr 10 19:02:11 2007 (7200 +0200)
+(defconst rngalt:version "0.51") ;;Version:
+;; Last-Updated: 2008-03-08T03:33:56+0100 Sat
 ;; Keywords:
 ;; Compatibility:
 ;;
-;; Fxeatures that might be required by this library:
+;; Features that might be required by this library:
 ;;
-;;   None
+;;   `nxml-enc', `nxml-ns', `nxml-parse', `nxml-util',
+;;   `ourcomments-util', `rng-dt', `rng-loc', `rng-match',
+;;   `rng-parse', `rng-pttrn', `rng-uri', `rng-util', `rng-valid',
+;;   `xmltok'.
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -78,6 +81,111 @@ If non-nil should be a function with the same parameters as
 If non-nil should be a function with the same parameters as
 `completing-read'.  Used by `rngalt-complete'.")
 
+
+(defun rngalt-finish-element ()
+  "Finish the current element by inserting an end-tag.
+Like `nxml-finish-element' but takes `rngalt-validation-header'
+into account."
+  (interactive "*")
+  (rngalt-finish-element-1 nil))
+
+;; Fix-me: Check the other uses of `nxml-finish-element-1'. But this
+;; is maybe not necessary since the only other use is in
+;; `nxml-split-element' and that will anyway work - I believe ...
+(defun rngalt-finish-element-1 (startp)
+  "Insert an end-tag for the current element and optionally a start-tag.
+The start-tag is inserted if STARTP is non-nil.  Return the position
+of the inserted start-tag or nil if none was inserted.
+
+This is like `nxml-finish-element-1' but takes
+`rngalt-validation-header' into account."
+  (interactive "*")
+  (let (token-end
+        start-tag-end
+        starts-line
+        ends-line
+        start-tag-indent
+        qname
+        inserted-start-tag-pos)
+    ;; Temporary insert the fictive validation header if any.
+    (let ((buffer-undo-list nil)
+          (here (point-marker)))
+      (when rngalt-validation-header
+        (let ((vh (nth 2 rngalt-validation-header)))
+          (set-marker-insertion-type here t)
+          (save-restriction
+            (widen)
+            (goto-char (point-min))
+            (insert vh)))
+        (goto-char here))
+      (setq token-end (nxml-token-before))
+      (setq start-tag-end
+            (save-excursion
+              (when (and (< (point) token-end)
+                         (memq xmltok-type
+                               '(cdata-section
+                                 processing-instruction
+                                 comment
+                                 start-tag
+                                 end-tag
+                                 empty-element)))
+                (error "Point is inside a %s"
+                       (nxml-token-type-friendly-name xmltok-type)))
+              (nxml-scan-element-backward token-end t)))
+      (when start-tag-end
+        (setq starts-line
+              (save-excursion
+                (unless (eq xmltok-type 'start-tag)
+                  (error "No matching start-tag"))
+                (goto-char xmltok-start)
+                (back-to-indentation)
+                (eq (point) xmltok-start)))
+        (setq ends-line
+              (save-excursion
+                (goto-char start-tag-end)
+                (looking-at "[ \t\r\n]*$")))
+        (setq start-tag-indent (save-excursion
+                                 (goto-char xmltok-start)
+                                 (current-column)))
+        (setq qname (xmltok-start-tag-qname)))
+
+      ;; Undo the insertion of the fictive header:
+      (undo-start)
+      (while (and (not (eq t pending-undo-list))
+                  pending-undo-list)
+        (undo-more 1))
+      (goto-char here))
+
+    (unless start-tag-end (error "No more start tags"))
+
+    (when (and starts-line ends-line)
+      ;; start-tag is on a line by itself
+      ;; => put the end-tag on a line by itself
+      (unless (<= (point)
+                  (save-excursion
+                    (back-to-indentation)
+                    (point)))
+        (insert "\n"))
+      (indent-line-to start-tag-indent))
+    (insert "</" qname ">")
+    (when startp
+      (when starts-line
+        (insert "\n")
+        (indent-line-to start-tag-indent))
+      (setq inserted-start-tag-pos (point))
+      (insert "<" qname ">")
+      (when (and starts-line ends-line)
+        (insert "\n")
+        (indent-line-to (save-excursion
+                          (goto-char xmltok-start)
+                          (forward-line 1)
+                          (back-to-indentation)
+                          (if (= (current-column)
+                                 (+ start-tag-indent nxml-child-indent))
+                              (+ start-tag-indent nxml-child-indent)
+                            start-tag-indent)))))
+    inserted-start-tag-pos))
+
 (defun rngalt-complete ()
   "Complete the string before point using the current schema.
 Return non-nil if in a context it understands.
@@ -104,19 +212,18 @@ you can add your own completion by setting the variables
         (progn
           (unless rng-current-schema-file-name
             (when (eq major-mode 'nxhtml-mode)
-              ;; FIX-ME: You can not answer no ...
-              ;;(lwarn 'dummy :warning "%s" (with-output-to-string (backtrace)))
               (when (y-or-n-p
                      "There is currently no DTD specified for the buffer.
 This makes XHTML completion impossible. You can add a fictive
-extra XHTML validation header that sets the DTD to XHTML.  This will
+XHTML validation header that sets the DTD to XHTML.  This will
 not be inserted in the buffer but completion and XHTML validation
 will assume it is there so both error checking and completion
 will work.
 
-Do you want to add an extra \(fictive) XHTML validation header? ")
+Do you want to add a fictive XHTML validation header? ")
                 (message "") ;; Get rid of the large minibuffer message window
-                (call-interactively 'nxhtml-set-validation-header))))
+                (nxhtml-validation-header-mode)
+                )))
           (let ((lt-pos (save-excursion (search-backward "<" nil t)))
                 xmltok-dtd)
             (or (and lt-pos
@@ -128,7 +235,7 @@ Do you want to add an extra \(fictive) XHTML validation header? ")
                 (when rngalt-complete-last-try
                   (funcall rngalt-complete-last-try))))))))
 
-(defun rngalt-validate()
+(defun rngalt-validate ()
   (unless (= (buffer-size) 0)
     (condition-case err
         (while (rng-do-some-validation) nil)
@@ -140,7 +247,7 @@ Do you want to add an extra \(fictive) XHTML validation header? ")
 
 (defvar rngalt-region-ovl nil)
 (defvar rngalt-region-prepared nil)
-(defun rngalt-complete-tag-region-prepare()
+(defun rngalt-complete-tag-region-prepare ()
   (unless rngalt-region-prepared
     (when rngalt-region-ovl
       (when (overlayp rngalt-region-ovl)
@@ -160,14 +267,14 @@ Do you want to add an extra \(fictive) XHTML validation header? ")
           )))
     (setq rngalt-region-prepared t)))
 
-(defun rngalt-complete-tag-region-cleanup()
+(defun rngalt-complete-tag-region-cleanup ()
   (when rngalt-region-prepared
     (when (overlayp rngalt-region-ovl)
       (delete-overlay rngalt-region-ovl))
     (deactivate-mark)
     (setq rngalt-region-prepared nil)))
 
-(defun rngalt-complete-tag-region-finish()
+(defun rngalt-complete-tag-region-finish ()
   (when (and rngalt-region-prepared
              (overlayp rngalt-region-ovl))
     (let ((here (point)))
@@ -187,55 +294,55 @@ The additions are:
 See also the variable `rngalt-completing-read-tag'."
   (let (rng-complete-extra-strings)
     (when (and (= lt-pos (1- (point)))
-	       rng-complete-end-tags-after-<
-	       rng-open-elements
-	       (not (eq (car rng-open-elements) t))
-	       (or rng-collecting-text
-		   (rng-match-save
-		     (rng-match-end-tag))))
+               rng-complete-end-tags-after-<
+               rng-open-elements
+               (not (eq (car rng-open-elements) t))
+               (or rng-collecting-text
+                   (rng-match-save
+                     (rng-match-end-tag))))
       (setq rng-complete-extra-strings
-	    (cons (concat "/"
-			  (if (caar rng-open-elements)
-			      (concat (caar rng-open-elements)
-				      ":"
-				      (cdar rng-open-elements))
-			    (cdar rng-open-elements)))
-		  rng-complete-extra-strings)))
+            (cons (concat "/"
+                          (if (caar rng-open-elements)
+                              (concat (caar rng-open-elements)
+                                      ":"
+                                      (cdar rng-open-elements))
+                            (cdar rng-open-elements)))
+                  rng-complete-extra-strings)))
     (when (save-excursion
-	    (re-search-backward rng-in-start-tag-name-regex
-				lt-pos
-				t))
+            (re-search-backward rng-in-start-tag-name-regex
+                                lt-pos
+                                t))
       (and rng-collecting-text (rng-flush-text))
       (rngalt-complete-tag-region-prepare)
       (let ((completion
-	     (let ((rng-complete-target-names
-		    (rng-match-possible-start-tag-names))
-		   (rng-complete-name-attribute-flag nil))
-	       (rngalt-complete-before-point (1+ lt-pos)
+             (let ((rng-complete-target-names
+                    (rng-match-possible-start-tag-names))
+                   (rng-complete-name-attribute-flag nil))
+               (rngalt-complete-before-point (1+ lt-pos)
                                              'rng-complete-qname-function
                                              "Insert tag: "
                                              nil
                                              'rng-tag-history
                                              rngalt-completing-read-tag)))
-	    name)
-	(when completion
-	  (cond ((rng-qname-p completion)
-		 (setq name (rng-expand-qname completion
-					      t
-					      'rng-start-tag-expand-recover))
-		 (when (and name
-			    (rng-match-start-tag-open name)
-			    (or (not (rng-match-start-tag-close))
-				;; need a namespace decl on the root element
-				(and (car name)
-				     (not rng-open-elements))))
-		   ;; attributes are required
-		   (insert " "))
+            name)
+        (when completion
+          (cond ((rng-qname-p completion)
+                 (setq name (rng-expand-qname completion
+                                              t
+                                              'rng-start-tag-expand-recover))
+                 (when (and name
+                            (rng-match-start-tag-open name)
+                            (or (not (rng-match-start-tag-close))
+                                ;; need a namespace decl on the root element
+                                (and (car name)
+                                     (not rng-open-elements))))
+                   ;; attributes are required
+                   (insert " "))
                  (rngalt-complete-tag-region-finish)
                  (run-hook-with-args 'rngalt-complete-tag-hooks completion)
                  )
-		((member completion rng-complete-extra-strings)
-		 (insert ">")))))
+                ((member completion rng-complete-extra-strings)
+                 (insert ">")))))
       (rngalt-complete-tag-region-finish)
       t)))
 
@@ -248,20 +355,20 @@ completed.")
   "Like `rng-complete-attribute-name' but with alternate completion.
 See the variable `rngalt-completing-read-attribute-name'."
   (when (save-excursion
-	  (re-search-backward rng-in-attribute-regex lt-pos t))
+          (re-search-backward rng-in-attribute-regex lt-pos t))
     (let ((attribute-start (match-beginning 1))
-	  rng-undeclared-prefixes)
+          rng-undeclared-prefixes)
       (and (rng-adjust-state-for-attribute lt-pos
-					   attribute-start)
-	   (let ((rng-complete-target-names
-		  (rng-match-possible-attribute-names))
-		 (rng-complete-extra-strings
-		  (mapcar (lambda (prefix)
-			    (if prefix
-				(concat "xmlns:" prefix)
-			      "xmlns"))
-			  rng-undeclared-prefixes))
-		 (rng-complete-name-attribute-flag t)
+                                           attribute-start)
+           (let ((rng-complete-target-names
+                  (rng-match-possible-attribute-names))
+                 (rng-complete-extra-strings
+                  (mapcar (lambda (prefix)
+                            (if prefix
+                                (concat "xmlns:" prefix)
+                              "xmlns"))
+                          rng-undeclared-prefixes))
+                 (rng-complete-name-attribute-flag t)
                  completion)
              (setq completion
                    (rngalt-complete-before-point attribute-start
@@ -279,36 +386,36 @@ See the variable `rngalt-completing-read-attribute-name'."
   "Like `rng-complete-attribute-value' but with alternate completion.
 See the variable `rngalt-completing-read-attribute-value'."
   (when (save-excursion
-	  (re-search-backward rng-in-attribute-value-regex lt-pos t))
+          (re-search-backward rng-in-attribute-value-regex lt-pos t))
     (let ((name-start (match-beginning 1))
-	  (name-end (match-end 1))
-	  (colon (match-beginning 2))
-	  (value-start (1+ (match-beginning 3))))
+          (name-end (match-end 1))
+          (colon (match-beginning 2))
+          (value-start (1+ (match-beginning 3))))
       (and (rng-adjust-state-for-attribute lt-pos
-					   name-start)
-	   (if (string= (buffer-substring-no-properties name-start
-							(or colon name-end))
-			"xmlns")
-	       (rngalt-complete-before-point
-		value-start
-		(rng-strings-to-completion-alist
-		 (rng-possible-namespace-uris
-		  (and colon
-		       (buffer-substring-no-properties (1+ colon) name-end))))
-		"Namespace URI: "
-		nil
-		'rng-namespace-uri-history
+                                           name-start)
+           (if (string= (buffer-substring-no-properties name-start
+                                                        (or colon name-end))
+                        "xmlns")
+               (rngalt-complete-before-point
+                value-start
+                (rng-strings-to-completion-alist
+                 (rng-possible-namespace-uris
+                  (and colon
+                       (buffer-substring-no-properties (1+ colon) name-end))))
+                "Namespace URI: "
+                nil
+                'rng-namespace-uri-history
                 rngalt-completing-read-attribute-value) ;; fix-me
-	     (rng-adjust-state-for-attribute-value name-start
-						   colon
-						   name-end)
-	     (rngalt-complete-before-point
-	      value-start
-	      (rng-strings-to-completion-alist
-	       (rng-match-possible-value-strings))
-	      "Value: "
-	      nil
-	      'rng-attribute-value-history
+             (rng-adjust-state-for-attribute-value name-start
+                                                   colon
+                                                   name-end)
+             (rngalt-complete-before-point
+              value-start
+              (rng-strings-to-completion-alist
+               (rng-match-possible-value-strings))
+              "Value: "
+              nil
+              'rng-attribute-value-history
               rngalt-completing-read-attribute-value))
            (unless (eq (char-after) (char-before value-start))
              (insert (char-before value-start)))))
@@ -321,50 +428,50 @@ ALTCOMPL is a function symbol and no completion alternative is
 available from table then this is called instead of
 `compleating-read' with the same parameters."
   (let* ((orig (buffer-substring-no-properties start (point)))
-	 (completion (try-completion orig table predicate))
+         (completion (try-completion orig table predicate))
          (completing-fun (if altcompl altcompl 'completing-read)))
     (cond ((not (or completion completing-fun))
-	   (if (string= orig "")
-	       (message "No completions available")
-	     (message "No completion for %s" (rng-quote-string orig)))
-	   (ding)
-	   nil)
-	  ((eq completion t) orig)
-	  ((and completion
+           (if (string= orig "")
+               (message "No completions available")
+             (message "No completion for %s" (rng-quote-string orig)))
+           (ding)
+           nil)
+          ((eq completion t) orig)
+          ((and completion
                 (not (string= completion orig)))
-	   (delete-region start (point))
-	   (insert completion)
-	   (cond ((not (rng-completion-exact-p completion table predicate))
-		  (message "Incomplete")
-		  nil)
-		 ((eq (try-completion completion table predicate) t)
-		  completion)
-		 (t
-		  (message "Complete but not unique")
-		  nil)))
-	  (t
-	   (setq completion
-		 (let ((saved-minibuffer-setup-hook
-			(default-value 'minibuffer-setup-hook)))
-		   (add-hook 'minibuffer-setup-hook
-			     'minibuffer-completion-help
-			     t)
-		   (unwind-protect
-		       (funcall completing-fun
+           (delete-region start (point))
+           (insert completion)
+           (cond ((not (rng-completion-exact-p completion table predicate))
+                  (message "Incomplete")
+                  nil)
+                 ((eq (try-completion completion table predicate) t)
+                  completion)
+                 (t
+                  (message "Complete but not unique")
+                  nil)))
+          (t
+           (setq completion
+                 (let ((saved-minibuffer-setup-hook
+                        (default-value 'minibuffer-setup-hook)))
+                   (add-hook 'minibuffer-setup-hook
+                             'minibuffer-completion-help
+                             t)
+                   (unwind-protect
+                       (funcall completing-fun
                                 prompt
                                 table
                                 predicate
                                 nil
                                 orig
                                 hist)
-		     (setq-default minibuffer-setup-hook
-				   saved-minibuffer-setup-hook))))
+                     (setq-default minibuffer-setup-hook
+                                   saved-minibuffer-setup-hook))))
            (when completion
              (delete-region start (point))
              (insert completion))
-	   completion))))
+           completion))))
 
-(defun rngalt-get-missing-required-attr(single-tag)
+(defun rngalt-get-missing-required-attr (single-tag)
   "Get a list of missing required attributes.
 This is to be used when completing attribute names.
 SINGLE-TAG should be non-nil if the tag has no end tag.
@@ -385,7 +492,7 @@ nxhtml.el.
       (insert ">")
       (rngalt-validate))
     (goto-char here))
-  (let ((ovl (rng-error-overlay-message (or (rng-error-overlay-after (point)) 
+  (let ((ovl (rng-error-overlay-message (or (rng-error-overlay-after (point))
                                             (rng-error-overlay-after (1- (point)))))))
     ;;(message "ovl=%s" ovl)(sit-for 1)
     ;;(message "prop ovl=%s" (overlay-properties ovl))(sit-for 1)
@@ -424,7 +531,7 @@ nxhtml.el.
 (make-variable-buffer-local 'rngalt-major-mode)
 (put 'rngalt-major-mode 'permanent-local t)
 
-(defun rngalt-after-change-major()
+(defun rngalt-after-change-major ()
   (unless (and (boundp 'mumamo-set-major-running)
                mumamo-set-major-running)
     (setq rngalt-major-mode major-mode)
@@ -433,7 +540,7 @@ nxhtml.el.
       (rngalt-reapply-validation-header))
     (rngalt-update-validation-header-overlay)))
 
-(defun rngalt-update-validation-header-overlay()
+(defun rngalt-update-validation-header-overlay ()
   (if (and rngalt-display-validation-header
            rngalt-validation-header
            (or (derived-mode-p 'nxml-mode)
@@ -448,8 +555,8 @@ nxhtml.el.
         (overlay-put rngalt-validation-header-overlay
                      'priority 1000)
         (overlay-put rngalt-validation-header-overlay
-                     'help-echo "XML validation header")
-        (let ((s1 (concat "*** Fictive XML Validation Header:\n"))
+                     'help-echo "XHTML/XML validation header")
+        (let ((s1 (concat "*** Fictive XHTML/XML Validation Header:\n"))
               (s2))
           (setq s2 (concat s1 (nth 2 rngalt-validation-header) "\n"))
           (put-text-property 0 (length s2)
@@ -468,7 +575,7 @@ nxhtml.el.
     (when rngalt-validation-header-overlay
       (delete-overlay rngalt-validation-header-overlay))))
 
-(defun rngalt-update-validation-header-overlay-everywhere()
+(defun rngalt-update-validation-header-overlay-everywhere ()
   (dolist (b (buffer-list))
     (when (buffer-live-p b)
       (with-current-buffer b
@@ -516,28 +623,28 @@ except when `rngalt-validation-header' is non-nil."
 ;; See also `rng-set-initial-state'."
 ;;   (cond ((= rng-validate-up-to-date-end 1)
 ;;          (rng-set-initial-state)
-;; 	 t)
-;; 	((= rng-validate-up-to-date-end (point-max))
-;; 	 nil)
-;; 	(t (let ((state
+;;       t)
+;;      ((= rng-validate-up-to-date-end (point-max))
+;;       nil)
+;;      (t (let ((state
 ;;                   (if (and rngalt-validation-header
 ;;                            (= rng-validate-up-to-date-end 1))
 ;;                       (car rngalt-validation-header)
 ;;                     (get-text-property (1- rng-validate-up-to-date-end)
 ;;                                        'rng-state))))
 ;;              (cond (state
-;; 		    (rng-restore-state state)
-;; 		    (goto-char rng-validate-up-to-date-end))
-;; 		   (t
-;; 		    (let ((pos (previous-single-property-change
-;; 				rng-validate-up-to-date-end
-;; 				'rng-state)))
-;; 		      (cond (pos
-;; 			     (rng-restore-state
-;; 			      (or (get-text-property (1- pos) 'rng-state)
-;; 				  (error "Internal error: state null")))
-;; 			     (goto-char pos))
-;; 			    (t (rng-set-initial-state))))))))))
+;;                  (rng-restore-state state)
+;;                  (goto-char rng-validate-up-to-date-end))
+;;                 (t
+;;                  (let ((pos (previous-single-property-change
+;;                              rng-validate-up-to-date-end
+;;                              'rng-state)))
+;;                    (cond (pos
+;;                           (rng-restore-state
+;;                            (or (get-text-property (1- pos) 'rng-state)
+;;                                (error "Internal error: state null")))
+;;                           (goto-char pos))
+;;                          (t (rng-set-initial-state))))))))))
 
 (defun rngalt-set-validation-header (start-of-doc)
   (rng-validate-mode 0)
@@ -557,6 +664,7 @@ except when `rngalt-validation-header' is non-nil."
         (setq rng-last-ipattern-index nil))
     (remove-hook 'after-change-major-mode-hook 'rngalt-after-change-major t)
     (setq rngalt-validation-header nil)
+    (rng-set-vacuous-schema)
     (rng-auto-set-schema))
   ;;(lwarn 'rngalt-svh :warning "here 2")
   (rng-validate-mode 1)
@@ -567,7 +675,7 @@ except when `rngalt-validation-header' is non-nil."
   ;;(lwarn 'rngalt-svh :warning "here 5")
   )
 
-(defun rngalt-reapply-validation-header()
+(defun rngalt-reapply-validation-header ()
   (when rngalt-validation-header
     (when (or (not rng-current-schema-file-name)
               (unless (string= rngalt-current-schema-file-name rng-current-schema-file-name)
@@ -587,7 +695,7 @@ except when `rngalt-validation-header' is non-nil."
 
 ;; FIX-ME: Add edit header?
 
-(defun rngalt-get-validation-header-buffer()
+(defun rngalt-get-validation-header-buffer ()
   (let ((b (get-buffer "*XML Validation Header*")))
     (unless b
       (setq b (get-buffer-create "*XML Validation Header*"))
@@ -596,7 +704,7 @@ except when `rngalt-validation-header' is non-nil."
         (nxml-mode)))
     b))
 
-(defun rngalt-get-state-after(start-of-doc)
+(defun rngalt-get-state-after (start-of-doc)
   ;; FIX-ME: better buffer name?
   (let ((statebuf (rngalt-get-validation-header-buffer)))
     (with-current-buffer statebuf
@@ -611,7 +719,7 @@ except when `rngalt-validation-header' is non-nil."
               (rng-locate-schema-file)
               start-of-doc)))))
 
-(defun rngalt-show-validation-header()
+(defun rngalt-show-validation-header ()
   "Show XML validation header used in current buffer.
 The XML validation header is used in `nxhtml-mode' to set a state
 for XML validation at the start of the buffer.
@@ -630,7 +738,7 @@ More techhnical info: This can be used by any mode derived from
   (rngalt-update-validation-header-buffer)
   (display-buffer (rngalt-get-validation-header-buffer) t))
 
-(defun rngalt-update-validation-header-buffer()
+(defun rngalt-update-validation-header-buffer ()
   (let ((vh (nth 2 rngalt-validation-header))
         (cb (current-buffer)))
     (with-current-buffer (rngalt-get-validation-header-buffer)
