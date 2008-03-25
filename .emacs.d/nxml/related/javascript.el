@@ -698,5 +698,5 @@ Key bindings:
   (run-hooks 'javascript-mode-hook))
 
 
-(provide 'javascript-mode)
+(provide 'javascript)
 ;;; javascript.el ends here

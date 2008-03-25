@@ -68,6 +68,7 @@
 (require 'install-elisp)
 (require 'elunit)
 
+(require 'cc-defs)
 (load "nxml/autostart.el")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
