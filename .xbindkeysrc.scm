@@ -50,7 +50,8 @@
 ;;;; Music functions
 
 (map (lambda (binding) (xbindkey (car binding) (cdr binding)))
- (list '(F6 . "~/bin/mpc-random")
+ (list '(F5 . "~/bin/mpc-notify")
+       '(F6 . "~/bin/mpc-random")
        '(F7 . "~/bin/mpc-choose")
        '(F8 . "mpc toggle")
        '(F9 . "mpc prev")

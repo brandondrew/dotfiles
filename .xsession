@@ -6,7 +6,6 @@ xmodmap ~/.xmodmap
 devilspie &
 unclutter -idle 0.5 &
 xbindkeys &
-
-pidgin &
+synergys &
 
 exec gnome-session
