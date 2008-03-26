@@ -16,9 +16,6 @@
 (require 'ruby-mode)
 (require 'ruby-electric)
 (require 'inf-ruby)
-;; This isn't in my repo; so don't whine when I do a fresh checkout and
-;; haven't symlinked in the dev checkout.
-(ignore-errors (require 'rails))
 (require 'ri-ruby)
 (require 'rcodetools)
 (require 'cheat)
@@ -26,8 +23,6 @@
 (add-to-list 'auto-mode-alist '("\\.rb$" . ruby-mode))
 (add-to-list 'auto-mode-alist '("\\.rake$" . ruby-mode)) ; d'oh!
 (add-to-list 'auto-mode-alist '("Rakefile$" . ruby-mode))
-(add-to-list 'auto-mode-alist '("\\.rhtml$" . my-rhtml))
-(add-to-list 'auto-mode-alist '("html\\.erb$" . my-rhtml))
 (add-to-list 'auto-mode-alist '("\\.builder$" . ruby-mode))
 (add-to-list 'auto-mode-alist '("\\.mab$" . ruby-mode))
 
@@ -58,7 +53,7 @@
   (interactive)
   (run-ruby (concat (rails-root) "script/console")))
 
-;; TODO: fix for rubinius?
+;; TODO: autodetect this?
 (setq inferior-ruby-first-prompt-pattern ">>"
       inferior-ruby-prompt-pattern ">>")
 
@@ -74,8 +69,8 @@
   (shell-command-to-string (concat "rake " (if (= 0 (length task)) "default" task))))
 
 (defun my-ruby-mode-hook ()
-  (ruby-electric-mode)
-  (pretty-lambdas))
+  (ruby-electric-mode))
+;;  (pretty-lambdas))
 
 (define-key ruby-mode-map "\C-\M-h" 'backward-kill-word) ; ruby-mode redefines this badly
 (define-key ruby-mode-map (kbd "RET") 'ruby-reindent-then-newline-and-indent)
@@ -97,19 +92,6 @@
 ;; the anoying red underlines
 (setq rng-nxml-auto-validate-flag nil)
 
-;; force to load another css-mode, the css-mode in nxml package
-;; seems failed to load under my Emacs 23
-
-(defun my-rhtml ()
-  (nxhtml-mode)
-  (make-local-variable 'cua-inhibit-cua-keys)
-  (setq mumamo-current-chunk-family '("eRuby nXhtml Family" nxhtml-mode
-                                      (mumamo-chunk-eruby
-                                       mumamo-chunk-inlined-style
-                                       mumamo-chunk-inlined-script
-                                       mumamo-chunk-style=
-                                       mumamo-chunk-onjs=)))
-  (mumamo-mode))
 
 ;; Flymake - http://www.emacswiki.org/cgi-bin/emacs-en/FlymakeRuby
 

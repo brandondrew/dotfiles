@@ -184,3 +184,7 @@
 ;; make an emacs peepcode
 
 ;; fix that rcirc completion
+
+;; grab music stats from /var/log/mpd/mpd.log
+;; * graph them
+;; * come up with a "not recently played" command
