@@ -58,6 +58,8 @@
 
 (global-set-key (kbd "C-x w") 'w3m)
 (global-set-key "\C-xh" 'view-url)
+(global-set-key "\C-xt" 'twittering-mode)
+(global-set-key "\C-xT" 'twittering-update-status-interactive)
 
 ;;; Display
 

@@ -5,22 +5,11 @@
 ** Backlight on resume
 ** Network on resume
 * Test setup on a VM
-* Typeset resumé
-* Submit PDF fonts bug report to Manning
-* Grab SVN version of mpd for powersaving
-* Work into Ubuntu
-** Cellwriter package?
-** Thinkfinger?
-** Proper binding for rotate key
-** Wacom device enabled by default
-** Rotate script
-** Rotate on swivel
-** Network on resume
-** Backlight on resume
+* Typeset résumé
 * Projects
 ** Emaculate Strike Force
 ** rcirc completion
-** bus scheme closures
+** bus scheme stack traces
 ** augment
 ** mars
 *** erb templates

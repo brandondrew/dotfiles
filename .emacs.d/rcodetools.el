@@ -28,7 +28,7 @@
       (insert "=>")
     ad-do-it))
 ;; To remove this advice.
-;; (progn (ad-disable-advice 'comment-dwim 'around 'rct-hack) (ad-update 'comment-dwim)) 
+(progn (ad-disable-advice 'comment-dwim 'around 'rct-hack) (ad-update 'comment-dwim)) 
 
 (defun rct-current-line ()
   "Return the vertical position of point..."

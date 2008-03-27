@@ -21,6 +21,7 @@
 
 (defun my-lisp-hook ()
   (local-set-key (kbd "RET") 'reindent-then-newline-and-indent)
+  (local-set-key (kbd "C-\\") 'lisp-complete-symbol)
   (font-lock-add-keywords nil
                           '(("(\\|)" . 'paren-face))))
 
@@ -59,7 +60,7 @@
     (flush-lines "^;")
     (end-of-buffer)
     (let ((loc (line-number-at-pos)))
-      (message (number-to-string loc) " lines of code"))))
+      (message (number-to-string loc) " lines of code. Be sure to undo now."))))
 
 (defmacro case-string (expr &rest choices)
   "A variation on the case macro that uses equal rather than eql, and is thus suitable for strings."

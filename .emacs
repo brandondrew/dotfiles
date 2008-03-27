@@ -37,12 +37,10 @@
 
 (add-to-list 'load-path "~/.emacs.d")
 (add-to-list 'load-path "~/.emacs.d/jabber")
-(add-to-list 'load-path "~/.emacs.d/w3m")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; loading modes
 
-(autoload 'php-mode "php-mode")
 (autoload 'yaml-mode "yaml-mode")
 (autoload 'css-mode "css-mode")
 (autoload 'javascript-mode "javascript" "" t)
@@ -55,9 +53,9 @@
 (autoload 'lisppaste-paste-region "lisppaste" "" t)
 (autoload 'rafb-paste "rafb-paste" "" t)
 (autoload 'pastie-region "pastie" "" t)
+(autoload 'top-mode "top-mode" "" t)
 
 (autoload 'jabber-connect "jabber" "" t)
-(autoload 'w3m "w3m" "" t)
 
 (require 'cl)
 (require 'saveplace)
@@ -70,6 +68,10 @@
 
 (require 'cc-defs)
 (load "nxml/autostart.el")
+
+;; some boxes won't have this installed from CVS
+;; if that is so, try roastbeef install emacs-w3m
+(ignore-errors (require 'w3m-load))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; My support files and configurations
@@ -179,8 +181,6 @@
 
 ;; fix flymake for JS and Ruby
 
-;; fix mumamo for rhtml
-
 ;; make an emacs peepcode
 
 ;; fix that rcirc completion
@@ -188,3 +188,5 @@
 ;; grab music stats from /var/log/mpd/mpd.log
 ;; * graph them
 ;; * come up with a "not recently played" command
+
+;; write a screenshot+upload combo
