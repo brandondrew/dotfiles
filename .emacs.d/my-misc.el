@@ -58,6 +58,18 @@
       '(("Technomancy" "http://dev.technomancy.us" utf-8)
         ("EmacsWiki" "http://www.emacswiki.org/cgi-bin/emacs" utf-8)))
 
+
+;; No idea if this actually works
+(defvar twittering-spam-regex "i?[pP]hone"
+  "Tweets that match this regex will not get displayed")
+
+(defadvice twittering-format-status (after twittering-spam-block)
+  "Drop tweets that match twittering-spam-regex"
+  (if (string-match twittering-spam-regex ad-return-value)
+      (setq ad-return-value "")
+    ad-return-value))
+  
+
 (setenv "PAGER" "cat")
 (setenv "EDITOR" "emacsclient")
 
