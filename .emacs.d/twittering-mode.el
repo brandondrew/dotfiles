@@ -6,7 +6,7 @@
 ;; Created: Sep 4, 2007
 ;; Version: 0.2.0
 ;; Keywords: twitter web
-;; URL: http://hayamin.com/
+;; URL: http://lambdarepos.svnrepository.com/share/trac.cgi/browser/lang/elisp/twittering-mode/trunk/twittering-mode.el
 
 ;; Contributors:
 ;;  naoya_t
@@ -183,6 +183,7 @@
       (define-key km [backspace] 'backward-char)
       (define-key km "G" 'end-of-buffer)
       (define-key km "H" 'beginning-of-buffer)
+      (define-key km "q" (lambda () (interactive) (kill-buffer (current-buffer))))
       nil))
 
 (defvar twittering-mode-syntax-table nil "")

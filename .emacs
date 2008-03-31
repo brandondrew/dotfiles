@@ -156,8 +156,9 @@
 ;;; C-x v = - diff
 ;;; C-x v ~ - diff against specific version
 
-;;; Eshell piping
-;;; ifconfig > #<buffer interfaces>
+;;;; Eshell
+;;; piping: ifconfig > #<buffer interfaces>
+;;; sudo: cd/sudo::
 
 ;;; Well, we already have `C-x r w R' (window-configuration-to-register)
 ;;; and `C-x r f R' (frame-configuration-to-register) for saving window
@@ -190,3 +191,5 @@
 ;; * come up with a "not recently played" command
 
 ;; write a screenshot+upload combo
+
+;; look into adding hyperlinks to *vc-change-log*
