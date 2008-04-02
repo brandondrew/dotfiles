@@ -46,8 +46,6 @@
 (autoload 'javascript-mode "javascript" "" t)
 (autoload 'moz-minor-mode "moz" "Mozilla Minor and Inferior Mozilla Modes" t)
 
-(autoload 'htmlize-region "htmlize" "" t)
-(autoload 'htmlize-buffer "htmlize" "" t)
 (autoload 'tail-file "tail.el" "Tail a file." t)
 (autoload 'color-theme-zenburn "zenburn")
 (autoload 'lisppaste-paste-region "lisppaste" "" t)
@@ -65,6 +63,7 @@
 (require 'esh-mode)
 (require 'install-elisp)
 (require 'elunit)
+(require 'scpaste)
 
 (require 'cc-defs)
 (load "nxml/autostart.el")
