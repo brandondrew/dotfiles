@@ -140,6 +140,15 @@
           "pariatur. Excepteur sint occaecat cupidatat non proident, sunt in "
           "culpa qui officia deserunt mollit anim id est laborum."))
 
+(defun todo ()
+  (interactive)
+  (switch-to-buffer "*todo*")
+  (emacs-lisp-mode)
+  (insert-file-contents "~/.emacs")
+  (goto-char (point-max))
+  (search-backward ";;; TODO")
+  (kill-region (point-min) (point)))
+
 (defun display-image ()
   "display images using imagemagick"
   (interactive)

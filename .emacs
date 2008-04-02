@@ -156,8 +156,9 @@
 ;;; C-x v = - diff
 ;;; C-x v ~ - diff against specific version
 
-;;; Eshell piping
-;;; ifconfig > #<buffer interfaces>
+;;;; Eshell
+;;; piping: ifconfig > #<buffer interfaces>
+;;; sudo: cd/sudo::
 
 ;;; sudo ionice -c3 -ppid
 
@@ -192,3 +193,5 @@
 ;; * come up with a "not recently played" command
 
 ;; write a screenshot+upload combo
+
+;; look into adding hyperlinks to *vc-change-log*
