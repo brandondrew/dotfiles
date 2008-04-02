@@ -36,6 +36,7 @@
 (global-font-lock-mode t)
 (menu-bar-mode -1)
 (winner-mode t)
+(column-number-mode t)
 (show-paren-mode 1)
 
 (when (> emacs-major-version 21)
@@ -90,7 +91,7 @@
 ;; w3m
 (setq w3m-use-cookies t
       w3m-default-save-directory "~/"
-      w3m-default-display-inline-images t)
+      w3m-default-display-inline-images nil)
 
 (mapc (lambda (v) (set v nil))
       '(w3m-show-graphic-icons-in-header-line

@@ -193,3 +193,5 @@
 ;; write a screenshot+upload combo
 
 ;; look into adding hyperlinks to *vc-change-log*
+
+;; check out js2-mode.el: http://code.google.com/p/js2-mode/
