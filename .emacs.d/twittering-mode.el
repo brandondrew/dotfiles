@@ -183,7 +183,7 @@
       (define-key km [backspace] 'backward-char)
       (define-key km "G" 'end-of-buffer)
       (define-key km "H" 'beginning-of-buffer)
-      (define-key km "q" (lambda () (interactive) (kill-buffer (current-buffer))))
+      (define-key km "q" 'bury-buffer)
       nil))
 
 (defvar twittering-mode-syntax-table nil "")
