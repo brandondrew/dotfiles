@@ -159,6 +159,8 @@
 ;;; Eshell piping
 ;;; ifconfig > #<buffer interfaces>
 
+;;; sudo ionice -c3 -ppid
+
 ;;; Well, we already have `C-x r w R' (window-configuration-to-register)
 ;;; and `C-x r f R' (frame-configuration-to-register) for saving window
 ;;; configurations, and `C-x r j R' for restoring them.
