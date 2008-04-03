@@ -33,6 +33,9 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;;; Fix for a bug in CVS Emacs 2 April 08; remove when fixed upstream:
+(defun handle-shift-selection ())
+
 (toggle-debug-on-error)
 
 (add-to-list 'load-path "~/.emacs.d")
@@ -41,19 +44,25 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; loading modes
 
-(autoload 'yaml-mode "yaml-mode")
-(autoload 'css-mode "css-mode")
-(autoload 'javascript-mode "javascript" "" t)
-(autoload 'moz-minor-mode "moz" "Mozilla Minor and Inferior Mozilla Modes" t)
+;;; Regenerate the autoload file if it doesn't exist or it's are too
+;;; old. (2 weeks or so)
+(let ((autoload-file "~/.emacs.d/loaddefs.el"))
+  (if (or (not (file-exists-p autoload-file))
+	  (< (+ (car (nth 5 (file-attributes autoload-file))) 20)
+	     (car (current-time))))
+      (let ((generated-autoload-file autoload-file))
+	(update-directory-autoloads "~/.emacs.d/")))
+  (load autoload-file))
 
+(autoload 'yaml-mode "yaml-mode")
+(autoload 'moz-minor-mode "moz" "Mozilla Minor and Inferior Mozilla Modes" t)
 (autoload 'tail-file "tail.el" "Tail a file." t)
-(autoload 'color-theme-zenburn "zenburn")
 (autoload 'lisppaste-paste-region "lisppaste" "" t)
 (autoload 'rafb-paste "rafb-paste" "" t)
 (autoload 'pastie-region "pastie" "" t)
 (autoload 'top-mode "top-mode" "" t)
-
 (autoload 'jabber-connect "jabber" "" t)
+(autoload 'scpaste "scpaste" "" t)
 
 (require 'cl)
 (require 'saveplace)
@@ -63,8 +72,6 @@
 (require 'esh-mode)
 (require 'install-elisp)
 (require 'elunit)
-(require 'scpaste)
-
 (require 'cc-defs)
 (load "nxml/autostart.el")
 
