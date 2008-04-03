@@ -55,7 +55,8 @@
        '(F7 . "~/bin/mpc-choose")
        '(F8 . "mpc toggle")
        '(F9 . "mpc prev")
-       '(F10 . "mpc next")))
+       '(F10 . "mpc next")
+       '(F12 . "vlc -f ~/documents/movies/misc/rick.flv")))
 
 ;;;; Other launchers
 

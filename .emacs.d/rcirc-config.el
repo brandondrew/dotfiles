@@ -3,7 +3,7 @@
 ;; example:
 ;(setq rcirc-authinfo '(("freenode" nickserv "technomancy" "password")))
 
-(setq rcirc-server-alist '(("irc.freenode.net" :channels ("#emacs" "#seattle.rb"))))
+(setq rcirc-server-alist '(("irc.freenode.net" (:channels ("#emacs" "#seattle.rb")))))
 (setq rcirc-fill-column 72)
 (add-hook 'rcirc-mode-hook (lambda () (rcirc-track-minor-mode 1)))
 
@@ -23,6 +23,7 @@
 
 (setq rcirc-buffer-maximum-lines 10240)
 
+;; TODO: fix
 (defun rcirc-notify-nick (process sender response target text)
   (if (and (executable-find "notify-send")
            (string-match rcirc-default-nick text))
