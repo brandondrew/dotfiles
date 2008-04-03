@@ -194,6 +194,8 @@
 
 ;; fix that rcirc completion
 
+;; fix ssh/scp pcompletion to use the tramp functions?
+
 ;; grab music stats from /var/log/mpd/mpd.log
 ;; * graph them
 ;; * come up with a "not recently played" command

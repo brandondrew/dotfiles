@@ -53,6 +53,8 @@
 
 ;;; Todo:
 
+;; Try to use tramp instead of shelling out to scp (tramp-handle-copy-file)
+;; Investigate htmlfontify.el instead of htmlize.el
 ;; Make htmlize convert all URLs to hyperlinks
 
 ;;; License:

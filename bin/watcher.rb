@@ -22,7 +22,7 @@ hash = Digest::SHA1.hexdigest(content)
 unless File.exist?(hash)
   include Jabber
   jid, password, to = File.read('config').split("\n")
-  message = "#{ARGV.first} changed to #{content[0 .. 200]}"
+  message = "#{ARGV.first} changed to #{content[0 .. 200]} ..."
   
   jid = JID::new("#{jid}/#{`hostname`.chomp}-watcher")
   client = Client::new(jid)
