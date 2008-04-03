@@ -38,6 +38,10 @@
   (interactive)
   (run-ruby "irb"))
 
+(defun rr1.9 ()
+  (interactive)
+  (run-ruby "irb1.9"))
+
 (defun rbx ()
   (interactive)
   (run-ruby "~/src/rubinius/shotgun/rubinius"))

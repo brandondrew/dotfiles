@@ -52,6 +52,7 @@
 (defalias 'qrr 'query-replace-regexp)
 (random t)
 
+;; TODO: get oddmuse-mode to not pollute ~
 (setq emacs-wiki-name "PhilHagelberg"
       oddmuse-username "PhilHagelberg")
 
@@ -60,7 +61,7 @@
         ("EmacsWiki" "http://www.emacswiki.org/cgi-bin/emacs" utf-8)))
 
 
-;; No idea if this actually works
+;; No idea if this actually works... UPDATE: yes, it works.
 (defvar twittering-spam-regex "i?[pP]hone"
   "Tweets that match this regex will not get displayed")
 
