@@ -12,6 +12,8 @@
      (setq eshell-save-history-on-exit t)
      (set-face-attribute 'eshell-prompt nil :foreground "DeepSkyBlue")
 
+     (add-to-list 'eshell-visual-commands "ssh")
+                  
      (add-to-list 'eshell-command-completions-alist
                   (cons "gunzip" "gz\\'"))
      (add-to-list 'eshell-command-completions-alist

@@ -121,6 +121,10 @@
   (interactive)
   (shell-command (concat "find " (rails-root) " -name \\*rb | xargs etags -o " (rails-root) "/TAGS")))
 
+(defun my-generate-ruby-tags ()
+  (interactive)
+  (flet ((rails-root () (cadr (split-string (pwd) " ")))) (my-generate-rails-tags)))
+
 (defun sudo-edit ()
   (interactive)
   (find-alternate-file (concat "/sudo:root@localhost:" buffer-file-name)))

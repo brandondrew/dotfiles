@@ -203,3 +203,5 @@
 ;; look into adding hyperlinks to *vc-change-log*
 
 ;; check out js2-mode.el: http://code.google.com/p/js2-mode/
+
+;; fix ruby-get-old-input to not care about what the prompt looks like

@@ -19,6 +19,8 @@
 (add-hook 'emacs-lisp-mode-hook 'eldoc-mode)
 (add-hook 'lisp-mode-hook 'pretty-lambdas)
 
+(add-to-list 'auto-mode-alist '("\\.emacs-project" . emacs-lisp-mode))
+
 (defun my-lisp-hook ()
   (local-set-key (kbd "RET") 'reindent-then-newline-and-indent)
   (local-set-key (kbd "C-\\") 'lisp-complete-symbol)
