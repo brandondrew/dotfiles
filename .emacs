@@ -196,9 +196,7 @@
 
 ;; fix ssh/scp pcompletion to use the tramp functions?
 
-;; grab music stats from /var/log/mpd/mpd.log
-;; * graph them
-;; * come up with a "not recently played" command
+;; get mpd-stats working: https://gna.org/projects/mpd-stats
 
 ;; write a screenshot+upload combo
 

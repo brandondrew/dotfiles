@@ -119,7 +119,8 @@
 
 (defun my-generate-rails-tags ()
   (interactive)
-  (shell-command (concat "find " (rails-root) " -name \\*rb | xargs etags -o " (rails-root) "/TAGS")))
+  (shell-command (format "find %s -name *rb | xargs ctags-exuberant -a -e -f %s/TAGS --exclude=vendor"
+			 (rails-root) (rails-root))))
 
 (defun sudo-edit ()
   (interactive)
