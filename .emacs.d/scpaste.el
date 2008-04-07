@@ -125,6 +125,18 @@ You must have write-access to this directory via `scp'.")
     (kill-new full-url)
     (message "Pasted to %s (on kill ring)" full-url)))
 
+(defun scpaste-window (window-name)
+  "Publish a screenshot of a window."
+  (interactive)
+  ;; TODO: use completing-read on the output of wmctrl
+  (let ((full-url (concat scpaste-http-destination "/"
+			  (url-hexify-string window-name) ".png")))
+    (eshell-command (format "import -window %s %s/scpaste.png" window-name scpaste-tmp-dir))
+    (eshell-command (format "scp %s/scpaste.png %s/%s.png" scpaste-tmp-dir full-url))
+  
+    (kill-new full-url)
+    (message "Pasted to %s (on kill ring)" full-url)))
+
 (defun scpaste-index ()
   "Generate an index of all existing pastes on server on the splash page."
   (interactive)

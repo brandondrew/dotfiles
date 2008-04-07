@@ -8,6 +8,7 @@
      (require 'pcmpl-rake)
      (require 'em-prompt)
      (require 'em-cmpl)
+     (require 'em-term.el)
      (setq eshell-cmpl-cycle-completions nil)
      (setq eshell-save-history-on-exit t)
      (set-face-attribute 'eshell-prompt nil :foreground "DeepSkyBlue")
