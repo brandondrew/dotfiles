@@ -177,18 +177,15 @@
 ;; steal ZSS defadvice in setup-aliases.el for find-file-at-point
 ;; steal ZSS greying out lines that get too long
 
-;; publish
-;;  - ebby
-
-;; install-elisp.el
-;;  - do something about metadata: description, author, version, url
-;;  - make sure each installation buffer gets focus/attention
-
 ;; set up rcodetools
 
 ;; get my-red-face and friends (my-misc.el) highlighting in ruby-mode
 
 ;; fix flymake for JS and Ruby
+
+;; do something about getting a better ruby highlighter:
+;;; http://rubyforge.org/projects/ruby-tp-dw-gram/
+;;; http://cedet.cvs.sourceforge.net/cedet/cedet/contrib/
 
 ;; make an emacs peepcode
 
@@ -198,8 +195,10 @@
 
 ;; get mpd-stats working: https://gna.org/projects/mpd-stats
 
-;; write a screenshot+upload combo
+;; finish scpaste-window
 
 ;; look into adding hyperlinks to *vc-change-log*
 
 ;; check out js2-mode.el: http://code.google.com/p/js2-mode/
+
+;; fix ruby-get-old-input to not care about what the prompt looks like

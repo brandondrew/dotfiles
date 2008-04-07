@@ -38,6 +38,10 @@
   (interactive)
   (run-ruby "irb"))
 
+(defun rr1.9 ()
+  (interactive)
+  (run-ruby "irb1.9"))
+
 (defun rbx ()
   (interactive)
   (run-ruby "~/src/rubinius/shotgun/rubinius"))
@@ -77,7 +81,6 @@
 (define-key ruby-mode-map (kbd "C-c l") (lambda () (interactive) (insert "lambda")))
 
 ;; rcodetools stuff
-;; TODO: doesn't do anything
 (define-key ruby-mode-map (kbd "C-\\") 'rct-complete-symbol)
 
 (global-set-key (kbd "C-h r") 'ri)

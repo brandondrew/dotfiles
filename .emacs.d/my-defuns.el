@@ -122,6 +122,10 @@
   (shell-command (format "find %s -name *rb | xargs ctags-exuberant -a -e -f %s/TAGS --exclude=vendor"
 			 (rails-root) (rails-root))))
 
+(defun my-generate-ruby-tags ()
+  (interactive)
+  (flet ((rails-root () (cadr (split-string (pwd) " ")))) (my-generate-rails-tags)))
+
 (defun sudo-edit ()
   (interactive)
   (find-alternate-file (concat "/sudo:root@localhost:" buffer-file-name)))

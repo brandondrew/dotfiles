@@ -34,6 +34,12 @@
 ;; twittering-mode.el is a major mode for Twitter.
 ;; You can check friends timeline, and update your status on Emacs.
 
+;;; History: (local changes)
+
+;; twittering-(icon|scroll)-mode should *not* go in the modeline
+;; q to bury-buffer
+;; thanks; don't need a message every time HTTP GETs work
+
 ;;; Code:
 
 (require 'cl)
@@ -206,8 +212,8 @@
   (defface twittering-uri-face
     `((t nil)) "" :group 'faces)
   (set-face-attribute 'twittering-uri-face nil :underline t)
-  (add-to-list 'minor-mode-alist '(twittering-icon-mode " tw-icon"))
-  (add-to-list 'minor-mode-alist '(twittering-scroll-mode " tw-scroll"))
+  (add-to-list 'minor-mode-alist '(twittering-icon-mode ""))
+  (add-to-list 'minor-mode-alist '(twittering-scroll-mode ""))
   )
 
 (defmacro case-string (str &rest clauses)
@@ -300,7 +306,8 @@
 	       (reverse (twittering-xmltree-to-status
 			 body)))
 	      (twittering-render-friends-timeline)
-	      (message (if suc-msg suc-msg "Success: Get.")))
+	      ;; (message (if suc-msg suc-msg "Success: Get."))
+	      )
 	     (t (message status))))
 	(message "Failure: Bad http response.")))
   )
