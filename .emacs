@@ -161,8 +161,8 @@
 ;;;; VC
 ;;; C-x v g - blame (V to toggle committer data)
 ;;; C-x v d - dired (v t to show all files)
-;;; C-x v = - diff
-;;; C-x v ~ - diff against specific version
+;;; C-x v = - diff (C-u to specify revision)
+;;; C-x v ~ - visit specific revision
 
 ;;;; Eshell
 ;;; piping: ifconfig > #<buffer interfaces>
@@ -176,31 +176,35 @@
 
 ;;; TODO:
 
+;; look into adding hyperlinks to *vc-change-log*
+
+;; find a better dark-on-light color scheme
+
 ;; steal ZSS defadvice in setup-aliases.el for find-file-at-point
 ;; steal ZSS greying out lines that get too long
 
 ;; pcomplete for: kill/killall, git, apt-get
 
-;; get my-red-face and friends (my-misc.el) highlighting in ruby-mode
+;; flymake for JS and Ruby
 
-;; fix flymake for JS and Ruby
+;; submit patched rcirc completion
 
-;; do something about getting a better ruby highlighter:
-;;; http://rubyforge.org/projects/ruby-tp-dw-gram/
-;;; http://cedet.cvs.sourceforge.net/cedet/cedet/contrib/
+;; make ssh/scp pcompletion use the tramp functions?
 
-;; make an emacs peepcode
+;; scpaste: use tramp functions, finish scpaste-window
 
-;; fix that rcirc completion
-
-;; fix ssh/scp pcompletion to use the tramp functions?
-
-;; get mpd-stats working: https://gna.org/projects/mpd-stats
-
-;; finish scpaste-window
-
-;; look into adding hyperlinks to *vc-change-log*
+;; fix ruby-get-old-input to not care about what the prompt looks like
 
 ;; check out js2-mode.el: http://code.google.com/p/js2-mode/
 
-;; fix ruby-get-old-input to not care about what the prompt looks like
+;; disable global-hl-line-mode for shell buffers?
+
+;;; Long-term:
+
+;; figure out how to get nnml in VC w/o merge conflicts
+
+;;; do something about getting a better ruby highlighter:
+;;; http://rubyforge.org/projects/ruby-tp-dw-gram/
+;;; http://cedet.cvs.sourceforge.net/cedet/cedet/contrib/
+
+;;; make an emacs peepcode

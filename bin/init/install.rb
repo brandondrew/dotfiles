@@ -22,7 +22,7 @@ if !File.exist?('/usr/bin/gem')
   system "gem update --system"
 end
 
-%w(irb ri rdoc ruby gem).each { |p| system "update-alternatives --install /usr/bin/#{p} #{p} /usr/bin/#{p}1.8 10" }
+%w(irb ri rdoc ruby gem rake).each { |p| system "update-alternatives --install /usr/bin/#{p} #{p} /usr/bin/#{p}1.8 10" }
 
 system "gem install rake" # sometimes we get a false start
 system "gem install #{gems.join(' ')}"

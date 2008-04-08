@@ -73,8 +73,8 @@
 
 (defun my-coding-hook ()
   "Enable things I consider convenient across all coding buffers."
+  ;; (indent-buffer)
   (setq show-trailing-whitespace t)
-  (indent-buffer)
   (font-lock-add-keywords nil
 			  '(("\\<\\(FIX\\|TODO\\|FIXME\\|HACK\\|REFACTOR\\):" 1 font-lock-warning-face t))))
 

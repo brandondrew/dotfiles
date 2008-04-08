@@ -108,12 +108,12 @@
 (defface my-red-face
   '((t (:background "red")))
   "A red face for warnings that are not quite that bad."
- :group 'my-faces)
+  :group 'my-faces)
 
 (defface my-yellow-face
   '((t (:background "yellow")))
   "A yellow face for warnings that are not quite that bad."
- :group 'my-faces)
+  :group 'my-faces)
 
 (dolist ((mode '(ruby-mode lisp-mode emacs-lisp-mode)))
   (font-lock-add-keywords mode
