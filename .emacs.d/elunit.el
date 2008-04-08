@@ -54,7 +54,7 @@
 ;; assertions in that file provide much better reporting if you use
 ;; them.  Using `assert-that' is preferred over built-in `assert'.
 
-;;; Todo:
+;;; TODO:
 
 ;;  * more helper functions, specifically for more functional-test stuff.
 

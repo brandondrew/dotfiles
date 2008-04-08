@@ -23,7 +23,7 @@
 
 (setq rcirc-buffer-maximum-lines 10240)
 
-;; TODO: fix
+;; TODO: fix escaping
 (defun rcirc-notify-nick (process sender response target text)
   (if (and (executable-find "notify-send")
            (string-match rcirc-default-nick text))
