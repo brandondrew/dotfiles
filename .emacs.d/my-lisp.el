@@ -30,6 +30,7 @@
 (add-hook 'emacs-lisp-mode-hook 'my-lisp-hook)
 (add-hook 'lisp-mode-hook 'my-lisp-hook)
 (add-hook 'lisp-mode-hook 'my-coding-hook)
+(add-hook 'emacs-lisp-mode-hook 'my-coding-hook)
 
 (defface paren-face
    '((((class color) (background dark))

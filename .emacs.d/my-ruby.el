@@ -18,7 +18,6 @@
 (require 'inf-ruby)
 (require 'ri-ruby)
 (require 'rcodetools)
-(require 'cheat)
 
 (add-to-list 'auto-mode-alist '("\\.rb$" . ruby-mode))
 (add-to-list 'auto-mode-alist '("\\.rake$" . ruby-mode)) ; d'oh!
@@ -32,7 +31,7 @@
 (add-to-list 'completion-ignored-extensions ".rbc")
  
 (add-hook 'ruby-mode-hook 'my-ruby-mode-hook)
-;; (add-hook 'ruby-mode-hook 'my-coding-hook)
+(add-hook 'ruby-mode-hook 'my-coding-hook)
 
 (defun rr ()
   (interactive)

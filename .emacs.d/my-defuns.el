@@ -16,7 +16,7 @@
   (interactive "MUrl: ")
   (switch-to-buffer (url-retrieve-synchronously url))
   (rename-buffer url t)
-  (eval ;set major mode
+  (eval					;set major mode
    (read
     (concat
      "("
@@ -73,9 +73,10 @@
 
 (defun my-coding-hook ()
   "Enable things I consider convenient across all coding buffers."
-					;  (column-marker-1 80)
   (setq show-trailing-whitespace t)
-  (indent-buffer))
+  (indent-buffer)
+  (font-lock-add-keywords nil
+			  '(("\\<\\(FIX\\|TODO\\|FIXME\\|HACK\\|REFACTOR\\):" 1 font-lock-warning-face t))))
 
 (defun untabify-buffer ()
   (interactive)
@@ -99,11 +100,11 @@
   (set-default-font "-b&h-lucidatypewriter-bold-r-normal-sans-34-240-100-100-m-200-iso8859-1"))
 
 (defun pretty-lambdas ()
-    (font-lock-add-keywords
-     nil `(("(?\\(lambda\\>\\)"
-            (0 (progn (compose-region (match-beginning 1) (match-end 1)
-                                      ,(make-char 'greek-iso8859-7 107))
-                      nil))))))
+  (font-lock-add-keywords
+   nil `(("(?\\(lambda\\>\\)"
+	  (0 (progn (compose-region (match-beginning 1) (match-end 1)
+				    ,(make-char 'greek-iso8859-7 107))
+		    nil))))))
 
 (defun terminus () (interactive) (set-default-font "-xos4-terminus-medium-r-normal--14-140-72-72-c-80-iso8859-1"))
 

@@ -51,6 +51,7 @@
 	  (< (+ (car (nth 5 (file-attributes autoload-file))) 20)
 	     (car (current-time))))
       (let ((generated-autoload-file autoload-file))
+	(message "Updating autoloads...")
 	(update-directory-autoloads "~/.emacs.d/")))
   (load autoload-file))
 
@@ -63,6 +64,7 @@
 (autoload 'top-mode "top-mode" "" t)
 (autoload 'jabber-connect "jabber" "" t)
 (autoload 'scpaste "scpaste" "" t)
+(autoload 'cheat "cheat" "" t)
 
 (require 'cl)
 (require 'saveplace)
@@ -105,7 +107,7 @@
       (load system-specific-config)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;    Nifty things to remember and hopefully use
+;;  Cheat Sheet
 
 ;;; M-z zap to char
 ;;; C-u C-SPC jump to previous edit
@@ -177,7 +179,7 @@
 ;; steal ZSS defadvice in setup-aliases.el for find-file-at-point
 ;; steal ZSS greying out lines that get too long
 
-;; set up rcodetools
+;; pcomplete for: kill/killall, git, apt-get
 
 ;; get my-red-face and friends (my-misc.el) highlighting in ruby-mode
 

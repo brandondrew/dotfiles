@@ -78,7 +78,9 @@
 (global-set-key (kbd "C-c p") (lambda () (interactive) (message "%s" (point))))
 (global-set-key [f1] 'menu-bar-mode)
 (global-set-key (kbd "C-h a") 'apropos)
+(global-set-key (kbd "C-h c") 'cheat)
 (define-key read-expression-map (kbd "TAB") #'lisp-complete-symbol)
+
 
 (define-key isearch-mode-map (kbd "C-o") ; occur easily inside isearch
   (lambda ()
