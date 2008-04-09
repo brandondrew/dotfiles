@@ -26,8 +26,6 @@
 ;;; Buffer management
 
 (global-set-key (kbd "C-x M-f") 'ido-find-file-other-window)
-(global-set-key "\M-p" 'previous-buffer)
-(global-set-key "\M-n" 'next-buffer)
 (global-set-key (kbd "C-x C-b") 'bs-show)
 (global-set-key (kbd "C-x M-r") 'revert-buffer)
 
@@ -36,7 +34,6 @@
 (global-set-key "\C-x-" 'shrink-window)
 (global-set-key "\C-x=" 'enlarge-window)
 
-(global-set-key (kbd "C-x !") 'window-small-and-large)
 (global-set-key "\C-xO" (lambda () (interactive) (other-window -1)))
 (global-set-key "\C-x." (lambda () (interactive) (enlarge-window 1 t)))
 (global-set-key "\C-x," (lambda () (interactive) (shrink-window 1 t)))
@@ -61,18 +58,6 @@
 (global-set-key "\C-xt" 'twittering-mode)
 (global-set-key "\C-xT" 'twittering-update-status-interactive)
 
-;;; Display
-
-(global-set-key (kbd "M-\\") 'my-selective-display)
-(global-set-key (kbd "C-c o") 'longlines-mode)
-(global-set-key [f2] (lambda () (interactive)
-                       (set-default-font "-xos4-terminus-medium-r-normal--16-160-72-72-c-80-iso8859-9")
-                       (require 'flymake)
-                       (set-face-attribute 'mumamo-background-chunk-submode nil :background "grey18")
-                       (set-face-attribute 'flymake-errline nil :background "Maroon4")
-                       (set-face-background 'flymake-warnline "dark slate blue")
-                       (color-theme-zenburn)))
-
 ;;; Utility
 
 (global-set-key (kbd "C-c p") (lambda () (interactive) (message "%s" (point))))
@@ -80,7 +65,8 @@
 (global-set-key (kbd "C-h a") 'apropos)
 (global-set-key (kbd "C-h c") 'cheat)
 (define-key read-expression-map (kbd "TAB") #'lisp-complete-symbol)
-
+(global-set-key (kbd "M-\\") 'my-selective-display)
+(global-set-key (kbd "C-x v d") 'vc-status)
 
 (define-key isearch-mode-map (kbd "C-o") ; occur easily inside isearch
   (lambda ()

@@ -74,6 +74,7 @@
 (require 'esh-mode)
 (require 'install-elisp)
 (require 'elunit)
+(require 'vc-buttons)
 (require 'cc-defs)
 (load "nxml/autostart.el")
 
@@ -163,6 +164,8 @@
 ;;; C-x v d - dired (v t to show all files)
 ;;; C-x v = - diff (C-u to specify revision)
 ;;; C-x v ~ - visit specific revision
+;;; C-x v l - log
+;;; C-x v d - vc-status
 
 ;;;; Eshell
 ;;; piping: ifconfig > #<buffer interfaces>
@@ -176,12 +179,16 @@
 
 ;;; TODO:
 
-;; look into adding hyperlinks to *vc-change-log*
+;; look into adding hyperlinks to vc-blame
 
 ;; find a better dark-on-light color scheme
 
 ;; steal ZSS defadvice in setup-aliases.el for find-file-at-point
 ;; steal ZSS greying out lines that get too long
+
+;; fix twittering-mode bugs mentioned in file
+
+;; make column-number-mode only active in coding buffers
 
 ;; pcomplete for: kill/killall, git, apt-get
 
