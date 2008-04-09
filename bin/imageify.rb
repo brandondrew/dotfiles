@@ -7,15 +7,15 @@ include Magick
 
 raise ArgumentError, "usage: imageify.rb <text file> <image file>" if ARGV.size != 2
 
-class Canvas 
- def initialize(text, image)
+class Canvas
+  def initialize(text, image)
     @text = text.gsub(/\n/, ";").squeeze(" ")
     ratio = (image.columns / image.rows.to_f) * 2 # letters are not square!
-    
+
     @rows = (Math::sqrt(@text.size/ratio))
     @columns = (@rows * ratio).ceil
     @rows = @rows.ceil
-    
+
     @resized = image.scale(@columns, @rows)
   end
 

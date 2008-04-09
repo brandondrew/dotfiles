@@ -2,6 +2,7 @@ startup_message off
 defscrollback 3000
 msgwait 1
 nethack on
+bind s # remove the flow control garbage
 
 escape ^Zz
 

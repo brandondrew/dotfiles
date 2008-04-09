@@ -40,6 +40,12 @@
 ;; q to bury-buffer
 ;; thanks; don't need a message every time HTTP GETs work
 
+;;; Bugs:
+
+;; should warn if you go over 140 chars
+;; sometimes icons get mixed up
+;; should not create a *twittering* buffer when you require it.
+
 ;;; Code:
 
 (require 'cl)
