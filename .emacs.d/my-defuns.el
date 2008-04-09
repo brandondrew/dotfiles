@@ -107,6 +107,7 @@
 		    nil))))))
 
 (defun terminus () (interactive) (set-default-font "-xos4-terminus-medium-r-normal--14-140-72-72-c-80-iso8859-1"))
+(defun inconsolata () (interactive) (set-default-font "Inconsolata-12"))
 
 ;;; Random stuff
 
