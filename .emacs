@@ -21,6 +21,11 @@
 ;; 'Shkembe chorba is best when it's hot, peppery and someone praises it'.
 ;; -http://programming.reddit.com/info/uw44/comments/cuze4
 
+;; Lisp dialects [...] are wonderful provided you don't mind spending
+;; 20% of your time rejoicing in the beauty that is a dynamic language
+;; with uniform syntax and a real macro system.
+;; - http://ratpoison.nongnu.org/inspiration.html
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; server singleton
 
@@ -44,7 +49,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; loading modes
 
-;;; Regenerate the autoload file if it doesn't exist or it's are too
+;;; Regenerate the autoload file if it doesn't exist or it's too
 ;;; old. (2 weeks or so)
 (let ((autoload-file "~/.emacs.d/loaddefs.el"))
   (if (or (not (file-exists-p autoload-file))
@@ -59,7 +64,6 @@
 (autoload 'moz-minor-mode "moz" "Mozilla Minor and Inferior Mozilla Modes" t)
 (autoload 'tail-file "tail.el" "Tail a file." t)
 (autoload 'lisppaste-paste-region "lisppaste" "" t)
-(autoload 'rafb-paste "rafb-paste" "" t)
 (autoload 'pastie-region "pastie" "" t)
 (autoload 'top-mode "top-mode" "" t)
 (autoload 'jabber-connect "jabber" "" t)
@@ -71,15 +75,16 @@
 (require 'toggle)
 (require 'compile)
 (require 'which-func)
-(require 'esh-mode)
-(require 'install-elisp)
-(require 'elunit)
-(require 'vc-buttons)
 (require 'cc-defs)
-(load "nxml/autostart.el")
+;; TODO: make this an autoload; it's slow!
+;;(load "nxml/autostart.el")
+
+(eval-after-load 'vc
+  '(progn (require 'vc-buttons)
+	  (require 'gitsum)))
 
 ;; some boxes won't have this installed from CVS
-;; if that is so, try roastbeef install emacs-w3m
+;; if that is so, try roastbeef install w3m && roastbeef install emacs-w3m
 (ignore-errors (require 'w3m-load))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -92,7 +97,6 @@
 (require 'my-registers)
 (require 'my-misc)
 (require 'my-hook-setup)
-(require 'my-music)
 
 (require 'my-ruby)
 (require 'my-lisp)
@@ -101,11 +105,12 @@
 (load "jabber-config")
 (load "rcirc-config")
 
-(let ((system-specific-config (concat "~/.emacs.d/"
-				      (substring (shell-command-to-string "hostname") 0 -1)
-				      ".el")))
-  (if (file-exists-p system-specific-config)
-      (load system-specific-config)))
+(setq system-specific-config
+      (concat "~/.emacs.d/"
+	      (substring (shell-command-to-string "hostname") 0 -1) ".el"))
+
+(if (file-exists-p system-specific-config)
+    (load system-specific-config))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  Cheat Sheet
@@ -176,6 +181,8 @@
 ;;; Well, we already have `C-x r w R' (window-configuration-to-register)
 ;;; and `C-x r f R' (frame-configuration-to-register) for saving window
 ;;; configurations, and `C-x r j R' for restoring them.
+
+;;; Profiling: time emacs -e save-buffers-kill-terminal
 
 ;;; TODO:
 

@@ -162,22 +162,6 @@
   (shell-command (concat "display "
                          (thing-at-point 'filename))))
 
-(defun eshell-handle-ansi-color ()
-  (ansi-color-apply-on-region eshell-last-output-start
-                              eshell-last-output-end))
-
-(add-to-list 'eshell-output-filter-functions 'eshell-handle-ansi-color)
-
-(defun eshell-maybe-bol ()
-  (interactive)
-  (let ((p (point)))
-    (eshell-bol)
-    (if (= p (point))
-        (beginning-of-line))))
-
-(add-hook 'eshell-mode-hook
-          '(lambda () (define-key eshell-mode-map "\C-a" 'eshell-maybe-bol)))
-
 (defun ss () (interactive) (server-start))
 
 (provide 'my-defuns)
