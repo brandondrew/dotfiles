@@ -74,6 +74,7 @@
 (defun my-coding-hook ()
   "Enable things I consider convenient across all coding buffers."
   ;; (indent-buffer)
+  (hl-line-mode)
   (set (make-local-variable 'show-trailing-whitespace) t)
   (font-lock-add-keywords nil
 			  '(("\\<\\(FIX\\|TODO\\|FIXME\\|HACK\\|REFACTOR\\):" 1 font-lock-warning-face t))))

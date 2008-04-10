@@ -11,7 +11,6 @@
 
 (when window-system
   (mouse-wheel-mode t)
-  (global-hl-line-mode t)
   (setq frame-title-format '(buffer-file-name "%f" ("%b")))
   (setq browse-url-browser-function 'browse-url-firefox)
   (setq browse-url-firefox-new-window-is-tab t)
