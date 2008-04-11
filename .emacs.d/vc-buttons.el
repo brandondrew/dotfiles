@@ -36,11 +36,13 @@
 
 ;;; Todo:
 
-;; remove cl dependency (lexical-let) for submission to GNU Emacs
+;; remove runtime cl dependency for submission to GNU Emacs
+;; incorporate into log-view.el
+;; show diffs as well as files?
 ;; add regexps for other vc backends
-;; make it work with filesets instead of individual files... maybe.
+;; make it work with filesets instead of individual files. show a menu of files.
 
-(require 'cl)
+(eval-when-compile (require 'cl))
 
 (defvar vc-button-regexp-alist
   '((Git . "^commit +\\([0-9a-f]\\{40\\}\\)$")

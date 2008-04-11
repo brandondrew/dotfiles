@@ -26,10 +26,10 @@
       inhibit-startup-message t
       transient-mark-mode t
       color-theme-is-global nil
-      indicate-empty-lines t
       save-place t
       truncate-partial-width-windows nil
       indent-tabs-mode nil
+      ;; Huh? These don't load on startup!
       whitespace-chars '(trailing tabs lines)
       whitespace-line-column 80)
 
