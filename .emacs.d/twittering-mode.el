@@ -45,6 +45,7 @@
 ;; should warn if you go over 140 chars
 ;; sometimes icons get mixed up
 ;; should not create a *twittering* buffer when you require it.
+;; undo buffer overflows; disable it
 
 ;;; Code:
 

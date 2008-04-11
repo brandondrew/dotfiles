@@ -1,0 +1,7 @@
+[user]
+	name = Phil Hagelberg
+	email = technomancy@gmail.com
+[color]
+	diff = auto
+	status = auto
+	branch = auto

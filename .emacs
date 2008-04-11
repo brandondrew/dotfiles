@@ -197,6 +197,8 @@
 
 ;; fix twittering-mode bugs mentioned in file
 
+;; allow edits to occur buffer to get propagated to original buffer
+
 ;; make column-number-mode only active in coding buffers
 
 ;; pcomplete for: kill/killall, git, apt-get
@@ -204,8 +206,6 @@
 ;; flymake for JS and Ruby
 
 ;; submit patched rcirc completion
-
-;; make ssh/scp pcompletion use the tramp functions?
 
 ;; scpaste: use tramp functions, finish scpaste-window
 

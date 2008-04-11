@@ -54,7 +54,6 @@
 ;;; Todo:
 
 ;; Try to use tramp instead of shelling out to scp (tramp-handle-copy-file)
-;; Investigate htmlfontify.el instead of htmlize.el
 ;; Make htmlize convert all URLs to hyperlinks
 
 ;;; License:
@@ -134,8 +133,8 @@ You must have write-access to this directory via `scp'.")
   (let ((full-url (concat scpaste-http-destination "/"
 			  (url-hexify-string window-name) ".png")))
     (eshell-command (format "import -window %s %s/scpaste.png" window-name scpaste-tmp-dir))
-    (eshell-command (format "scp %s/scpaste.png %s/%s.png" scpaste-tmp-dir full-url))
-  
+    (eshell-command (format "scp %s/scpaste.png %s/%s.png" scpaste-tmp-dir full-url window-name))
+
     (kill-new full-url)
     (message "Pasted to %s (on kill ring)" full-url)))
 
@@ -153,9 +152,9 @@ You must have write-access to this directory via `scp'.")
 	  (insert-file-contents "~/.emacs.d/scpaste.el") ;; TODO: find elisp's __FILE__
 	  (goto-char (point-min))
 	  (search-forward ";;; Commentary")
-	  (previous-line)
+	  (forward-line -1)
 	  (insert "\n;;; Pasted Files\n\n")
-	  (mapcar (lambda (file) (insert (concat ";; * <" scpaste-http-destination "/" file ">\n"))) file-list)
+	  (mapc (lambda (file) (insert (concat ";; * <" scpaste-http-destination "/" file ">\n"))) file-list)
 	  (emacs-lisp-mode) (font-lock-fontify-buffer) (rename-buffer "SCPaste")
 	  (scpaste "index")))
       (ignore-errors (kill-buffer "*EShell Command Output*")))))

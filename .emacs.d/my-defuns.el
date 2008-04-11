@@ -89,17 +89,6 @@
 
 ;;; Cosmetic stuff
 
-(defun smallish (&optional font-size)
-  (interactive)
-  (set-default-font
-   (concat "-xos4-terminus-medium-r-normal--"  (or font-size "12") "-120-72-72-c-60-iso8859-1"))
-  (tabbar-mode -1)
-  (scroll-bar-mode -1))
-
-(defun bigish ()
-  (interactive)
-  (set-default-font "-b&h-lucidatypewriter-bold-r-normal-sans-34-240-100-100-m-200-iso8859-1"))
-
 (defun pretty-lambdas ()
   (font-lock-add-keywords
    nil `(("(?\\(lambda\\>\\)"
@@ -132,10 +121,6 @@
 (defun sudo-edit ()
   (interactive)
   (find-alternate-file (concat "/sudo:root@localhost:" buffer-file-name)))
-
-(defun insert-timestamp ()
-  (interactive)
-  (insert (time-stamp-string)))
 
 (defun lorem ()
   "Insert a lorem ipsum."

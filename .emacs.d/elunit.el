@@ -346,7 +346,7 @@ May be passed BUFFER, otherwise defaults to current buffer."
     (goto-char (point-min))
     (unless (search-forward target nil t)
       (fail "%s expected to be found in buffer %s" target buffer))
-    (unless (equal (face (get-text-property (point) 'background)))
+    (unless (equal face (get-text-property (point) 'background))
       (fail "%s expected to be displayed with face %s" target face))))
 
 (defun assert-overlay (pos)

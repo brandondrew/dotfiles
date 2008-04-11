@@ -50,12 +50,11 @@
 
 (defun vc-log-make-buttons ()
   "Make each reference to a commit in the current buffer act as a hyperlink."
-  (interactive)
   (let* ((buffer-read-only nil)
 	 (file (buffer-file-name vc-parent-buffer))
 	 (button-regexp (assocref (vc-backend (list file)) vc-button-regexp-alist)))
     (save-excursion
-      (beginning-of-buffer)
+      (goto-char (point-min))
       (while (search-forward-regexp button-regexp nil t)
 	(lexical-let ((cl-file file) ;; closure time!
 		      (revision (match-string 1)))

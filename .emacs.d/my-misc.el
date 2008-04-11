@@ -112,9 +112,4 @@
   "A yellow face for warnings that are not quite that bad."
   :group 'my-faces)
 
-(dolist ((mode '(ruby-mode lisp-mode emacs-lisp-mode)))
-  (font-lock-add-keywords mode
-                          (list (list yellow-tokens 0 'my-yellow-face 'prepend)
-                                (list red-tokens    0 'my-red-face    'prepend))))
-
 (provide 'my-misc)

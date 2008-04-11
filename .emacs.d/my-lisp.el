@@ -37,7 +37,8 @@
       (:foreground "grey20"))
      (((class color) (background light))
       (:foreground "grey55")))
-   "Face used to dim parentheses.")
+   "Face used to dim parentheses."
+   :group 'my-faces)
 
 (defun my-eval-and-replace ()
   "Replace the preceding sexp with its value."
@@ -61,7 +62,7 @@
   (save-excursion
     (flush-lines "^$")
     (flush-lines "^;")
-    (end-of-buffer)
+    (goto-char (point-max))
     (let ((loc (line-number-at-pos)))
       (message (number-to-string loc) " lines of code. Be sure to undo now."))))
 

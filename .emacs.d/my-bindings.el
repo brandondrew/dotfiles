@@ -68,7 +68,7 @@
 (global-set-key (kbd "M-\\") 'my-selective-display)
 (global-set-key (kbd "C-x v d") 'vc-status)
 
-(define-key isearch-mode-map (kbd "C-o") ; occur easily inside isearch
+(define-key isearch-mode-map (kbd "C-o") ;; occur easily inside isearch
   (lambda ()
     (interactive)
     (let ((case-fold-search isearch-case-fold-search))
