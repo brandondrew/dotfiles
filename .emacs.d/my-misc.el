@@ -29,7 +29,9 @@
       indicate-empty-lines t
       save-place t
       truncate-partial-width-windows nil
-      indent-tabs-mode nil)
+      indent-tabs-mode nil
+      whitespace-chars '(trailing tabs lines)
+      whitespace-line-column 80)
 
 (auto-compression-mode t)
 (global-font-lock-mode t)
@@ -99,10 +101,6 @@
         w3m-use-toolbar))
 
 ;;; Cosmetics
-
-;; bug me
-(setq yellow-tokens (delete ?\s "\\<\\(F IX\\|D OC\\|R ETIRE\\|T ODO\\|W ARN\\|F IXME\\).*\\>"))
-(setq red-tokens (delete ?\s "\\<\\(H ACK\\|R EFACTOR\\).*\\>"))
 
 (defface my-red-face
   '((t (:background "red")))

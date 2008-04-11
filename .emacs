@@ -62,9 +62,9 @@
 
 (autoload 'yaml-mode "yaml-mode")
 (autoload 'moz-minor-mode "moz" "Mozilla Minor and Inferior Mozilla Modes" t)
+(autoload 'whitespace-mode "whitespace" "Toggle whitespace visualization." t)
 (autoload 'tail-file "tail.el" "Tail a file." t)
 (autoload 'lisppaste-paste-region "lisppaste" "" t)
-(autoload 'pastie-region "pastie" "" t)
 (autoload 'top-mode "top-mode" "" t)
 (autoload 'jabber-connect "jabber" "" t)
 (autoload 'scpaste "scpaste" "" t)
@@ -76,6 +76,7 @@
 (require 'compile)
 (require 'which-func)
 (require 'cc-defs)
+
 ;; TODO: make this an autoload; it's slow!
 ;;(load "nxml/autostart.el")
 
@@ -191,7 +192,8 @@
 ;; find a better dark-on-light color scheme
 
 ;; steal ZSS defadvice in setup-aliases.el for find-file-at-point
-;; steal ZSS greying out lines that get too long
+
+;; fix whitespace-mode. augh. horrible.
 
 ;; fix twittering-mode bugs mentioned in file
 
