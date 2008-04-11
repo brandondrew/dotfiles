@@ -29,7 +29,6 @@
       save-place t
       truncate-partial-width-windows nil
       indent-tabs-mode nil
-      ;; Huh? These don't load on startup!
       whitespace-chars '(trailing tabs lines)
       whitespace-line-column 80)
 

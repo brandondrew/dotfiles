@@ -86,8 +86,8 @@
 
 ;;; Random stuff
 
-(defun my-recompile-init ()
-  (interactive)
+(defun recompile-init ()
+  (interactive) ;; TODO: maybe shouldn't recompile my-* that changes a lot?
   (byte-recompile-directory (expand-file-name "~/.emacs.d") 0))
 
 (defun my-generate-elisp-tags ()
@@ -134,5 +134,11 @@
                          (thing-at-point 'filename))))
 
 (defun ss () (interactive) (server-start))
+
+(defun switch-or-start (buffer-name starter-function)
+  (if (get-buffer buffer-name)
+      (switch-to-buffer buffer-name)
+    (funcall starter-function)))
+
 
 (provide 'my-defuns)

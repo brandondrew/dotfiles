@@ -79,7 +79,7 @@
 (require 'cc-defs)
 
 ;; TODO: make this an autoload; it's slow!
-;;(load "nxml/autostart.el")
+;; (load "nxml/autostart.el")
 
 (eval-after-load 'vc
   '(progn (require 'vc-buttons)
@@ -131,10 +131,11 @@
 ;; M-x follow-mode
 
 ;;; Custom bindings
-;; C-x \ align-regexp
-;; C-x M-r revert buffer
+;; C-c \ align-regexp
+;; C-c C-r revert buffer
 ;; C-x M-k kill buffer and window
-;; C-x d toggle-dedicated-window
+;; C-x M-f find file in other window
+;; C-c d toggle-dedicated-window
 ;; C-c p message point
 
 ;;; Rectangles
@@ -209,6 +210,7 @@
 ;; fix whitespace-mode config to not be horrible
 ;; allow edits to occur buffer to get propagated to original buffer
 ;; pcomplete for: kill/killall, git, apt-get
+;; unify statuses in twitter and jabber
 
 ;;; Minor
 
