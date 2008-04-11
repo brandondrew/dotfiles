@@ -48,6 +48,7 @@
 
 (add-to-list 'load-path "~/.emacs.d")
 (add-to-list 'load-path "~/.emacs.d/jabber")
+(add-to-list 'load-path "~/.emacs.d/nxml/nxml-mode-20041004")
 
 ;; Regenerate the autoload file if it doesn't exist or it's too
 ;; old. (2 weeks or so)
@@ -61,10 +62,16 @@
 	(update-directory-autoloads "~/.emacs.d/")))
   (load autoload-file))
 
+(autoload 'nxhtml-mode "nxml/autostart" "" t)
+(autoload 'nxml-mode "nxml/autostart" "" t)
+(autoload 'ruby-mode "ruby-mode" "" t)
+(autoload 'javascript-mode "javascript" "" t)
+
+(autoload 'w3m "w3m-load" "" t)
 (autoload 'yaml-mode "yaml-mode")
 (autoload 'moz-minor-mode "moz" "Mozilla Minor and Inferior Mozilla Modes" t)
 (autoload 'whitespace-mode "whitespace" "Toggle whitespace visualization." t)
-(autoload 'tail-file "tail.el" "Tail a file." t)
+(autoload 'tail-file "tail" "Tail a file." t)
 (autoload 'lisppaste-paste-region "lisppaste" "" t)
 (autoload 'top-mode "top-mode" "" t)
 (autoload 'jabber-connect "jabber" "" t)
@@ -78,18 +85,9 @@
 (require 'which-func)
 (require 'cc-defs)
 
-;; TODO: make this an autoload; it's slow!
-;; (load "nxml/autostart.el")
-
 (eval-after-load 'vc
   '(progn (require 'vc-buttons)
 	  (require 'gitsum)))
-
-;; some boxes won't have this installed from CVS
-;; if that is so, try roastbeef install w3m && roastbeef install emacs-w3m
-;; currently (11 April 08) it's crashy as the dickens
-
-(ignore-errors (require 'w3m-load))
 
 ;;
 ;; My support files and configurations
@@ -102,13 +100,13 @@
 (require 'my-registers)
 (require 'my-misc)
 (require 'my-hook-setup)
-
-(require 'my-ruby)
 (require 'my-lisp)
-(require 'my-js)
 
-(load "jabber-config")
-(load "rcirc-config")
+(eval-after-load 'ruby-mode '(require 'my-ruby))
+(eval-after-load 'javascript-mode '(require 'my-js))
+
+(eval-after-load 'jabber-connect '(load "jabber-config"))
+(eval-after-load 'irc '(load "rcirc-config"))
 
 (setq system-specific-config
       (concat "~/.emacs.d/"

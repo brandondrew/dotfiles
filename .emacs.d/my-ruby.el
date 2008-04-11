@@ -10,9 +10,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Ruby help
 
-;; syntax highlighting needs to be done before ruby-electric
-(global-font-lock-mode t)
-
 (require 'ruby-mode)
 (require 'ruby-electric)
 (require 'inf-ruby)
