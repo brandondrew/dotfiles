@@ -1,0 +1,20 @@
+-*- org -*-
+
+* Laptop fixes
+** Set up fingerprint scanner
+** Backlight on resume
+** Network on resume
+* Test setup on a VM
+* Typeset résumé
+* Projects
+** Emaculate Strike Force
+** rcirc completion
+** bus scheme stack traces
+** augment
+** mars
+*** erb templates
+*** YAML config
+*** port planet caboose to it
+*** set up planet technomancy
+*** port planet ruby
+** Port Concourse to Rails 2?

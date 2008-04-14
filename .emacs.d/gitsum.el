@@ -26,6 +26,7 @@
 (define-derived-mode gitsum-diff-mode diff-mode "gitsum"
   "Git summary mode is for preparing patches to a Git repository.
 This mode is meant to be activated by `M-x gitsum' or pressing `s' in git-status.
+\\{gitsum-diff-mode-shared-map}
 \\{gitsum-diff-mode-map}"
   ;; magic...
   (lexical-let ((ro-bind (cons 'buffer-read-only gitsum-diff-mode-shared-map)))
@@ -38,7 +39,7 @@ This mode is meant to be activated by `M-x gitsum' or pressing `s' in git-status
 
 ;; When git.el is loaded, hack into keymap.
 (when (boundp 'git-status-mode-map)
-  (define-key git-status-mode-map "s" 'gitsum))
+  (define-key git-status-mode-map "s" 'gitsum-switch-from-git-status))
 
 ;; Undo doesn't work in read-only buffers else.
 (defun gitsum-undo ()
@@ -50,7 +51,7 @@ A numeric argument serves as a repeat count."
   (let ((inhibit-read-only t))
     (undo)))
 
-(defun gitsum-refresh ()
+(defun gitsum-refresh (&optional arguments)
   "Regenerate the patch based on the current state of the index."
   (interactive)
   (let ((inhibit-read-only t))
@@ -58,7 +59,7 @@ A numeric argument serves as a repeat count."
     (insert "# Directory:  " default-directory "\n")
     (insert "# Use n and p to navigate and k to kill a hunk.  u is undo, g will refresh.\n")
     (insert "# Edit the patch as you please and press 'c' to commit.\n\n")
-    (let ((diff (shell-command-to-string "git diff")))
+    (let ((diff (shell-command-to-string (concat "git diff " arguments))))
       (if (zerop (length diff))
           (insert "## No changes. ##")
         (insert diff)
@@ -156,11 +157,25 @@ A numeric argument serves as a repeat count."
   (interactive)
   (git-status default-directory))
 
+(defun gitsum-switch-from-git-status ()
+  "Switch to gitsum, resticting diff to marked files if any."
+  (interactive)
+  (let ((marked (git-get-filenames
+                 (ewoc-collect git-status
+                               (lambda (info) (git-fileinfo->marked info))))))
+    (gitsum)
+    (when marked
+      (gitsum-refresh (mapconcat 'identity marked " ")))))
+
 (defun gitsum ()
   "Entry point into gitsum-diff-mode."
   (interactive)
   (switch-to-buffer (generate-new-buffer "*gitsum*"))
   (gitsum-diff-mode)
   (gitsum-refresh))
+
+;; viper compatible
+(eval-after-load "viper"
+  '(add-to-list 'viper-emacs-state-mode-list 'gitsum-diff-mode))
 
 (provide 'gitsum)

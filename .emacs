@@ -26,14 +26,8 @@
 ;; with uniform syntax and a real macro system.
 ;; - http://ratpoison.nongnu.org/inspiration.html
 
-;;; On with the show:
-
-;;; Fix for a bug in CVS Emacs 2 April 08; remove when fixed upstream:
-(defun handle-shift-selection ())
-
-;;;
-;;; server singleton
-;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; server singleton
 
 (unless (string-equal "root" (getenv "USER"))
   (when (and (> emacs-major-version 22)
@@ -42,17 +36,21 @@
                           'listen))))
     (server-start)))
 
-;;;
-;;; load-path, autoloads, and requires
-;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;; Fix for a bug in CVS Emacs 2 April 08; remove when fixed upstream:
+(defun handle-shift-selection ())
+
+(toggle-debug-on-error)
 
 (add-to-list 'load-path "~/.emacs.d")
 (add-to-list 'load-path "~/.emacs.d/jabber")
-(add-to-list 'load-path "~/.emacs.d/nxml/nxml-mode-20041004")
 
-;; Regenerate the autoload file if it doesn't exist or it's too
-;; old. (2 weeks or so)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; loading modes
 
+;;; Regenerate the autoload file if it doesn't exist or it's too
+;;; old. (2 weeks or so)
 (let ((autoload-file "~/.emacs.d/loaddefs.el"))
   (if (or (not (file-exists-p autoload-file))
 	  (< (+ (car (nth 5 (file-attributes autoload-file))) 20)
@@ -62,16 +60,10 @@
 	(update-directory-autoloads "~/.emacs.d/")))
   (load autoload-file))
 
-(autoload 'nxhtml-mode "nxml/autostart" "" t)
-(autoload 'nxml-mode "nxml/autostart" "" t)
-(autoload 'ruby-mode "ruby-mode" "" t)
-(autoload 'javascript-mode "javascript" "" t)
-
-(autoload 'w3m "w3m-load" "" t)
 (autoload 'yaml-mode "yaml-mode")
 (autoload 'moz-minor-mode "moz" "Mozilla Minor and Inferior Mozilla Modes" t)
 (autoload 'whitespace-mode "whitespace" "Toggle whitespace visualization." t)
-(autoload 'tail-file "tail" "Tail a file." t)
+(autoload 'tail-file "tail.el" "Tail a file." t)
 (autoload 'lisppaste-paste-region "lisppaste" "" t)
 (autoload 'top-mode "top-mode" "" t)
 (autoload 'jabber-connect "jabber" "" t)
@@ -85,16 +77,19 @@
 (require 'which-func)
 (require 'cc-defs)
 
-(eval-after-load 'vc
-  '(progn
-     (require 'gitsum)
-     (require 'log-view)
-     (define-key log-view-mode-map (kbd "RET") 'log-view-find-revision)
-     (define-key vc-annotate-mode-map (kbd "RET") 'vc-annotate-find-revision-at-line)))
+;; TODO: make this an autoload; it's slow!
+;;(load "nxml/autostart.el")
 
-;;
+(eval-after-load 'vc
+  '(progn (require 'vc-buttons)
+	  (require 'gitsum)))
+
+;; some boxes won't have this installed from CVS
+;; if that is so, try roastbeef install w3m && roastbeef install emacs-w3m
+(ignore-errors (require 'w3m-load))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; My support files and configurations
-;;
 
 (require 'my-calendar)
 (require 'my-eshell)
@@ -103,20 +98,13 @@
 (require 'my-registers)
 (require 'my-misc)
 (require 'my-hook-setup)
+
+(require 'my-ruby)
 (require 'my-lisp)
+(require 'my-js)
 
-(eval-after-load 'ruby-mode '(require 'my-ruby))
-(eval-after-load 'javascript-mode '(require 'my-js))
-(eval-after-load 'jabber-connect '(load "jabber-config"))
-(eval-after-load 'irc '(load "rcirc-config"))
-
-;; Well, these autoloads have to get invoked somehow.
-(add-to-list 'auto-mode-alist '("\\.rb$" . ruby-mode))
-(add-to-list 'auto-mode-alist '("Rakefile$" . ruby-mode))
-(add-to-list 'auto-mode-alist '("\\.js$" . javascript-mode))
-(add-to-list 'auto-mode-alist '("\\.xml$" . nxml-mode))
-(add-to-list 'auto-mode-alist '("\\.html$" . nxhtml-mode))
-(add-to-list 'auto-mode-alist '("\\.rhtml$" . nxhtml-mode))
+(load "jabber-config")
+(load "rcirc-config")
 
 (setq system-specific-config
       (concat "~/.emacs.d/"
@@ -125,115 +113,114 @@
 (if (file-exists-p system-specific-config)
     (load system-specific-config))
 
-;;;
-;;;  Cheat Sheet
-;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;  Cheat Sheet
 
-;;; General
-;; M-z zap to char
-;; C-u C-SPC jump to previous edit
-;; M-/ autocomplete word
-;; M-! insert output of shell command
-;; M-| replace region with shell output
-;; M-x thumbs
-;; M-x follow-mode
+;;; M-z zap to char
+;;; C-u C-SPC jump to previous edit
+;;; M-/ autocomplete word
+;;; M-! insert output of shell command
+;;; M-| replace region with shell output
+;;; M-x thumbs
+;;; M-x follow-mode
 
-;;; Custom bindings
-;; C-c \ align-regexp
-;; C-c C-r revert buffer
-;; C-x M-k kill buffer and window
-;; C-x M-f find file in other window
-;; C-c d toggle-dedicated-window
-;; C-c p message point
+;;;; Rectangles
+;;; C-x r k Rectangle kill
+;;; C-x r y Rectangle yank
+;;; C-x r c Rectangle clear (replace with space)
+;;; C-x r o Insert space rectangle
+;;; C-x r t Replace rectangle with string
 
-;;; Rectangles
-;; C-x r k Rectangle kill
-;; C-x r y Rectangle yank
-;; C-x r c Rectangle clear (replace with space)
-;; C-x r o Insert space rectangle
-;; C-x r t Replace rectangle with string
+;;;; temp macros
+;;; C-m C-m to start recording
+;;; C-m C-s to stop
+;;; C-m C-p to play
 
-;;; temp macros
-;; C-m C-m to start recording
-;; C-m C-s to stop
-;; C-m C-p to play
+;;;; Macros
+;;; C-m C-r to begin
+;;; name it, and do stuff
+;;; C-s to save
 
-;;; Macros
-;; C-m C-r to begin
-;; name it, and do stuff
-;; C-s to save
+;;;; Ruby
+;;; M-C-p, M-C-n back and forward blocks
+;;; C-c C-s irb when in ruby-mode
+;;; C-c C-r Send region to inf-ruby
+;;; C-c M-r Send region to inf-ruby and switch to buffer
+;;; C-c C-l Load file in ruby
+;;; C-c C-x Send definition
 
-;;; Ruby
-;; M-C-p, M-C-n back and forward blocks
-;; C-c C-s irb when in ruby-mode
-;; C-c C-r Send region to inf-ruby
-;; C-c M-r Send region to inf-ruby and switch to buffer
-;; C-c C-l Load file in ruby
-;; C-c C-x Send definition
+;;;; Display
+;;; C-u N C-x $ only display lines with less than N spaces of indentation
+;;; C-x $ disable above
+;;; C-x n n narrow visibility of buffer to region
+;;; C-x n w widen to full buffer
 
-;;; Display
-;; C-u N C-x $ only display lines with less than N spaces of indentation
-;; C-x $ disable above
-;; C-x n n narrow visibility of buffer to region
-;; C-x n w widen to full buffer
+;;;; Dired
+;;; mark with 'm', press 'Q' for multi-file find/replace
+;;; C-j launch dired when ido-mode is enabled
 
-;;; Dired
-;; mark with 'm', press 'Q' for multi-file find/replace
-;; C-j launch dired when ido-mode is enabled
+;;;; Gnus Namazu
+;;; G G gnus keyword search
+;;; G T show context in keyword search
 
-;;; Gnus Namazu
-;; G G gnus keyword search
-;; G T show context in keyword search
+;;; list-colors-display
 
-;; list-colors-display
+;;;; VC
+;;; C-x v g - blame (V to toggle committer data)
+;;; C-x v d - dired (v t to show all files)
+;;; C-x v = - diff (C-u to specify revision)
+;;; C-x v ~ - visit specific revision
+;;; C-x v l - log
+;;; C-x v d - vc-status
 
-;;; VC
-;; C-x v g - blame (V to toggle committer data)
-;; C-x v d - dired (v t to show all files)
-;; C-x v = - diff (C-u to specify revision)
-;; C-x v ~ - visit specific revision
-;; C-x v l - log
-;; C-x v d - vc-status
+;;;; Eshell
+;;; piping: ifconfig > #<buffer interfaces>
+;;; sudo: cd/sudo::
 
-;;; Eshell
-;; piping: ifconfig > #<buffer interfaces>
-;; sudo: cd/sudo::
+;;; sudo ionice -c3 -ppid
 
-;; Well, we already have `C-x r w R' (window-configuration-to-register)
-;; and `C-x r f R' (frame-configuration-to-register) for saving window
-;; configurations, and `C-x r j R' for restoring them.
+;;; Well, we already have `C-x r w R' (window-configuration-to-register)
+;;; and `C-x r f R' (frame-configuration-to-register) for saving window
+;;; configurations, and `C-x r j R' for restoring them.
 
-;; Profiling: time emacs -e save-buffers-kill-terminal
+;;; Profiling: time emacs -e save-buffers-kill-terminal
 
-;;;
 ;;; TODO:
-;;;
 
-;; follow Stefan's advice wrt vc-buttons and log-view.el
 ;; look into adding hyperlinks to vc-blame
-;; fix twittering-mode bugs mentioned in file
-;; submit patched rcirc completion
-;; scpaste: use tramp functions, finish scpaste-window
-
-;; fix whitespace-mode config to not be horrible
-;; allow edits to occur buffer to get propagated to original buffer
-;; pcomplete for: kill/killall, git, apt-get
-;; unify statuses in twitter and jabber
-
-;;; Minor
 
 ;; find a better dark-on-light color scheme
-;; make column-number-mode only active in coding buffers
-;; flymake for JS and Ruby
+
 ;; steal ZSS defadvice in setup-aliases.el for find-file-at-point
+
+;; fix whitespace-mode. augh. horrible.
+
+;; fix twittering-mode bugs mentioned in file
+
+;; allow edits to occur buffer to get propagated to original buffer
+
+;; make column-number-mode only active in coding buffers
+
+;; pcomplete for: kill/killall, git, apt-get
+
+;; flymake for JS and Ruby
+
+;; submit patched rcirc completion
+
+;; scpaste: use tramp functions, finish scpaste-window
+
 ;; fix ruby-get-old-input to not care about what the prompt looks like
+
+;; check out js2-mode.el: http://code.google.com/p/js2-mode/
+
+;; disable global-hl-line-mode for shell buffers?
 
 ;;; Long-term:
 
-;; figure out how to get nnml under version control w/o merge conflicts
+;; figure out how to get nnml in VC w/o merge conflicts
 
-;; do something about getting a better ruby highlighter:
-;; http://rubyforge.org/projects/ruby-tp-dw-gram/
-;; http://cedet.cvs.sourceforge.net/cedet/cedet/contrib/
+;;; do something about getting a better ruby highlighter:
+;;; http://rubyforge.org/projects/ruby-tp-dw-gram/
+;;; http://cedet.cvs.sourceforge.net/cedet/cedet/contrib/
 
-;; make an emacs peepcode
+;;; make an emacs peepcode

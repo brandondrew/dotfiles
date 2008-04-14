@@ -16,8 +16,17 @@
   (interactive "MUrl: ")
   (switch-to-buffer (url-retrieve-synchronously url))
   (rename-buffer url t)
-  (goto-char (point-min))
-  (html-mode))
+  (eval					;set major mode
+   (read
+    (concat
+     "("
+     (completing-read "Major mode: "
+                      (mapcar (lambda
+                                (x)
+                                (list (symbol-name x)))
+                              (apropos-internal "-mode$"
+                                                'commandp))
+                      nil t) ")"))))
 
 (defun map-coords (lat lng)
   "Show a Yahoo map marked with the point LAT by LNG."
@@ -56,12 +65,17 @@
   "Toggle the window-dedicated-p state of current window."
   (set-window-dedicated-p (current-window) (not (window-dedicated-p (current-window)))))
 
+(defun window-small-and-large ()
+  (interactive)
+  (if (equal 1 (length (window-list)))
+      (split-window))
+  (set-window-text-height (first (window-list)) (- (frame-height) 20)))
+
 (defun my-coding-hook ()
   "Enable things I consider convenient across all coding buffers."
   ;; (indent-buffer)
-  ;; (whitespace-mode t)
   (hl-line-mode)
-  (setq indicate-empty-lines t)
+  ;; (whitespace-mode t)
   (font-lock-add-keywords nil
 			  '(("\\<\\(FIX\\|TODO\\|FIXME\\|HACK\\|REFACTOR\\):" 1 font-lock-warning-face t))))
 
@@ -87,8 +101,8 @@
 
 ;;; Random stuff
 
-(defun recompile-init ()
-  (interactive) ;; TODO: maybe shouldn't recompile my-* that changes a lot?
+(defun my-recompile-init ()
+  (interactive)
   (byte-recompile-directory (expand-file-name "~/.emacs.d") 0))
 
 (defun my-generate-elisp-tags ()
@@ -135,11 +149,5 @@
                          (thing-at-point 'filename))))
 
 (defun ss () (interactive) (server-start))
-
-(defun switch-or-start (buffer-name starter-function)
-  (if (get-buffer buffer-name)
-      (switch-to-buffer buffer-name)
-    (funcall starter-function)))
-
 
 (provide 'my-defuns)
