@@ -11,7 +11,7 @@
 
 (global-set-key "\C-\M-h" 'backward-kill-word)
 (global-set-key (kbd "C-c l") (lambda () (interactive) (insert "lambda")))
-(global-set-key (kbd "C-c \\") 'align-regexp)
+(global-set-key (kbd "C-x \\") 'align-regexp)
 
 ;;; Navigation
 
@@ -27,7 +27,7 @@
 
 (global-set-key (kbd "C-x M-f") 'ido-find-file-other-window)
 (global-set-key (kbd "C-x C-b") 'bs-show)
-(global-set-key (kbd "C-c C-r") 'revert-buffer)
+(global-set-key (kbd "C-x M-r") 'revert-buffer)
 
 ;;; Window management
 
@@ -35,12 +35,11 @@
 (global-set-key "\C-x=" 'enlarge-window)
 
 (global-set-key "\C-xO" (lambda () (interactive) (other-window -1)))
-(global-set-key "\C-x\C-o" (lambda () (interactive) (other-window 2)))
 (global-set-key "\C-x." (lambda () (interactive) (enlarge-window 1 t)))
 (global-set-key "\C-x," (lambda () (interactive) (shrink-window 1 t)))
 
 (global-set-key (kbd "C-x M-k") (lambda () (interactive) (kill-buffer (current-buffer)) (delete-window)))
-(global-set-key (kbd "C-c d") 'toggle-dedicated-window)
+(global-set-key (kbd "C-x d") 'toggle-dedicated-window)
 
 ;;; Lisp
 
@@ -52,12 +51,12 @@
 (global-set-key (kbd "C-x m") 'eshell)
 (global-set-key (kbd "C-x M") (lambda () (interactive) (eshell t)))
 
-;;; Web
+;; Web
 
 (global-set-key (kbd "C-x w") 'w3m)
 (global-set-key "\C-xh" 'view-url)
-(global-set-key "\C-ct" 'twittering-mode)
-(global-set-key "\C-cT" 'twittering-update-status-interactive)
+(global-set-key "\C-xt" 'twittering-mode)
+(global-set-key "\C-xT" 'twittering-update-status-interactive)
 
 ;;; Utility
 
@@ -68,11 +67,6 @@
 (define-key read-expression-map (kbd "TAB") #'lisp-complete-symbol)
 (global-set-key (kbd "M-\\") 'my-selective-display)
 (global-set-key (kbd "C-x v d") 'vc-status)
-(global-set-key (kbd "C-x v r") 'vc-resolve-conflicts)
-(global-set-key (kbd "C-c j") (lambda () (interactive)
-				(switch-or-start "*-jabber-*" #'jabber-connect)))
-(global-set-key (kbd "C-c g") (lambda () (interactive)
-				(switch-or-start "*Group*" #'gnus)))
 
 (define-key isearch-mode-map (kbd "C-o") ;; occur easily inside isearch
   (lambda ()

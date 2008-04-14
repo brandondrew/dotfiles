@@ -26,6 +26,7 @@
       inhibit-startup-message t
       transient-mark-mode t
       color-theme-is-global nil
+      indicate-empty-lines t
       save-place t
       truncate-partial-width-windows nil
       indent-tabs-mode nil
