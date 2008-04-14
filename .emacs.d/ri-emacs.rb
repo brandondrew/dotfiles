@@ -1,3 +1,4 @@
+#!/usr/local/bin/ruby1.9
 ## ri-emacs.rb helper script for use with ri-ruby.el
 #
 # Author: Kristof Bastiaensen <kristof@vleeuwen.org>
@@ -23,6 +24,7 @@
 #  For information on how to use and install see ri-ruby.el
 #
 
+require 'rubygems'
 require 'rdoc/ri/ri_paths'
 require 'rdoc/ri/ri_cache'
 require 'rdoc/ri/ri_util'

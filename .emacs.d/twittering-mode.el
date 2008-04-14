@@ -13,10 +13,12 @@
 ;;  * the templete string system for status
 ;;  id:masa_edw
 ;;  * twittering-scroll-mode
+;;  Phil Hagelberg
+;;  * misc. bug fixes
 
 ;; This file is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
-;; the Free Software Foundation; either version 2, or (at your option)
+;; the Free Software Foundation; either version 3, or (at your option)
 ;; any later version.
 
 ;; This file is distributed in the hope that it will be useful,
@@ -39,13 +41,13 @@
 ;; twittering-(icon|scroll)-mode should *not* go in the modeline
 ;; q to bury-buffer
 ;; thanks; don't need a message every time HTTP GETs work
+;; disable undo for the twittering buffer; it caused overflow
 
 ;;; Bugs:
 
 ;; should warn if you go over 140 chars
+;; should not create a *twittering* buffer when you require, just when you launch.
 ;; sometimes icons get mixed up
-;; should not create a *twittering* buffer when you require it.
-;; undo buffer overflows; disable it
 
 ;;; Code:
 
@@ -254,6 +256,7 @@
   (set-syntax-table twittering-mode-syntax-table)
   (run-hooks 'twittering-mode-hook)
   (font-lock-mode -1)
+  (buffer-disable-undo)
   (twittering-start)
   )
 

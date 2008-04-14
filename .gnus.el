@@ -30,8 +30,8 @@
 (setq nnmail-split-fancy
       '(| (to "ruby_emacs_dev@yahoogroups\\.com" "emacs-rails")
           (to "obby-users@list.0x539.de" "obby-users")
-          (any "conkeror" "conkeror")
-          (any "zenspider\\.com" "seattle.rb")
+          (to "phil@localhost" "feeds")
+	  (any "zenspider\\.com" "seattle.rb")
           (any "mozlab" "mozlab")
           (any "cartographer" junk)
           (any "Fyreball" junk)
@@ -40,7 +40,6 @@
           (any "bus-scheme" "bus-scheme")
 
           (any "cron" junk)
-          (to "phil@localhost" "feeds")
 
           (any "zacchaeus.*" "friends")
 

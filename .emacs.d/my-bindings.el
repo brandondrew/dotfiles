@@ -35,6 +35,7 @@
 (global-set-key "\C-x=" 'enlarge-window)
 
 (global-set-key "\C-xO" (lambda () (interactive) (other-window -1)))
+(global-set-key "\C-x\C-o" (lambda () (interactive) (other-window 2)))
 (global-set-key "\C-x." (lambda () (interactive) (enlarge-window 1 t)))
 (global-set-key "\C-x," (lambda () (interactive) (shrink-window 1 t)))
 
@@ -67,6 +68,7 @@
 (define-key read-expression-map (kbd "TAB") #'lisp-complete-symbol)
 (global-set-key (kbd "M-\\") 'my-selective-display)
 (global-set-key (kbd "C-x v d") 'vc-status)
+(global-set-key (kbd "C-x v r") 'vc-resolve-conflicts)
 (global-set-key (kbd "C-c j") (lambda () (interactive)
 				(switch-or-start "*-jabber-*" #'jabber-connect)))
 (global-set-key (kbd "C-c g") (lambda () (interactive)

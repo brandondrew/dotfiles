@@ -16,6 +16,7 @@
   (interactive "MUrl: ")
   (switch-to-buffer (url-retrieve-synchronously url))
   (rename-buffer url t)
+  (goto-char (point-min))
   (html-mode))
 
 (defun map-coords (lat lng)

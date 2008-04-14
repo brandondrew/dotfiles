@@ -86,8 +86,11 @@
 (require 'cc-defs)
 
 (eval-after-load 'vc
-  '(progn (require 'vc-buttons)
-	  (require 'gitsum)))
+  '(progn
+     (require 'gitsum)
+     (require 'log-view)
+     (define-key log-view-mode-map (kbd "RET") 'log-view-find-revision)
+     (define-key vc-annotate-mode-map (kbd "RET") 'vc-annotate-find-revision-at-line)))
 
 ;;
 ;; My support files and configurations
@@ -104,9 +107,16 @@
 
 (eval-after-load 'ruby-mode '(require 'my-ruby))
 (eval-after-load 'javascript-mode '(require 'my-js))
-
 (eval-after-load 'jabber-connect '(load "jabber-config"))
 (eval-after-load 'irc '(load "rcirc-config"))
+
+;; Well, these autoloads have to get invoked somehow.
+(add-to-list 'auto-mode-alist '("\\.rb$" . ruby-mode))
+(add-to-list 'auto-mode-alist '("Rakefile$" . ruby-mode))
+(add-to-list 'auto-mode-alist '("\\.js$" . javascript-mode))
+(add-to-list 'auto-mode-alist '("\\.xml$" . nxml-mode))
+(add-to-list 'auto-mode-alist '("\\.html$" . nxhtml-mode))
+(add-to-list 'auto-mode-alist '("\\.rhtml$" . nxhtml-mode))
 
 (setq system-specific-config
       (concat "~/.emacs.d/"
