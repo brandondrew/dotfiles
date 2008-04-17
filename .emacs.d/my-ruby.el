@@ -33,14 +33,17 @@
 (add-hook 'ruby-mode-hook 'my-ruby-mode-hook)
 (add-hook 'ruby-mode-hook 'my-coding-hook)
 
+;;;###autoload
 (defun rr ()
   (interactive)
   (run-ruby "irb"))
 
+;;;###autoload
 (defun rr1.9 ()
   (interactive)
   (run-ruby "irb1.9"))
 
+;;;###autoload
 (defun rbx ()
   (interactive)
   (run-ruby "~/src/rubinius/shotgun/rubinius"))
@@ -52,6 +55,7 @@
     (unless (equal dir "/")
       (rails-root (expand-file-name (concat dir "../"))))))
 
+;;;###autoload
 (defun rails-console ()
   (interactive)
   (run-ruby (concat (rails-root) "script/console")))
@@ -65,7 +69,7 @@
 (add-hook 'ruby-mode-hook
           '(lambda () (inf-ruby-keys)))
              
-
+;;;###autoload
 (defun rake (task)
   (interactive (list (completing-read "Rake (default: default): "
 				      (pcmpl-rake-tasks))))
