@@ -37,7 +37,6 @@
 (global-font-lock-mode t)
 (menu-bar-mode -1)
 (winner-mode t)
-(column-number-mode t)
 (show-paren-mode 1)
 
 (when (> emacs-major-version 21)
