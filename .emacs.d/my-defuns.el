@@ -148,6 +148,11 @@
   (shell-command (concat "display "
                          (thing-at-point 'filename))))
 
+(defun switch-or-start (function buffer)
+  (if (get-buffer buffer)
+      (switch-to-buffer buffer)
+    (funcall function)))
+
 (defun ss () (interactive) (server-start))
 
 (provide 'my-defuns)
