@@ -27,7 +27,7 @@
 
 (global-set-key (kbd "C-x M-f") 'ido-find-file-other-window)
 (global-set-key (kbd "C-x C-b") 'bs-show)
-(global-set-key (kbd "C-x M-r") 'revert-buffer)
+(global-set-key (kbd "C-c C-r") 'revert-buffer)
 
 ;;; Window management
 
@@ -35,11 +35,12 @@
 (global-set-key "\C-x=" 'enlarge-window)
 
 (global-set-key "\C-xO" (lambda () (interactive) (other-window -1)))
+(global-set-key "\C-x\C-o" (lambda () (interactive) (other-window 2)))
 (global-set-key "\C-x." (lambda () (interactive) (enlarge-window 1 t)))
 (global-set-key "\C-x," (lambda () (interactive) (shrink-window 1 t)))
 
 (global-set-key (kbd "C-x M-k") (lambda () (interactive) (kill-buffer (current-buffer)) (delete-window)))
-(global-set-key (kbd "C-x d") 'toggle-dedicated-window)
+(global-set-key (kbd "C-x d") (lambda () (interactive) (toggle-dedicated-window)))
 
 ;;; Lisp
 

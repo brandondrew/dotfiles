@@ -1,1 +1,1 @@
-notify-send "Now playing" "`mpc | head -n 1`"
+notify-send "Now playing" "`mpc | head -n 1`" --icon=stock_volume

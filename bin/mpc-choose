@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-dir = `find ~/music -type d | cut -c 18- | dmenu -fn -xos4-terminus-medium-r-normal--20-200-72-72-c-100-iso8859-1 -sf white -sb black`
+dir = `find ~/music -type d | cut -c 18- | dmenu -fn -xos4-terminus-medium-r-normal--14-140-72-72-c-80-iso8859-1 -sf white -sb black`
 unless dir.strip.empty?
   `mpc clear`
   `mpc add "#{dir}"`
