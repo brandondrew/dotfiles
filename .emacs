@@ -78,6 +78,7 @@
 (autoload 'jabber-connect "jabber" "" t)
 (autoload 'scpaste "scpaste" "" t)
 (autoload 'cheat "cheat" "" t)
+(autoload 'gitsum "gitsum" "" t)
 
 (require 'cl)
 (require 'saveplace)
@@ -88,7 +89,6 @@
 
 (eval-after-load 'vc
   '(progn
-     (require 'gitsum)
      (require 'log-view)
      (define-key log-view-mode-map (kbd "RET") 'log-view-find-revision)
      (define-key vc-annotate-mode-map (kbd "RET") 'vc-annotate-find-revision-at-line)))

@@ -160,11 +160,13 @@
       (switch-to-buffer buffer)
     (funcall function)))
 
-(defun gd ()
+(defun gd (&optional arg)
+  "Git diff for use in eshell."
   (interactive)
   (switch-to-buffer "*git diff*")
-  (insert (shell-command-to-string "git diff"))
-  (diff-mode))
+  (insert (shell-command-to-string (format "git diff %s" (or arg ""))))
+  (diff-mode)
+  (goto-char (point-min)))
 
 (defun ss () (interactive) (server-start))
 
