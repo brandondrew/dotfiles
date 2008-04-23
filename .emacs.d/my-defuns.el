@@ -102,6 +102,7 @@
 
 (defun terminus () (interactive) (set-default-font "-xos4-terminus-medium-r-normal--14-140-72-72-c-80-iso8859-1"))
 (defun inconsolata () (interactive) (set-default-font "Inconsolata-12"))
+(defun dvsm () (interactive) (set-default-font "DejaVu Sans Mono-10"))
 
 (defun ansi-region () (interactive) (ansi-color-apply-on-region (min (mark) (point))
 								(max (mark) (point))))
@@ -163,7 +164,7 @@
 (defun gd (&optional arg)
   "Git diff for use in eshell."
   (interactive)
-  (switch-to-buffer "*git diff*")
+  (switch-to-buffer-other-window "*git diff*")
   (insert (shell-command-to-string (format "git diff %s" (or arg ""))))
   (diff-mode)
   (goto-char (point-min)))

@@ -62,7 +62,7 @@
 
 (xbindkey '(mod4 e) "emacs")
 (xbindkey '(mod4 f) "firefox")
-(xbindkey '(mod4 c) "~/src/conkeror/conkeror")
+(xbindkey '(mod4 c) "~/src/conkeror/conkeror -E 'default_pref(\"conkeror.rcfile\",\"/home/phil/.conkeror.d\")'")
 (xbindkey '(mod4 d) "~/bin/dlaunch.rb")
 (xbindkey '(mod4 grave) "urxvt -bg white +sb -bd white -e screen -xRR")
 
