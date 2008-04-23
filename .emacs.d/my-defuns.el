@@ -74,10 +74,14 @@
 (defun my-coding-hook ()
   "Enable things I consider convenient across all coding buffers."
   ;; (indent-buffer)
-  (hl-line-mode)
+  (hl-line-mode))
+  ;; Would like to enable column-number-mode on a per-buffer basis
+  ;; here, but that doesn't seem possible.
   ;; (whitespace-mode t)
-  (font-lock-add-keywords nil
-			  '(("\\<\\(FIX\\|TODO\\|FIXME\\|HACK\\|REFACTOR\\):" 1 font-lock-warning-face t))))
+
+;; Need to switch to directly modifying each mode's font-lock rules to avoid mumamo problems.
+;; (font-lock-add-keywords nil
+;;			  '(("\\<\\(FIX\\|TODO\\|FIXME\\|HACK\\|REFACTOR\\):" 1 font-lock-warning-face t))))
 
 (defun untabify-buffer ()
   (interactive)
@@ -98,6 +102,10 @@
 
 (defun terminus () (interactive) (set-default-font "-xos4-terminus-medium-r-normal--14-140-72-72-c-80-iso8859-1"))
 (defun inconsolata () (interactive) (set-default-font "Inconsolata-12"))
+(defun dvsm () (interactive) (set-default-font "DejaVu Sans Mono-10"))
+
+(defun ansi-region () (interactive) (ansi-color-apply-on-region (min (mark) (point))
+								(max (mark) (point))))
 
 ;;; Random stuff
 
@@ -152,6 +160,14 @@
   (if (get-buffer buffer)
       (switch-to-buffer buffer)
     (funcall function)))
+
+(defun gd (&optional arg)
+  "Git diff for use in eshell."
+  (interactive)
+  (switch-to-buffer-other-window "*git diff*")
+  (insert (shell-command-to-string (format "git diff %s" (or arg ""))))
+  (diff-mode)
+  (goto-char (point-min)))
 
 (defun ss () (interactive) (server-start))
 

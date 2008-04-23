@@ -28,6 +28,8 @@
 
 ;;; On with the show:
 
+(toggle-debug-on-error t)
+
 ;;; Fix for a bug in CVS Emacs 2 April 08; remove when fixed upstream:
 (defun handle-shift-selection ())
 
@@ -48,7 +50,6 @@
 
 (add-to-list 'load-path "~/.emacs.d")
 (add-to-list 'load-path "~/.emacs.d/jabber")
-(add-to-list 'load-path "~/.emacs.d/nxml/nxml-mode-20041004")
 
 ;; Regenerate the autoload file if it doesn't exist or it's too
 ;; old. (2 weeks or so)
@@ -73,10 +74,11 @@
 (autoload 'whitespace-mode "whitespace" "Toggle whitespace visualization." t)
 (autoload 'tail-file "tail" "Tail a file." t)
 (autoload 'lisppaste-paste-region "lisppaste" "" t)
-(autoload 'top-mode "top-mode" "" t)
+(autoload 'top "top-mode" "" t)
 (autoload 'jabber-connect "jabber" "" t)
 (autoload 'scpaste "scpaste" "" t)
 (autoload 'cheat "cheat" "" t)
+(autoload 'gitsum "gitsum" "" t)
 
 (require 'cl)
 (require 'saveplace)
@@ -87,7 +89,6 @@
 
 (eval-after-load 'vc
   '(progn
-     (require 'gitsum)
      (require 'log-view)
      (define-key log-view-mode-map (kbd "RET") 'log-view-find-revision)
      (define-key vc-annotate-mode-map (kbd "RET") 'vc-annotate-find-revision-at-line)))
@@ -209,8 +210,7 @@
 ;;; TODO:
 ;;;
 
-;; follow Stefan's advice wrt vc-buttons and log-view.el
-;; look into adding hyperlinks to vc-blame
+;; follow Stefan's advice wrt filesets in log-view
 ;; fix twittering-mode bugs mentioned in file
 ;; submit patched rcirc completion
 ;; scpaste: use tramp functions, finish scpaste-window

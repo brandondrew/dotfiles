@@ -30,7 +30,7 @@
 
 (add-to-list 'completion-ignored-extensions ".rbc")
  
-(add-hook 'ruby-mode-hook 'my-ruby-mode-hook)
+(add-hook 'ruby-mode-hook 'ruby-electric-mode)
 (add-hook 'ruby-mode-hook 'my-coding-hook)
 
 ;;;###autoload
@@ -74,10 +74,6 @@
   (interactive (list (completing-read "Rake (default: default): "
 				      (pcmpl-rake-tasks))))
   (shell-command-to-string (concat "rake " (if (= 0 (length task)) "default" task))))
-
-(defun my-ruby-mode-hook ()
-  (ruby-electric-mode))
-;;  (pretty-lambdas))
 
 (define-key ruby-mode-map "\C-\M-h" 'backward-kill-word) ; ruby-mode redefines this badly
 (define-key ruby-mode-map (kbd "RET") 'ruby-reindent-then-newline-and-indent)
