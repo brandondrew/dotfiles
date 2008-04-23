@@ -99,6 +99,10 @@
 ;; the anoying red underlines
 (setq rng-nxml-auto-validate-flag nil)
 
+(font-lock-add-keywords
+ 'ruby-mode
+ '(("\\<\\(FIX\\|TODO\\|FIXME\\|HACK\\|REFACTOR\\):"
+    1 font-lock-warning-face t)))
 
 ;; Flymake - http://www.emacswiki.org/cgi-bin/emacs-en/FlymakeRuby
 

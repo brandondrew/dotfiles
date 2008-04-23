@@ -79,10 +79,6 @@
   ;; here, but that doesn't seem possible.
   ;; (whitespace-mode t)
 
-;; Need to switch to directly modifying each mode's font-lock rules to avoid mumamo problems.
-;; (font-lock-add-keywords nil
-;;			  '(("\\<\\(FIX\\|TODO\\|FIXME\\|HACK\\|REFACTOR\\):" 1 font-lock-warning-face t))))
-
 (defun untabify-buffer ()
   (interactive)
   (untabify (point-min) (point-max)))

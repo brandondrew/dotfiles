@@ -12,15 +12,17 @@
 (defun js-lambda () (interactive) (insert "function () {\n};")
   (backward-char 6))
 
-(defun js-pretty-lambdas ()
-    (font-lock-add-keywords
-     nil `(("\\(function *\\)("
-            (0 (progn (compose-region (match-beginning 1) (match-end 1)
-                                      ,(make-char 'greek-iso8859-7 107))
-                      nil))))))
+(font-lock-add-keywords
+ 'javascript-mode `(("\\(function *\\)("
+		     (0 (progn (compose-region (match-beginning 1) (match-end 1)
+					       ,(make-char 'greek-iso8859-7 107))
+			       nil)))))
 
-(add-hook 'javascript-mode-hook 'js-pretty-lambdas)
-(add-hook 'inferior-moz-mode-hook 'js-pretty-lambdas)
+(font-lock-add-keywords
+ 'ruby-mode
+ '(("\\<\\(FIX\\|TODO\\|FIXME\\|HACK\\|REFACTOR\\):"
+    1 font-lock-warning-face t)))
+
 (define-key javascript-mode-map (kbd "C-c l") 'js-lambda)
 
 (define-key javascript-mode-map "\C-\M-h" 'backward-kill-word)
