@@ -38,8 +38,6 @@
 ;;; Code:
 
 (require 'pcomplete)
-(require 'executable)
-(require 'thingatpt)
 
 ;;;###autoload
 (defun pcomplete/rake ()
@@ -47,20 +45,12 @@
   (pcomplete-here (pcmpl-rake-tasks)))
 
 (defun pcmpl-rake-tasks ()
-  (with-temp-buffer
-    (insert (shell-command-to-string "rake -T"))
-    (goto-char (point-min))
-    (pcmpl-build-rake-task-list)))
-
-(defun pcmpl-build-rake-task-list ()
-  (when (not (eobp))
-    (cons (pcmpl-task-at-point)
-          (progn (forward-line)
-                 (pcmpl-build-rake-task-list)))))
-
-(defun pcmpl-task-at-point ()
-  (forward-word 2)
-  (word-at-point))
+   "Return a list of all the rake tasks defined in the current
+projects.  I know this is a hack to put all the logic in the
+exec-to-string command, but it works and seems fast"
+   (delq nil (mapcar '(lambda(line)
+			(if (string-match "rake \\([^ ]+\\)" line) (match-string 1 line)))
+		     (split-string (shell-command-to-string "rake -T") "[\n]"))))
 
 (provide 'pcmpl-rake)
-;;; pcmpl-ssh.el ends here
+;;; pcmpl-rake.el ends here

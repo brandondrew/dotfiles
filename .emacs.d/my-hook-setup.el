@@ -1,8 +1,8 @@
 
-;;; Part of my .emacs file
+;;; Part of my .emacs project
 
 ;; by Phil Hagelberg
-;; Much thanks to emacswiki.org and RMS.
+;; Much thanks to RMS and the folks at emacswiki.org.
 
 ;; Note: this relies on files found in my dotfiles repository:
 ;; http://git.caboo.se/?p=technomancy.git;a=summary
