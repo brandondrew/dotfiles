@@ -1,8 +1,8 @@
 
-;;; Part of my .emacs file
+;;; Part of my .emacs project
 
 ;; by Phil Hagelberg
-;; Much thanks to emacswiki.org and RMS.
+;; Much thanks to RMS and the folks at emacswiki.org.
 
 ;; Note: this relies on files found in my dotfiles repository:
 ;; http://git.caboo.se/?p=technomancy.git;a=summary
@@ -28,6 +28,7 @@
 (global-set-key (kbd "C-x M-f") 'ido-find-file-other-window)
 (global-set-key (kbd "C-x C-b") 'bs-show)
 (global-set-key (kbd "C-c C-r") 'revert-buffer)
+(global-set-key "\C-c\C-t" 'toggle-buffer)
 
 ;;; Window management
 
@@ -70,6 +71,7 @@
 (global-set-key (kbd "C-c j") (lambda () (interactive) (switch-or-start 'jabber-connect "*-jabber-*")))
 (global-set-key (kbd "C-c g") (lambda () (interactive) (switch-or-start 'gnus "*Group*")))
 (global-set-key (kbd "C-c t") (lambda () (interactive) (switch-or-start 'twittering-mode "*twittering*")))
+(global-set-key (kbd "C-c C-j") 'jabber-send-presence)
 
 (define-key isearch-mode-map (kbd "C-o") ;; occur easily inside isearch
   (lambda ()

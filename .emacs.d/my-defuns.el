@@ -1,8 +1,8 @@
 
-;;; Part of my .emacs file
+;;; Part of my .emacs project
 
 ;; by Phil Hagelberg
-;; Much thanks to emacswiki.org and RMS.
+;; Much thanks to RMS and the folks at emacswiki.org.
 
 ;; Note: this relies on files found in my dotfiles repository:
 ;; http://git.caboo.se/?p=technomancy.git;a=summary
@@ -78,10 +78,6 @@
   ;; Would like to enable column-number-mode on a per-buffer basis
   ;; here, but that doesn't seem possible.
   ;; (whitespace-mode t)
-
-;; Need to switch to directly modifying each mode's font-lock rules to avoid mumamo problems.
-;; (font-lock-add-keywords nil
-;;			  '(("\\<\\(FIX\\|TODO\\|FIXME\\|HACK\\|REFACTOR\\):" 1 font-lock-warning-face t))))
 
 (defun untabify-buffer ()
   (interactive)

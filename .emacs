@@ -1,8 +1,8 @@
 
-;;; My .emacs file
+;;; My .emacs project
 
 ;; by Phil Hagelberg
-;; Much thanks to emacswiki.org and RMS.
+;; Much thanks to RMS and emacswiki.org
 
 ;; Note: this relies on files found in my .emacs.d:
 ;; http://git.caboo.se/?p=technomancy.git;a=summary
@@ -86,6 +86,8 @@
 (require 'compile)
 (require 'which-func)
 (require 'cc-defs)
+(require 'project-local-variables)
+(require 'find-file-in-project)
 
 (eval-after-load 'vc
   '(progn

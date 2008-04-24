@@ -1,8 +1,8 @@
 
-;;; Part of my .emacs file
+;;; Part of my .emacs project
 
 ;; by Phil Hagelberg
-;; Much thanks to emacswiki.org and RMS.
+;; Much thanks to RMS and the folks at emacswiki.org.
 
 ;; Note: this relies on files found in my dotfiles repository:
 ;; http://git.caboo.se/?p=technomancy.git;a=summary
@@ -21,14 +21,17 @@
 
 (add-to-list 'auto-mode-alist '("\\.emacs-project" . emacs-lisp-mode))
 
-(defun my-lisp-hook ()
-  (local-set-key (kbd "RET") 'reindent-then-newline-and-indent)
-  (local-set-key (kbd "C-\\") 'lisp-complete-symbol)
-  (font-lock-add-keywords nil
-                          '(("(\\|)" . 'paren-face))))
+(define-key lisp-mode-shared-map (kbd "RET") 'reindent-then-newline-and-indent)
+(define-key lisp-mode-shared-map (kbd "C-\\") 'lisp-complete-symbol)
 
-(add-hook 'emacs-lisp-mode-hook 'my-lisp-hook)
-(add-hook 'lisp-mode-hook 'my-lisp-hook)
+(font-lock-add-keywords 'emacs-lisp-mode
+			'(("(\\|)" . 'paren-face)))
+
+(font-lock-add-keywords
+ 'emacs-lisp-mode
+ '(("\\<\\(FIX\\|TODO\\|FIXME\\|HACK\\|REFACTOR\\):"
+    1 font-lock-warning-face t)))
+
 (add-hook 'lisp-mode-hook 'my-coding-hook)
 (add-hook 'emacs-lisp-mode-hook 'my-coding-hook)
 
