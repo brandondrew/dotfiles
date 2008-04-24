@@ -41,5 +41,5 @@ end
 #   end
 # end
 
-Autotest.add_hook(:red) { |at| Autotest::Notify.notify "autotest", 'broke\'d!' }
+Autotest.add_hook(:red) { |at| Autotest::Notify.notify "autotest", "broked" }
 Autotest.add_hook(:all_good) { |at| Autotest::Notify.notify "autotest", 'everything is fine', 'low' }
