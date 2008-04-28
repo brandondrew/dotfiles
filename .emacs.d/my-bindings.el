@@ -51,6 +51,7 @@
 ;;; Shell
 
 (global-set-key (kbd "C-x m") 'eshell)
+(global-set-key (kbd "C-c m") 'eshell)
 (global-set-key (kbd "C-x M") (lambda () (interactive) (eshell t)))
 
 ;; Web
