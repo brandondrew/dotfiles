@@ -3,17 +3,17 @@ require 'open-uri'
 require 'notify'
 require 'twitter'
 require 'yaml'
-#require 'hpricot'
+require 'hpricot'
 
 
-# class TwitterFace
-#   def self.url(username)
-#     response = Hpricot::parse(open("http://twitter.com/#{username}"))
-#     element = (response / "h2.thumb img").first
-#     raise "Can't find it you on twitter" unless element
-#     element.attributes["src"]
-#   end
-# end
+class TwitterFace
+  def self.url(username)
+    response = Hpricot::parse(open("http://twitter.com/#{username}"))
+    element = (response / "h2.thumb img").first
+    raise "Can't find it you on twitter" unless element
+    element.attributes["src"]
+  end
+end
 
 DOTFILE = File.expand_path('~/.twitter-notify')
 client = Twitter::Client.new(:login => 'technomancy', :password => File.read(File.expand_path('~/.twitter_password')))

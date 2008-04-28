@@ -113,7 +113,7 @@
 
 (eval-after-load 'diff-mode
   '(progn
-    (set-face-attribute 'diff-added nil :foreground "green4")
-    (set-face-attribute 'diff-removed nil :foreground "red4")))
+     (set-face-attribute 'diff-added nil :foreground "green4")
+     (set-face-attribute 'diff-removed nil :foreground "red4")))
 
 (provide 'my-misc)
