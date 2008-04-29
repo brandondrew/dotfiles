@@ -37,9 +37,11 @@
   (find-file (cdr (assoc file project-files-table))))
 
 (defun project-files (&optional file)
-  (setq project-files-table nil)
-  (populate-project-files-table (or file (project-root)))
-  project-files-table)
+  (when (or (not project-files-table) ;; initial load
+	    (not (string-match (rails-root) (cdar project-files-table)))) ;; switched projects
+    (setq project-files-table nil)
+    (populate-project-files-table (or file (project-root)))
+    project-files-table))
 
 (defun project-root (&optional dir)
   (or dir (setq dir default-directory))
@@ -50,6 +52,25 @@
       (project-root (expand-file-name (concat dir "../"))))))
 
 (global-set-key (kbd "C-x C-M-f") 'find-file-in-project)
+
+(eval-after-load 'ruby-mode
+  '(progn
+     (defun rails-project-files (&optional file)
+       (setq project-files-table nil)
+       (populate-project-files-table (or file (concat (rails-root) "/app")))
+       (populate-project-files-table (or file (concat (rails-root) "/lib")))
+       (populate-project-files-table (or file (concat (rails-root) "/test")))
+       project-files-table)
+
+     (defun find-file-in-rails (file)
+       (interactive (list (if (functionp 'ido-completing-read)
+			      (ido-completing-read "Find file in project: " (mapcar 'car (rails-project-files)))
+			    (completing-read "Find file in project: " (mapcar 'car (rails-project-files))))))
+       (find-file (cdr (assoc file project-files-table))))
+
+     (define-key ruby-mode-map (kbd "C-x C-M-f") 'find-file-in-rails)
+     (eval-after-load 'nxhtml-mode
+       '(define-key nxhtml-mode-map (kbd "C-x C-M-f") 'find-file-in-rails))))
 
 (provide 'find-file-in-project)
 ;;; find-file-in-project.el ends here

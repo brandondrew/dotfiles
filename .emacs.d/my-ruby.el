@@ -103,6 +103,7 @@
 
 (add-hook 'ruby-mode-hook 'ruby-electric-mode)
 (add-hook 'ruby-mode-hook 'my-coding-hook)
+(add-hook 'ruby-mode-hook 'pretty-lambdas)
 
 (setq ri-ruby-script (expand-file-name "~/.emacs.d/ri-emacs.rb"))
 
