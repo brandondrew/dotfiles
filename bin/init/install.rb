@@ -18,7 +18,7 @@ end
 if !File.exist?('/usr/bin/gem')
   system "wget http://rubyforge.org/frs/download.php/29548/rubygems-1.0.1.tgz"
   system "tar xzf rubygems-1.0.1.tgz"
-  system "cd rubygems-1.0.1; ruby setup.rb"
+  system "cd rubygems-1.0.1; ruby1.8 setup.rb"
   system "gem update --system"
 end
 
