@@ -730,8 +730,11 @@ If STATUS-DATUM is already in DATA-VAR, return nil. If not, return t."
   (let ((status init-str) (not-posted-p t))
     (while not-posted-p
       (setq status (read-from-minibuffer "status: " status nil nil nil nil t))
-      (setq not-posted-p
-	    (not (twittering-update-status-if-not-blank status))))))
+      (setq my-status status)
+      (if (> (length my-status) 140)
+	  (message "Status was too long")
+	(setq not-posted-p
+	      (not (twittering-update-status-if-not-blank status)))))))
 
 (defun twittering-update-lambda ()
   (interactive)

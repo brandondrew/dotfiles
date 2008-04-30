@@ -27,6 +27,7 @@
 (setq nnmail-split-methods 'nnmail-split-fancy)
 (setq nnmail-crosspost nil)
 (setq mail-source-delete-incoming nil)
+(setq gnus-asynchronous t)
 
 (setq nnmail-split-fancy
       '(| (to "ruby_emacs_dev@yahoogroups\\.com" "emacs-rails")

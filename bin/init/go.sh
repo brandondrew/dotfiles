@@ -18,16 +18,15 @@ apt-get update
 # get the minimum
 apt-get install git-core ruby ruby1.8 zile
 
-if [ -r install.rb ] ; then
-    ruby install.rb
-    chown -R $USER $HOME
-    su $USER ruby user-setup.rb # TODO: this breaks... huh?
-    exit 0
+if [ ! -r install.rb ] ; then
+  # if we are running a bare go.sh
+  cd ~
+  git clone git://git.caboo.se/technomancy.git dotfiles
+  chown -R $USER dotfiles
+  cd dotfiles/bin/init
 fi
 
-# if we are running a bare go.sh
-cd ~
-git clone git://git.caboo.se/technomancy.git dotfiles
-chown -R $USER dotfiles
-cd dotfiles/bin/init
-./go.sh
+ruby install.rb
+chown -R $USER $HOME
+su $USER ruby user-setup.rb # TODO: this breaks... huh?
+exit 0

@@ -27,4 +27,4 @@ end
 system "gem install rake" # sometimes we get a false start
 system "gem install #{gems.join(' ')}"
 
-sed -i s/DisallowTCP=true/DisallowTCP=false/ /etc/gdm/gdm.conf # gotta have my remote X!
+system "sed -i s/DisallowTCP=true/DisallowTCP=false/ /etc/gdm/gdm.conf" # gotta have my remote X!
