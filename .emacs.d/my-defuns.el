@@ -122,9 +122,11 @@
   (interactive)
   (flet ((rails-root () (cadr (split-string (pwd) " ")))) (my-generate-rails-tags)))
 
-(defun sudo-edit ()
-  (interactive)
-  (find-alternate-file (concat "/sudo:root@localhost:" buffer-file-name)))
+(defun sudo-edit (&optional arg)
+  (interactive "p")
+  (if arg
+      (find-file (concat "/sudo:root@localhost:" (ido-read-file-name "File: ")))
+    (find-alternate-file (concat "/sudo:root@localhost:" buffer-file-name))))
 
 (defun lorem ()
   "Insert a lorem ipsum."
