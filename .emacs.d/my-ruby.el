@@ -50,7 +50,7 @@
     (search-forward-regexp (concat "^" gem ".*\[rdoc\]"))))
 
 (defun ruby-test-one ()
-  "Test the current ruby test (must be runable via ruby <buffer> --name <test>)."
+  "Test the current ruby test (must be runable via ruby <bunffer> --name <test>)."
   (interactive)
   (let* ((funname (which-function))
 	 (fn (and (string-match "#\\(.*\\)" funname) (match-string 1 funname))))
@@ -72,6 +72,8 @@
 (define-key ruby-mode-map (kbd "RET") 'ruby-reindent-then-newline-and-indent)
 (define-key ruby-mode-map (kbd "C-c l") (lambda () (interactive) (insert "lambda")))
 (define-key ruby-mode-map (kbd "C-\\") 'rct-complete-symbol)
+(define-key ruby-mode-map (kbd "C-c M-t") 'ruby-test-file)
+(define-key ruby-mode-map (kbd "C-c C-M-t") 'ruby-test-one)
 
 (global-set-key (kbd "C-h r") 'ri)
 
@@ -99,7 +101,7 @@
 (add-hook 'ruby-mode-hook
           '(lambda () (inf-ruby-keys)))
 
-(add-hook 'ruby-mode-hook 'ruby-electric-mode)
+(add-hook 'ruby-mode-hook (lambda () (ruby-electric-mode t)))
 (add-hook 'ruby-mode-hook 'my-coding-hook)
 
 (setq ri-ruby-script (expand-file-name "~/.emacs.d/ri-emacs.rb"))

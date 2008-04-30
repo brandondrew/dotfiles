@@ -3,9 +3,10 @@
 ;; git auto-complete
 ;; apt-get
 
+(require 'ansi-color) ;; has to be eval'd before load
+
 (eval-after-load 'eshell
   '(progn
-     (require 'ansi-color)
      (require 'pcmpl-rake)
      (require 'em-prompt)
      (require 'em-cmpl)
