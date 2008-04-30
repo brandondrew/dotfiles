@@ -99,10 +99,13 @@
 (autoload 'inf-ruby-keys "inf-ruby"
   "Set local key defs for inf-ruby in ruby-mode")
 (add-hook 'ruby-mode-hook
-          '(lambda () (inf-ruby-keys)))
+          (lambda () (inf-ruby-keys)))
+(add-hook 'inferior-ruby-mode-hook
+	  (lambda () (toggle-truncate-lines nil)))
 
 (add-hook 'ruby-mode-hook (lambda () (ruby-electric-mode t)))
 (add-hook 'ruby-mode-hook 'my-coding-hook)
+(add-hook 'ruby-mode-hook 'pretty-lambdas)
 
 (setq ri-ruby-script (expand-file-name "~/.emacs.d/ri-emacs.rb"))
 

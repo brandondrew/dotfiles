@@ -16,7 +16,7 @@ sed -i -e "s/^.*cdrom.*$//g" /etc/apt/sources.list
 apt-get update
 
 # get the minimum
-apt-get install git-core ruby zile
+apt-get install git-core ruby ruby1.8 zile
 
 if [ -r install.rb ] ; then
     ruby install.rb

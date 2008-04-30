@@ -212,6 +212,7 @@
 ;;; TODO:
 ;;;
 
+;; Make nxhtml-mode apply ruby-mode to chunks on first load
 ;; follow Stefan's advice wrt filesets in log-view
 ;; fix twittering-mode bugs mentioned in file
 ;; submit patched rcirc completion
