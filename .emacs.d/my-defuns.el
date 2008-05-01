@@ -115,7 +115,7 @@
 
 (defun my-generate-rails-tags ()
   (interactive)
-  (shell-command (format "find %s -name *rb | xargs ctags-exuberant -a -e -f %s/TAGS --exclude=vendor"
+  (shell-command (format "find %s -name *rb | xargs ctags-exuberant -a -e -f %s/TAGS --exclude=vendor --exclude=public --exclude=log --exclude=db"
 			 (rails-root) (rails-root))))
 
 (defun my-generate-ruby-tags ()

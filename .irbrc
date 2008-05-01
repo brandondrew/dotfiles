@@ -9,9 +9,8 @@ require 'yaml'
 Wirble.init
 # Wirble.colorize unless IRB.conf[:PROMPT_MODE] == :INF_RUBY
 
-def decolor
-  Wirble::Colorize.disable
-  "Colorization disabled."
+def ri(obj)
+  puts "ri #{obj}"
 end
 
 IRB.conf[:AUTO_INDENT]=true
