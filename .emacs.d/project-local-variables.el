@@ -39,10 +39,6 @@
 
 ;; It has not been tested in versions of Emacs prior to 22.
 
-;;; Todo:
-
-;; test more
-
 (defvar plv-project-file ".emacs-project"
   "Name prefix for project files.
  Emacs appends name of major mode and looks for such a file in

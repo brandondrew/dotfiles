@@ -40,6 +40,7 @@
           (any "ocruby" junk)
           (any "emacs-devel" "emacs-devel")
           (any "bus-scheme" "bus-scheme")
+	  (any "ruby-core" "ruby-core")
 
           (any "cron" junk)
           (to "phil@localhost" "feeds")

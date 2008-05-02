@@ -1,0 +1,20 @@
+Host *hagelb.org
+  User philhag
+
+Host philisha.net
+  User philhag
+
+Host technomancy.us
+  User philhag
+
+Host rubyforge.org
+  User technomancy
+
+Host *
+  User phil
+  KeepAlive yes
+  controlmaster auto
+  controlpath /tmp/ssh-%r@%h:%p
+  GSSAPIAuthentication no
+  HashKnownHosts no
+

@@ -224,6 +224,11 @@
 ;; pcomplete for: kill/killall, git, apt-get
 ;; unify statuses in twitter and jabber
 
+;; start using ditz
+;; - move issue db to ~/.bugs; allow it to be autoconfigured
+
+;; Make my face customizations stick around with other color themes.
+
 ;;; Minor
 
 ;; find a better dark-on-light color scheme
