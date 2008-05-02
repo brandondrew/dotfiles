@@ -72,7 +72,9 @@
 
 (defvar ffip-find-options
   ""
-  "Extra options to pass to `find' when using find-file-in-project.")
+  "Extra options to pass to `find' when using find-file-in-project.
+
+Use this to exclude portions of your project: \"-not -regex \\\".*vendor.*\\\"\"")
 
 (defvar ffip-project-root nil
   "If non-nil, overrides the project root directory location.")
@@ -120,7 +122,7 @@ setting the `ffip-project-root' variable."
 
 (defun ffip-project-root (&optional dir)
   "Find the root of the project defined by presence of `.emacs-project'."
-  (file-name-nondirectory (plv-find-project-file default-directory "")))
+  (file-name-directory (plv-find-project-file default-directory "")))
 
 (provide 'find-file-in-project)
 ;;; find-file-in-project.el ends here

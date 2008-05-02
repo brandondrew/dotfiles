@@ -87,6 +87,13 @@
   (interactive)
   (indent-region (point-min) (point-max)))
 
+(defun recentf-ido-find-file ()
+  "Find a recent file using Ido."
+  (interactive)
+  (let ((file (ido-completing-read "Choose recent file: " recentf-list nil t)))
+    (when file
+      (find-file file))))
+
 ;;; Cosmetic stuff
 
 (defun pretty-lambdas ()

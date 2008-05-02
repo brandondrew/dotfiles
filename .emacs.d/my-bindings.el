@@ -30,6 +30,7 @@
 (global-set-key (kbd "C-c C-r") 'revert-buffer)
 (global-set-key "\C-c\C-t" 'toggle-buffer)
 (global-set-key (kbd "C-x C-M-f") 'find-file-in-project)
+(global-set-key (kbd "C-c C-f") 'recentf-ido-find-file)
 
 ;;; Window management
 
