@@ -26,6 +26,7 @@
       inhibit-startup-message t
       transient-mark-mode t
       indicate-empty-lines t
+      color-theme-is-global t
       save-place t
       truncate-partial-width-windows nil
       indent-tabs-mode nil
@@ -36,6 +37,7 @@
 (global-font-lock-mode t)
 (menu-bar-mode -1)
 (winner-mode t)
+(recentf-mode 1)
 (show-paren-mode 1)
 
 (when (> emacs-major-version 21)
@@ -43,6 +45,7 @@
   (setq ido-enable-prefix nil
         ido-enable-flex-matching t
         ido-create-new-buffer 'always
+	ido-use-filename-at-point t
         ido-max-prospects 10))
 
 (put 'narrow-to-region 'disabled nil)

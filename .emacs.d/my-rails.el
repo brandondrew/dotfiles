@@ -35,7 +35,7 @@
   (search-forward-regexp (concat "def\\s" action))
   (recenter))
 
-(defun rhtml-controller-name-from-view ()
+(defun rails-controller-name-from-view ()
   (concat (rails-root) 
 	  "app/controllers/"
 	   (file-name-nondirectory 
@@ -43,10 +43,10 @@
 	  "_controller.rb"))
 
 ;;; TODO: make this work with rails2-style view filenames
-(defun rhtml-find-action ()
+(defun rails-find-action ()
   (interactive)
   (let ((action (file-name-sans-extension (file-name-nondirectory buffer-file-name))))
-    (find-file (rhtml-controller-name-from-view))
+    (find-file (rails-controller-name-from-view))
     (beginning-of-buffer)
     (search-forward-regexp (concat "def *" action))
     (recenter)))
@@ -65,6 +65,14 @@
   "Helper for view toggling"
   (reduce #'(lambda (str next) (concat str (concat "_" next))) comps))
 
+(defun rails-insert-erb-skeleton (no-equals)
+  (interactive "P")
+  (setq no-e no-equals)
+  (insert "<%")
+  (unless no-equals (insert "="))
+  (insert "  %>")
+  (backward-char 3))
+
 (define-key ruby-mode-map (kbd "C-c C-v") 'rails-find-view)
 (define-key ruby-mode-map (kbd "C-c C-t") 'toggle-buffer)
 (define-key ruby-mode-map (kbd "C-c C-M-t") 'ruby-test-file)
@@ -72,7 +80,9 @@
 
 ;; nxhtml-mode is the cats!
 (eval-after-load 'nxhtml-mode
-  '(define-key nxhtml-mode-map (kbd "C-c C-v") 'rhtml-find-action))
+  '(progn
+     (define-key nxhtml-mode-map (kbd "C-c C-v") 'rails-find-action)
+     (define-key nxhtml-mode-map (kbd "C-c C-e") 'rails-insert-erb-skeleton)))
 
 (provide 'my-rails)
 ;;; my-rails.el ends here
