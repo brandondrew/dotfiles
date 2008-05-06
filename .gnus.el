@@ -38,6 +38,7 @@
           (any "cartographer" junk)
           (any "Fyreball" junk)
           (any "ocruby" junk)
+	  (any "emacs-rails" "emacs-rails")
           (any "emacs-devel" "emacs-devel")
           (any "bus-scheme" "bus-scheme")
 	  (any "ruby-core" "ruby-core")

@@ -30,7 +30,7 @@
 (global-set-key (kbd "C-c r") 'revert-buffer)
 (global-set-key "\C-c\C-t" 'toggle-buffer)
 (global-set-key (kbd "C-x C-M-f") 'find-file-in-project)
-(global-set-key (kbd "C-c C-f") 'recentf-ido-find-file)
+(global-set-key (kbd "C-c f") 'recentf-ido-find-file)
 
 ;;; Window management
 
@@ -47,7 +47,7 @@
 
 ;;; Lisp
 
-(global-set-key (kbd "C-c C-e") 'my-eval-and-replace)
+(global-set-key (kbd "C-c s") 'my-eval-and-replace)
 (global-set-key (kbd "C-c v") 'eval-buffer)
 
 ;;; Shell
@@ -74,7 +74,7 @@
 (global-set-key (kbd "C-c j") (lambda () (interactive) (switch-or-start 'jabber-connect "*-jabber-*")))
 (global-set-key (kbd "C-c g") (lambda () (interactive) (switch-or-start 'gnus "*Group*")))
 (global-set-key (kbd "C-c t") (lambda () (interactive) (switch-or-start 'twittering-mode "*twittering*")))
-(global-set-key (kbd "C-c C-j") 'jabber-send-presence)
+(global-set-key (kbd "C-c J") 'jabber-send-presence)
 
 (define-key isearch-mode-map (kbd "C-o") ;; occur easily inside isearch
   (lambda ()
