@@ -51,6 +51,8 @@
 
 (add-to-list 'load-path "~/.emacs.d")
 (add-to-list 'load-path "~/.emacs.d/jabber")
+(add-to-list 'load-path "~/.emacs.d/nxml")
+(add-to-list 'load-path "~/.emacs.d/nxml/nxml-mode-20041004")
 
 ;; Regenerate the autoload file if it doesn't exist or it's too
 ;; old. (2 weeks or so)
@@ -92,6 +94,7 @@
 (require 'ffap)
 (require 'ansi-color)
 (require 'recentf)
+(require 'css-mode)
 
 (eval-after-load 'vc
   '(progn
@@ -209,6 +212,7 @@
 ;; fix twittering-mode bugs mentioned in file
 ;; submit patched rcirc completion
 ;; scpaste: use tramp functions, finish scpaste-window
+;; submit test runner using compile to inf-ruby.el
 
 ;; fix whitespace-mode config to not be horrible
 ;; unify statuses in twitter and jabber
