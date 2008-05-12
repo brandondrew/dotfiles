@@ -135,12 +135,14 @@ You must have write-access to this directory via `scp'.")
   ;; TODO: use completing-read on the output of wmctrl
   (let ((full-url (concat scpaste-http-destination "/"
 			  (url-hexify-string window-name) ".png")))
+    (message "import -window %s %s/scpaste.png" window-name scpaste-tmp-dir)
     (eshell-command (format "import -window %s %s/scpaste.png" window-name scpaste-tmp-dir))
     (eshell-command (format "scp %s/scpaste.png %s/%s.png" scpaste-tmp-dir full-url window-name))
 
     (kill-new full-url)
     (message "Pasted to %s (on kill ring)" full-url)))
 
+;;; TODO: this doesn't work.
 (defun scpaste-index ()
   "Generate an index of all existing pastes on server on the splash page."
   (interactive)

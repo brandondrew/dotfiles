@@ -116,7 +116,8 @@
 (add-hook 'ruby-mode-hook
           (lambda () (inf-ruby-keys)))
 (add-hook 'inferior-ruby-mode-hook
-	  (lambda () (toggle-truncate-lines nil)))
+	  (lambda () (toggle-truncate-lines nil)
+	    (font-lock-mode -1)))
 
 (add-hook 'ruby-mode-hook (lambda () (ruby-electric-mode t)))
 (add-hook 'ruby-mode-hook 'my-coding-hook)
