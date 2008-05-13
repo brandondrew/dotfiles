@@ -131,7 +131,8 @@
       rng-nxml-auto-validate-flag nil)
 
 (font-lock-add-keywords
- 'ruby-mode
+ ' ruby-mode
+   ruby-mode
  '(("\\<\\(FIX\\|TODO\\|FIXME\\|HACK\\|REFACTOR\\):"
     1 font-lock-warning-face t)))
 
