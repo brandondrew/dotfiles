@@ -39,6 +39,12 @@
 	       description="The other XML guy"
 	       htmlUrl="http://blog.jclark.com"
 	       xmlUrl="http://blog.jclark.com/feeds/posts/default" />
+      <outline text="Oliver Steele"
+	       description="Languages of the Real and Artificial"
+	       htmlUrl="http://osteele.com"
+	       xmlUrl="http://feeds.feedburner.com/osteele" />
+      <outline text="Github"
+	       xmlUrl="http://feeds.feedburner.com/github" />
     </outline>
 
     <outline text="Emacs people">
@@ -209,6 +215,7 @@
 	       htmlUrl="http://drnicwilliams.com"
 	       xmlUrl="http://feeds.feedburner.com/DrNic" />
       <outline text="al3x"
+	       description="Alex Payne"
 	       htmlUrl="http://al3x.net"
 	       xmlUrl="http://feeds.feedburner.com/al3x" />
       <outline text="Dave Astels"
