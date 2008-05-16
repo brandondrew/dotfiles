@@ -12,3 +12,5 @@
   (shell-command "ruby ~/bin/morselight.rb %s" (shell-quote-argument text)))
 
 (add-hook 'jabber-alert-message-hooks 'jabber-notify-message)
+
+;; TODO: look into using same-window-regexps to make a jabber-only window.

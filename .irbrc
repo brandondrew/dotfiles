@@ -14,10 +14,10 @@ def ri(obj)
 end
 
 # Inspecting really long strings causes inf-ruby to get really, really slow.
-class String
-  def inspect
-    puts self
-  end
-end
+# class String
+#   def inspect
+#     puts self
+#   end
+# end
 
 IRB.conf[:AUTO_INDENT]=true

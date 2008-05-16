@@ -101,6 +101,11 @@
         w3m-use-favicon
         w3m-use-toolbar))
 
+;; nxhtml stuff
+(setq mumamo-chunk-coloring 'submode-colored
+      nxhtml-skip-welcome t
+      rng-nxml-auto-validate-flag nil)
+
 ;;; Cosmetics
 
 (defface my-red-face
