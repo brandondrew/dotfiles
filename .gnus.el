@@ -38,6 +38,8 @@
           (any "cartographer" junk)
           (any "Fyreball" junk)
           (any "ocruby" junk)
+	  (any "ALM Expo 2008" junk)
+	  (any "zacchaeus-bounces" junk)
 	  (any "emacs-rails" "emacs-rails")
           (any "emacs-devel" "emacs-devel")
           (any "bus-scheme" "bus-scheme")
