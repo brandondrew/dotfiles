@@ -41,6 +41,7 @@
 - libpurple-bin
 - libquicktime1
 - libsqlite3-ruby1.8
+- libxml2-dev
 - mpc
 - mpd
 - mpg321

@@ -116,8 +116,8 @@
 (require 'my-lisp)
 
 (eval-after-load 'ruby-mode '(require 'my-ruby))
-(eval-after-load 'javascript '(require 'my-js))
-(eval-after-load 'jabber '(load "jabber-config"))
+(eval-after-load 'javascript-mode '(require 'my-js))
+(eval-after-load 'jabber-connect '(load "jabber-config"))
 (eval-after-load 'rcirc '(load "rcirc-config"))
 
 ;; Well, these autoloads have to get invoked somehow.

@@ -116,18 +116,14 @@
 (add-hook 'ruby-mode-hook
           (lambda () (inf-ruby-keys)))
 (add-hook 'inferior-ruby-mode-hook
-	  (lambda () (toggle-truncate-lines nil)))
+	  (lambda () (toggle-truncate-lines nil)
+	    (font-lock-mode -1)))
 
 (add-hook 'ruby-mode-hook (lambda () (ruby-electric-mode t)))
 (add-hook 'ruby-mode-hook 'my-coding-hook)
 (add-hook 'ruby-mode-hook 'pretty-lambdas)
 
 (setq ri-ruby-script (expand-file-name "~/.emacs.d/ri-emacs.rb"))
-
-;; nxhtml stuff
-(setq mumamo-chunk-coloring 'submode-colored
-      nxhtml-skip-welcome t
-      rng-nxml-auto-validate-flag nil)
 
 (font-lock-add-keywords
  'ruby-mode
