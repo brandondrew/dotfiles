@@ -31,7 +31,8 @@
 (toggle-debug-on-error t)
 
 ;;; Fix for a bug in CVS Emacs 2 April 08; remove when fixed upstream:
-(defun handle-shift-selection ())
+(require 'cl)
+(defun handle-shift-selection (&rest args))
 
 ;;;
 ;;; server singleton

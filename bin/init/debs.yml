@@ -9,12 +9,14 @@
 - cellwriter
 - console-terminus
 - cvs
+- debhelper
 - devilspie
 - dwm-tools
 - epiphany-browser
 - epiphany-extensions
 - exuberant-ctags
 - f-spot
+- fakeroot
 - fetchmail
 - firefox-themes-ubuntu
 - gitk
