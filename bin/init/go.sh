@@ -22,7 +22,7 @@ apt-get install git-core ruby ruby1.8 zile
 if [ ! -r install.rb ] ; then
   # if we are running a bare go.sh
   cd ~
-  git clone git://git.caboo.se/technomancy.git dotfiles
+  git clone git@github.com:technomancy/dotfiles.git dotfiles
   chown -R $USER dotfiles
   cd dotfiles/bin/init
 fi
