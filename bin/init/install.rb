@@ -9,6 +9,7 @@ end
 
 debs = YAML.load(File.read('debs.yml'))
 gems = YAML.load(File.read('gems.yml')) # TODO: parsetree is called something else; as is redcloth
+roastbeefs = YAML.load(File.read('roastbeefs.yml'))
 
 if !system "apt-get install #{debs.join(' ')}"
   raise "Couldn't install packages"
@@ -28,3 +29,5 @@ system "gem install rake" # sometimes we get a false start
 system "gem install #{gems.join(' ')}"
 
 system "sed -i s/DisallowTCP=true/DisallowTCP=false/ /etc/gdm/gdm.conf" # gotta have my remote X!
+
+roastbeefs.each { |beef| system "sudo -u $USER roastbeef install #{beef}" }

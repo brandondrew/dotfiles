@@ -16,9 +16,8 @@
 - daemons
 - cheat
 - hoe
-- redcloth
 - redgreen
-- parsetree
+- ParseTree
 - termios
 - tzinfo
 - ZenTest
