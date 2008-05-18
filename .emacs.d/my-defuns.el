@@ -87,6 +87,13 @@
   (interactive)
   (indent-region (point-min) (point-max)))
 
+(defun recentf-ido-find-file ()
+  "Find a recent file using Ido."
+  (interactive)
+  (let ((file (ido-completing-read "Choose recent file: " recentf-list nil t)))
+    (when file
+      (find-file file))))
+
 ;;; Cosmetic stuff
 
 (defun pretty-lambdas ()
@@ -115,16 +122,18 @@
 
 (defun my-generate-rails-tags ()
   (interactive)
-  (shell-command (format "find %s -name *rb | xargs ctags-exuberant -a -e -f %s/TAGS --exclude=vendor"
+  (shell-command (format "find %s -name *rb | xargs ctags-exuberant -a -e -f %s/TAGS --exclude=vendor --exclude=public --exclude=log --exclude=db"
 			 (rails-root) (rails-root))))
 
 (defun my-generate-ruby-tags ()
   (interactive)
   (flet ((rails-root () (cadr (split-string (pwd) " ")))) (my-generate-rails-tags)))
 
-(defun sudo-edit ()
-  (interactive)
-  (find-alternate-file (concat "/sudo:root@localhost:" buffer-file-name)))
+(defun sudo-edit (&optional arg)
+  (interactive "p")
+  (if arg
+      (find-file (concat "/sudo:root@localhost:" (ido-read-file-name "File: ")))
+    (find-alternate-file (concat "/sudo:root@localhost:" buffer-file-name))))
 
 (defun lorem ()
   "Insert a lorem ipsum."

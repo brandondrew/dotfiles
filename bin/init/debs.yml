@@ -8,6 +8,7 @@
 - build-essential
 - cellwriter
 - console-terminus
+- curl
 - cvs
 - debhelper
 - devilspie
@@ -42,6 +43,7 @@
 - libpurple-bin
 - libquicktime1
 - libsqlite3-ruby1.8
+- libxml2-dev
 - mpc
 - mpd
 - mpg321
@@ -52,6 +54,7 @@
 - nmap
 - openssh-server
 - pidgin-libnotify
+- postfix
 - ptunnel
 - rdoc1.8
 - ri1.8

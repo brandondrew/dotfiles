@@ -51,6 +51,8 @@
 
 (add-to-list 'load-path "~/.emacs.d")
 (add-to-list 'load-path "~/.emacs.d/jabber")
+(add-to-list 'load-path "~/.emacs.d/nxml")
+(add-to-list 'load-path "~/.emacs.d/nxml/nxml-mode-20041004")
 
 ;; Regenerate the autoload file if it doesn't exist or it's too
 ;; old. (2 weeks or so)
@@ -89,6 +91,10 @@
 (require 'cc-defs)
 (require 'project-local-variables)
 (require 'find-file-in-project)
+(require 'ffap)
+(require 'ansi-color)
+(require 'recentf)
+(require 'css-mode)
 
 (eval-after-load 'vc
   '(progn
@@ -112,7 +118,7 @@
 (eval-after-load 'ruby-mode '(require 'my-ruby))
 (eval-after-load 'javascript-mode '(require 'my-js))
 (eval-after-load 'jabber-connect '(load "jabber-config"))
-(eval-after-load 'irc '(load "rcirc-config"))
+(eval-after-load 'rcirc '(load "rcirc-config"))
 
 ;; Well, these autoloads have to get invoked somehow.
 (add-to-list 'auto-mode-alist '("\\.rb$" . ruby-mode))
@@ -121,6 +127,7 @@
 (add-to-list 'auto-mode-alist '("\\.xml$" . nxml-mode))
 (add-to-list 'auto-mode-alist '("\\.html$" . nxhtml-mode))
 (add-to-list 'auto-mode-alist '("\\.rhtml$" . nxhtml-mode))
+(add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
 
 (setq system-specific-config
       (concat "~/.emacs.d/"
@@ -136,7 +143,6 @@
 ;;; General
 ;; M-z zap to char
 ;; C-u C-SPC jump to previous edit
-;; M-/ autocomplete word
 ;; M-! insert output of shell command
 ;; M-| replace region with shell output
 ;; M-x thumbs
@@ -144,9 +150,8 @@
 
 ;;; Custom bindings
 ;; C-c \ align-regexp
-;; C-c C-r revert buffer
+;; C-c r revert buffer
 ;; C-x M-k kill buffer and window
-;; C-x M-f find file in other window
 ;; C-c d toggle-dedicated-window
 ;; C-c p message point
 
@@ -156,16 +161,6 @@
 ;; C-x r c Rectangle clear (replace with space)
 ;; C-x r o Insert space rectangle
 ;; C-x r t Replace rectangle with string
-
-;;; temp macros
-;; C-m C-m to start recording
-;; C-m C-s to stop
-;; C-m C-p to play
-
-;;; Macros
-;; C-m C-r to begin
-;; name it, and do stuff
-;; C-s to save
 
 ;;; Ruby
 ;; M-C-p, M-C-n back and forward blocks
@@ -218,18 +213,20 @@
 ;; fix twittering-mode bugs mentioned in file
 ;; submit patched rcirc completion
 ;; scpaste: use tramp functions, finish scpaste-window
+;; submit test runner using compile to inf-ruby.el
 
 ;; fix whitespace-mode config to not be horrible
-;; allow edits to occur buffer to get propagated to original buffer
-;; pcomplete for: kill/killall, git, apt-get
 ;; unify statuses in twitter and jabber
+
+;; start using ditz
+;; - move issue db to ~/.bugs; allow it to be autoconfigured
+
+;; Make my face customizations stick around with other color themes.
 
 ;;; Minor
 
-;; find a better dark-on-light color scheme
 ;; make column-number-mode only active in coding buffers
-;; flymake for JS and Ruby
-;; steal ZSS defadvice in setup-aliases.el for find-file-at-point
+;; defadvice find-file-at-point to look for line numbers (zss setup-aliases does this)
 ;; fix ruby-get-old-input to not care about what the prompt looks like
 
 ;;; Long-term:

@@ -1042,6 +1042,7 @@ static char *gnus-pointer[] = {
        widget-single-line-field-face))
     )))
 
+;;;###autoload
 (defalias 'zenburn #'color-theme-zenburn)
 
 (provide 'zenburn)

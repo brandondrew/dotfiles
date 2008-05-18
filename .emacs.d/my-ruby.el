@@ -54,15 +54,30 @@
   (interactive)
   (let* ((funname (which-function))
 	 (fn (and (string-match "#\\(.*\\)" funname) (match-string 1 funname))))
-    (compile (concat "ruby " (file-name-nondirectory (buffer-file-name)) " --name " fn))))
+    (compile (concat "ruby " buffer-file-name " --name " fn))))
 
 (defun ruby-test-file ()
   (interactive)
   (if (string-match "_test.rb$" buffer-file-name)
-      (compile (concat "ruby " (file-name-nondirectory buffer-file-name)))
+      (compile (concat "ruby " buffer-file-name))
     (toggle-buffer)
-    (compile (concat "ruby " (file-name-nondirectory buffer-file-name)))
+    (compile (concat "ruby " buffer-file-name))
     (toggle-buffer)))
+
+;; find-file-at-point help
+
+(defun ruby-module-path (module)
+    (shell-command-to-string 
+     (concat 
+      "ruby -e " 
+      "\"ret='()';$LOAD_PATH.each{|p| " 
+      "x=p+'/'+ARGV[0].gsub('.rb', '')+'.rb';" 
+      "ret=File.expand_path(x)" 
+      "if(File.exist?(x))};printf ret\" " 
+      module)))
+ 
+(eval-after-load "ffap"
+  '(push '(ruby-mode . ruby-module-path) ffap-alist))
 
 ;;
 ;; Bindings
@@ -101,18 +116,14 @@
 (add-hook 'ruby-mode-hook
           (lambda () (inf-ruby-keys)))
 (add-hook 'inferior-ruby-mode-hook
-	  (lambda () (toggle-truncate-lines nil)))
+	  (lambda () (toggle-truncate-lines nil)
+	    (font-lock-mode -1)))
 
 (add-hook 'ruby-mode-hook (lambda () (ruby-electric-mode t)))
 (add-hook 'ruby-mode-hook 'my-coding-hook)
 (add-hook 'ruby-mode-hook 'pretty-lambdas)
 
 (setq ri-ruby-script (expand-file-name "~/.emacs.d/ri-emacs.rb"))
-
-;; nxhtml stuff
-(setq mumamo-chunk-coloring 'submode-colored
-      nxhtml-skip-welcome t
-      rng-nxml-auto-validate-flag nil)
 
 (font-lock-add-keywords
  'ruby-mode

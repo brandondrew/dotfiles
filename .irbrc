@@ -9,9 +9,15 @@ require 'yaml'
 Wirble.init
 # Wirble.colorize unless IRB.conf[:PROMPT_MODE] == :INF_RUBY
 
-def decolor
-  Wirble::Colorize.disable
-  "Colorization disabled."
+def ri(obj)
+  puts "ri #{obj}"
 end
+
+# Inspecting really long strings causes inf-ruby to get really, really slow.
+# class String
+#   def inspect
+#     puts self
+#   end
+# end
 
 IRB.conf[:AUTO_INDENT]=true

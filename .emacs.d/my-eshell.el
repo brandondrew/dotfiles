@@ -1,7 +1,11 @@
-;;; TODO
-;; PID completion for kill/killall
-;; git auto-complete
-;; apt-get
+
+;;; Part of my .emacs project
+
+;; by Phil Hagelberg
+;; Much thanks to RMS and the folks at emacswiki.org.
+
+;; Note: this relies on files found in my dotfiles repository:
+;; http://git.caboo.se/?p=technomancy.git;a=summary
 
 (require 'ansi-color) ;; has to be eval'd before load
 
@@ -19,6 +23,7 @@
 
      (add-to-list 'eshell-visual-commands "ssh")
      (add-to-list 'eshell-visual-commands "autotest")
+     (add-to-list 'eshell-visual-commands "tail")
 
      (add-to-list 'eshell-command-completions-alist
                   (cons "gunzip" "gz\\'"))

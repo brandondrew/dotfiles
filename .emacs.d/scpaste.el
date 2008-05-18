@@ -107,6 +107,7 @@ You must have write-access to this directory via `scp'.")
 				    original-name)))
 	 (full-url (concat scpaste-http-destination "/" name ".html"))
 	 (scp-destination (concat scpaste-scp-destination "/" name ".html"))
+	 (scp-original-destination (concat scpaste-scp-destination "/" name))
 	 (tmp-file (concat scpaste-tmp-dir "/" name)))
 
     ;; Save the file (while adding footer)
@@ -120,6 +121,8 @@ You must have write-access to this directory via `scp'.")
     ;; Could use shell-command here instead of eshell-command if you don't
     ;; want to load eshell and you don't mind the popup password prompt.
     (eshell-command (concat "scp " tmp-file " " scp-destination))
+    (eshell-command (concat "scp " (buffer-file-name (current-buffer))
+			    " " scp-original-destination))
     (ignore-errors (kill-buffer "*EShell Command Output*"))
 
     ;; Notify user and put the URL on the kill ring
@@ -132,12 +135,14 @@ You must have write-access to this directory via `scp'.")
   ;; TODO: use completing-read on the output of wmctrl
   (let ((full-url (concat scpaste-http-destination "/"
 			  (url-hexify-string window-name) ".png")))
+    (message "import -window %s %s/scpaste.png" window-name scpaste-tmp-dir)
     (eshell-command (format "import -window %s %s/scpaste.png" window-name scpaste-tmp-dir))
     (eshell-command (format "scp %s/scpaste.png %s/%s.png" scpaste-tmp-dir full-url window-name))
 
     (kill-new full-url)
     (message "Pasted to %s (on kill ring)" full-url)))
 
+;;; TODO: this doesn't work.
 (defun scpaste-index ()
   "Generate an index of all existing pastes on server on the splash page."
   (interactive)

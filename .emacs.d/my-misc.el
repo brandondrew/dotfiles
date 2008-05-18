@@ -25,8 +25,8 @@
       font-lock-maximum-decoration t
       inhibit-startup-message t
       transient-mark-mode t
-      color-theme-is-global nil
       indicate-empty-lines t
+      color-theme-is-global t
       save-place t
       truncate-partial-width-windows nil
       indent-tabs-mode nil
@@ -37,6 +37,7 @@
 (global-font-lock-mode t)
 (menu-bar-mode -1)
 (winner-mode t)
+(recentf-mode 1)
 (show-paren-mode 1)
 
 (when (> emacs-major-version 21)
@@ -44,6 +45,7 @@
   (setq ido-enable-prefix nil
         ido-enable-flex-matching t
         ido-create-new-buffer 'always
+	ido-use-filename-at-point t
         ido-max-prospects 10))
 
 (put 'narrow-to-region 'disabled nil)
@@ -98,6 +100,11 @@
         w3m-track-mouse
         w3m-use-favicon
         w3m-use-toolbar))
+
+;; nxhtml stuff
+(setq mumamo-chunk-coloring 'submode-colored
+      nxhtml-skip-welcome t
+      rng-nxml-auto-validate-flag nil)
 
 ;;; Cosmetics
 

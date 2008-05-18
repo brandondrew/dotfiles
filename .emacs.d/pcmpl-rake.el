@@ -34,6 +34,8 @@
 
 ;;; Commentary:
 
+;; Provides pcompletion for the `rake' command, which is basically
+;; `make' implemented in Ruby.
 
 ;;; Code:
 
