@@ -18,6 +18,7 @@
 (add-hook 'emacs-lisp-mode-hook 'pretty-lambdas)
 (add-hook 'emacs-lisp-mode-hook 'eldoc-mode)
 (add-hook 'lisp-mode-hook 'pretty-lambdas)
+(add-hook 'scheme-mode-hook 'pretty-lambdas)
 
 (add-to-list 'auto-mode-alist '("\\.emacs-project" . emacs-lisp-mode))
 
@@ -34,6 +35,7 @@
 
 (add-hook 'lisp-mode-hook 'my-coding-hook)
 (add-hook 'emacs-lisp-mode-hook 'my-coding-hook)
+(add-hook 'scheme-mode-hook 'my-coding-hook)
 
 (defface paren-face
    '((((class color) (background dark))
@@ -75,8 +77,5 @@
                     `((equal ,expr ,(car c)) ,@(cdr c)))
                     choices)))
 
-(defun bus ()
-  (interactive)
-  (run-scheme "~/projects/bus_scheme/bin/bus"))
-
+(require 'bus-scheme)
 (provide 'my-lisp)

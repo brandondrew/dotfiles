@@ -3,7 +3,7 @@
 (defun color-theme-vivid-chalk ()
   "Based on Vivid Chalk, a vim port of Vibrant Ink.
 Modified by Phil Hagelberg to fix minor garishness."
-  ;; Modified string face, type face, and highlight background
+  ;; Modified string, type, comment faces, and highlight background
   (interactive)
   (color-theme-install
    '(color-theme-vivid-chalk
@@ -19,7 +19,7 @@ Modified by Phil Hagelberg to fix minor garishness."
      (bold-italic ((t (:italic t :bold t))))
      (fringe ((t (:background "black"))))
      (font-lock-builtin-face ((t (:foreground "#aaccff"))))
-     (font-lock-comment-face ((t (:italic t :foreground "#9933cc"))))
+     (font-lock-comment-face ((t (:italic t :foreground "#bb55ee"))))
      (font-lock-comment-delimiter-face ((t (:foreground "#9933cc"))))
      (font-lock-constant-face ((t (:foreground "#339999"))))
      (font-lock-function-name-face ((t (:foreground "#ffcc00"))))
