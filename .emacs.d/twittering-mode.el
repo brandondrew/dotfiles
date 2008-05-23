@@ -242,6 +242,7 @@
       `(ucs-to-char ,num)
     `(decode-char 'ucs ,num)))
 
+;;;###autoload
 (defun twittering-mode ()
   "Major mode for Twitter"
   (interactive)
@@ -298,10 +299,10 @@
        (message "Failure: HTTP GET") nil))))
 
 (defun twittering-http-get-default-sentinel (proc stat &optional suc-msg)
-  (let ((header (twittering-get-response-header))
+  (ignore-errors
+    (let ((header (twittering-get-response-header))
 	  (body (twittering-get-response-body))
-	  (status nil)
-	  )
+	  (status nil))
       (if (string-match "HTTP/1\.[01] \\([a-z0-9 ]+\\)\r?\n" header)
 	  (progn
 	    (setq status (match-string-no-properties 1 header))
@@ -316,8 +317,7 @@
 	      ;; (message (if suc-msg suc-msg "Success: Get."))
 	      )
 	     (t (message status))))
-	(message "Failure: Bad http response.")))
-  )
+	(message "Failure: Bad http response.")))))
 
 (defun twittering-render-friends-timeline ()
   (with-current-buffer (twittering-buffer)

@@ -80,10 +80,10 @@
 
 ;; nxhtml-mode is the cats!
 ;; TODO: not working in eval-after-load
-(eval-after-load 'nxml-mode
-  '(progn
-     (define-key nxhtml-mode-map (kbd "C-c C-v") 'rails-find-action)
-     (define-key nxhtml-mode-map (kbd "C-c C-e") 'rails-insert-erb-skeleton)))
+;; (eval-after-load 'nxml-mode
+;;   '(progn
+;;      (define-key nxhtml-mode-map (kbd "C-c C-v") 'rails-find-action)
+;;      (define-key nxhtml-mode-map (kbd "C-c C-e") 'rails-insert-erb-skeleton)))
 
 (provide 'my-rails)
 ;;; my-rails.el ends here

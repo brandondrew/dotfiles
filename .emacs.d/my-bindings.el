@@ -71,6 +71,7 @@
 (define-key read-expression-map (kbd "TAB") #'lisp-complete-symbol)
 (global-set-key (kbd "M-\\") 'my-selective-display)
 (global-set-key (kbd "C-x v d") 'vc-status)
+(global-set-key (kbd "C-c a") (lambda () (interactive) (switch-or-start 'autotest "*autotest*")))
 (global-set-key (kbd "C-c j") (lambda () (interactive) (switch-or-start 'jabber-connect "*-jabber-*")))
 (global-set-key (kbd "C-c g") (lambda () (interactive) (switch-or-start 'gnus "*Group*")))
 (global-set-key (kbd "C-c t") (lambda () (interactive) (switch-or-start 'twittering-mode "*twittering*")))
