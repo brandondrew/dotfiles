@@ -1,7 +1,9 @@
 (require 'color-theme)
 
 (defun color-theme-vivid-chalk ()
-  "Based on Vivid Chalk, a vim port of Vibrant Ink."
+  "Based on Vivid Chalk, a vim port of Vibrant Ink.
+Modified by Phil Hagelberg to fix minor garishness."
+  ;; Modified string face, type face, and highlight background
   (interactive)
   (color-theme-install
    '(color-theme-vivid-chalk
@@ -24,13 +26,13 @@
      (font-lock-keyword-face ((t (:foreground "#ff6600"))))
      (font-lock-preprocessor-face ((t (:foreground "#aaffff"))))
      (font-lock-reference-face ((t (:foreground "LightSteelBlue"))))
-     (font-lock-string-face ((t (:foreground "#66FF00")))) ;; change
+     (font-lock-string-face ((t (:foreground "DarkOliveGreen3"))))
      (font-lock-doc-face ((t (:foreground "LightSalmon"))))
-     (font-lock-type-face ((t (:italic t :foreground "#aaaaaa"))))
+     (font-lock-type-face ((t (:italic t :foreground "burlywood3")))) 
      (font-lock-variable-name-face ((t (:foreground "#aaccff"))))
      (font-lock-warning-face ((t (:bold t :foreground "Pink"))))
      (paren-face-match-light ((t (:background "#222222"))))
-     (highlight ((t (:background "darkolivegreen")))) ;; ugh!
+     (highlight ((t (:background "gray4"))))
      (italic ((t (:italic t))))
      (modeline ((t (:background "#a5baf1" :foreground "black"))))
      (modeline-buffer-id ((t (:background "#a5baf1" :foreground
