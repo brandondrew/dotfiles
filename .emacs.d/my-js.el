@@ -30,7 +30,8 @@
 (add-hook 'javascript-mode-hook 'moz-minor-mode)
 (add-hook 'javascript-mode-hook 'my-coding-hook)
 
-(add-to-list 'auto-mode-alist '("\\.js$" . javascript-mode))
+(add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
+;; (add-to-list 'auto-mode-alist '("\\.js$" . javascript-mode))
 (add-to-list 'auto-mode-alist '("\\.json$" . yaml-mode))
 
 ;; for helma

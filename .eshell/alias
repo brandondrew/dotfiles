@@ -3,7 +3,7 @@ alias devlog tail -F log/development.log
 alias ll ls -l $*
 alias la ls -a $*
 alias l ls -a -l $*
-alias pgrep ps awx | grep $*
+alias grepp ps awx | grep $*
 alias sapti sudo apt-get install $*
 alias saptc apt-cache search $*
 alias sapts apt-cache show $*

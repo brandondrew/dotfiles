@@ -68,18 +68,14 @@
 
 (autoload 'nxhtml-mode "nxml/autostart" "" t)
 (autoload 'nxml-mode "nxml/autostart" "" t)
-(autoload 'ruby-mode "ruby-mode" "" t)
-(autoload 'javascript-mode "javascript" "" t)
 
 (autoload 'w3m "w3m-load" "" t)
-(autoload 'yaml-mode "yaml-mode")
 (autoload 'moz-minor-mode "moz" "Mozilla Minor and Inferior Mozilla Modes" t)
 (autoload 'whitespace-mode "whitespace" "Toggle whitespace visualization." t)
 (autoload 'tail-file "tail" "Tail a file." t)
 (autoload 'lisppaste-paste-region "lisppaste" "" t)
 (autoload 'top "top-mode" "" t)
 (autoload 'jabber-connect "jabber" "" t)
-(autoload 'scpaste "scpaste" "" t)
 (autoload 'cheat "cheat" "" t)
 (autoload 'gitsum "gitsum" "" t)
 

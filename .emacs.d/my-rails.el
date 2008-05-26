@@ -14,6 +14,7 @@
     (unless (equal dir "/")
       (rails-root (expand-file-name (concat dir "../"))))))
 
+;;;###autoload
 (defun rails-console ()
   (interactive)
   (run-ruby (concat (rails-root) "script/console")))
@@ -79,11 +80,10 @@
 ;;(define-key ruby-mode-map (kbd "C-c C-S-t") 'ruby-test-one)
 
 ;; nxhtml-mode is the cats!
-;; TODO: not working in eval-after-load
-;; (eval-after-load 'nxml-mode
-;;   '(progn
-;;      (define-key nxhtml-mode-map (kbd "C-c C-v") 'rails-find-action)
-;;      (define-key nxhtml-mode-map (kbd "C-c C-e") 'rails-insert-erb-skeleton)))
+(eval-after-load 'nxhtml-mode
+  '(progn
+     (define-key nxhtml-mode-map (kbd "C-c C-v") 'rails-find-action)
+     (define-key nxhtml-mode-map (kbd "C-c C-e") 'rails-insert-erb-skeleton)))
 
 (provide 'my-rails)
 ;;; my-rails.el ends here

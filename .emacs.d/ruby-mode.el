@@ -1,17 +1,26 @@
-;;;
-;;;  ruby-mode.el -
-;;;
-;;;  $Author: nobu $
-;;;  created at: Fri Feb  4 14:49:13 JST 1994
-;;;
+;;; ruby-mode.el --- Major mode for editing Ruby files
 
-(defconst ruby-mode-revision "$Revision: 16028 $"
+;; Copyright (C) 1994-2008 Yukihiro Matsumoto and contributors
+
+;; Author: Yukihiro Matsumoto
+;; Created: Fri Feb  4 14:49:13 JST 1994
+;; Keywords: languages
+
+;;; Commentary:
+
+;; Provides font-locking and indentation support for editing Ruby code.
+
+;;; Code:
+
+(eval-when-compile (require 'cl))
+
+(defconst ruby-mode-revision "$Revision: 16611 $"
   "Ruby mode revision string.")
 
 (defconst ruby-mode-version
   (progn
-   (string-match "[0-9.]+" ruby-mode-revision)
-   (substring ruby-mode-revision (match-beginning 0) (match-end 0)))
+    (string-match "[0-9.]+" ruby-mode-revision)
+    (substring ruby-mode-revision (match-beginning 0) (match-end 0)))
   "Ruby mode version number.")
 
 (defconst ruby-block-beg-re
@@ -20,7 +29,7 @@
 
 (defconst ruby-non-block-do-re
   "\\(while\\|until\\|for\\|rescue\\)\\>[^_]"
-  "Regexp to match")
+  "Regexp to match") ;; TODO: doc
 
 (defconst ruby-indent-beg-re
   "\\(\\s *\\(class\\|module\\|def\\)\\)\\|if\\|unless\\|case\\|while\\|until\\|for\\|begin"
@@ -40,18 +49,18 @@
 
 (defconst ruby-block-op-re
   "and\\|or\\|not"
-  "Regexp to match ")
+  "Regexp to match ") ;; TODO: doc
 
-(defconst ruby-block-hanging-re
-  (concat ruby-modifier-beg-re "\\|" ruby-block-op-re)
-  )
+(defconst ruby-block-hanging-re ;; TODO: doc
+  (concat ruby-modifier-beg-re "\\|" ruby-block-op-re))
 
-(defconst ruby-block-end-re "\\<end\\>")
+(defconst ruby-block-end-re "\\<end\\>") ;; TODO: doc
 
 (defconst ruby-here-doc-beg-re
-  "<<\\(-\\)?\\(\\([a-zA-Z0-9_]+\\)\\|[\"]\\([^\"]+\\)[\"]\\|[']\\([^']+\\)[']\\)")
+  "<<\\(-\\)?\\(\\([a-zA-Z0-9_]+\\)\\|[\"]\\([^\"]+\\)[\"]\\|[']\\([^']+\\)[']\\)") ;; TODO: doc
 
 (defun ruby-here-doc-end-match ()
+  ;; TODO: doc
   (concat "^"
 	  (if (match-string 1) "[ \t]*" nil)
 	  (regexp-quote
@@ -60,81 +69,75 @@
 	       (match-string 5)))))
 
 (defconst ruby-delimiter
+  ;; TODO: doc
   (concat "[?$/%(){}#\"'`.:]\\|<<\\|\\[\\|\\]\\|\\<\\("
 	  ruby-block-beg-re
 	  "\\)\\>\\|" ruby-block-end-re
-	  "\\|^=begin\\|" ruby-here-doc-beg-re)
-  )
+	  "\\|^=begin\\|" ruby-here-doc-beg-re))
 
 (defconst ruby-negative
   (concat "^[ \t]*\\(\\(" ruby-block-mid-re "\\)\\>\\|"
-	    ruby-block-end-re "\\|}\\|\\]\\)")
+	  ruby-block-end-re "\\|}\\|\\]\\)")
   "Regexp to match where the indentation gets shallower.")
 
-(defconst ruby-operator-chars "-,.+*/%&|^~=<>:")
-(defconst ruby-operator-re (concat "[" ruby-operator-chars "]"))
+(defconst ruby-operator-chars "-,.+*/%&|^~=<>:") ;; TODO: doc
+(defconst ruby-operator-re (concat "[" ruby-operator-chars "]")) ;; TODO: doc
 
-(defconst ruby-symbol-chars "a-zA-Z0-9_")
-(defconst ruby-symbol-re (concat "[" ruby-symbol-chars "]"))
+(defconst ruby-symbol-chars "a-zA-Z0-9_") ;; TODO: doc
+(defconst ruby-symbol-re (concat "[" ruby-symbol-chars "]")) ;; TODO: doc
 
 (defvar ruby-mode-abbrev-table nil
   "Abbrev table in use in ruby-mode buffers.")
 
 (define-abbrev-table 'ruby-mode-abbrev-table ())
 
-(defvar ruby-mode-map nil "Keymap used in ruby mode.")
+(defvar ruby-mode-map
+  (let ((map (make-sparse-keymap)))
+    (define-key map "{" 'ruby-electric-brace)
+    (define-key map "}" 'ruby-electric-brace)
+    (define-key map "\e\C-a" 'ruby-beginning-of-defun)
+    (define-key map "\e\C-e" 'ruby-end-of-defun)
+    (define-key map "\e\C-b" 'ruby-backward-sexp)
+    (define-key map "\e\C-f" 'ruby-forward-sexp)
+    (define-key map "\e\C-p" 'ruby-beginning-of-block)
+    (define-key map "\e\C-n" 'ruby-end-of-block)
+    (define-key map "\e\C-h" 'ruby-mark-defun)
+    (define-key map "\e\C-q" 'ruby-indent-exp)
+    (define-key map "\t" 'ruby-indent-command)
+    (define-key map "\C-c\C-e" 'ruby-insert-end)
+    (define-key map "\C-j" 'ruby-reindent-then-newline-and-indent)
+    (define-key map "\C-m" 'newline))
+  "Keymap used in ruby-mode.")
 
-(if ruby-mode-map
-    nil
-  (setq ruby-mode-map (make-sparse-keymap))
-  (define-key ruby-mode-map "{" 'ruby-electric-brace)
-  (define-key ruby-mode-map "}" 'ruby-electric-brace)
-  (define-key ruby-mode-map "\e\C-a" 'ruby-beginning-of-defun)
-  (define-key ruby-mode-map "\e\C-e" 'ruby-end-of-defun)
-  (define-key ruby-mode-map "\e\C-b" 'ruby-backward-sexp)
-  (define-key ruby-mode-map "\e\C-f" 'ruby-forward-sexp)
-  (define-key ruby-mode-map "\e\C-p" 'ruby-beginning-of-block)
-  (define-key ruby-mode-map "\e\C-n" 'ruby-end-of-block)
-  (define-key ruby-mode-map "\e\C-h" 'ruby-mark-defun)
-  (define-key ruby-mode-map "\e\C-q" 'ruby-indent-exp)
-  (define-key ruby-mode-map "\t" 'ruby-indent-command)
-  (define-key ruby-mode-map "\C-c\C-e" 'ruby-insert-end)
-  (define-key ruby-mode-map "\C-j" 'ruby-reindent-then-newline-and-indent)
-  (define-key ruby-mode-map "\C-m" 'newline))
-
-(defvar ruby-mode-syntax-table nil
-  "Syntax table in use in ruby-mode buffers.")
-
-(if ruby-mode-syntax-table
-    ()
-  (setq ruby-mode-syntax-table (make-syntax-table))
-  (modify-syntax-entry ?\' "\"" ruby-mode-syntax-table)
-  (modify-syntax-entry ?\" "\"" ruby-mode-syntax-table)
-  (modify-syntax-entry ?\` "\"" ruby-mode-syntax-table)
-  (modify-syntax-entry ?# "<" ruby-mode-syntax-table)
-  (modify-syntax-entry ?\n ">" ruby-mode-syntax-table)
-  (modify-syntax-entry ?\\ "\\" ruby-mode-syntax-table)
-  (modify-syntax-entry ?$ "." ruby-mode-syntax-table)
-  (modify-syntax-entry ?? "_" ruby-mode-syntax-table)
-  (modify-syntax-entry ?_ "_" ruby-mode-syntax-table)
-  (modify-syntax-entry ?< "." ruby-mode-syntax-table)
-  (modify-syntax-entry ?> "." ruby-mode-syntax-table)
-  (modify-syntax-entry ?& "." ruby-mode-syntax-table)
-  (modify-syntax-entry ?| "." ruby-mode-syntax-table)
-  (modify-syntax-entry ?% "." ruby-mode-syntax-table)
-  (modify-syntax-entry ?= "." ruby-mode-syntax-table)
-  (modify-syntax-entry ?/ "." ruby-mode-syntax-table)
-  (modify-syntax-entry ?+ "." ruby-mode-syntax-table)
-  (modify-syntax-entry ?* "." ruby-mode-syntax-table)
-  (modify-syntax-entry ?- "." ruby-mode-syntax-table)
-  (modify-syntax-entry ?\; "." ruby-mode-syntax-table)
-  (modify-syntax-entry ?\( "()" ruby-mode-syntax-table)
-  (modify-syntax-entry ?\) ")(" ruby-mode-syntax-table)
-  (modify-syntax-entry ?\{ "(}" ruby-mode-syntax-table)
-  (modify-syntax-entry ?\} "){" ruby-mode-syntax-table)
-  (modify-syntax-entry ?\[ "(]" ruby-mode-syntax-table)
-  (modify-syntax-entry ?\] ")[" ruby-mode-syntax-table)
-  )
+(defvar ruby-mode-syntax-table
+  (let ((table (make-syntax-table)))
+    (modify-syntax-entry ?\' "\"" table)
+    (modify-syntax-entry ?\" "\"" table)
+    (modify-syntax-entry ?\` "\"" table)
+    (modify-syntax-entry ?# "<" table)
+    (modify-syntax-entry ?\n ">" table)
+    (modify-syntax-entry ?\\ "\\" table)
+    (modify-syntax-entry ?$ "." table)
+    (modify-syntax-entry ?? "_" table)
+    (modify-syntax-entry ?_ "_" table)
+    (modify-syntax-entry ?< "." table)
+    (modify-syntax-entry ?> "." table)
+    (modify-syntax-entry ?& "." table)
+    (modify-syntax-entry ?| "." table)
+    (modify-syntax-entry ?% "." table)
+    (modify-syntax-entry ?= "." table)
+    (modify-syntax-entry ?/ "." table)
+    (modify-syntax-entry ?+ "." table)
+    (modify-syntax-entry ?* "." table)
+    (modify-syntax-entry ?- "." table)
+    (modify-syntax-entry ?\; "." table)
+    (modify-syntax-entry ?\( "()" table)
+    (modify-syntax-entry ?\) ")(" table)
+    (modify-syntax-entry ?\{ "(}" table)
+    (modify-syntax-entry ?\} "){" table)
+    (modify-syntax-entry ?\[ "(]" table)
+    (modify-syntax-entry ?\] ")[" table))
+  "Syntax table to use in ruby-mode.")
 
 (defcustom ruby-indent-tabs-mode nil
   "*Indentation can insert tabs in ruby mode if this is non-nil."
@@ -170,8 +173,8 @@ Also ignores spaces after parenthesis when 'space."
   "*Use `ruby-encoding-map' to set encoding magic comment if this is non-nil."
   :type 'boolean :group 'ruby)
 
-(eval-when-compile (require 'cl))
 (defun ruby-imenu-create-index-in-block (prefix beg end)
+  "Create an imenu index of methods inside a block."
   (let ((index-alist '()) (case-fold-search nil)
 	name next pos decl sing)
     (goto-char beg)
@@ -191,7 +194,7 @@ Also ignores spaces after parenthesis when 'space."
 		  (cond
 		   ((string-match "^self\." name)
 		    (concat (substring prefix 0 -1) (substring name 4)))
-		  (t (concat prefix name)))))
+		   (t (concat prefix name)))))
 	(push (cons name pos) index-alist)
 	(ruby-accurate-end-of-block end))
        (t
@@ -209,40 +212,34 @@ Also ignores spaces after parenthesis when 'space."
     index-alist))
 
 (defun ruby-imenu-create-index ()
+  ;; TODO: doc
   (nreverse (ruby-imenu-create-index-in-block nil (point-min) nil)))
 
 (defun ruby-accurate-end-of-block (&optional end)
+  ;; TODO: doc
   (let (state)
     (or end (setq end (point-max)))
     (while (and (setq state (apply 'ruby-parse-partial end state))
 		(>= (nth 2 state) 0) (< (point) end)))))
 
 (defun ruby-mode-variables ()
+  "Set up initial local variables for ruby-mode."
   (set-syntax-table ruby-mode-syntax-table)
   (setq local-abbrev-table ruby-mode-abbrev-table)
-  (make-local-variable 'indent-line-function)
-  (setq indent-line-function 'ruby-indent-line)
-  (make-local-variable 'require-final-newline)
-  (setq require-final-newline t)
-  (make-variable-buffer-local 'comment-start)
-  (setq comment-start "# ")
-  (make-variable-buffer-local 'comment-end)
-  (setq comment-end "")
-  (make-variable-buffer-local 'comment-column)
-  (setq comment-column ruby-comment-column)
-  (make-variable-buffer-local 'comment-start-skip)
-  (setq comment-start-skip "#+ *")
   (setq indent-tabs-mode ruby-indent-tabs-mode)
-  (make-local-variable 'parse-sexp-ignore-comments)
-  (setq parse-sexp-ignore-comments t)
-  (make-local-variable 'paragraph-start)
-  (setq paragraph-start (concat "$\\|" page-delimiter))
-  (make-local-variable 'paragraph-separate)
-  (setq paragraph-separate paragraph-start)
-  (make-local-variable 'paragraph-ignore-fill-prefix)
-  (setq paragraph-ignore-fill-prefix t))
+  (set (make-local-variable 'indent-line-function) 'ruby-indent-line)
+  (set (make-local-variable 'require-final-newline) t)
+  (set (make-variable-buffer-local 'comment-start) "# ")
+  (set (make-variable-buffer-local 'comment-end) "")
+  (set (make-variable-buffer-local 'comment-column) ruby-comment-column)
+  (set (make-variable-buffer-local 'comment-start-skip) "#+ *")
+  (set (make-local-variable 'parse-sexp-ignore-comments) t)
+  (set (make-local-variable 'paragraph-start) (concat "$\\|" page-delimiter))
+  (set (make-local-variable 'paragraph-separate) paragraph-start)
+  (set (make-local-variable 'paragraph-ignore-fill-prefix) t))
 
 (defun ruby-mode-set-encoding ()
+  ;; TODO: doc
   (save-excursion
     (widen)
     (goto-char (point-min))
@@ -293,42 +290,36 @@ The variable ruby-indent-level controls the amount of indentation.
   (setq major-mode 'ruby-mode)
   (ruby-mode-variables)
 
-  (make-local-variable 'imenu-create-index-function)
-  (setq imenu-create-index-function 'ruby-imenu-create-index)
+  (set (make-local-variable 'imenu-create-index-function) 'ruby-imenu-create-index)
+  (set (make-local-variable 'add-log-current-defun-function) 'ruby-add-log-current-method)
 
-  (make-local-variable 'add-log-current-defun-function)
-  (setq add-log-current-defun-function 'ruby-add-log-current-method)
-
-  (add-hook
-   (cond ((boundp 'before-save-hook)
-	  (make-local-variable 'before-save-hook)
-	  'before-save-hook)
-	 ((boundp 'write-contents-functions) 'write-contents-functions)
-	 ((boundp 'write-contents-hooks) 'write-contents-hooks))
-   'ruby-mode-set-encoding)
+  (add-hook 'before-save-hook 'ruby-mode-set-encoding)
 
   (set (make-local-variable 'font-lock-defaults) '((ruby-font-lock-keywords) nil nil))
   (set (make-local-variable 'font-lock-keywords) ruby-font-lock-keywords)
   (set (make-local-variable 'font-lock-syntax-table) ruby-font-lock-syntax-table)
   (set (make-local-variable 'font-lock-syntactic-keywords) ruby-font-lock-syntactic-keywords)
 
-  (run-mode-hooks 'ruby-mode-hook))
+  (run-hooks 'ruby-mode-hook))
 
 (defun ruby-current-indentation ()
+  ;; TODO: doc
   (save-excursion
     (beginning-of-line)
     (back-to-indentation)
     (current-column)))
 
 (defun ruby-indent-line (&optional flag)
-  "Correct indentation of the current ruby line."
+  "Correctly indent the current line."
   (ruby-indent-to (ruby-calculate-indent)))
 
 (defun ruby-indent-command ()
+  ;; TODO: doc
   (interactive)
   (ruby-indent-line t))
 
 (defun ruby-indent-to (x)
+  ;; TODO: doc
   (if x
       (let (shift top beg)
 	(and (< x 0) (error "invalid nest"))
@@ -350,6 +341,7 @@ The variable ruby-indent-level controls the amount of indentation.
 	  (move-to-column (+ x shift))))))
 
 (defun ruby-special-char-p (&optional pnt)
+  ;; TODO: doc
   (setq pnt (or pnt (point)))
   (let ((c (char-before pnt)) (b (and (< (point-min) pnt) (char-before (1- pnt)))))
     (cond ((or (eq c ??) (eq c ?$)))
@@ -357,6 +349,7 @@ The variable ruby-indent-level controls the amount of indentation.
 	  ((eq c ?\\) (eq b ??)))))
 
 (defun ruby-expr-beg (&optional option)
+  ;; TODO: doc
   (save-excursion
     (store-match-data nil)
     (let ((space (skip-chars-backward " \t"))
@@ -391,6 +384,7 @@ The variable ruby-indent-level controls the amount of indentation.
 		  (t nil)))))))))
 
 (defun ruby-forward-string (term &optional end no-error expand)
+  ;; TODO: doc
   (let ((n 1) (c (string-to-char term))
 	(re (if expand
 		(concat "[^\\]\\(\\\\\\\\\\)*\\([" term "]\\|\\(#{\\)\\)")
@@ -399,13 +393,14 @@ The variable ruby-indent-level controls the amount of indentation.
 		(if (match-beginning 3)
 		    (ruby-forward-string "}{" end no-error nil)
 		  (> (setq n (if (eq (char-before (point)) c)
-				     (1- n) (1+ n))) 0)))
+				 (1- n) (1+ n))) 0)))
       (forward-char -1))
     (cond ((zerop n))
 	  (no-error nil)
 	  ((error "unterminated string")))))
 
 (defun ruby-deep-indent-paren-p (c)
+  ;; TODO: doc
   (cond ((listp ruby-deep-indent-paren)
 	 (let ((deep (assoc c ruby-deep-indent-paren)))
 	   (cond (deep
@@ -416,6 +411,7 @@ The variable ruby-indent-level controls the amount of indentation.
 	((eq c ?\( ) ruby-deep-arglist)))
 
 (defun ruby-parse-partial (&optional end in-string nest depth pcol indent)
+  ;; TODO: doc
   (or depth (setq depth 0))
   (or indent (setq indent 0))
   (when (re-search-forward ruby-delimiter end 'move)
@@ -620,6 +616,7 @@ The variable ruby-indent-level controls the amount of indentation.
   (list in-string nest depth pcol))
 
 (defun ruby-parse-region (start end)
+  ;; TODO: doc
   (let (state)
     (save-excursion
       (if start
@@ -633,13 +630,15 @@ The variable ruby-indent-level controls the amount of indentation.
 	  (car (nth 1 state))		; nest
 	  (nth 2 state)			; depth
 	  (car (car (nth 3 state)))	; pcol
-	  ;(car (nth 5 state))		; indent
+					;(car (nth 5 state))		; indent
 	  )))
 
 (defun ruby-indent-size (pos nest)
+  ;; TODO: doc
   (+ pos (* (or nest 1) ruby-indent-level)))
 
 (defun ruby-calculate-indent (&optional parse-start)
+  ;; TODO: doc
   (save-excursion
     (beginning-of-line)
     (let ((indent-point (point))
@@ -753,13 +752,13 @@ The variable ruby-indent-level controls the amount of indentation.
 		    ;; operator at the end of line
 		    (let ((c (char-after (point))))
 		      (and
-;; 		       (or (null begin)
-;; 			   (save-excursion
-;; 			     (goto-char begin)
-;; 			     (skip-chars-forward " \t")
-;; 			     (not (or (eolp) (looking-at "#")
-;; 				      (and (eq (car (nth 1 state)) ?{)
-;; 					   (looking-at "|"))))))
+		       ;; 		       (or (null begin)
+		       ;; 			   (save-excursion
+		       ;; 			     (goto-char begin)
+		       ;; 			     (skip-chars-forward " \t")
+		       ;; 			     (not (or (eolp) (looking-at "#")
+		       ;; 				      (and (eq (car (nth 1 state)) ?{)
+		       ;; 					   (looking-at "|"))))))
 		       (or (not (eq ?/ c))
 			   (null (nth 0 (ruby-parse-region (or begin parse-start) (point)))))
 		       (or (not (eq ?| (char-after (point))))
@@ -800,6 +799,7 @@ The variable ruby-indent-level controls the amount of indentation.
 	indent))))
 
 (defun ruby-electric-brace (arg)
+  ;; TODO: doc
   (interactive "P")
   (insert-char last-command-char 1)
   (ruby-indent-line t)
@@ -808,6 +808,7 @@ The variable ruby-indent-level controls the amount of indentation.
 
 (eval-when-compile
   (defmacro defun-region-command (func args &rest body)
+    ;; TODO: doc
     (let ((intr (car body)))
       (when (featurep 'xemacs)
 	(if (stringp intr) (setq intr (cadr body)))
@@ -826,6 +827,7 @@ Returns t unless search stops due to end of buffer."
        (progn (beginning-of-line) t)))
 
 (defun ruby-beginning-of-indent ()
+  ;; TODO: doc
   (and (re-search-backward (concat "^\\(" ruby-indent-beg-re "\\)\\b")
 			   nil 'move)
        (progn
@@ -842,6 +844,7 @@ An end of a defun is found by moving forward from the beginning of one."
   (forward-line 1))
 
 (defun ruby-move-to-block (n)
+  ;; TODO: doc
   (let (start pos done down)
     (setq start (ruby-calculate-indent))
     (setq down (looking-at (if (< n 0) ruby-block-end-re
@@ -882,6 +885,7 @@ An end of a defun is found by moving forward from the beginning of one."
   (ruby-move-to-block (or arg 1)))
 
 (defun-region-command ruby-forward-sexp (&optional cnt)
+  ;; TODO: doc
   (interactive "p")
   (if (and (numberp cnt) (< cnt 0))
       (ruby-backward-sexp (- cnt))
@@ -921,6 +925,7 @@ An end of a defun is found by moving forward from the beginning of one."
       i)))
 
 (defun-region-command ruby-backward-sexp (&optional cnt)
+  ;; TODO: doc
   (interactive "p")
   (if (and (numberp cnt) (< cnt 0))
       (ruby-forward-sexp (- cnt))
@@ -964,6 +969,7 @@ An end of a defun is found by moving forward from the beginning of one."
       i)))
 
 (defun ruby-reindent-then-newline-and-indent ()
+  ;; TODO: doc
   (interactive "*")
   (newline)
   (save-excursion
@@ -972,9 +978,11 @@ An end of a defun is found by moving forward from the beginning of one."
     (delete-region (point) (progn (skip-chars-backward " \t") (point))))
   (indent-according-to-mode))
 
+;; TODO: use alias?
 (fset 'ruby-encomment-region (symbol-function 'comment-region))
 
 (defun ruby-decomment-region (beg end)
+  ;; TODO: doc
   (interactive "r")
   (save-excursion
     (goto-char beg)
@@ -984,6 +992,7 @@ An end of a defun is found by moving forward from the beginning of one."
 	(ruby-indent-line)))))
 
 (defun ruby-insert-end ()
+  ;; TODO: doc
   (interactive)
   (insert "end")
   (ruby-indent-line t)
@@ -1031,8 +1040,8 @@ balanced expression is found."
 	       (concat "^[ \t]*\\(def\\|class\\|module\\)[ \t]+"
 		       "\\("
 		       ;; \\. and :: for class method
-			"\\([A-Za-z_]" ruby-symbol-re "*\\|\\.\\|::" "\\)" 
-			"+\\)")
+		       "\\([A-Za-z_]" ruby-symbol-re "*\\|\\.\\|::" "\\)" 
+		       "+\\)")
 	       nil t)
 	      (progn
 		(setq mname (match-string 2))
@@ -1082,203 +1091,183 @@ balanced expression is found."
 	      (if mlist (concat mlist mname) mname)
 	    mlist)))))
 
-(cond
- ((featurep 'font-lock)
-  (or (boundp 'font-lock-variable-name-face)
-      (setq font-lock-variable-name-face font-lock-type-face))
+(defconst ruby-font-lock-syntactic-keywords
+  ;; TODO: doc
+  '(;; #{ }, #$hoge, #@foo are not comments
+    ("\\(#\\)[{$@]" 1 (1 . nil))
+    ;; the last $', $", $` in the respective string is not variable
+    ;; the last ?', ?", ?` in the respective string is not ascii code
+    ("\\(^\\|[\[ \t\n<+\(,=]\\)\\(['\"`]\\)\\(\\\\.\\|\\2\\|[^'\"`\n\\\\]\\)*?\\\\?[?$]\\(\\2\\)"
+     (2 (7 . nil))
+     (4 (7 . nil)))
+    ;; $' $" $` .... are variables
+    ;; ?' ?" ?` are ascii codes
+    ("\\(^\\|[^\\\\]\\)\\(\\\\\\\\\\)*[?$]\\([#\"'`]\\)" 3 (1 . nil))
+    ;; regexps
+    ("\\(^\\|[=(,~?:;<>]\\|\\(^\\|\\s \\)\\(if\\|elsif\\|unless\\|while\\|until\\|when\\|and\\|or\\|&&\\|||\\)\\|g?sub!?\\|scan\\|split!?\\)\\s *\\(/\\)[^/\n\\\\]*\\(\\\\.[^/\n\\\\]*\\)*\\(/\\)"
+     (4 (7 . ?/))
+     (6 (7 . ?/)))
+    ("^\\(=\\)begin\\(\\s \\|$\\)" 1 (7 . nil))
+    ("^\\(=\\)end\\(\\s \\|$\\)" 1 (7 . nil))))
 
-  (setq ruby-font-lock-syntactic-keywords
-	'(
-	  ;; #{ }, #$hoge, #@foo are not comments
-	  ("\\(#\\)[{$@]" 1 (1 . nil))
-	  ;; the last $', $", $` in the respective string is not variable
-	  ;; the last ?', ?", ?` in the respective string is not ascii code
-	  ("\\(^\\|[\[ \t\n<+\(,=]\\)\\(['\"`]\\)\\(\\\\.\\|\\2\\|[^'\"`\n\\\\]\\)*?\\\\?[?$]\\(\\2\\)"
-	   (2 (7 . nil))
-	   (4 (7 . nil)))
-	  ;; $' $" $` .... are variables
-	  ;; ?' ?" ?` are ascii codes
-	  ;; I never use character literals
-	  ;; ("\\(^\\|[^\\\\]\\)\\(\\\\\\\\\\)*[?$]\\([#\"'`]\\)" 3 (1 . nil))
-	  ;; regexps
-	  ("\\(^\\|[=(,~?:;<>]\\|\\(^\\|\\s \\)\\(if\\|elsif\\|unless\\|while\\|until\\|when\\|and\\|or\\|&&\\|||\\)\\|g?sub!?\\|scan\\|split!?\\)\\s *\\(/\\)[^/\n\\\\]*\\(\\\\.[^/\n\\\\]*\\)*\\(/\\)"
-	   (4 (7 . ?/))
-	   (6 (7 . ?/)))
-	  ("^\\(=\\)begin\\(\\s \\|$\\)" 1 (7 . nil))
-	  ("^\\(=\\)end\\(\\s \\|$\\)" 1 (7 . nil))))
+(if (featurep 'xemacs)
+    (put 'ruby-mode 'font-lock-defaults
+	 '((ruby-font-lock-keywords)
+	   nil nil nil
+	   beginning-of-line
+	   (font-lock-syntactic-keywords
+	    . ruby-font-lock-syntactic-keywords))))
 
-  (if (featurep 'xemacs)
-      (put 'ruby-mode 'font-lock-defaults
-	   '((ruby-font-lock-keywords)
-	     nil nil nil
-	     beginning-of-line
-	     (font-lock-syntactic-keywords
-	      . ruby-font-lock-syntactic-keywords))))
-
-  (defun ruby-font-lock-docs (limit)
-    (if (re-search-forward "^=begin\\(\\s \\|$\\)" limit t)
-	(let (beg)
-	  (beginning-of-line)
-	  (setq beg (point))
-	  (forward-line 1)
-	  (if (re-search-forward "^=end\\(\\s \\|$\\)" limit t)
-	      (progn
-		(set-match-data (list beg (point)))
-		t)))))
-
-  (defun ruby-font-lock-maybe-docs (limit)
-    (let (beg)
-      (save-excursion
-	(if (and (re-search-backward "^=\\(begin\\|end\\)\\(\\s \\|$\\)" nil t)
-		 (string= (match-string 1) "begin"))
+(defun ruby-font-lock-docs (limit)
+  ;; TODO: doc
+  (if (re-search-forward "^=begin\\(\\s \\|$\\)" limit t)
+      (let (beg)
+	(beginning-of-line)
+	(setq beg (point))
+	(forward-line 1)
+	(if (re-search-forward "^=end\\(\\s \\|$\\)" limit t)
 	    (progn
-	      (beginning-of-line)
-	      (setq beg (point)))))
-      (if (and beg (and (re-search-forward "^=\\(begin\\|end\\)\\(\\s \\|$\\)" nil t)
-			(string= (match-string 1) "end")))
+	      (set-match-data (list beg (point)))
+	      t)))))
+
+(defun ruby-font-lock-maybe-docs (limit)
+  ;; TODO: doc
+  (let (beg)
+    (save-excursion
+      (if (and (re-search-backward "^=\\(begin\\|end\\)\\(\\s \\|$\\)" nil t)
+	       (string= (match-string 1) "begin"))
 	  (progn
-	    (set-match-data (list beg (point)))
-	    t)
-	nil)))
+	    (beginning-of-line)
+	    (setq beg (point)))))
+    (if (and beg (and (re-search-forward "^=\\(begin\\|end\\)\\(\\s \\|$\\)" nil t)
+		      (string= (match-string 1) "end")))
+	(progn
+	  (set-match-data (list beg (point)))
+	  t)
+      nil)))
 
-  (defvar ruby-font-lock-syntax-table
-    (let* ((tbl (copy-syntax-table ruby-mode-syntax-table)))
-      (modify-syntax-entry ?_ "w" tbl)
-      tbl))
+(defvar ruby-font-lock-syntax-table
+  ;; TODO: doc
+  (let* ((tbl (copy-syntax-table ruby-mode-syntax-table)))
+    (modify-syntax-entry ?_ "w" tbl)
+    tbl))
 
-  (defun ruby-font-lock-here-docs (limit)
-    (if (re-search-forward ruby-here-doc-beg-re limit t)
-	(let (beg)
-	  (beginning-of-line)
-          (forward-line)
-	  (setq beg (point))
-	  (if (re-search-forward (ruby-here-doc-end-match) nil t)
-	      (progn
-		(set-match-data (list beg (point)))
-		t)))))
-
-  (defun ruby-font-lock-maybe-here-docs (limit)
-    (let (beg)
-      (save-excursion
-	(if (re-search-backward ruby-here-doc-beg-re nil t)
+(defun ruby-font-lock-here-docs (limit)
+  ;; TODO: doc
+  (if (re-search-forward ruby-here-doc-beg-re limit t)
+      (let (beg)
+	(beginning-of-line)
+	(forward-line)
+	(setq beg (point))
+	(if (re-search-forward (ruby-here-doc-end-match) nil t)
 	    (progn
-	      (beginning-of-line)
-              (forward-line)
-	      (setq beg (point)))))
-      (if (and beg
-	       (let ((end-match (ruby-here-doc-end-match)))
-                 (and (not (re-search-backward end-match beg t))
-		      (re-search-forward end-match nil t))))
+	      (set-match-data (list beg (point)))
+	      t)))))
+
+(defun ruby-font-lock-maybe-here-docs (limit)
+  ;; TODO: doc
+  (let (beg)
+    (save-excursion
+      (if (re-search-backward ruby-here-doc-beg-re nil t)
 	  (progn
-	    (set-match-data (list beg (point)))
-	    t)
-          nil)))
+	    (beginning-of-line)
+	    (forward-line)
+	    (setq beg (point)))))
+    (if (and beg
+	     (let ((end-match (ruby-here-doc-end-match)))
+	       (and (not (re-search-backward end-match beg t))
+		    (re-search-forward end-match nil t))))
+	(progn
+	  (set-match-data (list beg (point)))
+	  t)
+      nil)))
 
-  (defvar ruby-font-lock-keywords
-    (list
-     ;; functions
-     '("^\\s *def\\s +\\([^( \t\n]+\\)"
-       1 font-lock-function-name-face)
-     ;; keywords
-     (cons (concat
-	    "\\(^\\|[^_:.@$]\\|\\.\\.\\)\\b\\(defined\\?\\|\\("
-	    (mapconcat
-	     'identity
-	     '("alias"
-	       "and"
-	       "begin"
-	       "break"
-	       "case"
-	       "catch"
-	       "class"
-	       "def"
-	       "do"
-	       "elsif"
-	       "else"
-	       "fail"
-	       "ensure"
-	       "for"
-	       "end"
-	       "if"
-	       "in"
-	       "module"
-	       "next"
-	       "not"
-	       "or"
-	       "raise"
-	       "redo"
-	       "rescue"
-	       "retry"
-	       "return"
-	       "then"
-	       "throw"
-	       "super"
-	       "unless"
-	       "undef"
-	       "until"
-	       "when"
-	       "while"
-	       "yield"
-	       )
-	     "\\|")
-	    "\\)\\>\\)")
-	   2)
-     ;; variables
-     '("\\(^\\|[^_:.@$]\\|\\.\\.\\)\\b\\(nil\\|self\\|true\\|false\\)\\>"
-       2 font-lock-variable-name-face)
-     ;; variables
-     '("\\(\\$\\([^a-zA-Z0-9 \n]\\|[0-9]\\)\\)\\W"
-       1 font-lock-variable-name-face)
-     '("\\(\\$\\|@\\|@@\\)\\(\\w\\|_\\)+"
-       0 font-lock-variable-name-face)
-     ;; embedded document
-     '(ruby-font-lock-docs
-       0 font-lock-comment-face t)
-     '(ruby-font-lock-maybe-docs
-       0 font-lock-comment-face t)
-     ;; "here" document
-     '(ruby-font-lock-here-docs
-       0 font-lock-string-face t)
-     '(ruby-font-lock-maybe-here-docs
-       0 font-lock-string-face t)
-     `(,ruby-here-doc-beg-re
-       0 font-lock-string-face t)
-     ;; general delimited string
-     '("\\(^\\|[[ \t\n<+(,=]\\)\\(%[xrqQwW]?\\([^<[{(a-zA-Z0-9 \n]\\)[^\n\\\\]*\\(\\\\.[^\n\\\\]*\\)*\\(\\3\\)\\)"
-       (2 font-lock-string-face))
-     ;; constants
-     '("\\(^\\|[^_]\\)\\b\\([A-Z]+\\(\\w\\|_\\)*\\)"
-       2 font-lock-type-face)
-     ;; symbols
-     '("\\(^\\|[^:]\\)\\(:\\([-+~]@?\\|[/%&|^`]\\|\\*\\*?\\|<\\(<\\|=>?\\)?\\|>[>=]?\\|===?\\|=~\\|\\[\\]=?\\|\\(\\w\\|_\\)+\\([!?=]\\|\\b_*\\)\\|#{[^}\n\\\\]*\\(\\\\.[^}\n\\\\]*\\)*}\\)\\)"
-       2 font-lock-reference-face)
-     ;; expression expansion
-     '("#\\({[^}\n\\\\]*\\(\\\\.[^}\n\\\\]*\\)*}\\|\\(\\$\\|@\\|@@\\)\\(\\w\\|_\\)+\\)"
-       0 font-lock-variable-name-face t)
-     ;; warn lower camel case
-     ;'("\\<[a-z]+[a-z0-9]*[A-Z][A-Za-z0-9]*\\([!?]?\\|\\>\\)"
-     ;  0 font-lock-warning-face)
-     )
-    "*Additional expressions to highlight in ruby mode."))
-
- ((featurep 'hilit19)
-  (hilit-set-mode-patterns
-   'ruby-mode
-   '(("[^$\\?]\\(\"[^\\\"]*\\(\\\\\\(.\\|\n\\)[^\\\"]*\\)*\"\\)" 1 string)
-     ("[^$\\?]\\('[^\\']*\\(\\\\\\(.\\|\n\\)[^\\']*\\)*'\\)" 1 string)
-     ("[^$\\?]\\(`[^\\`]*\\(\\\\\\(.\\|\n\\)[^\\`]*\\)*`\\)" 1 string)
-     ("^\\s *#.*$" nil comment)
-     ("[^$@?\\]\\(#[^$@{\n].*$\\)" 1 comment)
-     ("[^a-zA-Z_]\\(\\?\\(\\\\[CM]-\\)*.\\)" 1 string)
-     ("^\\s *\\(require\\|load\\).*$" nil include)
-     ("^\\s *\\(include\\|alias\\|undef\\).*$" nil decl)
-     ("^\\s *\\<\\(class\\|def\\|module\\)\\>" "[)\n;]" defun)
-     ("[^_]\\<\\(begin\\|case\\|else\\|elsif\\|end\\|ensure\\|for\\|if\\|unless\\|rescue\\|then\\|when\\|while\\|until\\|do\\|yield\\)\\>\\([^_]\\|$\\)" 1 defun)
-     ("[^_]\\<\\(and\\|break\\|next\\|raise\\|fail\\|in\\|not\\|or\\|redo\\|retry\\|return\\|super\\|yield\\|catch\\|throw\\|self\\|nil\\)\\>\\([^_]\\|$\\)" 1 keyword)
-     ("\\$\\(.\\|\\sw+\\)" nil type)
-     ("[$@].[a-zA-Z_0-9]*" nil struct)
-     ("^__END__" nil label))))
- )
-
+(defvar ruby-font-lock-keywords
+  (list
+   ;; functions
+   '("^\\s *def\\s +\\([^( \t\n]+\\)"
+     1 font-lock-function-name-face)
+   ;; keywords
+   (cons (concat
+	  "\\(^\\|[^_:.@$]\\|\\.\\.\\)\\b\\(defined\\?\\|\\("
+	  (mapconcat
+	   'identity
+	   '("alias"
+	     "and"
+	     "begin"
+	     "break"
+	     "case"
+	     "catch"
+	     "class"
+	     "def"
+	     "do"
+	     "elsif"
+	     "else"
+	     "fail"
+	     "ensure"
+	     "for"
+	     "end"
+	     "if"
+	     "in"
+	     "module"
+	     "next"
+	     "not"
+	     "or"
+	     "raise"
+	     "redo"
+	     "rescue"
+	     "retry"
+	     "return"
+	     "then"
+	     "throw"
+	     "super"
+	     "unless"
+	     "undef"
+	     "until"
+	     "when"
+	     "while"
+	     "yield"
+	     )
+	   "\\|")
+	  "\\)\\>\\)")
+	 2)
+   ;; variables
+   '("\\(^\\|[^_:.@$]\\|\\.\\.\\)\\b\\(nil\\|self\\|true\\|false\\)\\>"
+     2 font-lock-variable-name-face)
+   ;; variables
+   '("\\(\\$\\([^a-zA-Z0-9 \n]\\|[0-9]\\)\\)\\W"
+     1 font-lock-variable-name-face)
+   '("\\(\\$\\|@\\|@@\\)\\(\\w\\|_\\)+"
+     0 font-lock-variable-name-face)
+   ;; embedded document
+   '(ruby-font-lock-docs
+     0 font-lock-comment-face t)
+   '(ruby-font-lock-maybe-docs
+     0 font-lock-comment-face t)
+   ;; "here" document
+   '(ruby-font-lock-here-docs
+     0 font-lock-string-face t)
+   '(ruby-font-lock-maybe-here-docs
+     0 font-lock-string-face t)
+   `(,ruby-here-doc-beg-re
+     0 font-lock-string-face t)
+   ;; general delimited string
+   '("\\(^\\|[[ \t\n<+(,=]\\)\\(%[xrqQwW]?\\([^<[{(a-zA-Z0-9 \n]\\)[^\n\\\\]*\\(\\\\.[^\n\\\\]*\\)*\\(\\3\\)\\)"
+     (2 font-lock-string-face))
+   ;; constants
+   '("\\(^\\|[^_]\\)\\b\\([A-Z]+\\(\\w\\|_\\)*\\)"
+     2 font-lock-type-face)
+   ;; symbols
+   '("\\(^\\|[^:]\\)\\(:\\([-+~]@?\\|[/%&|^`]\\|\\*\\*?\\|<\\(<\\|=>?\\)?\\|>[>=]?\\|===?\\|=~\\|\\[\\]=?\\|\\(\\w\\|_\\)+\\([!?=]\\|\\b_*\\)\\|#{[^}\n\\\\]*\\(\\\\.[^}\n\\\\]*\\)*}\\)\\)"
+     2 font-lock-reference-face)
+   ;; expression expansion
+   '("#\\({[^}\n\\\\]*\\(\\\\.[^}\n\\\\]*\\)*}\\|\\(\\$\\|@\\|@@\\)\\(\\w\\|_\\)+\\)"
+     0 font-lock-variable-name-face t)
+   ;; warn lower camel case
+					;'("\\<[a-z]+[a-z0-9]*[A-Z][A-Za-z0-9]*\\([!?]?\\|\\>\\)"
+					;  0 font-lock-warning-face)
+   )
+  "*Additional expressions to highlight in ruby mode.")
 
 (provide 'ruby-mode)
+;;; ruby-mode.el ends here

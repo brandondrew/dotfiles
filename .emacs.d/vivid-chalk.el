@@ -1,5 +1,6 @@
 (require 'color-theme)
 
+;;;###autoload
 (defun color-theme-vivid-chalk ()
   "Based on Vivid Chalk, a vim port of Vibrant Ink.
 Modified by Phil Hagelberg to fix minor garishness."
@@ -53,4 +54,5 @@ Modified by Phil Hagelberg to fix minor garishness."
      (underline ((t (:underline t))))
      (minibuffer-prompt ((t (:bold t :foreground "#ff6600")))))))
 
+;;;###autoload
 (defalias 'vivid-chalk 'color-theme-vivid-chalk)
