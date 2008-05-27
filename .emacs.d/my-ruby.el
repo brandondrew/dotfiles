@@ -83,12 +83,12 @@
 ;; Bindings
 ;;
 
-(define-key ruby-mode-map "\C-\M-h" 'backward-kill-word) ; ruby-mode redefines this badly
-(define-key ruby-mode-map (kbd "RET") 'ruby-reindent-then-newline-and-indent)
-(define-key ruby-mode-map (kbd "C-c l") (lambda () (interactive) (insert "lambda")))
-(define-key ruby-mode-map (kbd "C-\\") 'rct-complete-symbol)
-(define-key ruby-mode-map (kbd "C-c M-t") 'ruby-test-file)
-(define-key ruby-mode-map (kbd "C-c C-M-t") 'ruby-test-one)
+;; (define-key ruby-mode-map "\C-\M-h" 'backward-kill-word) ; ruby-mode redefines this badly
+;; (define-key ruby-mode-map (kbd "RET") 'ruby-reindent-then-newline-and-indent)
+;; (define-key ruby-mode-map (kbd "C-c l") (lambda () (interactive) (insert "lambda")))
+;; (define-key ruby-mode-map (kbd "C-\\") 'rct-complete-symbol)
+;; (define-key ruby-mode-map (kbd "C-c M-t") 'ruby-test-file)
+;; (define-key ruby-mode-map (kbd "C-c C-M-t") 'ruby-test-one)
 
 (global-set-key (kbd "C-h r") 'ri)
 

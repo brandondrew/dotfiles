@@ -106,7 +106,8 @@
     (define-key map "\t" 'ruby-indent-command)
     (define-key map "\C-c\C-e" 'ruby-insert-end)
     (define-key map "\C-j" 'ruby-reindent-then-newline-and-indent)
-    (define-key map "\C-m" 'newline))
+    (define-key map "\C-m" 'newline)
+    map)
   "Keymap used in ruby-mode.")
 
 (defvar ruby-mode-syntax-table
@@ -136,7 +137,8 @@
     (modify-syntax-entry ?\{ "(}" table)
     (modify-syntax-entry ?\} "){" table)
     (modify-syntax-entry ?\[ "(]" table)
-    (modify-syntax-entry ?\] ")[" table))
+    (modify-syntax-entry ?\] ")[" table)
+    table)
   "Syntax table to use in ruby-mode.")
 
 (defcustom ruby-indent-tabs-mode nil
