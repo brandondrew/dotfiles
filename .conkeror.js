@@ -20,3 +20,5 @@ function foo() {
 
 
 }
+
+add_webjump("github", "http://github.com/search?q=%s");

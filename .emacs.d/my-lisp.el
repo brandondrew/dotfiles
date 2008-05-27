@@ -19,6 +19,14 @@
 (add-hook 'emacs-lisp-mode-hook 'eldoc-mode)
 (add-hook 'lisp-mode-hook 'pretty-lambdas)
 (add-hook 'scheme-mode-hook 'pretty-lambdas)
+(add-hook 'emacs-lisp-mode-hook
+	  ;; If you're saving an elisp file, likely the .elc is no longer valid.
+	  (lambda ()
+	    (make-local-variable 'after-save-hook)
+	    (add-hook 'after-save-hook
+		      (lambda ()
+			(if (file-exists-p (concat buffer-file-name "c"))
+			    (delete-file (concat buffer-file-name "c")))))))
 
 (add-to-list 'auto-mode-alist '("\\.emacs-project" . emacs-lisp-mode))
 
