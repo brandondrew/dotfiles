@@ -1,20 +1,28 @@
 ;;; ruby-mode.el --- Major mode for editing Ruby files
 
-;; Copyright (C) 1994-2008 Yukihiro Matsumoto and contributors
+;; Copyright (C) 1994-2008 Yukihiro Matsumoto, Nobuyoshi Nakada, and contributors
 
 ;; Author: Yukihiro Matsumoto
 ;; Created: Fri Feb  4 14:49:13 JST 1994
 ;; Keywords: languages
 
+;; This file is not yet part of GNU Emacs.
+
 ;;; Commentary:
 
 ;; Provides font-locking and indentation support for editing Ruby code.
+
+;;; Todo:
+
+;; indentation broke. =\
+;; set interpreter-mode-alist with autoload?
+;; various docstrings labelled below
 
 ;;; Code:
 
 (eval-when-compile (require 'cl))
 
-(defconst ruby-mode-revision "$Revision: 16611 $"
+(defconst ruby-mode-revision "$Revision: 16611 $" ;; TODO: isn't this a CVS thing?
   "Ruby mode revision string.")
 
 (defconst ruby-mode-version
@@ -29,7 +37,7 @@
 
 (defconst ruby-non-block-do-re
   "\\(while\\|until\\|for\\|rescue\\)\\>[^_]"
-  "Regexp to match") ;; TODO: doc
+  "Regexp to match keywords that nest without blocks.")
 
 (defconst ruby-indent-beg-re
   "\\(\\s *\\(class\\|module\\|def\\)\\)\\|if\\|unless\\|case\\|while\\|until\\|for\\|begin"
@@ -49,18 +57,21 @@
 
 (defconst ruby-block-op-re
   "and\\|or\\|not"
-  "Regexp to match ") ;; TODO: doc
+  "Regexp to match boolean keywords.")
 
-(defconst ruby-block-hanging-re ;; TODO: doc
-  (concat ruby-modifier-beg-re "\\|" ruby-block-op-re))
+(defconst ruby-block-hanging-re
+  (concat ruby-modifier-beg-re "\\|" ruby-block-op-re)
+  "Regexp to match keywords that begin a new indentation level.")
 
-(defconst ruby-block-end-re "\\<end\\>") ;; TODO: doc
+(defconst ruby-block-end-re "\\<end\\>"
+  "Regexp to match closing of a block.")
 
 (defconst ruby-here-doc-beg-re
-  "<<\\(-\\)?\\(\\([a-zA-Z0-9_]+\\)\\|[\"]\\([^\"]+\\)[\"]\\|[']\\([^']+\\)[']\\)") ;; TODO: doc
+  "<<\\(-\\)?\\(\\([a-zA-Z0-9_]+\\)\\|[\"]\\([^\"]+\\)[\"]\\|[']\\([^']+\\)[']\\)"
+  "Regexp to match heredocs.")
 
 (defun ruby-here-doc-end-match ()
-  ;; TODO: doc
+  "Find the end of the last matched heredoc."
   (concat "^"
 	  (if (match-string 1) "[ \t]*" nil)
 	  (regexp-quote
@@ -69,22 +80,24 @@
 	       (match-string 5)))))
 
 (defconst ruby-delimiter
-  ;; TODO: doc
   (concat "[?$/%(){}#\"'`.:]\\|<<\\|\\[\\|\\]\\|\\<\\("
 	  ruby-block-beg-re
 	  "\\)\\>\\|" ruby-block-end-re
-	  "\\|^=begin\\|" ruby-here-doc-beg-re))
+	  "\\|^=begin\\|" ruby-here-doc-beg-re)
+  "Regexp to match things that indicate a new area of code.")
 
 (defconst ruby-negative
   (concat "^[ \t]*\\(\\(" ruby-block-mid-re "\\)\\>\\|"
 	  ruby-block-end-re "\\|}\\|\\]\\)")
   "Regexp to match where the indentation gets shallower.")
 
-(defconst ruby-operator-chars "-,.+*/%&|^~=<>:") ;; TODO: doc
-(defconst ruby-operator-re (concat "[" ruby-operator-chars "]")) ;; TODO: doc
+(defconst ruby-operator-re "[-,.+*/%&|^~=<>:]"
+  "Regexp to match operators.")
 
-(defconst ruby-symbol-chars "a-zA-Z0-9_") ;; TODO: doc
-(defconst ruby-symbol-re (concat "[" ruby-symbol-chars "]")) ;; TODO: doc
+(defconst ruby-symbol-chars "a-zA-Z0-9_"
+  "List of characters that symbol names may contain.")
+(defconst ruby-symbol-re (concat "[" ruby-symbol-chars "]")
+  "Regexp to match symbols.")
 
 (defvar ruby-mode-abbrev-table nil
   "Abbrev table in use in ruby-mode buffers.")
@@ -103,7 +116,7 @@
     (define-key map "\e\C-n" 'ruby-end-of-block)
     (define-key map "\e\C-h" 'ruby-mark-defun)
     (define-key map "\e\C-q" 'ruby-indent-exp)
-    (define-key map "\t" 'ruby-indent-command)
+    (define-key map "\t" 'ruby-indent-line)
     (define-key map "\C-c\C-e" 'ruby-insert-end)
     (define-key map "\C-j" 'ruby-reindent-then-newline-and-indent)
     (define-key map "\C-m" 'newline)
@@ -214,7 +227,7 @@ Also ignores spaces after parenthesis when 'space."
     index-alist))
 
 (defun ruby-imenu-create-index ()
-  ;; TODO: doc
+  "Create an imenu index of all methods in a file."
   (nreverse (ruby-imenu-create-index-in-block nil (point-min) nil)))
 
 (defun ruby-accurate-end-of-block (&optional end)
@@ -240,8 +253,9 @@ Also ignores spaces after parenthesis when 'space."
   (set (make-local-variable 'paragraph-separate) paragraph-start)
   (set (make-local-variable 'paragraph-ignore-fill-prefix) t))
 
+
 (defun ruby-mode-set-encoding ()
-  ;; TODO: doc
+  ;; TODO: doc throughout function
   (save-excursion
     (widen)
     (goto-char (point-min))
@@ -279,7 +293,7 @@ Also ignores spaces after parenthesis when 'space."
 ;;;###autoload
 (defun ruby-mode ()
   "Major mode for editing ruby scripts.
-\\[ruby-indent-command] properly indents subexpressions of multi-line
+\\[ruby-indent-line] properly indents subexpressions of multi-line
 class, module, def, if, while, for, do, and case statements, taking
 nesting into account.
 
@@ -290,22 +304,29 @@ The variable ruby-indent-level controls the amount of indentation.
   (use-local-map ruby-mode-map)
   (setq mode-name "Ruby")
   (setq major-mode 'ruby-mode)
+
   (ruby-mode-variables)
 
-  (set (make-local-variable 'imenu-create-index-function) 'ruby-imenu-create-index)
-  (set (make-local-variable 'add-log-current-defun-function) 'ruby-add-log-current-method)
+  (set (make-local-variable 'imenu-create-index-function)
+       'ruby-imenu-create-index)
+  (set (make-local-variable 'add-log-current-defun-function)
+       'ruby-add-log-current-method)
 
   (add-hook 'before-save-hook 'ruby-mode-set-encoding)
 
-  (set (make-local-variable 'font-lock-defaults) '((ruby-font-lock-keywords) nil nil))
-  (set (make-local-variable 'font-lock-keywords) ruby-font-lock-keywords)
-  (set (make-local-variable 'font-lock-syntax-table) ruby-font-lock-syntax-table)
-  (set (make-local-variable 'font-lock-syntactic-keywords) ruby-font-lock-syntactic-keywords)
+  (set (make-local-variable 'font-lock-defaults)
+       '((ruby-font-lock-keywords) nil nil))
+  (set (make-local-variable 'font-lock-keywords)
+       ruby-font-lock-keywords)
+  (set (make-local-variable 'font-lock-syntax-table)
+       ruby-font-lock-syntax-table)
+  (set (make-local-variable 'font-lock-syntactic-keywords)
+       ruby-font-lock-syntactic-keywords)
 
   (run-hooks 'ruby-mode-hook))
 
 (defun ruby-current-indentation ()
-  ;; TODO: doc
+  "Return the indentation level of current line."
   (save-excursion
     (beginning-of-line)
     (back-to-indentation)
@@ -313,10 +334,10 @@ The variable ruby-indent-level controls the amount of indentation.
 
 (defun ruby-indent-line (&optional flag)
   "Correctly indent the current line."
+  (interactive)
   (ruby-indent-to (ruby-calculate-indent)))
 
 (defun ruby-indent-command ()
-  ;; TODO: doc
   (interactive)
   (ruby-indent-line t))
 
@@ -413,7 +434,7 @@ The variable ruby-indent-level controls the amount of indentation.
 	((eq c ?\( ) ruby-deep-arglist)))
 
 (defun ruby-parse-partial (&optional end in-string nest depth pcol indent)
-  ;; TODO: doc
+  ;; TODO: doc throughout function
   (or depth (setq depth 0))
   (or indent (setq indent 0))
   (when (re-search-forward ruby-delimiter end 'move)
@@ -640,7 +661,7 @@ The variable ruby-indent-level controls the amount of indentation.
   (+ pos (* (or nest 1) ruby-indent-level)))
 
 (defun ruby-calculate-indent (&optional parse-start)
-  ;; TODO: doc
+  ;; TODO: doc throughout function
   (save-excursion
     (beginning-of-line)
     (let ((indent-point (point))
@@ -946,7 +967,7 @@ An end of a defun is found by moving forward from the beginning of one."
 		  ((looking-at "\\s\"\\|\\\\\\S_")
 		   (let ((c (char-to-string (char-before (match-end 0)))))
 		     (while (and (search-backward c)
-				 (oddp (skip-chars-backward "\\")))))
+				 (oddp (skip-chars-backward "\\"))))) ;; TODO: remove call to CL function oddp
 		   nil)
 		  ((looking-at "\\s.\\|\\s\\")
 		   (if (ruby-special-char-p) (forward-char -1)))
