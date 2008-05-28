@@ -14,22 +14,12 @@
 
 ;;; Todo:
 
-;; indentation broke. =\
 ;; set interpreter-mode-alist with autoload?
 ;; various docstrings labelled below
 
 ;;; Code:
 
 (eval-when-compile (require 'cl))
-
-(defconst ruby-mode-revision "$Revision: 16611 $" ;; TODO: isn't this a CVS thing?
-  "Ruby mode revision string.")
-
-(defconst ruby-mode-version
-  (progn
-    (string-match "[0-9.]+" ruby-mode-revision)
-    (substring ruby-mode-revision (match-beginning 0) (match-end 0)))
-  "Ruby mode version number.")
 
 (defconst ruby-block-beg-re
   "class\\|module\\|def\\|if\\|unless\\|case\\|while\\|until\\|for\\|begin\\|do"
@@ -71,7 +61,7 @@
   "Regexp to match heredocs.")
 
 (defun ruby-here-doc-end-match ()
-  "Find the end of the last matched heredoc."
+  "Return a regexp to find the end of the last matched heredoc."
   (concat "^"
 	  (if (match-string 1) "[ \t]*" nil)
 	  (regexp-quote
@@ -108,14 +98,14 @@
   (let ((map (make-sparse-keymap)))
     (define-key map "{" 'ruby-electric-brace)
     (define-key map "}" 'ruby-electric-brace)
-    (define-key map "\e\C-a" 'ruby-beginning-of-defun)
-    (define-key map "\e\C-e" 'ruby-end-of-defun)
-    (define-key map "\e\C-b" 'ruby-backward-sexp)
-    (define-key map "\e\C-f" 'ruby-forward-sexp)
-    (define-key map "\e\C-p" 'ruby-beginning-of-block)
-    (define-key map "\e\C-n" 'ruby-end-of-block)
-    (define-key map "\e\C-h" 'ruby-mark-defun)
-    (define-key map "\e\C-q" 'ruby-indent-exp)
+    (define-key map "\M-\C-a" 'ruby-beginning-of-defun)
+    (define-key map "\M-\C-e" 'ruby-end-of-defun)
+    (define-key map "\M-\C-b" 'ruby-backward-sexp)
+    (define-key map "\M-\C-f" 'ruby-forward-sexp)
+    (define-key map "\M-\C-p" 'ruby-beginning-of-block)
+    (define-key map "\M-\C-n" 'ruby-end-of-block)
+    (define-key map "\M-\C-h" 'ruby-mark-defun)
+    (define-key map "\M-\C-q" 'ruby-indent-exp)
     (define-key map "\t" 'ruby-indent-line)
     (define-key map "\C-c\C-e" 'ruby-insert-end)
     (define-key map "\C-j" 'ruby-reindent-then-newline-and-indent)
@@ -230,6 +220,8 @@ Also ignores spaces after parenthesis when 'space."
   "Create an imenu index of all methods in a file."
   (nreverse (ruby-imenu-create-index-in-block nil (point-min) nil)))
 
+;; TODO: Doc'd up to here
+
 (defun ruby-accurate-end-of-block (&optional end)
   ;; TODO: doc
   (let (state)
@@ -287,8 +279,7 @@ Also ignores spaces after parenthesis when 'space."
 			      ((forward-char)))))
 		 (insert coding-system)))
 	      ((looking-at "\\s *#.*coding\\s *[:=]"))
-	      (t (insert "# -*- coding: " coding-system " -*-\n"))
-	      )))))
+	      (t (insert "# -*- coding: " coding-system " -*-\n")))))))
 
 ;;;###autoload
 (defun ruby-mode ()
@@ -509,8 +500,7 @@ The variable ruby-indent-level controls the amount of indentation.
 	(forward-char 1))
        ((looking-at "#")		;skip comment
 	(forward-line 1)
-	(goto-char (point))
-	)
+	(goto-char (point)))
        ((looking-at "[\\[{(]")
 	(let ((deep (ruby-deep-indent-paren-p (char-after))))
 	  (if (and deep (or (not (eq (char-after) ?\{)) (ruby-expr-beg)))
@@ -522,8 +512,7 @@ The variable ruby-indent-level controls the amount of indentation.
 		(setq depth 0))
 	    (setq nest (cons (cons (char-after (point)) pnt) nest))
 	    (setq depth (1+ depth))))
-	(goto-char pnt)
-	)
+	(goto-char pnt))
        ((looking-at "[])}]")
 	(if (ruby-deep-indent-paren-p (matching-paren (char-after)))
 	    (setq depth (cdr (car pcol)) pcol (cdr pcol))
@@ -634,8 +623,7 @@ The variable ruby-indent-level controls the amount of indentation.
 	  (goto-char indent-point)))
        (t
 	(error (format "bad string %s"
-		       (buffer-substring (point) pnt)
-		       ))))))
+		       (buffer-substring (point) pnt)))))))
   (list in-string nest depth pcol))
 
 (defun ruby-parse-region (start end)
@@ -652,9 +640,9 @@ The variable ruby-indent-level controls the amount of indentation.
     (list (nth 0 state)			; in-string
 	  (car (nth 1 state))		; nest
 	  (nth 2 state)			; depth
-	  (car (car (nth 3 state)))	; pcol
+	  (car (car (nth 3 state))))))	; pcol
 					;(car (nth 5 state))		; indent
-	  )))
+	  
 
 (defun ruby-indent-size (pos nest)
   ;; TODO: doc
@@ -717,7 +705,6 @@ The variable ruby-indent-level controls the amount of indentation.
 	  (setq indent (ruby-indent-size (current-column) (nth 2 state))))
 	 (t
 	  (setq indent (+ (current-column) ruby-indent-level)))))
-       
        ((and (nth 2 state) (< (nth 2 state) 0)) ; in negative nest
 	(setq indent (ruby-indent-size (current-column) (nth 2 state)))))
       (when indent
@@ -775,13 +762,13 @@ The variable ruby-indent-level controls the amount of indentation.
 		    ;; operator at the end of line
 		    (let ((c (char-after (point))))
 		      (and
-		       ;; 		       (or (null begin)
-		       ;; 			   (save-excursion
-		       ;; 			     (goto-char begin)
-		       ;; 			     (skip-chars-forward " \t")
-		       ;; 			     (not (or (eolp) (looking-at "#")
-		       ;; 				      (and (eq (car (nth 1 state)) ?{)
-		       ;; 					   (looking-at "|"))))))
+;;; 		       (or (null begin)
+;;; 			   (save-excursion
+;;; 			     (goto-char begin)
+;;; 			     (skip-chars-forward " \t")
+;;; 			     (not (or (eolp) (looking-at "#")
+;;; 				      (and (eq (car (nth 1 state)) ?{)
+;;; 					   (looking-at "|"))))))
 		       (or (not (eq ?/ c))
 			   (null (nth 0 (ruby-parse-region (or begin parse-start) (point)))))
 		       (or (not (eq ?| (char-after (point))))
@@ -1001,8 +988,7 @@ An end of a defun is found by moving forward from the beginning of one."
     (delete-region (point) (progn (skip-chars-backward " \t") (point))))
   (indent-according-to-mode))
 
-;; TODO: use alias?
-(fset 'ruby-encomment-region (symbol-function 'comment-region))
+(defalias 'ruby-encomment-region 'comment-region)
 
 (defun ruby-decomment-region (beg end)
   ;; TODO: doc
@@ -1249,8 +1235,7 @@ balanced expression is found."
 	     "until"
 	     "when"
 	     "while"
-	     "yield"
-	     )
+	     "yield")
 	   "\\|")
 	  "\\)\\>\\)")
 	 2)
@@ -1285,11 +1270,10 @@ balanced expression is found."
      2 font-lock-reference-face)
    ;; expression expansion
    '("#\\({[^}\n\\\\]*\\(\\\\.[^}\n\\\\]*\\)*}\\|\\(\\$\\|@\\|@@\\)\\(\\w\\|_\\)+\\)"
-     0 font-lock-variable-name-face t)
+     0 font-lock-variable-name-face t))
    ;; warn lower camel case
 					;'("\\<[a-z]+[a-z0-9]*[A-Z][A-Za-z0-9]*\\([!?]?\\|\\>\\)"
 					;  0 font-lock-warning-face)
-   )
   "*Additional expressions to highlight in ruby mode.")
 
 (provide 'ruby-mode)
