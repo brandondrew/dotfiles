@@ -2,6 +2,10 @@
 
 (setq scheme-program-name "~/projects/bus_scheme/bin/bus")
 
+(defun bus ()
+  (interactive)
+  (run-scheme "~/projects/bus_scheme/bin/bus"))
+
 (font-lock-add-keywords 'scheme-mode
 			(list
 			 (cons (mapconcat #'identity

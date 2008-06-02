@@ -3,7 +3,7 @@ alias devlog tail -F log/development.log
 alias ll ls -l $*
 alias la ls -a $*
 alias l ls -a -l $*
-alias grepp ps awx | grep $*
+alias grepp ps aux | grep $*
 alias sapti sudo apt-get install $*
 alias saptc apt-cache search $*
 alias sapts apt-cache show $*
@@ -15,7 +15,7 @@ alias sagr sudo gem uninstall $*
 alias sagd sudo gem source -u
 alias sagc gem search --remote $*
 alias gst git status
-alias gb git branch --color
+alias gb git branch --color $*
 alias gcm git commit -a -v
 alias gco git checkout $*
 alias xmlcurl curl -H Accept:text/xml $*

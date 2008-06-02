@@ -11,7 +11,7 @@
 ;;     registers (C-x C-r)
 
 (mapc (lambda (args) (apply #'set-register args))
-      '((?e (file . "~/.emacs"))
+      '((?e (file . "~/.emacs.d/init.el"))
 	(?d (file . "~/.emacs.d"))
 	(?g (file . "~/.gnus.el"))
 	(?b (file . "~/.bashrc"))

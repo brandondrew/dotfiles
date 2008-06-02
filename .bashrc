@@ -16,7 +16,7 @@ alias la="ls -a"
 alias l="ls"
 alias lla="ls -a -l"
 alias grep="grep --color=auto"
-alias pgrep="ps awx | grep"
+alias grepp="ps aux | grep"
 
 # package management
 alias sapti="sudo apt-get install"

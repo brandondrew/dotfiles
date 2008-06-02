@@ -83,7 +83,7 @@
 ;; Bindings
 ;;
 
-(define-key ruby-mode-map "\C-\M-h" 'backward-kill-word) ; ruby-mode redefines this badly
+(define-key ruby-mode-map "\C-\M-h" 'backward-kill-word) ;; ruby-mode redefines this badly
 (define-key ruby-mode-map (kbd "RET") 'ruby-reindent-then-newline-and-indent)
 (define-key ruby-mode-map (kbd "C-c l") (lambda () (interactive) (insert "lambda")))
 (define-key ruby-mode-map (kbd "C-\\") 'rct-complete-symbol)
