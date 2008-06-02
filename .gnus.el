@@ -112,4 +112,4 @@
 (if (file-exists-p system-specific-config)
     (load system-specific-config))
 
-(shell-command "fetchmail -d 300 &")
+(shell-command "fetchmail")

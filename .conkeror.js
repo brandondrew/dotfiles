@@ -22,3 +22,5 @@ function foo() {
 }
 
 add_webjump("github", "http://github.com/search?q=%s");
+
+url_remoting_fn = load_url_in_new_buffer;

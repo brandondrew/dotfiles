@@ -78,6 +78,7 @@
 (autoload 'jabber-connect "jabber" "" t)
 (autoload 'cheat "cheat" "" t)
 (autoload 'gitsum "gitsum" "" t)
+(autoload 'vivid-chalk "vivid-chalk" "" t)
 
 (require 'cl)
 (require 'saveplace)

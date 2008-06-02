@@ -12,8 +12,6 @@
 (when window-system
   (mouse-wheel-mode t)
   (setq frame-title-format '(buffer-file-name "%f" ("%b")))
-  (setq browse-url-browser-function 'browse-url-firefox)
-  (setq browse-url-firefox-new-window-is-tab t)
   (tooltip-mode -1)
   (tool-bar-mode -1)
   (blink-cursor-mode -1))
@@ -31,7 +29,9 @@
       truncate-partial-width-windows nil
       indent-tabs-mode nil
       whitespace-chars '(trailing tabs lines)
-      whitespace-line-column 80)
+      whitespace-line-column 80
+      browse-url-browser-function 'browse-url-generic
+      browse-url-generic-program "~/bin/conkeror")
 
 (auto-compression-mode t)
 (global-font-lock-mode t)
