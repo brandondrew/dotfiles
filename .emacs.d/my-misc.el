@@ -30,8 +30,9 @@
       indent-tabs-mode nil
       whitespace-chars '(trailing tabs lines)
       whitespace-line-column 80
+      save-place-file (convert-standard-filename "~/.emacs.d/places")
       browse-url-browser-function 'browse-url-generic
-      browse-url-generic-program "~/bin/conkeror")
+      browse-url-generic-program "~/src/conkeror/conkeror")
 
 (auto-compression-mode t)
 (global-font-lock-mode t)

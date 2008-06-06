@@ -16,7 +16,6 @@
 !.screenrc
 !.todo
 !.xbindkeysrc.scm
-!.Xdefaults
 !.xsession
 !.zile
 !bin/*

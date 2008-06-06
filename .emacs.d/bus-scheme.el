@@ -35,4 +35,7 @@
 					  "\\|")
 			       'font-lock-keyword-face)))
 
+;; this file is just a link to the real bus_scheme.rb
+(add-to-list 'completion-ignored-extensions "bus-scheme\.rb")
+
 (provide 'bus-scheme)
