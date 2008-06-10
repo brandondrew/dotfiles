@@ -10,12 +10,12 @@
 
 ;;; Commentary:
 
-;; Provides font-locking and indentation support for editing Ruby code.
+;; Provides font-locking, indentation support, and navigation for Ruby code.
 
 ;;; Todo:
 
 ;; set interpreter-mode-alist with autoload?
-;; various docstrings labelled below
+;; various docstrings labelled below with TODOs
 ;; Taken from Ruby SVN revision 16028; need to port recent changes.
 
 ;;; Code:
@@ -221,8 +221,6 @@ Also ignores spaces after parenthesis when 'space."
   "Create an imenu index of all methods in a file."
   (nreverse (ruby-imenu-create-index-in-block nil (point-min) nil)))
 
-;; TODO: Doc'd up to here
-
 (defun ruby-accurate-end-of-block (&optional end)
   ;; TODO: doc
   (let (state)
@@ -248,7 +246,7 @@ Also ignores spaces after parenthesis when 'space."
 
 
 (defun ruby-mode-set-encoding ()
-  ;; TODO: doc throughout function
+  "Insert a magic comment header indicating the proper encoding if necessary."
   (save-excursion
     (widen)
     (goto-char (point-min))
@@ -335,9 +333,10 @@ The variable ruby-indent-level controls the amount of indentation.
 
 (defun ruby-indent-to (x)
   ;; TODO: doc
+  ;; This function makes no sense. Should it just use save-excursion instead?
   (if x
       (let (shift top beg)
-	(and (< x 0) (error "invalid nest"))
+	(if (< x 0) (error "invalid nest"))
 	(setq shift (current-column))
 	(beginning-of-line)
 	(setq beg (point))
@@ -992,7 +991,7 @@ An end of a defun is found by moving forward from the beginning of one."
 (defalias 'ruby-encomment-region 'comment-region)
 
 (defun ruby-decomment-region (beg end)
-  ;; TODO: doc
+  "Remove comment markers from the region."
   (interactive "r")
   (save-excursion
     (goto-char beg)
@@ -1002,7 +1001,7 @@ An end of a defun is found by moving forward from the beginning of one."
 	(ruby-indent-line)))))
 
 (defun ruby-insert-end ()
-  ;; TODO: doc
+  "Insert \"end\" at point and reindent current line."
   (interactive)
   (insert "end")
   (ruby-indent-line t)
@@ -1202,7 +1201,8 @@ balanced expression is found."
 	  "\\(^\\|[^_:.@$]\\|\\.\\.\\)\\b\\(defined\\?\\|\\("
 	  (mapconcat
 	   'identity
-	   '("alias"
+	   '("alias_method"
+	     "alias"
 	     "and"
 	     "begin"
 	     "break"

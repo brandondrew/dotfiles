@@ -63,7 +63,7 @@
       oddmuse-directory "~/.emacs.d/oddmuse")
 
 ;; Sorry, I *really* don't care.
-(defvar twittering-spam-regex "i[pP]hone"
+(defvar twittering-spam-regex "\\(iphone\\|wwdc\\)"
   "Tweets that match this regex will not get displayed")
 
 (defadvice twittering-format-status (after twittering-spam-block)

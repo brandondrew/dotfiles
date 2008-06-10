@@ -1,12 +1,13 @@
 ;;; lisppaste.el --- Interact with the lisppaste pastebot via XML-RPC.
 
-;; Copyright (C) 2004, 2005 Lawrence Mitchell <wence@gmx.li>
+;; Copyright (C) 2004, 2005, 2006, 2007, 2008 Lawrence Mitchell <wence@gmx.li>
 ;; File: lisppaste.el
 ;; Author: Lawrence Mitchell <wence@gmx.li>
 ;; Created: 2004-04-25
-;; Version: 1.2
+;; Version: 1.4
 ;; Keywords: IRC xml rpc network
 ;; URL: http://purl.org/NET/wence/lisppaste.el
+;; Package-Requires: ((xml-rpc "1.6.4"))
 
 ;;; Commentary:
 ;; This file provide an Emacs interface to the lisppaste bot running
@@ -21,9 +22,7 @@
 ;; `lisppaste-browse-url'.
 ;;
 ;; Interacting with lisppaste requires xml-rpc.el which you can find
-;; a link for at <URL: http://www.emacswiki.org/cgi-bin/wiki/XmlRpc>,
-;; which has had this patch applied to it:
-;; <URL: http://purl.org/NET/wence/xml-rpc.el.patch>
+;; a link for at <URL: http://www.emacswiki.org/cgi-bin/wiki/XmlRpc>.
 
 ;;; Code:
 
@@ -34,7 +33,8 @@
 
 (defun lisppaste-send-command (command &rest stuff)
   "Send COMMAND to the lisppaste bot with STUFF as arguments."
-  (apply #'xml-rpc-method-call lisppaste-url command stuff))
+  (let ((xml-entity-alist nil))         ; defeat xml.el encoding of entities
+    (apply #'xml-rpc-method-call lisppaste-url command stuff)))
 
 (defun lisppaste-new-paste (channel nick title content &optional annotate)
   "Create a new paste with the specified arguments.
@@ -112,15 +112,14 @@ If that returns nil, return the value of the variable
           (erc-current-nick)))
       lisppaste-default-nick))
 
-(defmacro defpaste (name)
-  "Define a `plist-get' method for NAME."
-  `(defsubst ,name (p)
-     (plist-get p ',name)))
-
-(defpaste lisppaste-paste)
-(defpaste lisppaste-annotation)
-(defpaste lisppaste-channel)
-(defpaste lisppaste-annotations)
+(defsubst lisppaste-paste (p)
+  (plist-get p 'lisppaste-paste))
+(defsubst lisppaste-annotation (p)
+  (plist-get p 'lisppaste-annotation))
+(defsubst lisppaste-channel (p)
+  (plist-get p 'lisppaste-channel))
+(defsubst lisppaste-annotations (p)
+  (plist-get p 'lisppaste-annotations))
 
 (defsubst lisppaste-read-number (prompt &optional annotation)
   "Read a number prompting with PROMPT.
@@ -439,6 +438,7 @@ variable `lisppaste-channels'."
    "       Create a new paste.\n"
    "RET -- lisppaste-dwim\n"
    "       Fetch either the paste or the annotation at point.\n"
+   "SPC -- scroll-up\n"
    "`q' -- lisppaste-quit\n"
    "       Quit the paste display.\n"))
 
@@ -468,6 +468,7 @@ variable `lisppaste-channels'."
     (define-key map (kbd "l p") #'lisppaste-list-recent-pastes)
     (define-key map "n" #'lisppaste-create-new-paste)
     (define-key map (kbd "RET") #'lisppaste-dwim)
+    (define-key map (kbd "SPC") #'scroll-up)
     (define-key map "q" #'lisppaste-quit)
     map)
   "Keymap for `lisppaste-mode'.")

@@ -170,6 +170,7 @@
   "Git diff for use in eshell."
   (interactive)
   (switch-to-buffer-other-window "*git diff*")
+  (delete-region (point-min) (point-max))
   (insert (shell-command-to-string (format "git diff %s" (or arg ""))))
   (diff-mode)
   (goto-char (point-min)))

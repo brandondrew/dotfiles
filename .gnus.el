@@ -31,6 +31,7 @@
 
 (setq nnmail-split-fancy
       '(| (to "ruby_emacs_dev@yahoogroups\\.com" "emacs-rails")
+	  (to "emacs-on-rails" "emacs-rails")
           (to "obby-users@list.0x539.de" "obby-users")
           (any "conkeror" "conkeror")
           (any "zenspider\\.com" "seattle.rb")

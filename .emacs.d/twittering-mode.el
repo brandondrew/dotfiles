@@ -59,7 +59,7 @@
 
 (defvar twittering-idle-time 20)
 
-(defvar twittering-timer-interval 90)
+(defvar twittering-timer-interval 120)
 
 (defvar twittering-username nil)
 

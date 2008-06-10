@@ -19,3 +19,4 @@ alias gb git branch --color $*
 alias gcm git commit -a -v
 alias gco git checkout $*
 alias xmlcurl curl -H Accept:text/xml $*
+alias github ~/src/conkeror/conkeror \`git config -l | grep 'remote.origin.url' | sed -En 's/remote.origin.url=git(@|:\/\/)github.com(:|\/)(.+)\/(.+).git/https:\/\/github.com\/\3\/\4/p'\`
