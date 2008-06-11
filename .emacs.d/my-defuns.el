@@ -5,7 +5,7 @@
 ;; Much thanks to RMS and the folks at emacswiki.org.
 
 ;; Note: this relies on files found in my dotfiles repository:
-;; http://git.caboo.se/?p=technomancy.git;a=summary
+;; http://github.com/technomancy/dotfiles
 
 ;;;; defuns
 
@@ -57,6 +57,25 @@
       (select-window nw)
       (switch-to-buffer cb))))
 
+(defvar isearch-initial-string nil)
+
+(defun isearch-set-initial-string ()
+  (remove-hook 'isearch-mode-hook 'isearch-set-initial-string)
+  (setq isearch-string isearch-initial-string)
+  (isearch-search-and-update))
+
+(defun isearch-forward-at-point (&optional regexp-p no-recursive-edit)
+  "Interactive search forward for the symbol at point."
+  (interactive "P\np")
+  (if regexp-p (isearch-forward regexp-p no-recursive-edit)
+    (let* ((end (progn (skip-syntax-forward "w_") (point)))
+           (begin (progn (skip-syntax-backward "w_") (point))))
+      (if (eq begin end)
+          (isearch-forward regexp-p no-recursive-edit)
+        (setq isearch-initial-string (buffer-substring begin end))
+        (add-hook 'isearch-mode-hook 'isearch-set-initial-string)
+        (isearch-forward regexp-p no-recursive-edit)))))
+
 (defun current-window ()
   "Why get-buffer-window instead of buffer-window? Why isn't this defined already?"
   (get-buffer-window (current-buffer)))
@@ -74,10 +93,11 @@
 (defun my-coding-hook ()
   "Enable things I consider convenient across all coding buffers."
   ;; (indent-buffer)
-  (hl-line-mode))
-  ;; Would like to enable column-number-mode on a per-buffer basis
-  ;; here, but that doesn't seem possible.
   ;; (whitespace-mode t)
+  (make-local-variable 'column-number-mode)
+  (column-number-mode)
+  (hl-line-mode)
+  (idle-highlight))
 
 (defun untabify-buffer ()
   (interactive)
@@ -107,8 +127,9 @@
 (defun inconsolata () (interactive) (set-default-font "Inconsolata-12"))
 (defun dvsm () (interactive) (set-default-font "DejaVu Sans Mono-10"))
 
-(defun ansi-region () (interactive) (ansi-color-apply-on-region (min (mark) (point))
-								(max (mark) (point))))
+(defun ansi-region () (interactive)
+  (ansi-color-apply-on-region (min (mark) (point))
+			      (max (mark) (point))))
 
 ;;; Random stuff
 
@@ -127,7 +148,8 @@
 
 (defun my-generate-ruby-tags ()
   (interactive)
-  (flet ((rails-root () (cadr (split-string (pwd) " ")))) (my-generate-rails-tags)))
+  (flet ((rails-root () (cadr (split-string (pwd) " "))))
+    (my-generate-rails-tags)))
 
 (defun sudo-edit (&optional arg)
   (interactive "p")
@@ -150,7 +172,7 @@
   (interactive)
   (switch-to-buffer "*todo*")
   (emacs-lisp-mode)
-  (insert-file-contents "~/.emacs")
+  (insert-file-contents "~/.emacs.d/init.d")
   (goto-char (point-max))
   (search-backward ";;; TODO")
   (kill-region (point-min) (point)))
