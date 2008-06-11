@@ -175,6 +175,7 @@
   (diff-mode)
   (goto-char (point-min)))
 
-(defun ss () (interactive) (server-start))
+(defalias 'ss 'server-start)
+(defalias 'pg 'sql-postgres)
 
 (provide 'my-defuns)

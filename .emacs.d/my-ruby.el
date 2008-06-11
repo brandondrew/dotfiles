@@ -34,6 +34,11 @@
   (run-ruby "~/src/rubinius/shotgun/rubinius"))
 
 ;;;###autoload
+(defun rjr ()
+  (interactive)
+  (run-ruby "jruby -S irb"))
+
+;;;###autoload
 (defun rake (task)
   (interactive (list (completing-read "Rake (default: default): "
 				      (pcmpl-rake-tasks))))

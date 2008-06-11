@@ -28,7 +28,7 @@
 
 ;;; On with the show:
 
-(toggle-debug-on-error t)
+(toggle-debug-on-error)
 
 ;;; Fix for a bug in CVS Emacs 2 April 08; remove when fixed upstream:
 (require 'cl)
@@ -103,7 +103,6 @@
 ;; My support files and configurations
 ;;
 
-(require 'my-calendar)
 (require 'my-eshell)
 (require 'my-bindings)
 (require 'my-defuns)

@@ -30,6 +30,7 @@
       indent-tabs-mode nil
       whitespace-chars '(trailing tabs lines)
       whitespace-line-column 80
+      sql-server "localhost"
       save-place-file (convert-standard-filename "~/.emacs.d/places")
       browse-url-browser-function 'browse-url-generic
       browse-url-generic-program "~/src/conkeror/conkeror")
