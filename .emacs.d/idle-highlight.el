@@ -58,8 +58,8 @@
 (defun idle-highlight-disable ()
   "Disable idle-highlighting caused by `idle-highlight'."
   (interactive)
-  (if (boundp 'idle-highlight-timer)
-      (cancel-timer idle-highlight-timer)
-    (message "idle-highlight not enabled")))
+  (when (boundp 'idle-highlight-timer)
+      (cancel-timer idle-highlight-timer)))
 
 (provide 'idle-highlight)
+;;; idle-highlight.el ends here

@@ -218,13 +218,13 @@ Also ignores spaces after parenthesis when 'space."
     index-alist))
 
 (defun ruby-imenu-create-index ()
-  "Create an imenu index of all methods in a file."
+  "Create an imenu index of all methods in the buffer."
   (nreverse (ruby-imenu-create-index-in-block nil (point-min) nil)))
 
 (defun ruby-accurate-end-of-block (&optional end)
   ;; TODO: doc
-  (let (state)
-    (or end (setq end (point-max)))
+  (let (state
+	(end (or end (point-max))))
     (while (and (setq state (apply 'ruby-parse-partial end state))
 		(>= (nth 2 state) 0) (< (point) end)))))
 
@@ -1273,9 +1273,6 @@ balanced expression is found."
    ;; expression expansion
    '("#\\({[^}\n\\\\]*\\(\\\\.[^}\n\\\\]*\\)*}\\|\\(\\$\\|@\\|@@\\)\\(\\w\\|_\\)+\\)"
      0 font-lock-variable-name-face t))
-   ;; warn lower camel case
-					;'("\\<[a-z]+[a-z0-9]*[A-Z][A-Za-z0-9]*\\([!?]?\\|\\>\\)"
-					;  0 font-lock-warning-face)
   "*Additional expressions to highlight in ruby mode.")
 
 (provide 'ruby-mode)
