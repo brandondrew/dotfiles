@@ -5,7 +5,7 @@
 ;; Much thanks to RMS and the folks at emacswiki.org.
 
 ;; Note: this relies on files found in my dotfiles repository:
-;; http://git.caboo.se/?p=technomancy.git;a=summary
+;; http://github.com/technomancy/dotfiles
 
 (require 'ruby-mode)
 (require 'ruby-electric)

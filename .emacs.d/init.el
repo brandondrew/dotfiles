@@ -5,7 +5,7 @@
 ;; Much thanks to RMS and emacswiki.org
 
 ;; Note: this relies on files found in my .emacs.d:
-;; http://git.caboo.se/?p=technomancy.git;a=summary
+;; http://github.com/technomancy/dotfiles
 
 ;; "Emacs outshines all other editing software in approximately the
 ;; same way that the noonday sun does the stars. It is not just bigger
@@ -92,6 +92,7 @@
 (require 'ansi-color)
 (require 'recentf)
 (require 'css-mode)
+(require 'idle-highlight)
 
 (eval-after-load 'vc
   '(progn
