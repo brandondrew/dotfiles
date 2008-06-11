@@ -24,11 +24,11 @@
 ;;
 ;; This program is distributed in the hope that it will be useful,
 ;; but WITHOUT ANY WARRANTY; without even the implied warranty of
-;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 ;; GNU General Public License for more details.
 ;;
 ;; You should have received a copy of the GNU General Public License
-;; along with GNU Emacs; see the file COPYING.  If not, write to the
+;; along with GNU Emacs; see the file COPYING. If not, write to the
 ;; Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 ;; Boston, MA 02110-1301, USA.
 
@@ -38,25 +38,20 @@
 ;; by Nathaniel Talbott, and xUnit by Kent Beck
 
 ;; ElUnit exists to accomodate test-driven development of Emacs Lisp
-;; programs.  Tests are divided up into suites.  Each test makes a
+;; programs. Tests are divided up into suites. Each test makes a
 ;; number of assertions to ensure that things are going according to
 ;; expected.
 
 ;; Tests are divided into suites for the purpose of hierarchical
-;; structure and hooks.  The hierarchy allows suites to belong to
-;; suites, in essence creating test trees.  The hooks are meant to
+;; structure and hooks. The hierarchy allows suites to belong to
+;; suites, in essence creating test trees. The hooks are meant to
 ;; allow for extra setup that happens once per test, for both before
 ;; and after it runs.
 
-;; The file `elunit-assertions.el' provides a number of helpful
-;; assertions for ensuring that things are going properly.  You may use
-;; Emacs' built-in `assert' function for checking such things, but the
-;; assertions in that file provide much better reporting if you use
-;; them.  Using `assert-that' is preferred over built-in `assert'.
-
-;;; TODO:
-
-;;  * more helper functions, specifically for more functional-test stuff.
+;; You may use Emacs' built-in `assert' function for checking such
+;; things, but the assertions at the bottom of this file provide much
+;; better reporting if you use them. Using `assert-that' is preferred
+;; over built-in `assert'.
 
 ;;; Usage:
 
@@ -68,7 +63,6 @@
 ;; (make-local-variable 'after-save-hook)
 ;; (add-hook 'after-save-hook (lambda () (elunit "meta-suite")))
 ;; to the file containing your tests for convenient auto-running.
-
 
 ;;; History:
 
@@ -160,7 +154,7 @@
            (length (test-suite-tests suite))))))
 
 (defun elunit-test-docstring (test)
-  "Return a `TEST's docstring."
+  "Return a TEST's docstring."
   (if (equal (car (test-body test)) 'lambda)
       (if (stringp (caddr (test-body test)))
           (caddr (test-body test))
@@ -170,9 +164,10 @@
 
 (defun elunit (suite)
   "Ask for a single SUITE, run all its tests, and display the results."
-  (interactive (list (completing-read (concat "Run test suite (default " elunit-default-suite "): " )
-                                      (mapcar (lambda (suite) (symbol-name (test-suite-name suite)))
-                                              elunit-suites) nil t nil nil elunit-default-suite)))
+  (interactive (list (completing-read
+		      (concat "Run test suite (default " elunit-default-suite "): " )
+		      (mapcar (lambda (suite) (symbol-name (test-suite-name suite)))
+			      elunit-suites) nil t nil nil elunit-default-suite)))
  (setq elunit-default-suite suite)
  (setq elunit-test-count 0)
  (setq elunit-failures nil)
@@ -254,21 +249,25 @@ In `TEST' store error data `ERR' structure and print `OUTPUT'."
 
 (defun elunit-quiet (suite)
   "Run a SUITE and display results in the minibuffer."
-  (interactive (list (completing-read (concat "Run test suite (default " elunit-default-suite "): " )
-				      (mapcar (lambda (suite) (symbol-name (test-suite-name suite)))
-					      elunit-suites) nil t nil nil elunit-default-suite)))
+  (interactive (list (completing-read
+		      (concat "Run test suite (default " elunit-default-suite "): " )
+		      (mapcar (lambda (suite) (symbol-name (test-suite-name suite)))
+			      elunit-suites) nil t nil nil elunit-default-suite)))
   (save-window-excursion
     (elunit suite))
   (message "%d tests with %d failures" elunit-test-count (length elunit-failures)))
-
-;; TODO: font-lock deftest and defsuite
-;; do this too? (put 'defsuite 'lisp-indent-function 1)
 
 (defun fail (&rest args)
   "Signal a test failure in a way that elunit understands.
 
 Takes the same ARGS as `error'."
     (signal 'elunit-test-failed (list (apply 'format args))))
+
+(font-lock-add-keywords 'emacs-lisp-mode
+			;; Make elunit tests look like defuns.
+			'(("defsuite"   . 'font-lock-keyword-face)
+			  ("deftest"    . 'font-lock-keyword-face)
+			  ("\\<fail\\>" . 'font-lock-warning-face)))
 
 ;;; General assertions
 

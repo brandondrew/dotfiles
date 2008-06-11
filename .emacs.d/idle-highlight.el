@@ -44,14 +44,14 @@
 	 (target (symbol-name target-symbol)))
     (when idle-highlight-last-word
       (unhighlight-regexp (concat "\\<" (regexp-quote idle-highlight-last-word) "\\>")))
-    (when (and target-symbol (not (in-string-p)))
+    (when (and target target-symbol (not (in-string-p)))
       (highlight-regexp (concat "\\<" (regexp-quote target) "\\>") 'region)
       (setq idle-highlight-last-word target))))
 
 (defun idle-highlight ()
   "Activate idle-highlighting."
   (interactive)
-  (make-local-variable 'idle-highlight-last-word)
+  (set (make-local-variable 'idle-highlight-last-word) nil)
   (set (make-local-variable 'idle-highlight-timer)
        (run-with-idle-timer 0.5 :repeat 'idle-highlight-word-at-point)))
 
