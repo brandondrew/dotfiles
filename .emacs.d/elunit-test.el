@@ -107,14 +107,14 @@
    ;; must use princ to take advantage of with-output-to-temp-buffer
    (princ "some crap"))
 
-(save-window-excursion
- (elunit "sample-suite")
- (assert-in-buffer "some crap" "*elunit*"))
+;;; Moved to mode-unit.
 
-;; report successes with dots
+;; (save-window-excursion
+;;  (elunit "sample-suite")
+;;  (assert-in-buffer "some crap" "*elunit*"))
 
-(save-window-excursion
-  (elunit "meta-suite")
-  (assert-in-buffer ".." "*elunit*"))
+;; ;; report successes with dots
 
-(elunit-quiet "meta-suite")
+;; (save-window-excursion
+;;   (elunit "meta-suite")
+;;   (assert-in-buffer ".." "*elunit*"))

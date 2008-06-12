@@ -1,6 +1,6 @@
 ;;; elunit.el --- Emacs Lisp Unit Testing framework
 
-;; Copyright (C) 2006 - 2007 Phil Hagelberg
+;; Copyright (C) 2006 - 2008 Phil Hagelberg
 
 ;; Author: Phil Hagelberg <technomancy@gmail.com>
 ;; URL: http://www.emacswiki.org/cgi-bin/wiki/ElUnit
@@ -70,9 +70,8 @@
 
 ;;; Code:
 
-(eval-when-compile
-  (require 'cl)
-  (require 'compile))
+(require 'cl)
+(require 'compile)
 
 (defstruct test-suite name children tests setup-hook teardown-hook)
 (defstruct test name body file line message problem)
@@ -325,38 +324,6 @@ Takes the same ARGS as `error'."
 		     (progn
 		       ,@body
 		       (eval ,form))))
-
-;; Buffer-specific assertions
-
-(defun assert-in-buffer (target &optional buffer)
-  "Fails if TARGET is not a string found in current buffer or BUFFER."
-  (save-window-excursion
-    (if buffer (switch-to-buffer buffer))
-    (goto-char (point-min))
-    (unless (search-forward target nil t)
-      (fail "%s expected to be found in buffer %s" target buffer))))
-
-(defun assert-background (target face &optional buffer)
-  "Fails if TARGET is not rendered in FACE face.
-
-May be passed BUFFER, otherwise defaults to current buffer."
-  (save-window-excursion
-    (if buffer (switch-to-buffer buffer))
-    (goto-char (point-min))
-    (unless (search-forward target nil t)
-      (fail "%s expected to be found in buffer %s" target buffer))
-    (unless (equal face (get-text-property (point) 'background))
-      (fail "%s expected to be displayed with face %s" target face))))
-
-(defun assert-overlay (pos)
-  "Fails if overlay is not present at POS."
-  (unless (overlays-at pos)
-    (fail "Expected overlay at position %d" pos)))
-
-(defun assert-no-overlay (pos)
-  "Fails if overlay is present at POS."
-  (if (overlays-at pos)
-    (fail "Expected no overlay at position %d" pos)))
 
 (provide 'elunit)
 

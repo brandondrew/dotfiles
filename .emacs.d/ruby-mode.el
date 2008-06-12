@@ -14,7 +14,7 @@
 
 ;;; Todo:
 
-;; set interpreter-mode-alist with autoload?
+;; set auto-mode-alist and interpreter-mode-alist with autoload?
 ;; various docstrings labelled below with TODOs
 ;; Taken from Ruby SVN revision 16028; need to port recent changes.
 

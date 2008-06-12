@@ -3,7 +3,6 @@
 !.bash_profile
 !.bashrc
 !.devilspie/*
-!.emacs
 !.emacs.d/*
 !.eshell/*
 !.feeds.opml

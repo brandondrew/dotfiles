@@ -1,0 +1,4 @@
+# -*- ruby -*-
+
+task(:test) { system "emacs -Q -l tests.el" }
+task :default => :test
