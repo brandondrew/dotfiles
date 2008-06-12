@@ -73,7 +73,7 @@
 (require 'cl)
 (require 'compile)
 
-(defstruct test-suite name children tests setup-hook teardown-hook)
+(defstruct test-suite name children tests setup-hooks teardown-hooks)
 (defstruct test name body file line message problem)
 
 (put 'elunit-test-failed 'error-conditions '(failure))
@@ -99,14 +99,15 @@
 
 ;;; Defining tests
 
-(defmacro* defsuite (suite-name suite-ancestor &key setup-hook teardown-hook)
+(defmacro* defsuite (suite-name suite-ancestor &key setup-hooks teardown-hooks)
   "Define a suite, which may be hierarchical."
   `(let ((suite (make-test-suite :name ',suite-name
-                                 :setup-hook ,setup-hook :teardown-hook ,teardown-hook)))
+                                 :setup-hooks ,setup-hooks :teardown-hooks ,teardown-hooks)))
      (elunit-delete-suite ',suite-name)
      (if ',suite-ancestor
          (push suite (test-suite-children (elunit-get-suite ',suite-ancestor))))
-     (add-to-list 'elunit-suites suite)))
+     (add-to-list 'elunit-suites suite)
+     suite))
 
 (defun elunit-get-suite (suite)
   "Fetch a SUITE by its name."
@@ -187,9 +188,9 @@
 (defun elunit-run-suite (suite)
   "Run a SUITE's tests and children."
   (dolist (test (reverse (test-suite-tests suite)))
-    (if (test-suite-setup-hook suite) (funcall (test-suite-setup-hook suite)))
+    (if (test-suite-setup-hooks suite) (apply #'funcall (test-suite-setup-hooks suite)))
     (elunit-run-test test)
-    (if (test-suite-teardown-hook suite) (funcall (test-suite-teardown-hook suite))))
+    (if (test-suite-teardown-hooks suite) (apply #'funcall (test-suite-teardown-hooks suite))))
   (dolist (child-suite (test-suite-children suite))
     (elunit-run-suite child-suite))
   (run-hook-with-args 'elunit-done-running-hook elunit-test-count (length elunit-failures)))

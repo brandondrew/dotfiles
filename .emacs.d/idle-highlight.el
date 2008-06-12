@@ -39,6 +39,12 @@
 
 (require 'thingatpt)
 
+(defvar idle-highlight-last-word nil
+  "Last word to be idle-highlighted.")
+
+(defvar idle-highlight-timer nil
+  "Timer to activate re-highlighting.")
+
 (defun idle-highlight-word-at-point ()
   (let* ((target-symbol (symbol-at-point)) ;; need to save this value to check for nil
 	 (target (symbol-name target-symbol)))

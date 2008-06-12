@@ -32,12 +32,22 @@
 
 ;; ModeUnit builds on top of ElUnit to provide higher-level tests to
 ;; be written. Specifically it's focused on tests for Emacs modes
-;; rather than on the lower level of Emacs Lisp functions.
+;; rather than lower level Emacs Lisp functions.
 
 ;; To this end it is mostly a collection of helper functions (for
 ;; buffer setup) and higher-level assertions that handle the kind of
 ;; thing major modes are usually concerned with, like font-lock and
-;; indentation.
+;; indentation. So ModeUnit tests end up looking a lot like ElUnit
+;; tests; see the documentation for that library for some examples.
+
+;; The main difference is that each ModeUnit suite is bound to the
+;; context of a given file and mode. So in addition to elunit's
+;; defsuite, you may use mode-unit-suite to define a suite that always
+;; loads up a file in a fresh buffer and invokes a mode before running
+;; each of its tests:
+
+;; (defsuite my-mode-suite default-suite ;; ancestor of default.
+;;   "foo-sample.my" my-mode)
 
 ;; Note: ModeUnit expects to be run in a clean "emacs -Q" invocation.
 ;; The rationale behind this is that it's very easy to write modes
@@ -46,15 +56,41 @@
 ;; only relying on what it explicitly requires. So to run ModeUnit you
 ;; would use something like:
 
-;;   $ emacs -Q -l my-mode-unit-test.el
+;;  $ emacs -Q -l my-mode-unit-test.el
 
-;; You would want to invoke mode-unit at the bottom of your test file.
+;; or better yet:
+
+;; (global-set-key (kbd "C-c C-m")
+;;                 (shell-command "emacs -Q -l my-mode-unit-test.el"))
+
+;; You would want to include an invokation of elunit with your given
+;; suite at the bottom of your test file.
+
+;;; TODO:
+
+;; - defsuite assumes tests do not open new buffers
 
 ;;; Code:
 
 (require 'elunit)
 
-;; Buffer-specific assertions
+(defstruct test-suite name children tests
+  setup-hooks teardown-hooks file mode)
+
+(elunit-clear-suites) ;; so default-suite is a struct of the same definition
+
+(defmacro* mode-unit-suite (suite-name suite-ancestor file mode
+				       &key setup-hooks teardown-hooks)
+  "Create a test suite with extra mode-unit hooks."
+  `(let ((suite (defsuite ,suite-name ,suite-ancestor
+		  :setup-hooks (cons (lambda () (find-file (test-suite-file suite))
+				       (funcall (test-suite-mode suite)))
+				     ,setup-hooks)
+		  :teardown-hooks (cons (lambda () (kill-buffer nil)) ,teardown-hooks))))
+     (setf (test-suite-file suite) ,file)
+     (setf (test-suite-mode suite) ',mode)))
+
+;;; Buffer-specific assertions
 
 (defun assert-in-buffer (target &optional buffer)
   "Fails if TARGET is not a string found in current buffer or BUFFER."
@@ -97,7 +133,9 @@ May be passed BUFFER, otherwise defaults to current buffer."
 	(kill-buffer nil)
 	(unless (equal buffer-original-indentation buffer-new-indentation)
 	  (fail "Indentation incorrect for %s" filename))))))
-      
+
+(font-lock-add-keywords 'emacs-lisp-mode
+			'(("mode-unit-suite" . 'font-lock-keyword-face)))
 
 (provide 'mode-unit)
 ;;; mode-unit.el ends here
