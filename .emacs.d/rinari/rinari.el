@@ -18,7 +18,7 @@
 (require 'which-func)
 (require 'snippet)
 
-(require 'rinari-abbrevs)
+;; (require 'rinari-abbrevs)
 (require 'ruby-test)
 
 ;;; helpers for rinari-find-view

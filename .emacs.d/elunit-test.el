@@ -24,12 +24,12 @@
 (deftest sample-suite-setup meta-suite
   "Ensure that defsuite creates new suites properly."
   (defsuite sample-suite nil ; nil for no parent suite
-    :setup-hook (lambda () (message "setting up test"))
-    :teardown-hook (lambda () (message "done with test")))
+    :setup-hooks (lambda () (message "setting up test"))
+    :teardown-hooks (lambda () (message "done with test")))
   
   (assert-that (elunit-get-suite 'sample-suite))
-  (assert-that (test-suite-setup-hook (elunit-get-suite 'sample-suite)))
-  (assert-that (test-suite-teardown-hook (elunit-get-suite 'sample-suite)))
+  (assert-that (test-suite-setup-hooks (elunit-get-suite 'sample-suite)))
+  (assert-that (test-suite-teardown-hooks (elunit-get-suite 'sample-suite)))
   (assert-equal 4 (length elunit-suites))
 
   (elunit-delete-suite 'sample-suite)
@@ -38,14 +38,14 @@
 
 (deftest duplicate-suite meta-suite
   (defsuite sample-suite nil
-    :setup-hook (lambda () (message "start testing")))
+    :setup-hooks (lambda () (message "start testing")))
   ;; Should replace existing suite
   (assert-not-changed (length elunit-suites)
 		      (defsuite sample-suite nil
-			:teardown-hook (lambda () (message "done testing")))
+			:teardown-hooks (lambda () (message "done testing")))
 
 		      ;; make sure it really got replaced.
-		      (assert-nil (test-suite-setup-hook
+		      (assert-nil (test-suite-setup-hooks
 				    (elunit-get-suite 'sample-suite)))))
 
 (deftest duplicate-test meta-suite

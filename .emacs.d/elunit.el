@@ -4,7 +4,7 @@
 
 ;; Author: Phil Hagelberg <technomancy@gmail.com>
 ;; URL: http://www.emacswiki.org/cgi-bin/wiki/ElUnit
-;; Version: 1.0
+;; Version: 1.1
 ;; Created: 2006-08-17
 ;; Keywords: unit test tdd
 ;; EmacsWiki: ElUnit
@@ -38,19 +38,19 @@
 ;; by Nathaniel Talbott, and xUnit by Kent Beck
 
 ;; ElUnit exists to accomodate test-driven development of Emacs Lisp
-;; programs. Tests are divided up into suites. Each test makes a
+;; programs.  Tests are divided up into suites.  Each test makes a
 ;; number of assertions to ensure that things are going according to
 ;; expected.
 
 ;; Tests are divided into suites for the purpose of hierarchical
-;; structure and hooks. The hierarchy allows suites to belong to
-;; suites, in essence creating test trees. The hooks are meant to
+;; structure and hooks.  The hierarchy allows suites to belong to
+;; suites, in essence creating test trees.  The hooks are meant to
 ;; allow for extra setup that happens once per test, for both before
 ;; and after it runs.
 
 ;; You may use Emacs' built-in `assert' function for checking such
 ;; things, but the assertions at the bottom of this file provide much
-;; better reporting if you use them. Using `assert-that' is preferred
+;; better reporting if you use them.  Using `assert-that' is preferred
 ;; over built-in `assert'.
 
 ;;; Usage:
@@ -64,9 +64,17 @@
 ;; (add-hook 'after-save-hook (lambda () (elunit "meta-suite")))
 ;; to the file containing your tests for convenient auto-running.
 
-;;; History:
+;; Unit tests are meant to test single low-level functions. If you
+;; find yourself wanting to write higher-level tests, you may find
+;; mode-unit.el (http://www.emacswiki.org/cgi-bin/wiki/ModeUnit)
+;; useful as it is designed to help test whole Emacs modes.
 
-;; 2007-11-16 - First release to EmacsWiki
+;; TODO:
+
+;; - allow test definitions to be nested in suites
+;; - improve readability of failure reports
+;; - highlight test definitions as they pass/fail?
+;; - store suites as a tree instead of a list?
 
 ;;; Code:
 
@@ -118,6 +126,8 @@
 
 (defun elunit-delete-suite (name)
   "Remove a suite named NAME."
+  ;; TODO: why doesn't delete work here?
+  ;; (delete (elunit-get-suite name) elunit-suites))
   (setq elunit-suites (remove (elunit-get-suite name) elunit-suites)))
 
 (defmacro deftest (name suite &rest body)

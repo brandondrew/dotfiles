@@ -25,6 +25,7 @@
       transient-mark-mode t
       indicate-empty-lines t
       color-theme-is-global t
+      comment-auto-fill-only-comments t
       save-place t
       truncate-partial-width-windows nil
       indent-tabs-mode nil
@@ -106,6 +107,7 @@
 ;; nxhtml stuff
 (setq mumamo-chunk-coloring 'submode-colored
       nxhtml-skip-welcome t
+      indent-region-mode t
       rng-nxml-auto-validate-flag nil)
 
 ;;; Cosmetics

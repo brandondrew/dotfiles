@@ -50,7 +50,7 @@
 	 (target (symbol-name target-symbol)))
     (when idle-highlight-last-word
       (unhighlight-regexp (concat "\\<" (regexp-quote idle-highlight-last-word) "\\>")))
-    (when (and target target-symbol (not (in-string-p)))
+    (when (and idle-highlight-timer target target-symbol (not (in-string-p)))
       (highlight-regexp (concat "\\<" (regexp-quote target) "\\>") 'region)
       (setq idle-highlight-last-word target))))
 
@@ -64,8 +64,9 @@
 (defun idle-highlight-disable ()
   "Disable idle-highlighting caused by `idle-highlight'."
   (interactive)
-  (when (boundp 'idle-highlight-timer)
-      (cancel-timer idle-highlight-timer)))
+  (when idle-highlight-timer
+    (cancel-timer idle-highlight-timer)
+    (setq idle-highlight-timer nil)))
 
 (provide 'idle-highlight)
 ;;; idle-highlight.el ends here

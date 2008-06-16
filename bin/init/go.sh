@@ -27,6 +27,7 @@ if [ ! -r install.rb ] ; then
   cd dotfiles/bin/init
 fi
 
+chattr +A / # don't write atimes
 ruby install.rb
 chown -R $USER $HOME
 sudo -u $USER ruby user-setup.rb # TODO: this breaks... huh?

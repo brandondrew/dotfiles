@@ -1,7 +1,11 @@
+(add-to-list 'load-path "~/.emacs.d/rinari")
+(add-to-list 'load-path "~/.emacs.d/rinari/rhtml")
+(add-to-list 'load-path "~/.emacs.d/rinari/test/spec")
 (require 'rinari)
 (require 'behave)
 
-(setq rinari-behave-root (expand-file-name (concat (file-name-directory load-file-name) "/../sample/")))
+;; (setq rinari-behave-root (expand-file-name (concat (file-name-directory load-file-name) "/../sample/")))
+(setq rinari-behave-root "~/.emacs.d/rinari/test/sample/")
 
 (context "rhtml syntax highlighting on bar.rhtml should highlight"
 	 (tag rinari rhtml font-lock)
@@ -20,10 +24,10 @@
 
 	   (specify "ERB delimiters"
 		    (expect '(erb-out-delim-face) equals (face-at "<%" file)))
-	   (specify "strings in ERB"
-;		    (expect 'font-lock-string-face member (face-at "button" file)) ; single-quoted string
-		    (expect 'font-lock-string-face member (face-at "fizzbuzz" file))
-		    (expect 'erb-exec-face member (face-at "fizzbuzz" file)))
+;;; 	   (specify "strings in ERB"
+;;; ;		    (expect 'font-lock-string-face member (face-at "button" file)) ; single-quoted string
+;;; 		    (expect 'font-lock-string-face member (face-at "fizzbuzz" file))
+;;; 		    (expect 'erb-exec-face member (face-at "fizzbuzz" file)))
 	   (specify "ruby keywords in ERB"
 		    (expect 'font-lock-keyword-face member (face-at "do" file)))
 ;; TODO:
