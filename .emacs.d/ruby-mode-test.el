@@ -2,6 +2,9 @@
 (add-to-list 'load-path "~/.emacs.d")
 (require 'ruby-mode)
 (require 'mode-unit)
+(require 'elunit-augment)
+
+(global-set-key (kbd "C-c v") 'eval-buffer)
 
 (mode-unit-suite ruby-mode-suite default-suite
 		 "ruby_mode_sample.rb" ruby-mode)
@@ -25,8 +28,13 @@
 
 (deftest major-mode ruby-mode-suite
   (assert-equal 'ruby-mode major-mode))
+
+(deftest failer ruby-mode-suite
+  (assert-equal 2 3))
+
+(deftest errorer ruby-mode-suite
+  (assert (/ 4 0)))
   
-(elunit "ruby-mode-suite")
+;; (elunit "ruby-mode-suite")
 
-;; (global-set-key (kbd "C-c C-m") (lambda () (interactive) (shell-command "emacs -Q -l ruby-mode-test.el")))
-
+;; (global-set-key (kbd "C-c C-m") (lambda () (interactive) (shell-command "emacs -Q ruby-mode-test.el")))

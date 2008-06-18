@@ -60,6 +60,7 @@
 
 ;; or better yet:
 
+
 ;; (global-set-key (kbd "C-c C-m")
 ;;                 (shell-command "emacs -Q -l my-mode-unit-test.el"))
 ;; TODO: figure out how to non-block w/o async output buffer
@@ -87,7 +88,8 @@
 		  :setup-hooks (cons (lambda () (find-file (test-suite-file suite))
 				       (funcall (test-suite-mode suite)))
 				     ,setup-hooks)
-		  :teardown-hooks (cons (lambda () (kill-buffer nil)) ,teardown-hooks))))
+		  :teardown-hooks (cons (lambda ()
+					  (kill-buffer nil)) ,teardown-hooks))))
      (setf (test-suite-file suite) ,file)
      (setf (test-suite-mode suite) ',mode)))
 

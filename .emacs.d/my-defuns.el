@@ -16,17 +16,24 @@
   (interactive "MUrl: ")
   (switch-to-buffer (url-retrieve-synchronously url))
   (rename-buffer url t)
-  (eval					;set major mode
-   (read
-    (concat
-     "("
-     (completing-read "Major mode: "
-                      (mapcar (lambda
-                                (x)
-                                (list (symbol-name x)))
-                              (apropos-internal "-mode$"
-                                                'commandp))
-                      nil t) ")"))))
+  (funcall (intern
+	    (completing-read "Major mode: "
+			     (mapcar (lambda (x)
+				       (list (symbol-name x)))
+				     (apropos-internal "-mode$"
+						       'commandp))))))
+
+;;;   (eval					;set major mode
+;;;    (read
+;;;     (concat
+;;;      "("
+;;;      (completing-read "Major mode: "
+;;;                       (mapcar (lambda
+;;;                                 (x)
+;;;                                 (list (symbol-name x)))
+;;;                               (apropos-internal "-mode$"
+;;;                                                 'commandp))
+;;;                       nil t) ")"))))
 
 (defun map-coords (lat lng)
   "Show a Yahoo map marked with the point LAT by LNG."

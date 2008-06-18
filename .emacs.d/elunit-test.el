@@ -34,7 +34,8 @@
 
   (elunit-delete-suite 'sample-suite)
   ;; should just have default suite now
-  (assert-equal 3 (length elunit-suites)))
+  (assert-equal 3 (length elunit-suites))
+  )
 
 (deftest duplicate-suite meta-suite
   (defsuite sample-suite nil
@@ -83,7 +84,7 @@
 (deftest test-success sample-suite
   (assert-that t))
 
-(elunit-quiet "sample-suite")
+(elunit "sample-suite")
 
 ;; have to write raw assertions as suites can't run inside suites.
 ;; probably should fix this, allowing multiple *elunit* buffers, but

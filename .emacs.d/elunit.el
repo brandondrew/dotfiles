@@ -73,7 +73,6 @@
 
 ;; - allow test definitions to be nested in suites
 ;; - improve readability of failure reports
-;; - highlight test definitions as they pass/fail?
 ;; - store suites as a tree instead of a list?
 
 ;;; Code:
@@ -82,7 +81,27 @@
 (require 'compile)
 
 (defstruct test-suite name children tests setup-hooks teardown-hooks)
-(defstruct test name body file line message problem)
+(defstruct test name body file line problem)
+
+(defface elunit-pass-face
+  `((t (:background "green")))
+  "Face for passing unit tests"
+  :group 'elunit-faces)
+
+(defface elunit-fail-face
+  `((t (:background "red1")))
+  "Face for failed unit tests"
+  :group 'elunit-faces)
+
+(defface elunit-line-face
+  `((t (:background "red3")))
+  "Face for highlighting lines that cause problems"
+  :group 'elunit-faces)
+
+(defface elunit-error-face
+  `((t (:background "chocolate1")))
+  "Face for errored unit tests"
+  :group 'elunit-faces)
 
 (put 'elunit-test-failed 'error-conditions '(failure))
 
@@ -104,6 +123,10 @@
   "Reset the internal suite list."
   (interactive)
   (setq elunit-suites (list (make-test-suite :name 'default-suite))))
+
+(defun elunit-clear ()
+  "Clear overlays from buffer."
+  (interactive) (remove-overlays))
 
 ;;; Defining tests
 
@@ -133,6 +156,7 @@
 (defmacro deftest (name suite &rest body)
   "Define a test NAME in SUITE with BODY."
   (save-excursion
+    ;; TODO: Use backtrace info to get line number
     (search-backward (symbol-name name) nil t)
     (let ((line (line-number-at-pos))
           (file buffer-file-name)
@@ -178,25 +202,19 @@
 		      (concat "Run test suite (default " elunit-default-suite "): " )
 		      (mapcar (lambda (suite) (symbol-name (test-suite-name suite)))
 			      elunit-suites) nil t nil nil elunit-default-suite)))
- (setq elunit-default-suite suite)
- (setq elunit-test-count 0)
- (setq elunit-failures nil)
-
- (with-output-to-temp-buffer "*elunit*"
-   (switch-to-buffer "*elunit*")
-   (compilation-minor-mode)
-   (switch-to-buffer nil)
-
-   (princ (concat "Loaded suite: " suite "\n\n"))
-   (let ((start-time (cadr (current-time))))
-     (elunit-run-suite (elunit-get-suite (intern suite)))
-     (princ (format "\n\n%d tests with %d failures in %d seconds."
-                    elunit-test-count (length elunit-failures)
-                    (- (cadr (current-time)) start-time))))
-   (elunit-report-failures)))
+  
+ (let ((start-time (cadr (current-time))))
+   (elunit-run-suite (elunit-get-suite (intern suite)))
+   (message "%d tests with %d failures in %d seconds."
+	    elunit-test-count (length elunit-failures)
+	    (- (cadr (current-time)) start-time))))
 
 (defun elunit-run-suite (suite)
   "Run a SUITE's tests and children."
+  (setq elunit-default-suite (symbol-name (test-suite-name suite))
+	elunit-test-count 0
+	elunit-failures nil)
+
   (dolist (test (reverse (test-suite-tests suite)))
     (if (test-suite-setup-hooks suite) (apply #'funcall (test-suite-setup-hooks suite)))
     (elunit-run-test test)
@@ -211,42 +229,26 @@
       (progn
         (incf elunit-test-count)
         (funcall (test-body test))
-        (princ "."))
+	(elunit-highlight-test test 'elunit-pass-face))
     (failure
-     (elunit-failure test err "F"))
+     (elunit-failure test err 'elunit-fail-face))
     (error
-     (elunit-failure test err "E"))))
+     (elunit-failure test err 'elunit-error-face))))
 
-(defun elunit-failure (test err output)
-  "Display and store failure info.
-
-In `TEST' store error data `ERR' structure and print `OUTPUT'."
-  (princ output)
+(defun elunit-failure (test err face)
+  "Record a failing TEST and store ERR info."
   (setf (test-problem test) err)
-  ;; color overlays are GNU-only IIRC
-  (unless (featurep 'xemacs)
-    (switch-to-buffer "*elunit*")
-    (overlay-put (make-overlay (point) (- (point) 1)) 'face '(foreground-color . "red"))
-    (switch-to-buffer nil))
-  (setf (test-message test) err)
-  (push test elunit-failures))
+  (push test elunit-failures)
+  (elunit-highlight-test test face))
 
-(defun elunit-report-failures ()
-  "Summarize failures."
-  (let ((count 0))
-    (dolist (test elunit-failures)
-      (incf count)
-      (princ (format "\n\n%d) %s %s [%s:%s]
-            %s
-   Message: %s
-      Form: %s" count
-      (if (equal (car (test-problem test)) 'elunit-test-failed)
-          "Failure:" "  Error:")
-      (test-name test) (test-file test) (test-line test)
-      (elunit-test-docstring test) (pp-to-string (test-message test))
-      (pp-to-string (test-body test)))))))
-
-(add-to-list 'compilation-error-regexp-alist '("\\[\\([^\]]*\\):\\([0-9]+\\)\\]" 1 2))
+(defun elunit-highlight-test (test face)
+  (save-excursion
+    ;; (switch-to-buffer (file-name-nondirectory (test-file test)))
+    (goto-line (test-line test))
+    (beginning-of-line)
+    (let ((line-start (point)))
+      (end-of-line)
+      (overlay-put (make-overlay line-start (+ 1 (point))) 'face face))))
 
 ;;; Helper functions
 
@@ -256,16 +258,6 @@ In `TEST' store error data `ERR' structure and print `OUTPUT'."
      (switch-to-buffer "*elunit-output*")
      ,@body
      (kill-buffer "*elunit-output*")))
-
-(defun elunit-quiet (suite)
-  "Run a SUITE and display results in the minibuffer."
-  (interactive (list (completing-read
-		      (concat "Run test suite (default " elunit-default-suite "): " )
-		      (mapcar (lambda (suite) (symbol-name (test-suite-name suite)))
-			      elunit-suites) nil t nil nil elunit-default-suite)))
-  (save-window-excursion
-    (elunit suite))
-  (message "%d tests with %d failures" elunit-test-count (length elunit-failures)))
 
 (defun fail (&rest args)
   "Signal a test failure in a way that elunit understands.

@@ -501,7 +501,7 @@ static char *gnus-pointer[] = {
      '(erc-timestamp ((t (:inherit zenburn-green+1))))
      '(erc-underline ((t (:inherit underline))))
 
-     '(eshell-prompt ((t (:inherit zenburn-primary-1))))
+     '(eshell-prompt ((t (:foreground "DeepSkyBlue"))))
      '(eshell-ls-archive ((t (:foreground "#c3bf9f" :weight bold))))
      '(eshell-ls-backup ((t (:inherit font-lock-comment))))
      '(eshell-ls-clutter ((t (:inherit font-lock-comment))))
