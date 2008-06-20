@@ -103,7 +103,7 @@
   ;; (whitespace-mode t)
   (make-local-variable 'column-number-mode)
   (column-number-mode)
-  (hl-line-mode)
+  (if (window-system) (hl-line-mode))
   (idle-highlight))
 
 (defun untabify-buffer ()
@@ -137,6 +137,12 @@
 (defun ansi-region () (interactive)
   (ansi-color-apply-on-region (min (mark) (point))
 			      (max (mark) (point))))
+
+(defun zenburn-elunit ()
+  (interactive)
+  (set-face-attribute 'elunit-pass-face nil :background "forest green")
+  (set-face-attribute 'elunit-fail-face nil :background "dark red")
+  (set-face-attribute 'elunit-error-face nil :background "DarkOrange4"))
 
 ;;; Random stuff
 

@@ -16,3 +16,4 @@ add_webjump("wikipedia", "http://www.google.com/search?q=wikipedia+%s&btnI=I'm F
 
 url_remoting_fn = load_url_in_new_buffer;
 url_completion_use_history = true;
+can_kill_last_buffer = false;

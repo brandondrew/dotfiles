@@ -79,25 +79,12 @@
   (assert-that nil))
 
 (deftest test-error sample-suite
-  (assert nil))
+  (/ 3 0))
 
 (deftest test-success sample-suite
   (assert-that t))
 
 (elunit "sample-suite")
-
-;; have to write raw assertions as suites can't run inside suites.
-;; probably should fix this, allowing multiple *elunit* buffers, but
-;; doesn't seem worth it.
-
-(save-window-excursion
-  (delete-other-windows)
-  (elunit "sample-suite")
-  (other-window 1)
-  ;; Will signal an error if not found.
-  (search-forward "sample-suite")
-  (search-forward "Error:")
-  (search-forward "Failure:"))
 
 ;; should run a suite's tests plus a suite's children
 
@@ -106,7 +93,7 @@
 (deftest child-test child-suite
    "put some crap in the elunit buffer"
    ;; must use princ to take advantage of with-output-to-temp-buffer
-   (princ "some crap"))
+   (assert-that nil))
 
 ;;; Moved to mode-unit.
 
@@ -119,3 +106,5 @@
 ;; (save-window-excursion
 ;;   (elunit "meta-suite")
 ;;   (assert-in-buffer ".." "*elunit*"))
+(elunit-get-test (intern ms1)
+		 (intern ms2))

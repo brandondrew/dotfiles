@@ -81,27 +81,19 @@
 (require 'compile)
 
 (defstruct test-suite name children tests setup-hooks teardown-hooks)
-(defstruct test name body file line problem)
+(defstruct test name body file line problem message)
 
 (defface elunit-pass-face
   `((t (:background "green")))
-  "Face for passing unit tests"
-  :group 'elunit-faces)
+  "Face for passing unit tests" :group 'elunit-faces)
 
 (defface elunit-fail-face
   `((t (:background "red1")))
-  "Face for failed unit tests"
-  :group 'elunit-faces)
-
-(defface elunit-line-face
-  `((t (:background "red3")))
-  "Face for highlighting lines that cause problems"
-  :group 'elunit-faces)
+  "Face for failed unit tests" :group 'elunit-faces)
 
 (defface elunit-error-face
   `((t (:background "chocolate1")))
-  "Face for errored unit tests"
-  :group 'elunit-faces)
+  "Face for errored unit tests" :group 'elunit-faces)
 
 (put 'elunit-test-failed 'error-conditions '(failure))
 
@@ -157,7 +149,7 @@
   "Define a test NAME in SUITE with BODY."
   (save-excursion
     ;; TODO: Use backtrace info to get line number
-    (search-backward (symbol-name name) nil t)
+    (search-backward (concat "deftest " (symbol-name name)) nil t)
     (let ((line (line-number-at-pos))
           (file buffer-file-name)
           (suite-sym (gensym)))
@@ -203,11 +195,8 @@
 		      (mapcar (lambda (suite) (symbol-name (test-suite-name suite)))
 			      elunit-suites) nil t nil nil elunit-default-suite)))
   
- (let ((start-time (cadr (current-time))))
-   (elunit-run-suite (elunit-get-suite (intern suite)))
-   (message "%d tests with %d failures in %d seconds."
-	    elunit-test-count (length elunit-failures)
-	    (- (cadr (current-time)) start-time))))
+  (elunit-run-suite (elunit-get-suite (intern suite)))
+  (message "%d tests with %d problems." elunit-test-count (length elunit-failures)))
 
 (defun elunit-run-suite (suite)
   "Run a SUITE's tests and children."
@@ -237,7 +226,8 @@
 
 (defun elunit-failure (test err face)
   "Record a failing TEST and store ERR info."
-  (setf (test-problem test) err)
+  (setf (test-problem test) err
+	(test-message test) (or (cadr err) (format "%s" err)))
   (push test elunit-failures)
   (elunit-highlight-test test face))
 
@@ -248,7 +238,16 @@
     (beginning-of-line)
     (let ((line-start (point)))
       (end-of-line)
-      (overlay-put (make-overlay line-start (+ 1 (point))) 'face face))))
+      (overlay-put (make-overlay line-start (point)) 'face face))))
+
+(defun elunit-explain-problem ()
+  "Display a message explaining the problem with the test at point."
+  (interactive)
+  (save-excursion
+    (search-backward-regexp "(deftest \\([-a-z]+\\) \\([-a-z]+\\)" nil t)
+    (if (and (match-string 1) (match-string 2))
+	(test-message (elunit-get-test (intern (match-string 1))
+				       (intern (match-string 2)))))))
 
 ;;; Helper functions
 
@@ -261,7 +260,6 @@
 
 (defun fail (&rest args)
   "Signal a test failure in a way that elunit understands.
-
 Takes the same ARGS as `error'."
     (signal 'elunit-test-failed (list (apply 'format args))))
 

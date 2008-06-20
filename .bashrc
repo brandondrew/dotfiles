@@ -51,7 +51,8 @@ export EDITOR=emacsclient
 if [ `/usr/bin/whoami` = "root" ] ; then
   # root has a red prompt
   export PS1="\[\033[0;31m\]\u@\h \w \$ \[\033[0m\]"
-elif [ `hostname` = "vannevar" -o `hostname` = "puyo" -o `hostname` = "pdp10" -o `hostname` = "dynabook" ] ; then
+elif [ `hostname` = "puyo" -o `hostname` = "pdp10" -o `hostname` = "dynabook" ] ; then
+  # the hosts I use on a daily basis have blue
   export PS1="\[\033[0;36m\]\u@\h \w \$ \[\033[0m\]"
 else
   # purple by default
@@ -61,9 +62,4 @@ fi
 # Source global definitions
 if [ -f /etc/bashrc ]; then
         . /etc/bashrc
-fi
-
-# eterm-color causes screen problems
-if [ $TERM = "eterm-color" ] ; then
-    TERM=xterm
 fi

@@ -23,6 +23,8 @@
 (global-set-key "\C-\M-s" 'isearch-forward)
 (global-set-key "\C-\M-r" 'isearch-backward)
 
+(global-set-key "\C-x\C-i" 'imenu)
+
 ;;; Buffer management
 
 (global-set-key (kbd "C-x M-f") 'ido-find-file-other-window)

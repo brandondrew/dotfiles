@@ -34,10 +34,8 @@
        (ansi-color-apply-on-region eshell-last-output-start
 				   eshell-last-output-end))
 
-     ;; workaround for an Emacs CVS bug:
-     (setq eshell-output-filter-functions nil)
-     
-     (add-to-list 'eshell-output-filter-functions 'eshell-handle-ansi-color)
+     (ignore-errors
+       (add-to-list 'eshell-output-filter-functions 'eshell-handle-ansi-color))
 
      (defun eshell-maybe-bol ()
        (interactive)

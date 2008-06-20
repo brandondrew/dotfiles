@@ -28,6 +28,7 @@
       comment-auto-fill-only-comments t
       save-place t
       truncate-partial-width-windows nil
+      uniquify-buffer-name-style 'forward
       indent-tabs-mode nil
       whitespace-chars '(trailing tabs lines)
       whitespace-line-column 80
@@ -121,6 +122,11 @@
   '((t (:background "yellow")))
   "A yellow face for warnings that are not quite that bad."
   :group 'my-faces)
+
+(eval-after-load 'flymake-mode
+  '(progn
+     (set-face-background 'flymake-errline "red4")
+     (set-face-background 'flymake-warnline "dark slate blue")))
 
 (eval-after-load 'diff-mode
   '(progn
