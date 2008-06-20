@@ -89,6 +89,7 @@
 (require 'project-local-variables)
 (require 'find-file-in-project)
 (require 'ffap)
+(require 'uniquify)
 (require 'ansi-color)
 (require 'recentf)
 (require 'css-mode)

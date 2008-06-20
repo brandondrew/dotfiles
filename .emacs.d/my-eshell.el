@@ -34,7 +34,8 @@
        (ansi-color-apply-on-region eshell-last-output-start
 				   eshell-last-output-end))
 
-     (add-to-list 'eshell-output-filter-functions 'eshell-handle-ansi-color)
+     (ignore-errors
+       (add-to-list 'eshell-output-filter-functions 'eshell-handle-ansi-color))
 
      (defun eshell-maybe-bol ()
        (interactive)

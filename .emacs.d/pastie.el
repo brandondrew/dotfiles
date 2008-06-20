@@ -7,6 +7,7 @@
 
 ;; Thanks to: Phil Hagelberg for fixes.
 
+;;;###autoload
 (defun pastie-region (begin end)
   "Post the current region as a new paste at pastie.caboo.se.
 Copies the URL into the kill ring."

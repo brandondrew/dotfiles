@@ -96,7 +96,7 @@
   ;; (whitespace-mode t)
   (make-local-variable 'column-number-mode)
   (column-number-mode)
-  (hl-line-mode)
+  (if (window-system) (hl-line-mode))
   (idle-highlight))
 
 (defun untabify-buffer ()
