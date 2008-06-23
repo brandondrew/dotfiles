@@ -13,7 +13,13 @@ define_key(minibuffer_keymap, kbd("/", MOD_CTRL), "fill_domain");
 
 add_webjump("hub", "http://github.com/search?q=%s");
 add_webjump("wikipedia", "http://www.google.com/search?q=wikipedia+%s&btnI=I'm Feeling Lucky");
+add_delicious_webjumps ("technomancy");
 
 url_remoting_fn = load_url_in_new_buffer;
 url_completion_use_history = true;
 can_kill_last_buffer = false;
+
+
+register_user_stylesheet( 
+    "data:text/css,"+
+        escape("#minibuffer, tree.completions, .mode-line { font-family: Terminus; }"));
