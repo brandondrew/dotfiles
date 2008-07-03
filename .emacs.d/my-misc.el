@@ -29,8 +29,9 @@
       save-place t
       truncate-partial-width-windows nil
       uniquify-buffer-name-style 'forward
-      indent-tabs-mode nil
       whitespace-chars '(trailing tabs lines)
+      whitespace-style '(tabs trailing lines space-before-tab
+                              indentation space-after-tab)
       whitespace-line-column 80
       sql-server "localhost"
       save-place-file (convert-standard-filename "~/.emacs.d/places")
@@ -54,6 +55,7 @@
 
 (put 'narrow-to-region 'disabled nil)
 (put 'downcase-region 'disabled nil)
+(set-default 'indent-tabs-mode nil)
 (defalias 'yes-or-no-p 'y-or-n-p)
 (defalias 'qrr 'query-replace-regexp)
 (random t)

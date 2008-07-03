@@ -88,9 +88,10 @@
 ;; Bindings
 ;;
 
-(define-key ruby-mode-map "\C-\M-h" 'backward-kill-word) ;; ruby-mode redefines this badly
+(define-key ruby-mode-map "\C-\M-h" 'backward-kill-word)
 (define-key ruby-mode-map (kbd "RET") 'ruby-reindent-then-newline-and-indent)
-(define-key ruby-mode-map (kbd "C-c l") (lambda () (interactive) (insert "lambda")))
+(define-key ruby-mode-map (kbd "C-c l") (lambda ()
+                                          (interactive) (insert "lambda")))
 (define-key ruby-mode-map (kbd "C-\\") 'rct-complete-symbol)
 (define-key ruby-mode-map (kbd "C-c M-t") 'ruby-test-file)
 (define-key ruby-mode-map (kbd "C-c C-M-t") 'ruby-test-one)
@@ -152,7 +153,8 @@
 (push '(".+\\.rb$" flymake-ruby-init) flymake-allowed-file-name-masks)
 (push '("Rakefile$" flymake-ruby-init) flymake-allowed-file-name-masks)
 
-(push '("^\\(.*\\):\\([0-9]+\\): \\(.*\\)$" 1 2 nil 3) flymake-err-line-patterns)
+(push '("^\\(.*\\):\\([0-9]+\\): \\(.*\\)$" 1 2 nil 3)
+      flymake-err-line-patterns)
 
 (add-hook 'ruby-mode-hook
           (lambda ()
@@ -160,5 +162,7 @@
 		(local-set-key "C-c d" 'flymake-display-err-menu-for-current-line)
 		(flymake-mode t))))
 
-(require 'my-rails)
+(ignore-errors
+  (add-to-list 'load-path "~/src/rinari")
+  (require 'rinari))
 (provide 'my-ruby)

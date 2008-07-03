@@ -10,13 +10,9 @@
 - wirble
 - flog
 - gruff
-- rubyforge
 - tattle
-- capistrano
-- daemons
 - cheat
 - hoe
-- redgreen
 - ParseTree
 - termios
 - tzinfo
@@ -28,3 +24,4 @@
 - railroad
 - twitter
 - net-mdns
+- twitter

@@ -17,4 +17,3 @@ TODO:
 - panel config
 - lists in gconf.yml to support ctrl:nocaps
 - tell mpd.conf to look in ~/music
-- dmenu-driven music control

@@ -53,7 +53,6 @@
 
 ;;; Todo:
 
-;; Try to use tramp instead of shelling out to scp (tramp-handle-copy-file)
 ;; Make htmlize convert all URLs to hyperlinks
 
 ;;; License:
@@ -126,19 +125,6 @@ You must have write-access to this directory via `scp'.")
     (ignore-errors (kill-buffer "*EShell Command Output*"))
 
     ;; Notify user and put the URL on the kill ring
-    (kill-new full-url)
-    (message "Pasted to %s (on kill ring)" full-url)))
-
-(defun scpaste-window (window-name)
-  "Publish a screenshot of a window."
-  (interactive)
-  ;; TODO: use completing-read on the output of wmctrl
-  (let ((full-url (concat scpaste-http-destination "/"
-			  (url-hexify-string window-name) ".png")))
-    (message "import -window %s %s/scpaste.png" window-name scpaste-tmp-dir)
-    (eshell-command (format "import -window %s %s/scpaste.png" window-name scpaste-tmp-dir))
-    (eshell-command (format "scp %s/scpaste.png %s/%s.png" scpaste-tmp-dir full-url window-name))
-
     (kill-new full-url)
     (message "Pasted to %s (on kill ring)" full-url)))
 

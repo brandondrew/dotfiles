@@ -17,23 +17,11 @@
   (switch-to-buffer (url-retrieve-synchronously url))
   (rename-buffer url t)
   (funcall (intern
-	    (completing-read "Major mode: "
-			     (mapcar (lambda (x)
-				       (list (symbol-name x)))
-				     (apropos-internal "-mode$"
-						       'commandp))))))
-
-;;;   (eval					;set major mode
-;;;    (read
-;;;     (concat
-;;;      "("
-;;;      (completing-read "Major mode: "
-;;;                       (mapcar (lambda
-;;;                                 (x)
-;;;                                 (list (symbol-name x)))
-;;;                               (apropos-internal "-mode$"
-;;;                                                 'commandp))
-;;;                       nil t) ")"))))
+            (completing-read "Major mode: "
+                             (mapcar (lambda (x)
+                                       (list (symbol-name x)))
+                                     (apropos-internal "-mode$"
+                                                       'commandp))))))
 
 (defun map-coords (lat lng)
   "Show a Yahoo map marked with the point LAT by LNG."
@@ -100,7 +88,9 @@
 (defun my-coding-hook ()
   "Enable things I consider convenient across all coding buffers."
   ;; (indent-buffer)
-  ;; (whitespace-mode t)
+  ;; (delete-trailing-whitespace)
+  ;; (untabify-buffer)
+  (whitespace-mode t)
   (make-local-variable 'column-number-mode)
   (column-number-mode)
   (if (window-system) (hl-line-mode))
@@ -126,9 +116,9 @@
 (defun pretty-lambdas ()
   (font-lock-add-keywords
    nil `(("(?\\(lambda\\>\\)"
-	  (0 (progn (compose-region (match-beginning 1) (match-end 1)
-				    ,(make-char 'greek-iso8859-7 107))
-		    nil))))))
+          (0 (progn (compose-region (match-beginning 1) (match-end 1)
+                                    ,(make-char 'greek-iso8859-7 107))
+                    nil))))))
 
 (defun terminus () (interactive) (set-default-font "-xos4-terminus-medium-r-normal--14-140-72-72-c-80-iso8859-1"))
 (defun inconsolata () (interactive) (set-default-font "Inconsolata-12"))
@@ -136,7 +126,7 @@
 
 (defun ansi-region () (interactive)
   (ansi-color-apply-on-region (min (mark) (point))
-			      (max (mark) (point))))
+                              (max (mark) (point))))
 
 (defun zenburn-elunit ()
   (interactive)
@@ -156,8 +146,9 @@
 
 (defun my-generate-rails-tags ()
   (interactive)
-  (shell-command (format "find %s -name *rb | xargs ctags-exuberant -a -e -f %s/TAGS --exclude=vendor --exclude=public --exclude=log --exclude=db"
-			 (rails-root) (rails-root))))
+  (shell-command (format "find %s | egrep \"rb$\" | xargs ctags-exuberant -a -e -f %s/TAGS --exclude=vendor --exclude=public --exclude=log --exclude=db"
+                         (rails-root) (rails-root)))
+  (visit-tags-table (concat (rails-root) "/TAGS")))
 
 (defun my-generate-ruby-tags ()
   (interactive)

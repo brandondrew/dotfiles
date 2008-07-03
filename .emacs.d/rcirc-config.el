@@ -8,17 +8,14 @@
 (setq rcirc-startup-channels '("#emacs" "#seattle.rb"))
 
 (setq rcirc-fill-column 72)
-(add-hook 'rcirc-mode-hook (lambda () (rcirc-track-minor-mode 1)))
 
 ;; Turn on spell checking.
 (add-hook 'rcirc-mode-hook (lambda ()
+                             (set (make-local-variable 'scroll-conservatively)
+                                  8192)
+                             (rcirc-track-minor-mode 1)
+                             (rcirc-omit-mode)
                              (flyspell-mode 1)))
-
-;; Keep input line at bottom.
-(add-hook 'rcirc-mode-hook
-          (lambda ()
-            (set (make-local-variable 'scroll-conservatively)
-                 8192)))
 
 (setq rcirc-default-nick "technomancy")
 (setq rcirc-server-alist '(("irc.freenode.net" "#emacs" "#seattle.rb")))

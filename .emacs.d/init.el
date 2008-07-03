@@ -149,6 +149,7 @@
 ;; M-| replace region with shell output
 ;; M-x thumbs
 ;; M-x follow-mode
+;; C-u C-SPC jump to mark ring
 
 ;;; Custom bindings
 ;; C-c \ align-regexp
@@ -198,7 +199,6 @@
 
 ;;; Eshell
 ;; piping: ifconfig > #<buffer interfaces>
-;; sudo: cd/sudo::
 
 ;; Well, we already have `C-x r w R' (window-configuration-to-register)
 ;; and `C-x r f R' (frame-configuration-to-register) for saving window
@@ -210,10 +210,14 @@
 ;;; TODO:
 ;;;
 
-;; Make nxhtml-mode apply ruby-mode to chunks on first load
+;; nxhtml-mode
+;; - set up launchpad
+;; - load into ELPA
+;; - bugfix: apply ruby-mode to chunks on first load
+
+;; finish documenting ruby-mode.el
 ;; follow Stefan's advice wrt filesets in log-view
 ;; submit patched rcirc completion
-;; scpaste: use tramp functions, finish scpaste-window
 ;; submit test runner using compile to inf-ruby.el
 
 ;; unify statuses in twitter and jabber
@@ -222,6 +226,8 @@
 ;; - move issue db to ~/.bugs; allow it to be autoconfigured
 
 ;; Make my face customizations stick around with other color themes.
+
+;; Look into zeroconf-chat over dbus
 
 ;;; Minor
 

@@ -55,6 +55,7 @@
           (from "agelberg" - "Alisha" "family")
 
 	  (any "David Morton" "xpoint")
+	  (any "Edward Volz" "xpoint")
 	  (any "John Gaitan" "xpoint")
 	  (any "crosspoint" "xpoint")
           (any ".*hackelford.*" "friends")
