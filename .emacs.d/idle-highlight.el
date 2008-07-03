@@ -51,6 +51,7 @@
     (when idle-highlight-last-word
       (unhighlight-regexp (concat "\\<" (regexp-quote idle-highlight-last-word) "\\>")))
     (when (and idle-highlight-timer target target-symbol (not (in-string-p)))
+      ;; TODO: check for faces we like with describe-text-properties
       (highlight-regexp (concat "\\<" (regexp-quote target) "\\>") 'region)
       (setq idle-highlight-last-word target))))
 

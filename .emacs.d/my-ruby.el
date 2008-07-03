@@ -41,14 +41,14 @@
 ;;;###autoload
 (defun rake (task)
   (interactive (list (completing-read "Rake (default: default): "
-				      (pcmpl-rake-tasks))))
+                                      (pcmpl-rake-tasks))))
   (shell-command-to-string (concat "rake " (if (= 0 (length task)) "default" task))))
 
 ;;;###autoload
 (defun rdoc-browse-gems (gem)
   (interactive "MGem: ")
   (if (equal (shell-command-to-string "ps awx | grep \"gem [s]erver\"")
-	     "")
+             "")
       (shell-command "gem server &"))
   (w3m-browse-url "http://localhost:8808")
   (ignore-errors
@@ -58,7 +58,7 @@
   "Test the current ruby test (must be runable via ruby <bunffer> --name <test>)."
   (interactive)
   (let* ((funname (which-function))
-	 (fn (and (string-match "#\\(.*\\)" funname) (match-string 1 funname))))
+         (fn (and (string-match "#\\(.*\\)" funname) (match-string 1 funname))))
     (compile (concat "ruby " buffer-file-name " --name " fn))))
 
 (defun ruby-test-file ()
@@ -72,15 +72,15 @@
 ;; find-file-at-point help
 
 (defun ruby-module-path (module)
-    (shell-command-to-string 
-     (concat 
-      "ruby -e " 
-      "\"ret='()';$LOAD_PATH.each{|p| " 
-      "x=p+'/'+ARGV[0].gsub('.rb', '')+'.rb';" 
-      "ret=File.expand_path(x)" 
-      "if(File.exist?(x))};printf ret\" " 
+    (shell-command-to-string
+     (concat
+      "ruby -e "
+      "\"ret='()';$LOAD_PATH.each{|p| "
+      "x=p+'/'+ARGV[0].gsub('.rb', '')+'.rb';"
+      "ret=File.expand_path(x)"
+      "if(File.exist?(x))};printf ret\" "
       module)))
- 
+
 (eval-after-load "ffap"
   '(push '(ruby-mode . ruby-module-path) ffap-alist))
 
@@ -122,8 +122,8 @@
 (add-hook 'ruby-mode-hook
           (lambda () (inf-ruby-keys)))
 (add-hook 'inferior-ruby-mode-hook
-	  (lambda () (toggle-truncate-lines nil)
-	    (font-lock-mode -1)))
+          (lambda () (toggle-truncate-lines nil)
+            (font-lock-mode -1)))
 
 (add-hook 'ruby-mode-hook (lambda () (ruby-electric-mode t)))
 (add-hook 'ruby-mode-hook 'my-coding-hook)
@@ -143,10 +143,10 @@
 ;; Invoke ruby with '-c' to get syntax checking
 (defun flymake-ruby-init ()
   (let* ((temp-file (flymake-init-create-temp-buffer-copy
-		     'flymake-create-temp-inplace))
-	 (local-file (file-relative-name
-		      temp-file
-		      (file-name-directory buffer-file-name))))
+                     'flymake-create-temp-inplace))
+         (local-file (file-relative-name
+                      temp-file
+                      (file-name-directory buffer-file-name))))
     (list "ruby" (list "-c" local-file))))
 
 (push '(".+\\.rb$" flymake-ruby-init) flymake-allowed-file-name-masks)
@@ -154,7 +154,11 @@
 
 (push '("^\\(.*\\):\\([0-9]+\\): \\(.*\\)$" 1 2 nil 3) flymake-err-line-patterns)
 
-(add-hook 'ruby-mode-hook 'flymake-mode)
+(add-hook 'ruby-mode-hook
+          (lambda ()
+	    (when (and buffer-file-name (file-writable-p buffer-file-name))
+		(local-set-key "C-c d" 'flymake-display-err-menu-for-current-line)
+		(flymake-mode t))))
 
 (require 'my-rails)
 (provide 'my-ruby)

@@ -95,11 +95,15 @@
 (require 'css-mode)
 (require 'idle-highlight)
 
-(eval-after-load 'vc
+(eval-after-load 'vc-annotate
   '(progn
      (require 'log-view)
      (define-key log-view-mode-map (kbd "RET") 'log-view-find-revision)
      (define-key vc-annotate-mode-map (kbd "RET") 'vc-annotate-find-revision-at-line)))
+
+(ignore-errors
+  (load "elpa/package.el")
+  (package-initialize))
 
 ;;
 ;; My support files and configurations
@@ -208,12 +212,10 @@
 
 ;; Make nxhtml-mode apply ruby-mode to chunks on first load
 ;; follow Stefan's advice wrt filesets in log-view
-;; fix twittering-mode bugs mentioned in file
 ;; submit patched rcirc completion
 ;; scpaste: use tramp functions, finish scpaste-window
 ;; submit test runner using compile to inf-ruby.el
 
-;; fix whitespace-mode config to not be horrible
 ;; unify statuses in twitter and jabber
 
 ;; start using ditz
@@ -223,7 +225,6 @@
 
 ;;; Minor
 
-;; make column-number-mode only active in coding buffers
 ;; defadvice find-file-at-point to look for line numbers (zss setup-aliases does this)
 ;; fix ruby-get-old-input to not care about what the prompt looks like
 
@@ -236,14 +237,3 @@
 ;; http://cedet.cvs.sourceforge.net/cedet/cedet/contrib/
 
 ;; make an emacs peepcode
-
-
-;;; This was installed by package-install.el.
-;;; This provides support for the package system and
-;;; interfacing with ELPA, the package archive.
-;;; Move this code earlier if you want to reference
-;;; packages in your .emacs.
-(when
-    (load
-     (expand-file-name "~/.emacs.d/elpa/package.el"))
-  (package-initialize))

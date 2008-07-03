@@ -39,6 +39,8 @@
 - libfaad2-0
 - libgnome2-ruby
 - libnotify-bin
+- liboft0
+- liboft-dev
 - libopenssl-ruby1.8
 - libpurple-bin
 - libquicktime1

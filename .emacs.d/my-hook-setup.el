@@ -20,5 +20,12 @@
 	    (unless (string-match "question" oddmuse-post)
 	      (setq oddmuse-post (concat "uihnscuskc=1;" oddmuse-post)))))
 
+(eval-after-load 'jabber
+  '(progn
+     (add-hook 'jabber-post-disconnect-hook
+	       (lambda () (kill-buffer "*-jabber-*")
+		 (kill-buffer " *-jabber-process-*")))
+
+     (add-hook 'jabber-post-connect-hook (lambda () (switch-to-buffer "*-jabber-*")))))
 
 (provide 'my-hook-setup)
