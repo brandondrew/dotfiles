@@ -1,0 +1,6 @@
+---
+:gem: --no-rdoc
+:sources:
+- http://gems.rubyforge.org
+- http://gems.github.com
+:benchmark: false
