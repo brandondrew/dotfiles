@@ -82,16 +82,24 @@
 (elunit-clear-suites) ;; so default-suite is a struct of the same definition
 
 (defmacro* mode-unit-suite (suite-name suite-ancestor file mode
-				       &key setup-hooks teardown-hooks)
+                                       &key setup-hooks teardown-hooks)
   "Create a test suite with extra mode-unit hooks."
   `(let ((suite (defsuite ,suite-name ,suite-ancestor
-		  :setup-hooks (cons (lambda () (find-file (test-suite-file suite))
-				       (funcall (test-suite-mode suite)))
-				     ,setup-hooks)
-		  :teardown-hooks (cons (lambda ()
-					  (kill-buffer nil)) ,teardown-hooks))))
+                  :setup-hooks (cons (lambda ()
+                                       (find-file (test-suite-file suite))
+                                       (funcall (test-suite-mode suite)))
+                                     ,setup-hooks)
+                  :teardown-hooks (cons (lambda ()
+                                          (kill-buffer nil)) ,teardown-hooks))))
      (setf (test-suite-file suite) ,file)
      (setf (test-suite-mode suite) ',mode)))
+
+(defmacro with-test-buffer (&rest body)
+  "Execute BODY in a test buffer named `*mode-unit-output*'."
+  `(save-excursion
+     (switch-to-buffer "*mode-unit-output*")
+     ,@body
+     (kill-buffer "*mode-unit-output*")))
 
 ;;; Buffer-specific assertions
 
@@ -109,10 +117,10 @@
   (jit-lock-fontify-now)
   (unless (equal face (get-text-property (or point (point)) 'face))
     (fail "Text at \"%s\" expected to be displayed with face %s, but was %s."
-	  (symbol-name (symbol-at-point))
-	  face
-	  (get-text-property (or point (point)) 'face))))
-	  
+          (symbol-name (symbol-at-point))
+          face
+          (get-text-property (or point (point)) 'face))))
+
 (defun assert-overlay (pos)
   "Fails if overlay is not present at POS."
   (unless (overlays-at pos)
@@ -130,23 +138,23 @@
     (dolist (target targets)
       (beginning-of-buffer)
       (while (search-forward-regexp target nil t)
-	(backward-char)
-	(assert-face-at-point face)))))
+        (backward-char)
+        (assert-face-at-point face)))))
 
 (defun assert-correct-indentation (filename)
   "Fails if the indenting rules change indentation of the contents of FILENAME."
   (save-excursion
     (find-file filename)
     (let ((buffer-original-indentation (buffer-string))
-	  (kill-buffer-query-functions nil))
+          (kill-buffer-query-functions nil))
       (indent-region (point-min) (point-max))
       (let ((buffer-new-indentation (buffer-string)))
-	(kill-buffer nil)
-	(unless (equal buffer-original-indentation buffer-new-indentation)
-	  (fail "Indentation incorrect for %s" filename))))))
+        (kill-buffer nil)
+        (unless (equal buffer-original-indentation buffer-new-indentation)
+          (fail "Indentation incorrect for %s" filename))))))
 
 (font-lock-add-keywords 'emacs-lisp-mode
-			'(("mode-unit-suite" . 'font-lock-keyword-face)))
+                        '(("mode-unit-suite" . 'font-lock-keyword-face)))
 
 (provide 'mode-unit)
 ;;; mode-unit.el ends here

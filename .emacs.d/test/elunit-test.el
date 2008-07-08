@@ -3,7 +3,7 @@
 (add-hook (make-local-variable 'after-save-hook)
           (lambda () (elunit "meta-suite")))
 
-(elunit-clear-suites)
+(elunit-clear)
 
 ;; Meta suite
 
@@ -28,15 +28,9 @@
     :setup-hooks (lambda () (message "setting up test"))
     :teardown-hooks (lambda () (message "done with test")))
 
-  (assert-that (elunit-get-suite 'sample-suite))
-  (assert-that (test-suite-setup-hooks (elunit-get-suite 'sample-suite)))
-  (assert-that (test-suite-teardown-hooks (elunit-get-suite 'sample-suite)))
-  (assert-equal 4 (length elunit-suites))
-
-  (elunit-delete-suite 'sample-suite)
-  ;; should just have default suite now
-  (assert-equal 3 (length elunit-suites))
-  )
+  (assert-that sample-suite)
+  (assert-that (test-suite-setup-hooks sample-suite))
+  (assert-that (test-suite-teardown-hooks sample-suite)))
 
 (deftest duplicate-suite meta-suite
   (defsuite sample-suite nil
@@ -48,11 +42,11 @@
 
                       ;; make sure it really got replaced.
                       (assert-nil (test-suite-setup-hooks
-                                    (elunit-get-suite 'sample-suite)))))
+                                    sample-suite))))
 
 (deftest duplicate-test meta-suite
   (defsuite sample-suite nil)
-  (assert-changed (length (test-suite-tests (elunit-get-suite 'sample-suite)))
+  (assert-changed (length (test-suite-tests sample-suite))
                   (deftest empty-test sample-suite
                     (assert-that t))))
 
@@ -60,18 +54,18 @@
   (defsuite sample-suite nil)
   (deftest empty-test sample-suite)
   ;; should not define twice
-  (assert-not-changed (length (test-suite-tests (elunit-get-suite 'sample-suite)))
+  (assert-not-changed (length (test-suite-tests sample-suite))
                       (deftest empty-test sample-suite))
 
-    ;; should store file and line number in test
+  ;; should store file and line number in test
   (assert-equal buffer-file-name
-                (test-file (elunit-get-test 'empty-test 'sample-suite)))
+                (test-file (elunit-get-test 'empty-test sample-suite)))
 
-  (let ((test-count (length (test-suite-tests (elunit-get-suite 'sample-suite)))))
+  (let ((test-count (length (test-suite-tests sample-suite))))
     ;; should delete test
-    (elunit-delete-test 'empty-test 'sample-suite)
+    (elunit-delete-test 'empty-test sample-suite)
     (assert-equal (- test-count 1)
-                  (length (test-suite-tests (elunit-get-suite 'sample-suite))))))
+                  (length (test-suite-tests sample-suite)))))
 
 
 (defsuite sample-suite nil)
@@ -85,7 +79,7 @@
 (deftest test-success sample-suite
   (assert-that t))
 
-(elunit "sample-suite")
+;; (elunit "sample-suite")
 
 ;; should run a suite's tests plus a suite's children
 
