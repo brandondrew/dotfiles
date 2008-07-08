@@ -71,14 +71,14 @@
 
 ;; TODO:
 
-;; - allow test definitions to be nested in suites
 ;; - improve readability of failure reports
+;; - allow test definitions to be nested in suites?
 ;; - store suites as a tree instead of a list?
+;; - refer to suites as values instead of looking up by symbol.
 
 ;;; Code:
 
 (require 'cl)
-(require 'compile)
 
 (defstruct test-suite name children tests setup-hooks teardown-hooks)
 (defstruct test name body file line problem message)
@@ -109,12 +109,7 @@
   "A list of tests that have failed.")
 
 (defvar elunit-done-running-hook nil
-  "Runs when the tests are finished; passed a total test count and a failure count.")
-
-(defun elunit-clear-suites ()
-  "Reset the internal suite list."
-  (interactive)
-  (setq elunit-suites (list (make-test-suite :name 'default-suite))))
+  "Runs when the tests are finished; passed a test count and a failure count.")
 
 (defun elunit-clear ()
   "Clear overlays from buffer."
@@ -125,7 +120,8 @@
 (defmacro* defsuite (suite-name suite-ancestor &key setup-hooks teardown-hooks)
   "Define a suite, which may be hierarchical."
   `(let ((suite (make-test-suite :name ',suite-name
-                                 :setup-hooks ,setup-hooks :teardown-hooks ,teardown-hooks)))
+                                 :setup-hooks ,setup-hooks
+                                 :teardown-hooks ,teardown-hooks)))
      (elunit-delete-suite ',suite-name)
      (if ',suite-ancestor
          (push suite (test-suite-children (elunit-get-suite ',suite-ancestor))))
@@ -191,26 +187,33 @@
 (defun elunit (suite)
   "Ask for a single SUITE, run all its tests, and display the results."
   (interactive (list (completing-read
-		      (concat "Run test suite (default " elunit-default-suite "): " )
-		      (mapcar (lambda (suite) (symbol-name (test-suite-name suite)))
-			      elunit-suites) nil t nil nil elunit-default-suite)))
-  
+                      (concat "Run test suite (default " elunit-default-suite
+                              "): " )
+                      (mapcar (lambda (suite)
+                                (symbol-name (test-suite-name suite)))
+                              elunit-suites)
+                      nil t nil nil elunit-default-suite)))
+
   (elunit-run-suite (elunit-get-suite (intern suite)))
-  (message "%d tests with %d problems." elunit-test-count (length elunit-failures)))
+  (message "%d tests with %d problems."
+           elunit-test-count (length elunit-failures)))
 
 (defun elunit-run-suite (suite)
   "Run a SUITE's tests and children."
   (setq elunit-default-suite (symbol-name (test-suite-name suite))
-	elunit-test-count 0
-	elunit-failures nil)
+        elunit-test-count 0
+        elunit-failures nil)
 
   (dolist (test (reverse (test-suite-tests suite)))
-    (if (test-suite-setup-hooks suite) (apply #'funcall (test-suite-setup-hooks suite)))
+    (if (test-suite-setup-hooks suite)
+        (apply #'funcall (test-suite-setup-hooks suite)))
     (elunit-run-test test)
-    (if (test-suite-teardown-hooks suite) (apply #'funcall (test-suite-teardown-hooks suite))))
+    (if (test-suite-teardown-hooks suite)
+        (apply #'funcall (test-suite-teardown-hooks suite))))
   (dolist (child-suite (test-suite-children suite))
     (elunit-run-suite child-suite))
-  (run-hook-with-args 'elunit-done-running-hook elunit-test-count (length elunit-failures)))
+  (run-hook-with-args 'elunit-done-running-hook
+                      elunit-test-count (length elunit-failures)))
 
 (defun elunit-run-test (test)
   "Run a single `TEST'."
@@ -218,7 +221,7 @@
       (progn
         (incf elunit-test-count)
         (funcall (test-body test))
-	(elunit-highlight-test test 'elunit-pass-face))
+        (elunit-highlight-test test 'elunit-pass-face))
     (failure
      (elunit-failure test err 'elunit-fail-face))
     (error
@@ -227,7 +230,7 @@
 (defun elunit-failure (test err face)
   "Record a failing TEST and store ERR info."
   (setf (test-problem test) err
-	(test-message test) (or (cadr err) (format "%s" err)))
+        (test-message test) (or (cadr err) (format "%s" err)))
   (push test elunit-failures)
   (elunit-highlight-test test face))
 
@@ -244,10 +247,11 @@
   "Display a message explaining the problem with the test at point."
   (interactive)
   (save-excursion
+    (end-of-line)
     (search-backward-regexp "(deftest \\([-a-z]+\\) \\([-a-z]+\\)" nil t)
     (if (and (match-string 1) (match-string 2))
-	(test-message (elunit-get-test (intern (match-string 1))
-				       (intern (match-string 2)))))))
+        (message (test-message (elunit-get-test (intern (match-string 1))
+                                                (intern (match-string 2))))))))
 
 ;;; Helper functions
 
@@ -264,10 +268,10 @@ Takes the same ARGS as `error'."
     (signal 'elunit-test-failed (list (apply 'format args))))
 
 (font-lock-add-keywords 'emacs-lisp-mode
-			;; Make elunit tests look like defuns.
-			'(("defsuite"   . 'font-lock-keyword-face)
-			  ("deftest"    . 'font-lock-keyword-face)
-			  ("\\<fail\\>" . 'font-lock-warning-face)))
+                        ;; Make elunit tests look like defuns.
+                        '(("defsuite"   . 'font-lock-keyword-face)
+                          ("deftest"    . 'font-lock-keyword-face)
+                          ("\\<fail\\>" . 'font-lock-warning-face)))
 
 ;;; General assertions
 
@@ -308,23 +312,23 @@ Takes the same ARGS as `error'."
   "Fails if BODY does not signal an error."
   `(condition-case err
        (progn
-	 ,@body
-	 (fail "%s expected to signal an error" body))
+         ,@body
+         (fail "%s expected to signal an error" body))
      (error t)))
 
 (defmacro assert-changed (form &rest body)
   "Fails if FORM does not return a different value after BODY is evaled."
   `(assert-not-equal (eval ,form)
-		     (progn
-		       ,@body
-		       (eval ,form))))
+                     (progn
+                       ,@body
+                       (eval ,form))))
 
 (defmacro assert-not-changed (form &rest body)
   "Fails if FORM returns a different value after BODY is evaled."
   `(assert-equal (eval ,form)
-		     (progn
-		       ,@body
-		       (eval ,form))))
+                     (progn
+                       ,@body
+                       (eval ,form))))
 
 (provide 'elunit)
 

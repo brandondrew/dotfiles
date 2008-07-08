@@ -82,6 +82,8 @@
 (global-set-key (kbd "C-c g") (lambda () (interactive) (switch-or-start 'gnus "*Group*")))
 (global-set-key (kbd "C-c t") (lambda () (interactive) (switch-or-start 'twittering-mode "*twittering*")))
 (global-set-key (kbd "C-c J") 'jabber-send-presence)
+(global-set-key (kbd "C-c e") 'elunit)
+(global-set-key (kbd "C-c x") 'elunit-explain-problem)
 
 (define-key isearch-mode-map (kbd "C-o") ;; occur easily inside isearch
   (lambda ()
