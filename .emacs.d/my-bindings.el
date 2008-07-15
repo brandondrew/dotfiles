@@ -13,6 +13,9 @@
 (global-set-key (kbd "C-c l") (lambda () (interactive) (insert "lambda")))
 (global-set-key (kbd "C-x \\") 'align-regexp)
 (global-set-key (kbd "M-/") 'hippie-expand)
+(global-set-key (kbd "C-c n") (lambda () (interactive)
+                                (delete-trailing-whitespace)
+                                (untabify-buffer)))
 
 ;;; Navigation
 
@@ -34,6 +37,8 @@
 (global-set-key "\C-c\C-t" 'toggle-buffer)
 (global-set-key (kbd "C-x C-M-f") 'find-file-in-project)
 (global-set-key (kbd "C-c f") 'recentf-ido-find-file)
+(global-set-key (kbd "C-x C-p") 'find-file-at-point)
+(global-set-key (kbd "C-c b") 'bury-buffer)
 
 ;;; Window management
 
@@ -65,6 +70,7 @@
 (global-set-key (kbd "C-x w") 'w3m)
 (global-set-key "\C-xh" 'view-url)
 (global-set-key "\C-cT" 'twittering-update-status-interactive)
+(global-set-key (kbd "C-c o") 'google-region)
 
 ;;; Utility
 

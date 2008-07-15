@@ -63,3 +63,7 @@ fi
 if [ -f /etc/bashrc ]; then
         . /etc/bashrc
 fi
+
+if [ -f $HOME/.java_profile ]; then
+    source $HOME/.java_profile
+fi

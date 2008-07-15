@@ -9,8 +9,8 @@ require 'fileutils'
 begin
   FileUtils.cd(File.expand_path("~/.watcher"))
 rescue
-  puts "You need ~/.watcher/config to contain a sender jabber ID, password, and recipient
-jabber ID on their own lines."
+  puts "You need ~/.watcher/config to contain a sender jabber ID, password, and
+recipient jabber ID on their own lines."
   exit 1
 end
 
@@ -23,7 +23,7 @@ unless File.exist?(hash)
   include Jabber
   jid, password, to = File.read('config').split("\n")
   message = "#{ARGV.first} changed to #{content[0 .. 200]} ..."
-  
+
   jid = JID::new("#{jid}/#{`hostname`.chomp}-watcher")
   client = Client::new(jid)
   client.connect

@@ -44,6 +44,7 @@
 (winner-mode t)
 (recentf-mode 1)
 (show-paren-mode 1)
+(mouse-avoidance-mode 'exile)
 
 (when (> emacs-major-version 21)
   (ido-mode t)

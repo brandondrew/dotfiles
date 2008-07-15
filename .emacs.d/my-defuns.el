@@ -23,6 +23,12 @@
                                      (apropos-internal "-mode$"
                                                        'commandp))))))
 
+(defun google-region (&optional flags)
+  "Google the selected region."
+  (interactive)
+  (browse-url (concat "http://www.google.com/search?ie=utf-8&oe=utf-8&q="
+                      (buffer-substring (region-beginning) (region-end)))))
+
 (defun map-coords (lat lng)
   "Show a Yahoo map marked with the point LAT by LNG."
   (interactive "BLatitude: \nBLongitude")
@@ -72,12 +78,13 @@
         (isearch-forward regexp-p no-recursive-edit)))))
 
 (defun current-window ()
-  "Why get-buffer-window instead of buffer-window? Why isn't this defined already?"
+  "Why isn't this defined already?"
   (get-buffer-window (current-buffer)))
 
 (defun toggle-dedicated-window ()
   "Toggle the window-dedicated-p state of current window."
-  (set-window-dedicated-p (current-window) (not (window-dedicated-p (current-window)))))
+  (set-window-dedicated-p (current-window)
+                          (not (window-dedicated-p (current-window)))))
 
 (defun window-small-and-large ()
   (interactive)
@@ -92,7 +99,7 @@
   ;; (untabify-buffer)
   (whitespace-mode t)
   (make-local-variable 'column-number-mode)
-  (column-number-mode)
+  (column-number-mode t)
   (if (window-system) (hl-line-mode))
   (idle-highlight))
 
@@ -120,7 +127,9 @@
                                     ,(make-char 'greek-iso8859-7 107))
                     nil))))))
 
-(defun terminus () (interactive) (set-default-font "-xos4-terminus-medium-r-normal--14-140-72-72-c-80-iso8859-1"))
+(defun terminus () (interactive)
+  (set-default-font
+   "-xos4-terminus-medium-r-normal--14-140-72-72-c-80-iso8859-1"))
 (defun inconsolata () (interactive) (set-default-font "Inconsolata-12"))
 (defun dvsm () (interactive) (set-default-font "DejaVu Sans Mono-10"))
 
@@ -136,17 +145,25 @@
 
 ;;; Random stuff
 
+(defadvice find-file-at-point (around goto-line compile activate)
+  (let ((line (and (looking-at ".*:\\([0-9]+\\)")
+                   (string-to-number (match-string 1)))))
+    ad-do-it
+    (and line (goto-line line))))
+
 (defun my-recompile-init ()
   (interactive)
   (byte-recompile-directory (expand-file-name "~/.emacs.d") 0))
 
 (defun my-generate-elisp-tags ()
   (interactive)
-  (shell-command "find ~/.emacs.d ~/src/emacs -name \\*el | xargs etags -o ~/.emacs.d/TAGS"))
+  (shell-command
+   "find ~/.emacs.d ~/src/emacs -name \\*el | xargs etags -o ~/.emacs.d/TAGS"))
 
 (defun my-generate-rails-tags ()
   (interactive)
-  (shell-command (format "find %s | egrep \"rb$\" | xargs ctags-exuberant -a -e -f %s/TAGS --exclude=vendor --exclude=public --exclude=log --exclude=db"
+  (shell-command
+   (format "find %s | egrep \"rb$\" | xargs ctags-exuberant -a -e -f %s/TAGS --exclude=vendor --exclude=public --exclude=log --exclude=db"
                          (rails-root) (rails-root)))
   (visit-tags-table (concat (rails-root) "/TAGS")))
 
@@ -165,8 +182,8 @@
   "Insert a lorem ipsum."
   (interactive)
   (insert "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do "
-          "eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad "
-          "minim veniam, quis nostrud exercitation ullamco laboris nisi ut "
+          "eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim"
+          "ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut "
           "aliquip ex ea commodo consequat. Duis aute irure dolor in "
           "reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla "
           "pariatur. Excepteur sint occaecat cupidatat non proident, sunt in "

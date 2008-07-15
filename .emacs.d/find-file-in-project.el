@@ -86,24 +86,24 @@ Files with duplicate filenames are suffixed with the name of the
 directory they are found in so that they are unique."
   (let ((file-alist nil))
     (mapcar (lambda (file)
-	      (let ((file-cons (cons (file-name-nondirectory file)
-				     (expand-file-name file))))
-		(when (assoc (car file-cons) file-alist)
-		  (ffip-uniqueify (assoc (car file-cons) file-alist))
-		  (ffip-uniqueify file-cons))
-		(add-to-list 'file-alist file-cons)
-		file-cons))
-	    (split-string (shell-command-to-string (concat "find " (or ffip-project-root
-								       (ffip-project-root))
-							   " -type f -regex \""
-							   ffip-regexp
-							   "\" " ffip-find-options))))))
+              (let ((file-cons (cons (file-name-nondirectory file)
+                                     (expand-file-name file))))
+                (when (assoc (car file-cons) file-alist)
+                  (ffip-uniqueify (assoc (car file-cons) file-alist))
+                  (ffip-uniqueify file-cons))
+                (add-to-list 'file-alist file-cons)
+                file-cons))
+            (split-string (shell-command-to-string (concat "find " (or ffip-project-root
+                                                                       (ffip-project-root))
+                                                           " -type f -regex \""
+                                                           ffip-regexp
+                                                           "\" " ffip-find-options))))))
 
 (defun ffip-uniqueify (file-cons)
   "Set the car of the argument to include the directory name plus the file name."
   (setcar file-cons
-	  (concat (car file-cons) ": "
-		  (cadr (reverse (split-string (cdr file-cons) "/"))))))
+          (concat (car file-cons) ": "
+                  (cadr (reverse (split-string (cdr file-cons) "/"))))))
 
 (defun find-file-in-project ()
   "Prompt with a completing list of all files in the project to find one.
@@ -113,11 +113,11 @@ an `.emacs-project' file. You can override this by locally
 setting the `ffip-project-root' variable."
   (interactive)
   (let* ((project-files (ffip-project-files))
-	 (file (if (functionp 'ido-completing-read)
-		   (ido-completing-read "Find file in project: "
-					(mapcar 'car project-files))
-		 (completing-read "Find file in project: "
-				  (mapcar 'car project-files)))))
+         (file (if (functionp 'ido-completing-read)
+                   (ido-completing-read "Find file in project: "
+                                        (mapcar 'car project-files))
+                 (completing-read "Find file in project: "
+                                  (mapcar 'car project-files)))))
     (find-file (cdr (assoc file project-files)))))
 
 (defun ffip-project-root (&optional dir)

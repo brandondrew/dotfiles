@@ -158,9 +158,10 @@
 
 (add-hook 'ruby-mode-hook
           (lambda ()
-	    (when (and buffer-file-name (file-writable-p buffer-file-name))
-		(local-set-key "C-c d" 'flymake-display-err-menu-for-current-line)
-		(flymake-mode t))))
+            (when (and buffer-file-name (file-writable-p buffer-file-name))
+              (local-set-key (kbd "C-c d")
+                             'flymake-display-err-menu-for-current-line)
+              (flymake-mode t))))
 
 (ignore-errors
   (add-to-list 'load-path "~/src/rinari")

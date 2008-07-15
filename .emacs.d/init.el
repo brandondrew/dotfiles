@@ -120,8 +120,8 @@
 
 (eval-after-load 'ruby-mode '(require 'my-ruby))
 (eval-after-load 'javascript-mode '(require 'my-js))
-(eval-after-load 'jabber-connect '(load "jabber-config"))
-(eval-after-load 'rcirc '(load "rcirc-config"))
+(eval-after-load 'jabber '(load "my-jabber"))
+(eval-after-load 'rcirc '(load "my-rcirc"))
 
 ;; Well, these autoloads have to get invoked somehow.
 (add-to-list 'auto-mode-alist '("\\.rb$" . ruby-mode))

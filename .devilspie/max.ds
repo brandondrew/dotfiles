@@ -1,8 +1,8 @@
 (if (or (matches (window_name) "Firefox")
         (matches (window_name) "Gran Paradiso")
         (matches (application_name) "macs")
-	(matches (application_name) "conkeror")
-	(matches (application_name) "erminal")
+        (matches (application_name) "conkeror")
+        (matches (application_name) "erminal")
         (matches (window_name) "^screen$"))
     (begin
       (undecorate)
