@@ -60,8 +60,8 @@
 ;; to refer to as samples.
 
 ;; Add the lines:
-;; (make-local-variable 'after-save-hook)
-;; (add-hook 'after-save-hook (lambda () (elunit "meta-suite")))
+;; (add-hook (make-local-variable 'after-save-hook)
+;;           (lambda () (elunit "meta-suite")))
 ;; to the file containing your tests for convenient auto-running.
 
 ;; Unit tests are meant to test single low-level functions. If you
@@ -71,14 +71,12 @@
 
 ;; TODO:
 
-;; - allow test definitions to be nested in suites
 ;; - improve readability of failure reports
-;; - store suites as a tree instead of a list?
+;; - next-problem
 
 ;;; Code:
 
 (require 'cl)
-(require 'compile)
 
 (defstruct test-suite name children tests setup-hooks teardown-hooks)
 (defstruct test name body file line problem message)
@@ -101,20 +99,12 @@
   "default-suite"
   "Choice to use for default suite to run (gets updated to last suite run).")
 
-(defvar elunit-suites (list (make-test-suite :name 'default-suite))
-  "A list of every suite that's been defined.")
-
 (defvar elunit-test-count 0)
 (defvar elunit-failures nil
   "A list of tests that have failed.")
 
 (defvar elunit-done-running-hook nil
-  "Runs when the tests are finished; passed a total test count and a failure count.")
-
-(defun elunit-clear-suites ()
-  "Reset the internal suite list."
-  (interactive)
-  (setq elunit-suites (list (make-test-suite :name 'default-suite))))
+  "Runs when the tests are finished; passed a test count and a failure count.")
 
 (defun elunit-clear ()
   "Clear overlays from buffer."
@@ -124,60 +114,44 @@
 
 (defmacro* defsuite (suite-name suite-ancestor &key setup-hooks teardown-hooks)
   "Define a suite, which may be hierarchical."
-  `(let ((suite (make-test-suite :name ',suite-name
-                                 :setup-hooks ,setup-hooks :teardown-hooks ,teardown-hooks)))
-     (elunit-delete-suite ',suite-name)
-     (if ',suite-ancestor
-         (push suite (test-suite-children (elunit-get-suite ',suite-ancestor))))
-     (add-to-list 'elunit-suites suite)
-     suite))
+  `(progn
+     (setq ,suite-name (make-test-suite :name ',suite-name
+                                      :setup-hooks ,setup-hooks
+                                      :teardown-hooks ,teardown-hooks))
+     (if ,suite-ancestor
+         (push ,suite-name (test-suite-children ,suite-ancestor)))
+     ,suite-name))
 
-(defun elunit-get-suite (suite)
-  "Fetch a SUITE by its name."
-  (if (test-suite-p suite)
-      suite
-    (find suite elunit-suites :test (lambda (suite asuite)
-                                     (equal suite (test-suite-name asuite))))))
-
-(defun elunit-delete-suite (name)
-  "Remove a suite named NAME."
-  ;; TODO: why doesn't delete work here?
-  ;; (delete (elunit-get-suite name) elunit-suites))
-  (setq elunit-suites (remove (elunit-get-suite name) elunit-suites)))
+(defsuite default-suite nil)
 
 (defmacro deftest (name suite &rest body)
   "Define a test NAME in SUITE with BODY."
-  (save-excursion
-    ;; TODO: Use backtrace info to get line number
-    (search-backward (concat "deftest " (symbol-name name)) nil t)
-    (let ((line (line-number-at-pos))
-          (file buffer-file-name)
-          (suite-sym (gensym)))
-      `(let ((,suite-sym (elunit-get-suite ',suite)))
-         ;; not a foolproof heuristic to get line number, but good enough.
-         (elunit-delete-test ',name ,suite-sym)
-         (push (make-test :name ',name :body (lambda () ,@body)
-                                       :file ,file :line ,line)
-               (test-suite-tests ,suite-sym))))))
+  `(save-excursion
+     ;; TODO: Use backtrace info to get line number
+     (search-backward (concat "deftest " (symbol-name ',name)) nil t)
+     (let ((line (line-number-at-pos))
+           (file buffer-file-name))
+       (elunit-delete-test ',name ,suite)
+       (push (make-test :name ',name :body (lambda () ,@body)
+                        :file file :line line)
+             (test-suite-tests ,suite)))))
 
 (defun elunit-get-test (name suite)
   "Return a test given a NAME and SUITE."
   (if (test-p name) name
-    (find name (test-suite-tests (elunit-get-suite suite))
+    (find name (test-suite-tests suite)
           :test (lambda (name test) (equal name (test-name test))))))
 
 (defun elunit-delete-test (name suite)
   "Delete test named NAME in SUITE."
-  (let ((suite (elunit-get-suite suite)))
-    (setf (test-suite-tests suite)
-          (delete (elunit-get-test name suite) (test-suite-tests suite)))))
+  (setf (test-suite-tests suite) ;; Why doesn't delete work here?
+        (remove (elunit-get-test name suite) (test-suite-tests suite))))
 
 (defun elunit-total-test-count (suite)
   "Return the total number of tests in a SUITE."
-  (let ((suite (elunit-get-suite suite)))
-    (if suite
-        (+ (apply #'+ (elunit-total-test-count (test-suite-children suite)))
-           (length (test-suite-tests suite))))))
+  (if suite
+      (+ (apply #'+ (elunit-total-test-count (test-suite-children suite)))
+         (length (test-suite-tests suite)))))
 
 (defun elunit-test-docstring (test)
   "Return a TEST's docstring."
@@ -190,27 +164,32 @@
 
 (defun elunit (suite)
   "Ask for a single SUITE, run all its tests, and display the results."
-  (interactive (list (completing-read
-		      (concat "Run test suite (default " elunit-default-suite "): " )
-		      (mapcar (lambda (suite) (symbol-name (test-suite-name suite)))
-			      elunit-suites) nil t nil nil elunit-default-suite)))
-  
-  (elunit-run-suite (elunit-get-suite (intern suite)))
-  (message "%d tests with %d problems." elunit-test-count (length elunit-failures)))
+  (interactive (list (read-string
+                      (concat "Run test suite (default "
+                              elunit-default-suite "): ")
+                      nil nil elunit-default-suite)))
+
+  (elunit-clear)
+  (elunit-run-suite (symbol-value (intern suite)))
+  (message "%d tests with %d problems."
+           elunit-test-count (length elunit-failures)))
 
 (defun elunit-run-suite (suite)
   "Run a SUITE's tests and children."
   (setq elunit-default-suite (symbol-name (test-suite-name suite))
-	elunit-test-count 0
-	elunit-failures nil)
+        elunit-test-count 0
+        elunit-failures nil)
 
   (dolist (test (reverse (test-suite-tests suite)))
-    (if (test-suite-setup-hooks suite) (apply #'funcall (test-suite-setup-hooks suite)))
+    (if (test-suite-setup-hooks suite)
+        (apply #'funcall (test-suite-setup-hooks suite)))
     (elunit-run-test test)
-    (if (test-suite-teardown-hooks suite) (apply #'funcall (test-suite-teardown-hooks suite))))
+    (if (test-suite-teardown-hooks suite)
+        (apply #'funcall (test-suite-teardown-hooks suite))))
   (dolist (child-suite (test-suite-children suite))
     (elunit-run-suite child-suite))
-  (run-hook-with-args 'elunit-done-running-hook elunit-test-count (length elunit-failures)))
+  (run-hook-with-args 'elunit-done-running-hook
+                      elunit-test-count (length elunit-failures)))
 
 (defun elunit-run-test (test)
   "Run a single `TEST'."
@@ -218,7 +197,7 @@
       (progn
         (incf elunit-test-count)
         (funcall (test-body test))
-	(elunit-highlight-test test 'elunit-pass-face))
+        (elunit-highlight-test test 'elunit-pass-face))
     (failure
      (elunit-failure test err 'elunit-fail-face))
     (error
@@ -227,36 +206,31 @@
 (defun elunit-failure (test err face)
   "Record a failing TEST and store ERR info."
   (setf (test-problem test) err
-	(test-message test) (or (cadr err) (format "%s" err)))
+        (test-message test) (or (cadr err) (format "%s" err)))
   (push test elunit-failures)
   (elunit-highlight-test test face))
 
 (defun elunit-highlight-test (test face)
-  (save-excursion
-    ;; (switch-to-buffer (file-name-nondirectory (test-file test)))
-    (goto-line (test-line test))
-    (beginning-of-line)
-    (let ((line-start (point)))
-      (end-of-line)
-      (overlay-put (make-overlay line-start (point)) 'face face))))
+  (save-window-excursion
+    (save-excursion
+      (find-file (test-file test))
+      (goto-line (test-line test))
+      (let ((line-start (point)))
+        (end-of-line)
+        (overlay-put (make-overlay line-start (point)) 'face face)))))
 
 (defun elunit-explain-problem ()
   "Display a message explaining the problem with the test at point."
   (interactive)
   (save-excursion
+    (beginning-of-defun) (end-of-line)
     (search-backward-regexp "(deftest \\([-a-z]+\\) \\([-a-z]+\\)" nil t)
-    (if (and (match-string 1) (match-string 2))
-	(test-message (elunit-get-test (intern (match-string 1))
-				       (intern (match-string 2)))))))
+    (when (and (match-string 1) (match-string 2))
+      (message (test-message
+                (elunit-get-test (intern (match-string 1))
+                                 (symbol-value (intern (match-string 2)))))))))
 
 ;;; Helper functions
-
-(defmacro with-test-buffer (&rest body)
-  "Execute BODY in a test buffer named `*elunit-output*'."
-  `(save-excursion
-     (switch-to-buffer "*elunit-output*")
-     ,@body
-     (kill-buffer "*elunit-output*")))
 
 (defun fail (&rest args)
   "Signal a test failure in a way that elunit understands.
@@ -264,10 +238,10 @@ Takes the same ARGS as `error'."
     (signal 'elunit-test-failed (list (apply 'format args))))
 
 (font-lock-add-keywords 'emacs-lisp-mode
-			;; Make elunit tests look like defuns.
-			'(("defsuite"   . 'font-lock-keyword-face)
-			  ("deftest"    . 'font-lock-keyword-face)
-			  ("\\<fail\\>" . 'font-lock-warning-face)))
+                        ;; Make elunit tests look like defuns.
+                        '(("defsuite"   . 'font-lock-keyword-face)
+                          ("deftest"    . 'font-lock-keyword-face)
+                          ("\\<fail\\>" . 'font-lock-warning-face)))
 
 ;;; General assertions
 
@@ -308,24 +282,22 @@ Takes the same ARGS as `error'."
   "Fails if BODY does not signal an error."
   `(condition-case err
        (progn
-	 ,@body
-	 (fail "%s expected to signal an error" body))
+         ,@body
+         (fail "%s expected to signal an error" body))
      (error t)))
 
 (defmacro assert-changed (form &rest body)
   "Fails if FORM does not return a different value after BODY is evaled."
   `(assert-not-equal (eval ,form)
-		     (progn
-		       ,@body
-		       (eval ,form))))
+                     (progn
+                       ,@body
+                       (eval ,form))))
 
 (defmacro assert-not-changed (form &rest body)
   "Fails if FORM returns a different value after BODY is evaled."
   `(assert-equal (eval ,form)
-		     (progn
-		       ,@body
-		       (eval ,form))))
+                     (progn ,@body
+                       (eval ,form))))
 
 (provide 'elunit)
-
 ;;; elunit.el ends here
