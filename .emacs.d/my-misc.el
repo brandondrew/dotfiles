@@ -65,7 +65,8 @@
       oddmuse-wikis
       '(("Technomancy" "http://dev.technomancy.us" utf-8)
         ("EmacsWiki" "http://www.emacswiki.org/cgi-bin/emacs" utf-8))
-      oddmuse-directory "~/.emacs.d/oddmuse")
+      oddmuse-directory "~/.emacs.d/oddmuse"
+      install-elisp-repository-directory "~/.emacs.d/")
 
 ;; Sorry, I *really* don't care.
 (defvar twittering-spam-regex "\\(iphone\\|wwdc\\)"

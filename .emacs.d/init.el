@@ -1,4 +1,3 @@
-
 ;;; My .emacs project
 
 ;; by Phil Hagelberg
@@ -59,11 +58,11 @@
 
 (let ((autoload-file "~/.emacs.d/loaddefs.el"))
   (if (or (not (file-exists-p autoload-file))
-	  (< (+ (car (nth 5 (file-attributes autoload-file))) 20)
-	     (car (current-time))))
+          (< (+ (car (nth 5 (file-attributes autoload-file))) 20)
+             (car (current-time))))
       (let ((generated-autoload-file autoload-file))
-	(message "Updating autoloads...")
-	(update-directory-autoloads "~/.emacs.d/")))
+        (message "Updating autoloads...")
+        (update-directory-autoloads "~/.emacs.d/")))
   (load autoload-file))
 
 (autoload 'nxhtml-mode "nxml/autostart" "" t)
@@ -99,7 +98,8 @@
   '(progn
      (require 'log-view)
      (define-key log-view-mode-map (kbd "RET") 'log-view-find-revision)
-     (define-key vc-annotate-mode-map (kbd "RET") 'vc-annotate-find-revision-at-line)))
+     (define-key vc-annotate-mode-map (kbd "RET")
+       'vc-annotate-find-revision-at-line)))
 
 (ignore-errors
   (load "elpa/package.el")
@@ -133,7 +133,7 @@
 
 (setq system-specific-config
       (concat "~/.emacs.d/"
-	      (substring (shell-command-to-string "hostname") 0 -1) ".el"))
+              (substring (shell-command-to-string "hostname") 0 -1) ".el"))
 
 (if (file-exists-p system-specific-config)
     (load system-specific-config))
@@ -188,6 +188,8 @@
 ;; G T show context in keyword search
 
 ;; list-colors-display
+
+;; Handy unicode chars: ♪ ♫ ♬ ‽ ☞
 
 ;;; VC
 ;; C-x v g - blame (V to toggle committer data)

@@ -127,7 +127,7 @@
 (defmacro deftest (name suite &rest body)
   "Define a test NAME in SUITE with BODY."
   `(save-excursion
-     ;; TODO: Use backtrace info to get line number
+     ;; TODO: Use backtrace-frame info to get line number
      (search-backward (concat "deftest " (symbol-name ',name)) nil t)
      (let ((line (line-number-at-pos))
            (file buffer-file-name))

@@ -13,6 +13,8 @@
 (global-set-key (kbd "C-c l") (lambda () (interactive) (insert "lambda")))
 (global-set-key (kbd "C-x \\") 'align-regexp)
 (global-set-key (kbd "M-/") 'hippie-expand)
+(global-set-key (kbd "C-c n") (lambda ()
+                                (delete-trailing-whitespace) (untabify-buffer)))
 
 ;;; Navigation
 

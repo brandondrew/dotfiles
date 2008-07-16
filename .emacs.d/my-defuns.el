@@ -29,6 +29,19 @@
   (w3m-browse-url (concat "http://maps.yahoo.com/maps_result?mag=12&lat="
                           lat "&lon=" lng)))
 
+(defun steersman-connect (password)
+  "Make this Emacs instance become controlled by Steersman."
+  (interactive "MPassword: ")
+  (setq steersman-password password
+        steersman-master "phil@hagelb.org"
+        jabber-server "hagelb.org"
+        jabber-username "agent"
+        jabber-password password
+        jabber-resource
+        (concat "steersman-"
+                (substring (shell-command-to-string "hostname") 0 -1)))
+  (jabber-connect))
+
 ;;; Buffer/window stuff
 
 (defun my-selective-display (column)

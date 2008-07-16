@@ -35,7 +35,7 @@
 ;; M-x idle-highlight sets an idle timer that highlights all
 ;; occurences in the buffer of the word under the point.
 
-;;; Code: 
+;;; Code:
 
 (require 'thingatpt)
 
@@ -47,7 +47,7 @@
 
 (defun idle-highlight-word-at-point ()
   (let* ((target-symbol (symbol-at-point)) ;; need to save this value to check for nil
-	 (target (symbol-name target-symbol)))
+         (target (symbol-name target-symbol)))
     (when idle-highlight-last-word
       (unhighlight-regexp (concat "\\<" (regexp-quote idle-highlight-last-word) "\\>")))
     (when (and idle-highlight-timer target target-symbol (not (in-string-p)))

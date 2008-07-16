@@ -43,8 +43,8 @@
 
 ;;   (setq steersman-password "secret"
 ;;         steersman-master "phil@hagelb.org"
-;;         jabber-server "jabber.org"
-;;         jabber-username "my-steersman"
+;;         jabber-server "hagelb.org"
+;;         jabber-username "agent"
 ;;         jabber-resource
 ;;         (concat "steersman-"
 ;;                 (substring (shell-command-to-string "hostname") 0 -1)))

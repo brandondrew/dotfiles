@@ -30,15 +30,15 @@
 ;; (set-numlock! #f or #t)
 ;; (set-scrolllock! #f or #t)
 ;; (set-capslock! #f or #t)
-;; 
+;;
 ;; Shell command key:
 ;; (xbindkey key "foo-bar-command [args]")
 ;; (xbindkey '(modifier* key) "foo-bar-command [args]")
-;; 
+;;
 ;; Scheme function key:
 ;; (xbindkey-function key function-name-or-lambda-function)
 ;; (xbindkey-function '(modifier* key) function-name-or-lambda-function)
-;; 
+;;
 ;; Other functions:
 ;; (remove-xbindkey key)
 ;; (run-command "foo-bar-command [args]")
@@ -62,6 +62,7 @@
 
 (xbindkey '(mod4 e) "emacs")
 (xbindkey '(mod4 f) "firefox")
+(xbindkey '(mod4 s) "f-spot")
 (xbindkey '(mod4 c) "~/src/conkeror/conkeror -E 'default_pref(\"conkeror.rcfile\",\"/home/phil/.conkeror.d\")'")
 (xbindkey '(mod4 d) "ruby ~/bin/dlaunch.rb")
 (xbindkey '(mod4 x) "xournal")

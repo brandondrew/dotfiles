@@ -103,3 +103,11 @@
 ;;   (assert-in-buffer ".." "*elunit*"))
 ;; (elunit-get-test (intern ms1)
 ;;               (intern ms2))
+
+(defun my-trace (n)
+  (backtrace-frame n))
+
+(defun my-trr (n)
+  (my-trace n))
+
+(my-trr 6)
