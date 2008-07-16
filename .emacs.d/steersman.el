@@ -34,7 +34,7 @@
 ;; steersman. Steersman is a library for remotely controlling an Emacs
 ;; instance.
 
-;; Inspired by Barman Brakjoller's Jabber Remote Control:
+;; Inspired by and based on Barman Brakjoller's Jabber Remote Control:
 ;; (http://sourceforge.net/forum/forum.php?thread_id=1092503&forum_id=303383)
 
 ;;; Usage:
@@ -51,9 +51,14 @@
 
 ;; Connect via M-x jabber-connect or (jabber-connect) in your init.
 
-;; Talk to it. Commands beginning with an open parentheses will be
-;; evaluated as Lisp code, commands beginning with a dollar sign will
-;; be executed in the shell. Anything else will be psychoanalyzed.
+;; Talk to it from the Jabber ID set in `steersman-master'.
+
+;; You'll first need to activate it by saying `steersman-password'.
+;; Commands beginning with an open parentheses will be evaluated as
+;; Lisp code; commands beginning with a dollar sign will be executed
+;; in the shell. Commands for which a function exists named
+;; steersman-$COMMAND will execute that function with no
+;; arguments. Anything else will be psychoanalyzed.
 
 ;;; Code:
 
@@ -63,19 +68,19 @@
 (defvar steersman-activated nil)
 (defvar steersman-password nil)
 (defvar steersman-master nil
-  "Jabber user allowed to control the agent.")
+  "Jabber user allowed to control the steersman.")
 
-(defun steersman-reply (mess)
-  (jabber-send-message steersman-master mess nil nil))
+;;; Core functions
+
+(defun steersman-reply (mess &optional to)
+  (jabber-send-message (or to steersman-master) nil mess nil))
 
 (defun steersman-message (from buffer text proposed-alert)
   "Respond to a Jabber message from the master."
   (if (equal steersman-master (jabber-jid-user from))
     (if steersman-activated
-        (cond ((equal text "sleep")
-               (steersman-reply
-                "For a time... we slumber.")
-               (setq steersman-activated nil))
+        (cond ((functionp (intern (concat "steersman-" text)))
+               (funcall (intern (concat "steersman-" text))))
               ((string-match "^(.*)" text)
                (steersman-reply (pp (eval (read text)))))
               ((string-match "^$\\(.*\\)" text)
@@ -87,9 +92,34 @@
         (setq steersman-activated t)
         (steersman-reply
          "Awakening. Your command, master?")))
-    (jabber-send-message from "Begone." nil nil)))
+    (steersman-reply "Begone." from)))
 
 (add-hook 'jabber-alert-message-hooks 'steersman-message)
+
+;;; Commands
+
+;; TODO: check the first word for commands; use the rest as args
+
+(defun steersman-update ()
+  "Get and use the latest version of steersman.el from the EmacsWiki."
+  (steersman-reply "Updating from EmacsWiki; be sure you trust the code.")
+  (let ((install-elisp-confirm-flag nil))
+    (install-elisp-from-emacswiki "steersman.el"))
+  (save-excursion (find-file (concat install-elisp-repository-directory
+                                     "steersman.el"))
+                  (eval-buffer)
+                  (kill-buffer))
+  "Updated.")
+
+(defun steersman-restart ()
+  "Launch a new Emacs instance with a steersman and kill the current one.")
+
+(defun steersman-sleep ()
+  "Deactivate steersman until `steersman-password' is spoken."
+  (steersman-reply "For a time... we slumber.")
+  (setq steersman-activated nil))
+
+;;; Psychoanalysis
 
 ;; The doctor.el library seems to suffer from fairly poor coupling; we
 ;; need to be able to use its functionality non-interactively.
