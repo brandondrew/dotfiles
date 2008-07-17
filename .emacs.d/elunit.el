@@ -61,7 +61,7 @@
 
 ;; Add the lines:
 ;; (add-hook (make-local-variable 'after-save-hook)
-;;           (lambda () (elunit "meta-suite")))
+;;           (lambda () (eval-buffer) (elunit "meta-suite")))
 ;; to the file containing your tests for convenient auto-running.
 
 ;; Unit tests are meant to test single low-level functions. If you
@@ -206,7 +206,7 @@
 (defun elunit-failure (test err face)
   "Record a failing TEST and store ERR info."
   (setf (test-problem test) err
-        (test-message test) (or (cadr err) (format "%s" err)))
+        (test-message test) (format "%s" err))
   (push test elunit-failures)
   (elunit-highlight-test test face))
 
@@ -223,9 +223,10 @@
   "Display a message explaining the problem with the test at point."
   (interactive)
   (save-excursion
-    (beginning-of-defun) (end-of-line)
-    (search-backward-regexp "(deftest \\([-a-z]+\\) \\([-a-z]+\\)" nil t)
+    (narrow-to-defun) (goto-char (point-min))
+    (search-forward-regexp "(deftest \\([-a-z]+\\) \\([-a-z]+\\)")
     (when (and (match-string 1) (match-string 2))
+      (setq match1 (match-string 1) match2 (match-string 2))
       (message (test-message
                 (elunit-get-test (intern (match-string 1))
                                  (symbol-value (intern (match-string 2)))))))))
