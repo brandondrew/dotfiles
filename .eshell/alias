@@ -1,5 +1,4 @@
 alias jake JAVA_HOME=~/bin/jdk1.6.0_02/ ~/bin/jruby-1.1.2/bin/jruby -S rake
-alias github ~/src/conkeror/conkeror \`git config -l | grep 'remote.origin.url' | sed -En 's/remote.origin.url=git(@|:\/\/)github.com(:|\/)(.+)\/(.+).git/https:\/\/github.com\/\3\/\4/p'\`
 alias xmlcurl curl -H Accept:text/xml $*
 alias gco git checkout $*
 alias gcm git commit -a -v

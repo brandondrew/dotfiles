@@ -132,9 +132,7 @@
 (add-to-list 'auto-mode-alist '("\\.rhtml$" . nxhtml-mode))
 (add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
 
-(setq system-specific-config
-      (concat "~/.emacs.d/"
-              (substring (shell-command-to-string "hostname") 0 -1) ".el"))
+(setq system-specific-config (concat "~/.emacs.d/" system-name ".el"))
 
 (if (file-exists-p system-specific-config)
     (load system-specific-config))

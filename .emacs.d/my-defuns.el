@@ -137,11 +137,17 @@
   (ansi-color-apply-on-region (min (mark) (point))
                               (max (mark) (point))))
 
-(defun zenburn-elunit ()
-  (interactive)
-  (set-face-attribute 'elunit-pass-face nil :background "forest green")
-  (set-face-attribute 'elunit-fail-face nil :background "dark red")
-  (set-face-attribute 'elunit-error-face nil :background "DarkOrange4"))
+(defadvice color-theme-zenburn (after elunit-flymake)
+  (eval-after-load 'flymake
+    '(progn
+       (set-face-background 'flymake-errline "red4")
+       (set-face-background 'flymake-warnline "dark slate blue")))
+
+  (eval-after-load 'elunit
+    '(progn
+       (set-face-attribute 'elunit-pass-face nil :background "forest green")
+       (set-face-attribute 'elunit-fail-face nil :background "dark red")
+       (set-face-attribute 'elunit-error-face nil :background "DarkOrange4"))))
 
 ;;; Random stuff
 
