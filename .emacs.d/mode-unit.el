@@ -71,6 +71,7 @@
 ;;; TODO:
 
 ;; - defsuite assumes tests do not open new buffers.
+;; - make it easy to jump to problem in fixtures in fontification tests
 
 ;;; Code:
 

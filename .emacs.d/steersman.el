@@ -43,8 +43,8 @@
 
 ;;   (setq steersman-password "secret"
 ;;         steersman-master "phil@hagelb.org"
-;;         jabber-server "jabber.org"
-;;         jabber-username "my-steersman"
+;;         jabber-server "hagelb.org"
+;;         jabber-username "agent"
 ;;         jabber-resource
 ;;         (concat "steersman-"
 ;;                 (substring (shell-command-to-string "hostname") 0 -1)))
@@ -83,8 +83,11 @@
                (funcall (intern (concat "steersman-" text))))
               ((string-match "^(.*)" text)
                (steersman-reply (pp (eval (read text)))))
-              ((string-match "^$\\(.*\\)" text)
+              ((string-match "^$" text)
                (steersman-reply (shell-command-to-string (substring text 1))))
+              ((string-match "^!" text)
+               (steersman-reply (format "Yes master! I *will* %s right away!"
+                                        (substring text 1))))
               (t (steersman-reply (doctor-reply text))))
 
       (if (not (equal text steersman-password))
@@ -131,7 +134,7 @@
 
 (defun doctor-reply (input)
   "Wrap the `doctor' library in a function for non-interactive use."
-  (save-excursion
+  (save-window-excursion
     (switch-to-buffer "*doctor*")
     (unless (boundp 'howareyoulst) (make-doctor-variables))
     (let ((begin-point (point)))

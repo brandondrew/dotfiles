@@ -61,7 +61,7 @@
 
 ;; Add the lines:
 ;; (add-hook (make-local-variable 'after-save-hook)
-;;           (lambda () (elunit "meta-suite")))
+;;           (lambda () (eval-buffer) (elunit "meta-suite")))
 ;; to the file containing your tests for convenient auto-running.
 
 ;; Unit tests are meant to test single low-level functions. If you
@@ -73,6 +73,7 @@
 
 ;; - improve readability of failure reports
 ;; - next-problem
+;; - measure coverage of elunit itself with testcover
 
 ;;; Code:
 
@@ -112,7 +113,8 @@
 
 ;;; Defining tests
 
-(defmacro* defsuite (suite-name suite-ancestor &key setup-hooks teardown-hooks)
+(defmacro* define-elunit-suite (suite-name suite-ancestor
+                                           &key setup-hooks teardown-hooks)
   "Define a suite, which may be hierarchical."
   `(progn
      (setq ,suite-name (make-test-suite :name ',suite-name
@@ -122,13 +124,11 @@
          (push ,suite-name (test-suite-children ,suite-ancestor)))
      ,suite-name))
 
-(defsuite default-suite nil)
-
-(defmacro deftest (name suite &rest body)
+(defmacro define-elunit-test (name suite &rest body)
   "Define a test NAME in SUITE with BODY."
   `(save-excursion
-     ;; TODO: Use backtrace info to get line number
-     (search-backward (concat "deftest " (symbol-name ',name)) nil t)
+     ;; TODO: Use backtrace-frame info to get line number
+     (search-backward (concat "define-elunit-test " (symbol-name ',name)) nil t)
      (let ((line (line-number-at-pos))
            (file buffer-file-name))
        (elunit-delete-test ',name ,suite)
@@ -206,7 +206,7 @@
 (defun elunit-failure (test err face)
   "Record a failing TEST and store ERR info."
   (setf (test-problem test) err
-        (test-message test) (or (cadr err) (format "%s" err)))
+        (test-message test) (format "%s" err))
   (push test elunit-failures)
   (elunit-highlight-test test face))
 
@@ -223,25 +223,27 @@
   "Display a message explaining the problem with the test at point."
   (interactive)
   (save-excursion
-    (beginning-of-defun) (end-of-line)
-    (search-backward-regexp "(deftest \\([-a-z]+\\) \\([-a-z]+\\)" nil t)
+    (narrow-to-defun) (goto-char (point-min))
+    (search-forward-regexp "(define-elunit-test \\([-a-z]+\\) \\([-a-z]+\\)")
+    (widen)
     (when (and (match-string 1) (match-string 2))
+      (setq match1 (match-string 1) match2 (match-string 2))
       (message (test-message
                 (elunit-get-test (intern (match-string 1))
                                  (symbol-value (intern (match-string 2)))))))))
 
 ;;; Helper functions
 
-(defun fail (&rest args)
+(defun elunit-fail (&rest args)
   "Signal a test failure in a way that elunit understands.
 Takes the same ARGS as `error'."
     (signal 'elunit-test-failed (list (apply 'format args))))
 
 (font-lock-add-keywords 'emacs-lisp-mode
                         ;; Make elunit tests look like defuns.
-                        '(("defsuite"   . 'font-lock-keyword-face)
-                          ("deftest"    . 'font-lock-keyword-face)
-                          ("\\<fail\\>" . 'font-lock-warning-face)))
+                        '(("define-elunit-suite"   . 'font-lock-keyword-face)
+                          ("define-elunit-test"    . 'font-lock-keyword-face)
+                          ("\\<elunit-fail\\>" . 'font-lock-warning-face)))
 
 ;;; General assertions
 
@@ -251,39 +253,39 @@ Takes the same ARGS as `error'."
 (defun assert-that (actual)
   "Fails if ACTUAL is nil."
   (unless actual
-    (fail "%s expected to be non-nil" actual)))
+    (elunit-fail "%s expected to be non-nil" actual)))
 
 (defun assert-nil (actual)
   "Fails if ACTUAL is non-nil."
   (when actual
-    (fail "%s expected to be nil" actual)))
+    (elunit-fail "%s expected to be nil" actual)))
 
 (defun assert-equal (expected actual)
   "Fails if EXPECTED is not equal to ACTUAL."
   (unless (equal expected actual)
-    (fail "%s expected to be %s" actual expected)))
+    (elunit-fail "%s expected to be %s" actual expected)))
 
 (defun assert-not-equal (expected actual)
   "Fails if EXPECTED is equal to ACTUAL."
   (when (equal expected actual)
-    (fail "%s expected to not be %s" actual expected)))
+    (elunit-fail "%s expected to not be %s" actual expected)))
 
 (defun assert-member (elt list)
   "Fails if ELT is not a member of LIST."
   (unless (member elt list)
-    (fail "%s expected to include %s" list elt)))
+    (elunit-fail "%s expected to include %s" list elt)))
 
 (defun assert-match (regex string)
   "Fails if REGEX does not match STRING."
   (unless (string-match regex string)
-    (fail "%s expected to match %s" string regex)))
+    (elunit-fail "%s expected to match %s" string regex)))
 
 (defmacro assert-error (&rest body)
   "Fails if BODY does not signal an error."
   `(condition-case err
        (progn
          ,@body
-         (fail "%s expected to signal an error" body))
+         (elunit-fail "%s expected to signal an error" body))
      (error t)))
 
 (defmacro assert-changed (form &rest body)

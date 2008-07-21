@@ -1,4 +1,4 @@
-
+# -*- coding: utf-8 -*-
 ;;; My .emacs project
 
 ;; by Phil Hagelberg
@@ -187,6 +187,8 @@
 ;; G T show context in keyword search
 
 ;; list-colors-display
+
+;; Handy unicode chars: ♪ ♫ ♬ ‽ ☞
 
 ;;; VC
 ;; C-x v g - blame (V to toggle committer data)

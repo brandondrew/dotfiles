@@ -8,10 +8,6 @@
   <body>
 
     <outline text="General Tech Folks">
-      <outline text="ongoing"
-               description="Ongoing fragmented essay by Tim Bray."
-               htmlUrl="http://www.tbray.org/ongoing/"
-               xmlUrl="http://www.tbray.org/ongoing/ongoing.atom" />
       <outline text="Mark Pilgrim"
 	       description="Dive into Mark"
 	       htmlUrl="http://diveintomark.org"

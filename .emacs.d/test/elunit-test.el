@@ -1,15 +1,15 @@
 (load "elunit")
 
 (add-hook (make-local-variable 'after-save-hook)
-          (lambda () (elunit "meta-suite")))
+          (lambda () (eval-buffer) (elunit "meta-suite")))
 
 (elunit-clear)
 
 ;; Meta suite
 
-(defsuite meta-suite nil)
+(define-elunit-suite meta-suite nil)
 
-(deftest assertions meta-suite
+(define-elunit-test assertions meta-suite
   "Let's make sure our assertions work."
   (assert-equal 2 (+ 1 1))
   (assert-not-equal 2 1)
@@ -22,9 +22,9 @@
   (assert-not-changed foo
                       (setq foo "bar")))
 
-(deftest sample-suite-setup meta-suite
-  "Ensure that defsuite creates new suites properly."
-  (defsuite sample-suite nil ; nil for no parent suite
+(define-elunit-test sample-suite-setup meta-suite
+  "Ensure that define-elunit-suite creates new suites properly."
+  (define-elunit-suite sample-suite nil ; nil for no parent suite
     :setup-hooks (lambda () (message "setting up test"))
     :teardown-hooks (lambda () (message "done with test")))
 
@@ -32,30 +32,18 @@
   (assert-that (test-suite-setup-hooks sample-suite))
   (assert-that (test-suite-teardown-hooks sample-suite)))
 
-(deftest duplicate-suite meta-suite
-  (defsuite sample-suite nil
-    :setup-hooks (lambda () (message "start testing")))
-  ;; Should replace existing suite
-  (assert-not-changed (length elunit-suites)
-                      (defsuite sample-suite nil
-                        :teardown-hooks (lambda () (message "done testing")))
-
-                      ;; make sure it really got replaced.
-                      (assert-nil (test-suite-setup-hooks
-                                    sample-suite))))
-
-(deftest duplicate-test meta-suite
-  (defsuite sample-suite nil)
+(define-elunit-test duplicate-test meta-suite
+  (define-elunit-suite sample-suite nil)
   (assert-changed (length (test-suite-tests sample-suite))
-                  (deftest empty-test sample-suite
+                  (define-elunit-test empty-test sample-suite
                     (assert-that t))))
 
-(deftest deleting-and-redefining-tests meta-suite
-  (defsuite sample-suite nil)
-  (deftest empty-test sample-suite)
+(define-elunit-test deleting-and-redefining-tests meta-suite
+  (define-elunit-suite sample-suite nil)
+  (define-elunit-test empty-test sample-suite)
   ;; should not define twice
   (assert-not-changed (length (test-suite-tests sample-suite))
-                      (deftest empty-test sample-suite))
+                      (define-elunit-test empty-test sample-suite))
 
   ;; should store file and line number in test
   (assert-equal buffer-file-name
@@ -68,24 +56,24 @@
                   (length (test-suite-tests sample-suite)))))
 
 
-(defsuite sample-suite nil)
+(define-elunit-suite sample-suite nil)
 
-(deftest test-fail sample-suite
+(define-elunit-test test-fail sample-suite
   (assert-that nil))
 
-(deftest test-error sample-suite
+(define-elunit-test test-error sample-suite
   (/ 3 0))
 
-(deftest test-success sample-suite
+(define-elunit-test test-success sample-suite
   (assert-that t))
 
 ;; (elunit "sample-suite")
 
 ;; should run a suite's tests plus a suite's children
 
-(defsuite child-suite sample-suite)
+(define-elunit-suite child-suite sample-suite)
 
-(deftest child-test child-suite
+(define-elunit-test child-test child-suite
    "put some crap in the elunit buffer"
    ;; must use princ to take advantage of with-output-to-temp-buffer
    (assert-that nil))
@@ -103,3 +91,11 @@
 ;;   (assert-in-buffer ".." "*elunit*"))
 ;; (elunit-get-test (intern ms1)
 ;;               (intern ms2))
+
+(defun my-trace (n)
+  (backtrace-frame n))
+
+(defun my-trr (n)
+  (my-trace n))
+
+(my-trr 6)
