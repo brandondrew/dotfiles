@@ -46,28 +46,29 @@
   "Timer to activate re-highlighting.")
 
 (defun idle-highlight-word-at-point ()
-  (let* ((target-symbol (symbol-at-point)) ;; need to save this value to check for nil
+  (let* ((target-symbol (symbol-at-point))
          (target (symbol-name target-symbol)))
     (when idle-highlight-last-word
-      (unhighlight-regexp (concat "\\<" (regexp-quote idle-highlight-last-word) "\\>")))
-    (when (and idle-highlight-timer target target-symbol (not (in-string-p)))
+      (unhighlight-regexp (concat "\\<"
+                                  (regexp-quote idle-highlight-last-word)
+                                  "\\>")))
+    (when (and idle-highlight-timer target target-symbol
+               (not (in-string-p)) (not (equal target "end")))
       ;; TODO: check for faces we like with describe-text-properties
       (highlight-regexp (concat "\\<" (regexp-quote target) "\\>") 'region)
       (setq idle-highlight-last-word target))))
 
-(defun idle-highlight ()
-  "Activate idle-highlighting."
-  (interactive)
-  (set (make-local-variable 'idle-highlight-last-word) nil)
-  (set (make-local-variable 'idle-highlight-timer)
-       (run-with-idle-timer 0.5 :repeat 'idle-highlight-word-at-point)))
-
-(defun idle-highlight-disable ()
-  "Disable idle-highlighting caused by `idle-highlight'."
-  (interactive)
-  (when idle-highlight-timer
-    (cancel-timer idle-highlight-timer)
-    (setq idle-highlight-timer nil)))
+(defun idle-highlight (&optional arg)
+  "Toggle idle-highlighting."
+  (interactive "P")
+  (if (and (boundp 'idle-highlight-timer)
+           idle-highlight-timer)
+      (progn
+        (cancel-timer idle-highlight-timer)
+        (setq idle-highlight-timer nil))
+    (set (make-local-variable 'idle-highlight-last-word) nil)
+    (set (make-local-variable 'idle-highlight-timer)
+         (run-with-idle-timer 0.5 :repeat 'idle-highlight-word-at-point))))
 
 (provide 'idle-highlight)
 ;;; idle-highlight.el ends here

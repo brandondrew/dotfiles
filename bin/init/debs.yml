@@ -37,6 +37,8 @@
 - imagemagick
 - irb1.8
 - lame
+- libavahi-compat-libdnssd-dev
+- libavahi-compat-libdnssd1
 - libfaad2-0
 - libgnome2-ruby
 - libnotify-bin

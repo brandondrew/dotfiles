@@ -110,7 +110,7 @@
   ;; (indent-buffer)
   ;; (delete-trailing-whitespace)
   ;; (untabify-buffer)
-  (whitespace-mode t)
+  ;; (whitespace-mode t)
   (make-local-variable 'column-number-mode)
   (column-number-mode t)
   (if (window-system) (hl-line-mode))

@@ -14,6 +14,7 @@
 (global-set-key (kbd "C-x \\") 'align-regexp)
 (global-set-key (kbd "M-/") 'hippie-expand)
 (global-set-key (kbd "C-c n") (lambda () (interactive)
+                                (indent-buffer)
                                 (delete-trailing-whitespace)
                                 (untabify-buffer)))
 
@@ -38,7 +39,7 @@
 (global-set-key (kbd "C-x C-M-f") 'find-file-in-project)
 (global-set-key (kbd "C-c f") 'recentf-ido-find-file)
 (global-set-key (kbd "C-x C-p") 'find-file-at-point)
-(global-set-key (kbd "C-c b") 'bury-buffer)
+(global-set-key (kbd "C-c y") 'bury-buffer)
 
 ;;; Window management
 

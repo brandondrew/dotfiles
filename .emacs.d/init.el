@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ;;; My .emacs project
 
 ;; by Phil Hagelberg
