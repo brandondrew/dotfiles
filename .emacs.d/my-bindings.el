@@ -17,6 +17,7 @@
                                 (indent-buffer)
                                 (delete-trailing-whitespace)
                                 (untabify-buffer)))
+(global-set-key (kbd "C-c w") 'whitespace-mode)
 
 ;;; Navigation
 

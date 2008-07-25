@@ -14,7 +14,7 @@
   (assert-equal 2 (+ 1 1))
   (assert-not-equal 2 1)
   (assert-member 1 '(2 3 1))
-  (assert-nil (not t))
+  (assert-nil t)
   (assert-error (assert nil))
   (setq foo "foo")
   (assert-changed foo

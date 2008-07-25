@@ -136,6 +136,9 @@
 (if (file-exists-p system-specific-config)
     (load system-specific-config))
 
+(ignore-errors
+  (load "~/src/conspire/lib/conspire/support/conspire.el"))
+
 ;;;
 ;;;  Cheat Sheet
 ;;;
