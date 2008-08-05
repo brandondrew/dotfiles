@@ -62,6 +62,7 @@
 
 ;;; Shell
 
+(global-set-key [menu] 'eshell)
 (global-set-key (kbd "C-x m") 'eshell)
 (global-set-key (kbd "C-x C-m") 'eshell)
 (global-set-key (kbd "C-c m") 'eshell)
@@ -82,7 +83,7 @@
 (global-set-key [f1] 'menu-bar-mode)
 (global-set-key (kbd "C-h a") 'apropos)
 (global-set-key (kbd "C-h c") 'cheat)
-(define-key read-expression-map (kbd "TAB") #'lisp-complete-symbol)
+(define-key read-expression-map (kbd "TAB") 'lisp-complete-symbol)
 (global-set-key (kbd "M-\\") 'my-selective-display)
 (global-set-key (kbd "C-x v d") 'vc-status)
 (global-set-key (kbd "C-c a") (lambda () (interactive) (switch-or-start 'autotest "*autotest*")))

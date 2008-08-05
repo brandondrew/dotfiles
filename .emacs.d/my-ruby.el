@@ -14,6 +14,9 @@
 (require 'rcodetools)
 (require 'pcmpl-rake)
 
+(defvar ruby-test-program "ruby"
+  "Program to use to run tests")
+
 ;;
 ;; Defuns
 ;;
@@ -36,7 +39,11 @@
 ;;;###autoload
 (defun rjr ()
   (interactive)
-  (run-ruby "jruby -S irb"))
+  (run-ruby "jruby -S irb")
+  (set (make-local-variable 'inferior-ruby-first-prompt-pattern)
+       "^irb(.*)[0-9:]+0> *")
+  (set (make-local-variable 'inferior-ruby-prompt-pattern)
+       "^\\(irb(.*)[0-9:]+[>*\"'] *\\)+"))
 
 ;;;###autoload
 (defun rake (task)
@@ -59,14 +66,14 @@
   (interactive)
   (let* ((funname (which-function))
          (fn (and (string-match "#\\(.*\\)" funname) (match-string 1 funname))))
-    (compile (concat "ruby " buffer-file-name " --name " fn))))
+    (compile (concat ruby-test-program " " buffer-file-name " --name " fn))))
 
 (defun ruby-test-file ()
   (interactive)
   (if (string-match "_test.rb$" buffer-file-name)
       (compile (concat "ruby " buffer-file-name))
     (toggle-buffer)
-    (compile (concat "ruby " buffer-file-name))
+    (compile (concat ruby-test-program " " buffer-file-name))
     (toggle-buffer)))
 
 ;; find-file-at-point help

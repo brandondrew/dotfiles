@@ -219,14 +219,10 @@
 ;; - bugfix: apply ruby-mode to chunks on first load
 
 ;; finish documenting ruby-mode.el
-;; follow Stefan's advice wrt filesets in log-view
 ;; submit patched rcirc completion
 ;; submit test runner using compile to inf-ruby.el
 
 ;; unify statuses in twitter and jabber
-
-;; start using ditz
-;; - move issue db to ~/.bugs; allow it to be autoconfigured
 
 ;; Make my face customizations stick around with other color themes.
 
@@ -234,7 +230,6 @@
 
 ;;; Minor
 
-;; defadvice find-file-at-point to look for line numbers (zss setup-aliases does this)
 ;; fix ruby-get-old-input to not care about what the prompt looks like
 
 ;;; Long-term:

@@ -29,9 +29,8 @@
       save-place t
       truncate-partial-width-windows nil
       uniquify-buffer-name-style 'forward
-      whitespace-chars '(trailing tabs lines)
-      whitespace-style '(tabs trailing lines space-before-tab
-                              indentation space-after-tab)
+      whitespace-style '(trailing lines space-before-tab
+                                  indentation space-after-tab)
       whitespace-line-column 80
       sql-server "localhost"
       save-place-file (convert-standard-filename "~/.emacs.d/places")
