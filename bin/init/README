@@ -6,14 +6,8 @@ ready (as defined by what I use). Just run go.sh as root. go.sh
 should be able to fetch the other required files if it's run by
 itself.
 
-TODO: 
-- firefox extensions:
- - mozlab
- - firebug
- - firecookie
- - flashblock
- - greasemonkey
-- sync music, movies, books, photos from external drive
+TODO:
+- sync music, movies, books, photos from another machine
 - panel config
 - lists in gconf.yml to support ctrl:nocaps
 - tell mpd.conf to look in ~/music
