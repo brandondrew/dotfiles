@@ -22,7 +22,7 @@
      (set-face-attribute 'eshell-prompt nil :foreground "DeepSkyBlue")
 
      (add-to-list 'eshell-visual-commands "ssh")
-     (add-to-list 'eshell-visual-commands "autotest")
+     ;; (add-to-list 'eshell-visual-commands "autotest")
      (add-to-list 'eshell-visual-commands "tail")
 
      (add-to-list 'eshell-command-completions-alist

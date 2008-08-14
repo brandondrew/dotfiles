@@ -50,8 +50,7 @@
 
 (add-to-list 'load-path "~/.emacs.d")
 (add-to-list 'load-path "~/.emacs.d/jabber")
-(add-to-list 'load-path "~/.emacs.d/nxml")
-(add-to-list 'load-path "~/.emacs.d/nxml/nxml-mode-20041004")
+(add-to-list 'load-path "~/src/nxhtml")
 
 ;; Regenerate the autoload file if it doesn't exist or it's too
 ;; old. (2 weeks or so)
@@ -65,8 +64,8 @@
         (update-directory-autoloads "~/.emacs.d/")))
   (load autoload-file))
 
-(autoload 'nxhtml-mode "nxml/autostart" "" t)
-(autoload 'nxml-mode "nxml/autostart" "" t)
+(autoload 'nxhtml-mode "autostart" "" t)
+(autoload 'nxml-mode "autostart" "" t)
 
 (autoload 'w3m "w3m-load" "" t)
 (autoload 'moz-minor-mode "moz" "Mozilla Minor and Inferior Mozilla Modes" t)
@@ -223,6 +222,7 @@
 ;; submit test runner using compile to inf-ruby.el
 
 ;; unify statuses in twitter and jabber
+;; have an auto-downloading init script you can curl and pipe to sh
 
 ;; Make my face customizations stick around with other color themes.
 
