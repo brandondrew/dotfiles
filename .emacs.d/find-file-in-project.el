@@ -57,6 +57,8 @@
 ;; Recommended binding:
 ;; (global-set-key (kbd "C-x C-M-f") 'find-file-in-project)
 
+;; This library depends on GNU find.
+
 ;;; TODO:
 
 ;; Performance testing with large projects

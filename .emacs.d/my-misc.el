@@ -25,13 +25,12 @@
       transient-mark-mode t
       indicate-empty-lines t
       color-theme-is-global t
-      comment-auto-fill-only-comments t
       save-place t
       truncate-partial-width-windows nil
       uniquify-buffer-name-style 'forward
       whitespace-style '(trailing lines space-before-tab
                                   indentation space-after-tab)
-      whitespace-line-column 80
+      whitespace-line-column 100
       sql-server "localhost"
       save-place-file (convert-standard-filename "~/.emacs.d/places")
       browse-url-browser-function 'browse-url-generic

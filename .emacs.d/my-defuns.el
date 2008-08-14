@@ -110,7 +110,8 @@
   ;; (indent-buffer)
   ;; (delete-trailing-whitespace)
   ;; (untabify-buffer)
-  ;; (whitespace-mode t)
+  (whitespace-mode t)
+  (set (make-local-variable 'comment-auto-fill-only-comments) t)
   (make-local-variable 'column-number-mode)
   (column-number-mode t)
   (if (window-system) (hl-line-mode))
@@ -236,6 +237,15 @@
   (insert (shell-command-to-string (format "git diff %s" (or arg ""))))
   (diff-mode)
   (goto-char (point-min)))
+
+(defun rot13-insertion (begin end length)
+  "Probably doesn't work."
+  (if (and
+       (string-match "@irc\.freenode\.net" (buffer-name))
+       (= (point-max) end))
+      (rot13-region begin end)))
+
+; (add-hook 'after-change-functions 'rot13-insertion)
 
 (defalias 'ss 'server-start)
 (defalias 'pg 'sql-postgres)
