@@ -2,3 +2,4 @@ export PATH=$PATH:/sbin:/usr/sbin:~/bin:/bin:/usr/bin:/usr/local/bin:/usr/local/
 export EDITOR="emacsclient"
 export JRUBY_HOME=/home/phil/bin/jruby-1.1.3
 export JAVA_OPTS="-client"
+source ~/.java_profile

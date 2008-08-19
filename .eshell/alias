@@ -18,5 +18,6 @@ alias grepp ps aux | grep $*
 alias l ls -a -l $*
 alias la ls -a $*
 alias ll ls -l $*
+alias lh ls -l -h $*
 alias devlog tail -F log/development.log
 alias nil $*

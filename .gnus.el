@@ -81,8 +81,7 @@
 (gnus-demon-add-handler 'gnus-group-get-new-news 10 t)
 (gnus-demon-init)
 
-(add-hook 'message-mode-hook (lambda () (auto-fill-mode t)))
-(add-hook 'message-mode-hook 'flyspell-mode)
+;; (add-hook 'message-mode-hook 'flyspell-mode)
 
 (setq gnus-summary-line-format
       (concat

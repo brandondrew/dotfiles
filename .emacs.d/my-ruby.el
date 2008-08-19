@@ -14,6 +14,10 @@
 (require 'rcodetools)
 (require 'pcmpl-rake)
 
+(ignore-errors
+  (add-to-list 'load-path "~/src/rinari")
+  (require 'rinari))
+
 (defvar ruby-test-program "ruby"
   "Program to use to run tests")
 
@@ -62,18 +66,18 @@
     (search-forward-regexp (concat "^" gem ".*\[rdoc\]"))))
 
 (defun ruby-test-one ()
-  "Test the current ruby test (must be runable via ruby <bunffer> --name <test>)."
+  "Test the current ruby test (must be runable via ruby `buffer' --name `test')."
   (interactive)
   (let* ((funname (which-function))
          (fn (and (string-match "#\\(.*\\)" funname) (match-string 1 funname))))
-    (compile (concat ruby-test-program " " buffer-file-name " --name " fn))))
+    (compile (concat ruby-test-program " -I:../lib " buffer-file-name " --name " fn))))
 
 (defun ruby-test-file ()
   (interactive)
-  (if (string-match "_test.rb$" buffer-file-name)
-      (compile (concat "ruby " buffer-file-name))
+  (if (string-match "test.*\.rb$" buffer-file-name)
+      (compile (concat ruby-test-program " " buffer-file-name))
     (toggle-buffer)
-    (compile (concat ruby-test-program " " buffer-file-name))
+    (compile (concat ruby-test-program " -I:../lib " buffer-file-name))
     (toggle-buffer)))
 
 ;; find-file-at-point help
@@ -102,6 +106,9 @@
 (define-key ruby-mode-map (kbd "C-\\") 'rct-complete-symbol)
 (define-key ruby-mode-map (kbd "C-c M-t") 'ruby-test-file)
 (define-key ruby-mode-map (kbd "C-c C-M-t") 'ruby-test-one)
+(define-key ruby-mode-map (kbd "M-;") (lambda () (interactive)
+                                        (comment-dwim nil)
+                                        (indent-buffer)))
 
 (global-set-key (kbd "C-h r") 'ri)
 
@@ -170,7 +177,4 @@
                              'flymake-display-err-menu-for-current-line)
               (flymake-mode t))))
 
-(ignore-errors
-  (add-to-list 'load-path "~/src/rinari")
-  (require 'rinari))
 (provide 'my-ruby)

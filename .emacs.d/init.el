@@ -3,6 +3,9 @@
 ;; by Phil Hagelberg
 ;; Much thanks to RMS and emacswiki.org
 
+;; All files distributed under the same terms as GNU Emacs unless
+;; otherwise stated.
+
 ;; Note: this relies on files found in my .emacs.d:
 ;; http://github.com/technomancy/dotfiles
 
