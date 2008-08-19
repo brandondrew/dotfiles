@@ -74,8 +74,8 @@
 
 (defun ruby-test-file ()
   (interactive)
-  (if (string-match "_test.rb$" buffer-file-name)
-      (compile (concat "ruby " buffer-file-name))
+  (if (string-match "test.*\.rb$" buffer-file-name)
+      (compile (concat ruby-test-program " " buffer-file-name))
     (toggle-buffer)
     (compile (concat ruby-test-program " -I:../lib " buffer-file-name))
     (toggle-buffer)))

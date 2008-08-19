@@ -114,7 +114,8 @@
   (set (make-local-variable 'comment-auto-fill-only-comments) t)
   (make-local-variable 'column-number-mode)
   (column-number-mode t)
-  (if (window-system) (hl-line-mode))
+  (auto-fill-mode)
+  (if (window-system) (hl-line-mode t))
   (idle-highlight))
 
 (defun untabify-buffer ()
@@ -225,9 +226,12 @@
                          (thing-at-point 'filename))))
 
 (defun switch-or-start (function buffer)
-  (if (get-buffer buffer)
-      (switch-to-buffer buffer)
-    (funcall function)))
+  "If the buffer is current, bury it, otherwise invoke the function."
+  (if (equal (buffer-name (current-buffer)) buffer)
+      (bury-buffer)
+    (if (get-buffer buffer)
+        (switch-to-buffer buffer)
+      (funcall function))))
 
 (defun gd (&optional arg)
   "Git diff for use in eshell."
