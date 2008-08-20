@@ -90,7 +90,7 @@
 (global-set-key (kbd "C-c g") (lambda () (interactive) (switch-or-start 'gnus "*Group*")))
 (global-set-key (kbd "C-c t") (lambda () (interactive) (switch-or-start 'twittering-mode "*twittering*")))
 (global-set-key (kbd "C-c J") 'jabber-send-presence)
-(global-set-key (kbd "C-c e") 'elunit)
+(global-set-key (kbd "C-x g") 'magit-status)
 (global-set-key  "\C-c\C-a" 'autotest-switch)
 (global-set-key (kbd "C-c x") 'elunit-explain-problem)
 
