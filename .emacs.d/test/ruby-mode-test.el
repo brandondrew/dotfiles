@@ -29,12 +29,6 @@
 (deftest major-mode ruby-mode-suite
   (assert-equal 'ruby-mode major-mode))
 
-(deftest failer ruby-mode-suite
-  (assert-equal 2 3))
-
-(deftest errorer ruby-mode-suite
-  (assert (/ 4 0)))
-  
 ;; (elunit "ruby-mode-suite")
 
 ;; (global-set-key (kbd "C-c C-m") (lambda () (interactive) (shell-command "emacs -Q ruby-mode-test.el")))

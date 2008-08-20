@@ -234,13 +234,9 @@
       (funcall function))))
 
 (defun gd (&optional arg)
-  "Git diff for use in eshell."
+  "Help me retrain my fingers to use magit."
   (interactive)
-  (switch-to-buffer-other-window "*git diff*")
-  (delete-region (point-min) (point-max))
-  (insert (shell-command-to-string (format "git diff %s" (or arg ""))))
-  (diff-mode)
-  (goto-char (point-min)))
+  (magit-status "."))
 
 (defun rot13-insertion (begin end length)
   "Probably doesn't work."

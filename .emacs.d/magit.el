@@ -38,6 +38,10 @@
 ;; - Equivalent of interactive rebase
 ;; - 'Subsetting', only looking at a subset of all files.
 ;; - Detect and handle renames and copies.
+;; - Show a given file at the commit under point in the history
+;; - Use font-lock for colorization
+;; - Maybe use after-save-hooks to refresh the status buffer?
+;; - `c' in status should be a no-op if nothing is staged
 
 (require 'cl)
 (require 'parse-time)
@@ -355,11 +359,13 @@
     (define-key map (kbd "m") 'magit-manual-merge)
     (define-key map (kbd "M") 'magit-automatic-merge)
     (define-key map (kbd "R") 'magit-rebase-step)
+    (define-key map (kbd "A") 'magit-amend)
     (define-key map (kbd "U") 'magit-pull)
     (define-key map (kbd "P") 'magit-push)
     (define-key map (kbd "c") 'magit-log-edit)
     (define-key map (kbd "C") 'magit-add-log)
     (define-key map (kbd "$") 'magit-display-process)
+    (define-key map (kbd "q") 'quit-window)
     map))
 
 (defvar magit-mode-hook nil)
@@ -406,7 +412,7 @@ Please see the manual for a complete description of Magit.
 	(magit-mark-subsection (line-beginning-position) 
 			       (+ (line-end-position) 1)
 			       seq 1)
-	(magit-put-line-property 'face '(:foreground "red"))
+	(magit-put-line-property 'face '(:foreground "red3"))
 	(magit-put-line-property 'magit-info (list 'other-file filename)))
       (setq seq (+ seq 1))
       (forward-line)
@@ -736,14 +742,14 @@ Please see the manual for a complete description of Magit.
     (if (re-search-forward "[ \t\n]*\\'" nil t)
 	(replace-match "\n" nil nil))))
 
-(defun magit-log-edit-commit ()
+(defun magit-log-edit-commit (&rest args)
   (interactive)
   (magit-log-edit-cleanup)
   (if (> (buffer-size) 0)
       (write-region (point-min) (point-max) ".git/magit-log")
     (write-region "(Empty description)" nil ".git/magit-log"))
   (erase-buffer)
-  (magit-run "git" "commit" "-F" ".git/magit-log")
+  (apply 'magit-run (append (list "git" "commit" "-F" ".git/magit-log") args))
   (bury-buffer)
   (when magit-pre-log-edit-window-configuration
     (set-window-configuration magit-pre-log-edit-window-configuration)
@@ -830,11 +836,6 @@ Please see the manual for a complete description of Magit.
 			      "git" "log" "--max-count=1" "--cc" "-p"
 			      commit)))))
 
-(defun magit-quit ()
-  "Bury the current buffer."
-  (interactive)
-  (bury-buffer))
-
 (defun magit-wash-log (status)
   (goto-char (point-min))
   (while (not (eobp))
@@ -866,6 +867,17 @@ Please see the manual for a complete description of Magit.
 (defun magit-log-head ()
   (interactive)
   (magit-log "HEAD"))
+
+(defun magit-amend ()
+  (interactive)
+  (magit-log-edit)
+  ;; TODO: should get this from git itself; this could be inaccurate.
+  (insert-file ".git/magit-log")
+  (local-set-key (kbd "C-c C-c") 'magit-log-edit-commit-amend))
+
+(defun magit-log-edit-commit-amend ()
+  (interactive)
+  (magit-log-edit-commit "--amend"))
 
 ;;; Diffing
 
@@ -922,7 +934,7 @@ Please see the manual for a complete description of Magit.
 	    (if (and info (eq (car info) 'commit))
 		(put-text-property (point) next-change
 				   'face (if (equal marked (cadr info))
-					     '(:foreground "red4")
+					     '(:foreground "red")
 					   nil)))
 	    (goto-char next-change)))))))
 
@@ -972,3 +984,4 @@ Please see the manual for a complete description of Magit.
     (message "Thing: %s" info)))
 
 (provide 'magit)
+;;; magit.el ends here
