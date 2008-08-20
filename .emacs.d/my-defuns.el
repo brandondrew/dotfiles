@@ -110,7 +110,7 @@
   ;; (indent-buffer)
   ;; (delete-trailing-whitespace)
   ;; (untabify-buffer)
-  (whitespace-mode t)
+  (unless (eq major-mode 'emacs-lisp-mode)(whitespace-mode t))
   (set (make-local-variable 'comment-auto-fill-only-comments) t)
   (make-local-variable 'column-number-mode)
   (column-number-mode t)
