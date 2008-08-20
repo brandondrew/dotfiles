@@ -459,9 +459,9 @@ Please see the manual for a complete description of Magit.
 	       (setq hunk-seq (+ hunk-seq 1))
 	       (setq hunk-beg (point)))
 	      ((string-match "\\+" prefix)
-	       (magit-put-line-property 'face '(:foreground "blue1")))
+	       (magit-put-line-property 'face '(:foreground "green3")))
 	      ((string-match "-" prefix)
-	       (magit-put-line-property 'face '(:foreground "red")))))
+	       (magit-put-line-property 'face '(:foreground "red3")))))
       (forward-line)
       (beginning-of-line))
     (magit-wash-diff-propertize-diff head-seq head-beg head-end)
@@ -922,7 +922,7 @@ Please see the manual for a complete description of Magit.
 	    (if (and info (eq (car info) 'commit))
 		(put-text-property (point) next-change
 				   'face (if (equal marked (cadr info))
-					     '(:foreground "red")
+					     '(:foreground "red4")
 					   nil)))
 	    (goto-char next-change)))))))
 

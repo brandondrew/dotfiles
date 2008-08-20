@@ -303,7 +303,7 @@ The variable ruby-indent-level controls the amount of indentation.
        'ruby-add-log-current-method)
 
   (make-local-variable 'before-save-hook)
-  (add-hook 'before-save-hook 'ruby-mode-set-encoding)
+  ;; (add-hook 'before-save-hook 'ruby-mode-set-encoding)
 
   (set (make-local-variable 'font-lock-defaults)
        '((ruby-font-lock-keywords) nil nil))

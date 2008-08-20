@@ -78,7 +78,7 @@
 (autoload 'top "top-mode" "" t)
 (autoload 'jabber-connect "jabber" "" t)
 (autoload 'cheat "cheat" "" t)
-(autoload 'gitsum "gitsum" "" t)
+(autoload 'magit "magit" "" t)
 (autoload 'vivid-chalk "vivid-chalk" "" t)
 
 (require 'cl)
@@ -196,11 +196,10 @@
 
 ;;; VC
 ;; C-x v g - blame (V to toggle committer data)
-;; C-x v d - dired (v t to show all files)
 ;; C-x v = - diff (C-u to specify revision)
 ;; C-x v ~ - visit specific revision
 ;; C-x v l - log
-;; C-x v d - vc-status
+;; C-x g   - magit
 
 ;;; Eshell
 ;; piping: ifconfig > #<buffer interfaces>
