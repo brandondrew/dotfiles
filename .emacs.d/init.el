@@ -54,6 +54,7 @@
 (add-to-list 'load-path "~/.emacs.d")
 (add-to-list 'load-path "~/.emacs.d/jabber")
 (add-to-list 'load-path "~/src/nxhtml")
+(add-to-list 'load-path "~/src/magit")
 
 ;; Regenerate the autoload file if it doesn't exist or it's too
 ;; old. (2 weeks or so)

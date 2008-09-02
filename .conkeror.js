@@ -22,7 +22,7 @@ can_kill_last_buffer = false;
 
 register_user_stylesheet( 
     "data:text/css,"+
-        escape("#minibuffer, tree.completions, .mode-line { font-family: Terminus; }"));
+        escape("#minibuffer, tree.completions, .mode-line { font-family: Terminus; font-size: 12pt; }"));
 
 /* Sets up the reddit-mode for the given buffer. */
 function twitter_mode_setup(buffer) {

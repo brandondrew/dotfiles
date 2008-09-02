@@ -1,10 +1,9 @@
 (require 'rcirc)
 
 ;; example:
-;(setq rcirc-authinfo '(("freenode" nickserv "technomancy" "password")))
-
-(setq rcirc-server-alist '(("irc.freenode.net" (:channels
-                                                ("#emacs" "#seattle.rb")))))
+(setq rcirc-server-alist '(("irc.freenode.net" . (:channels .
+                                                  ("#emacs" "#seattle.rb")))
+                           ("central" . (:channels "#chatter"))))
 
 (setq rcirc-startup-channels '("#emacs" "#seattle.rb"))
 

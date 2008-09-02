@@ -153,10 +153,15 @@
 ;;                         (setq ido-execute-command-cache
 ;;                               (cons (format "%S" s) ido-execute-command-cache))))))
 ;;         ido-execute-command-cache)))))
-    
+;;
 ;;  (add-hook 'ido-setup-hook
 ;;            (lambda ()
 ;;              (setq ido-enable-flex-matching t)
 ;;              (global-set-key "\M-x" 'ido-execute-command)))
+
+(eval-after-load 'magit
+  '(progn
+     (set-face-attribute 'magit-diff-add nil :foreground "green3")
+     (set-face-attribute 'magit-diff-del nil :foreground "red3")))
 
 (provide 'my-misc)
