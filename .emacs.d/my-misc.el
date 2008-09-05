@@ -27,6 +27,7 @@
       color-theme-is-global t
       save-place t
       imenu-auto-rescan t
+      magit-auto-update t
       truncate-partial-width-windows nil
       uniquify-buffer-name-style 'forward
       whitespace-style '(trailing lines space-before-tab

@@ -3,7 +3,9 @@
 (setq gnus-secondary-select-methods '((nnml ""
                                             (nnml-directory "~/Mail"))))
 
-(setq gnus-home-directory "~/.emacs.d")
+(setq gnus-home-directory "~/.emacs.d"
+      gnus-dribble-directory "~/.emacs.d"
+      gnus-always-read-dribble-file t)
 (setq user-mail-address "phil@hagelb.org")
 (setq user-full-name "Phil Hagelberg")
 (setq gnus-ignored-from-addresses "Phil Hagelberg")

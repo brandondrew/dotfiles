@@ -4,6 +4,4 @@
         (matches (application_name) "conkeror")
         (matches (application_name) "erminal")
         (matches (window_name) "^screen$"))
-    (begin
-      (undecorate)
-      (maximize)))
+    (undecorate))
