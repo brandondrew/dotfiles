@@ -44,6 +44,20 @@
 	 (if (= p (point))
 	     (beginning-of-line))))
 
+     (setq eshell-prompt-function
+           (lambda ()
+             (concat (or (eshell/branch) "") " "
+                     (eshell/pwd)
+                     (if (= (user-uid) 0) " # " " $ "))))
+
+     (defun eshell/branch ()
+       "Return the current git branch, if applicable."
+       ;; TODO: should use VC so it works with more than just git
+       ;; but VC doesn't return branch info for directories yet
+       (let ((branch (shell-command-to-string "git branch")))
+         (string-match "^\\* \\(.*\\)" branch)
+         (match-string 1 branch)))
+                                      
      (add-hook 'eshell-mode-hook
 	       '(lambda () (define-key eshell-mode-map "\C-a" 'eshell-maybe-bol)))
 
