@@ -46,6 +46,7 @@
         (any "emacs-devel" "emacs-devel")
         (any "bus-scheme" "bus-scheme")
         (any "ruby-core" "ruby-core")
+        (any "ert-devs" "ert")
 
         (to "phil@localhost" "feeds")
 
@@ -57,9 +58,10 @@
         (any "David Morton" "xpoint")
         (any "Edward Volz" "xpoint")
         (any "John Gaitan" "xpoint")
-        (from ".*crosspoint.*" xpoint)
-        (from "hudsonite" xpoint)
+        (from ".*crosspoint.*" "xpoint")
+        (from "hudsonite" "xpoint")
 
+        (any "zacchaeus-bounces" junk)
         (any "zacchaeus.*" "friends")
         (any ".*hackelford.*" "friends")
         (any ".*peckham.*" "friends")
@@ -74,6 +76,7 @@
         ;; misc
         (any "cron" junk)
         (any "Anacron" junk)
+        (from "Inbox Archiver" junk)
         (any "Meridius" junk)
         (any "Paris Hilton" junk)
         (any "cartographer" junk)
@@ -81,7 +84,6 @@
         (any "ocruby" junk)
         (any "CNN Alerts" junk)
         (any "ALM Expo 2008" junk)
-        (any "zacchaeus-bounces" junk)
         "inbox"))
 
 (setq mail-sources '((file :path "/var/mail/phil")))
@@ -92,6 +94,9 @@
 
 (gnus-demon-add-handler 'gnus-group-get-new-news 10 t)
 (gnus-demon-init)
+
+;; Unbind this key; it's annoying!
+(define-key gnus-summary-mode-map "o" (lambda () (interactive)))
 
 ;; (add-hook 'message-mode-hook 'flyspell-mode)
 

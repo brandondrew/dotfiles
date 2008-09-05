@@ -58,6 +58,18 @@
          (string-match "^\\* \\(.*\\)" branch)
          (match-string 1 branch)))
                                       
+     (defun eshell-make-primary ()
+       "Make the current buffer swap names with \"*eshell*\"."
+       (interactive)
+         (let ((old-name (buffer-name)))
+           (switch-to-buffer "*eshell*")
+           (rename-buffer "*eshell-temp*")
+           (switch-to-buffer old-name)
+           (rename-buffer "*eshell*")
+           (switch-to-buffer "*eshell-temp*")
+           (rename-buffer old-name))
+         (switch-to-buffer "*eshell*"))
+  
      (add-hook 'eshell-mode-hook
 	       '(lambda () (define-key eshell-mode-map "\C-a" 'eshell-maybe-bol)))
 

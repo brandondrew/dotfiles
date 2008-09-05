@@ -245,6 +245,14 @@
        (= (point-max) end))
       (rot13-region begin end)))
 
+(defun texinfo-view-info ()
+  (interactive)
+  (shell-command (concat "makeinfo " (buffer-file-name)))
+  (save-excursion
+    (goto-char (point-min))
+    (search-forward-regexp "^@setfilename \\(.*\\)"))
+  (info (concat (file-name-directory (buffer-file-name)) (match-string 1))))
+
 ; (add-hook 'after-change-functions 'rot13-insertion)
 
 (defalias 'ss 'server-start)

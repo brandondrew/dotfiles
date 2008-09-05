@@ -34,6 +34,7 @@
 - gstreamer0.10-plugins-bad-multiverse
 - gstreamer0.10-plugins-ugly
 - gstreamer0.10-plugins-ugly-multiverse
+- htop
 - imagemagick
 - irb1.8
 - lame

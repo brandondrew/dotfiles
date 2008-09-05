@@ -3,4 +3,10 @@ export EDITOR="emacsclient"
 export JRUBY_HOME=/home/phil/bin/jruby-1.1.3
 export JAVA_OPTS="-client"
 export SAKE_UNSAFE="why-not"
-source ~/.java_profile
+
+if [ -r ~/.java_profile ]; then
+    source ~/.java_profile
+fi
+
+# This doesn't seem to do anything
+export CDPATH=~/src:~/work

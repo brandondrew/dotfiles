@@ -95,6 +95,9 @@
 (global-set-key  "\C-c\C-a" 'autotest-switch)
 (global-set-key (kbd "C-c x") 'elunit-explain-problem)
 
+(eval-after-load 'texinfo-mode
+  '(define-key texinfo-mode-map (kbd "C-x i") 'texinfo-view-info))
+
 (define-key isearch-mode-map (kbd "C-o") ;; occur easily inside isearch
   (lambda ()
     (interactive)
