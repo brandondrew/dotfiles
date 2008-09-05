@@ -8,6 +8,10 @@ interactive("fill_domain", function (I) {
 	      var domain = paths[0] + "/" + paths[1] + "/" + paths[2] + "/";
 	      field.value = domain;});
 
+interactive("tinyurl", function(I) {
+    I.window.content.location.href = 'http://tinyurl.com/create.php?url=' + 
+        encodeURIComponent(I.window.content.location.href);
+});
 
 define_key(minibuffer_keymap, kbd("/", MOD_CTRL), "fill_domain");
 
