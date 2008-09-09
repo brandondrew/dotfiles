@@ -98,6 +98,9 @@
 (eval-after-load 'texinfo-mode
   '(define-key texinfo-mode-map (kbd "C-x i") 'texinfo-view-info))
 
+(eval-after-load 'java-mode
+  '(define-key java-mode-map "\C-\M-h" 'backward-kill-word))
+
 (define-key isearch-mode-map (kbd "C-o") ;; occur easily inside isearch
   (lambda ()
     (interactive)
