@@ -50,13 +50,14 @@
 ;;;; Music functions
 
 (map (lambda (binding) (xbindkey (car binding) (cdr binding)))
- (list '(F5 . "~/bin/mpc-notify")
-       '(F6 . "~/bin/mpc-random")
-       '(F7 . "~/bin/mpc-choose")
-       '(F8 . "mpc toggle")
-       '(F9 . "mpc prev")
-       '(F10 . "mpc next")
-       '(F12 . "vlc -f ~/documents/movies/misc/rick.flv")))
+     (list '(F5 . "~/bin/mpc-notify")
+           '((Control F5) . "~/bin/mpc-playlist")
+           '(F6 . "~/bin/mpc-random")
+           '(F7 . "~/bin/mpc-choose")
+           '(F8 . "mpc toggle")
+           '(F9 . "mpc prev")
+           '(F10 . "mpc next")
+           '(F12 . "vlc -f ~/documents/movies/misc/rick.flv"))) ;; tee hee
 
 ;;;; Other launchers
 

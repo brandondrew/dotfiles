@@ -1,0 +1,3 @@
+#!/bin/bash
+
+notify-send "Playlist" "`mpc playlist`" --icon=stock_volume
