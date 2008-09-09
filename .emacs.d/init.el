@@ -82,6 +82,7 @@
 (autoload 'cheat "cheat" "" t)
 (autoload 'magit-status "magit" "" t)
 (autoload 'vivid-chalk "vivid-chalk" "" t)
+(autoload 'ri "ri-ruby" "" t)
 
 (require 'cl)
 (require 'saveplace)
