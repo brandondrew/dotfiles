@@ -3,7 +3,7 @@
 # Author: Kristof Bastiaensen <kristof@vleeuwen.org>
 #
 #
-#    Copyright (C) 2004 Kristof Bastiaensen
+#    Copyright (C) 2004,2006 Kristof Bastiaensen
 #
 #    This program is free software; you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -23,12 +23,32 @@
 #  For information on how to use and install see ri-ruby.el
 #
 
+require 'rubygems'
 require 'rdoc/ri/ri_paths'
 require 'rdoc/ri/ri_cache'
 require 'rdoc/ri/ri_util'
 require 'rdoc/ri/ri_reader'
 require 'rdoc/ri/ri_formatter'
 require 'rdoc/ri/ri_display'
+
+class DefaultDisplay
+   def full_params(method)
+      method.params.split(/\n/).each do |p|
+         p.sub!(/^#{method.name}\(/o,'(')
+         unless p =~ /\b\.\b/
+            p = method.full_name + p
+         end
+         @formatter.wrap(p) 
+         @formatter.break_to_newline
+      end
+   end
+end
+
+def ruby_minimum_version?(*version)
+   VERSION.split(".").
+      map{ |i| i.to_i }.
+      <=>(version) > -1
+end
 
 class RiEmacs
    Options = Struct.new(:formatter, :use_stdout, :width)
@@ -40,6 +60,16 @@ class RiEmacs
       options.formatter = RI::TextFormatter.for("ansi")
       options.width = 72
 
+      if ruby_minimum_version?(1, 8, 5)
+         begin
+            require 'rubygems'
+            Dir["#{Gem.path}/doc/*/ri"].each do |path|
+               RI::Paths::PATH << path
+            end
+         rescue LoadError
+         end
+      end
+
       paths = paths || RI::Paths::PATH
 
       @ri_reader = RI::RiReader.new(RI::RiCache.new(paths))
@@ -48,60 +78,61 @@ class RiEmacs
 
    def lookup_keyw(keyw)
       begin
-         @desc = NameDescriptor.new(keyw)
+         desc = NameDescriptor.new(keyw)
       rescue RiError => e
-         return false
-      end
-      @namespaces = @ri_reader.top_level_namespace
-
-      container = @namespaces
-      for class_name in @desc.class_names
-         return false if container.empty?
-         @namespaces = @ri_reader.lookup_namespace_in(class_name, container)
-         container = @namespaces.find_all {|m| m.name == class_name}
+         return nil
       end
 
-      if @desc.method_name.nil?
+      last_space = @ri_reader.top_level_namespace
+      class_name = nil
+      container = desc.class_names.inject(last_space) do
+         |container, class_name|
+         last_space = @ri_reader.lookup_namespace_in(class_name, container)
+         last_space.find_all {|m| m.name == class_name}
+      end
+      
+      if desc.method_name.nil?
          if [?., ?:, ?#].include? keyw[-1]
-            @namespaces = container
+            namespaces = @ri_reader.lookup_namespace_in("", container)
             is_class_method = case keyw[-1]
                               when ?.: nil
                               when ?:: true
                               when ?#: false
                               end
-            @methods = @ri_reader.find_methods("", is_class_method,
+            methods = @ri_reader.find_methods("", is_class_method,
                                                container)
-            return false if @methods.empty?
+            return nil if methods.empty? && namespaces.empty?
          else
-            @namespaces = @namespaces.find_all{ |n| n.name.index(class_name).zero? }
-            return false if @namespaces.empty?
-            @methods = nil
+            #class_name = desc.class_names.last
+            namespaces = last_space.find_all{ |n| n.name.index(class_name).zero? }
+            return nil if namespaces.empty?
+            methods = []
          end
       else
-         return false if container.empty?
-         @namespaces = container
-         @methods = @ri_reader.find_methods(@desc.method_name,
-                                            @desc.is_class_method,
-                                            container)
-         @methods = @methods.find_all { |m|
-            m.name.index(@desc.method_name).zero? }
-         return false if @methods.empty?
+         return nil if container.empty?
+         namespaces = []
+         methods = @ri_reader.
+            find_methods(desc.method_name,
+                         desc.is_class_method,
+                         container).
+            find_all { |m| m.name.index(desc.method_name).zero? }
+         return nil if methods.empty?
       end
-      
-      return true
+
+      return desc, methods, namespaces
    end
 
    def completion_list(keyw)
       return @ri_reader.full_class_names if keyw == ""
-      
-      return nil unless lookup_keyw(keyw)
 
-      if @methods.nil?
-         return @namespaces.map{ |n| n.full_name }
-      elsif @desc.class_names.empty?
-         return @methods.map { |m| m.name }.uniq
+      desc, methods, namespaces = lookup_keyw(keyw)
+      return nil unless desc
+
+      if desc.class_names.empty?
+         return methods.map { |m| m.name }.uniq
       else
-         return @methods.map { |m| m.full_name }
+         return methods.map { |m| m.full_name } +
+            namespaces.map { |n| n.full_name }
       end
    end
 
@@ -151,18 +182,33 @@ class RiEmacs
    end
 
    def display_info(keyw)
-      return false unless lookup_keyw(keyw)
+      desc, methods, namespaces = lookup_keyw(keyw)
+      return false if desc.nil?
       
-      if @methods.nil?
-         @namespaces = @namespaces.find_all { |n| n.full_name == @desc.full_class_name }
-         return false if @namespaces.empty?
-         klass = @ri_reader.get_class(@namespaces[0])
-         @display.display_class_info(klass, @ri_reader)
-      else
-         @methods = @methods.find_all { |m| m.name == @desc.method_name }
-         return false if @methods.empty?
-         meth = @ri_reader.get_method(@methods[0])
+      if desc.method_name
+         methods = methods.find_all { |m| m.name == desc.method_name }
+         return false if methods.empty?
+         meth = @ri_reader.get_method(methods[0])
          @display.display_method_info(meth)
+      else
+         namespaces = namespaces.find_all { |n| n.full_name == desc.full_class_name }
+         return false if namespaces.empty?
+         klass = @ri_reader.get_class(namespaces[0])
+         @display.display_class_info(klass, @ri_reader)
+      end
+
+      return true
+   end
+
+   def display_args(keyw)
+      desc, methods, namespaces = lookup_keyw(keyw)
+      return nil unless desc && desc.class_names.empty?
+
+      methods = methods.find_all { |m| m.name == desc.method_name }
+      return false if methods.empty?
+      methods.each do |m|
+        meth = @ri_reader.get_method(m)
+        @display.full_params(meth)
       end
 
       return true
@@ -170,16 +216,23 @@ class RiEmacs
 
    # return a list of classes for the method keyw
    # return nil if keyw has already a class
-   def class_list(keyw)
-      return nil unless lookup_keyw(keyw)
-      return nil unless @desc.class_names.empty?
+   def class_list(keyw, rep='\1')
+      desc, methods, namespaces = lookup_keyw(keyw)
+      return nil unless desc && desc.class_names.empty?
 
-      @methods = @methods.find_all { |m| m.name == @desc.method_name }
+      methods = methods.find_all { |m| m.name == desc.method_name }
 
-      return "(" + @methods.map do |m|
+      return "(" + methods.map do |m|
          "(" + m.full_name.sub(/(.*)(#|(::)).*/,
-                                '\1').inspect + ")"
+                                rep).inspect + ")"
       end.uniq.join(" ") + ")"
+   end
+
+   # flag means (#|::) 
+   # return a list of classes and flag for the method keyw
+   # return nil if keyw has already a class
+   def class_list_with_flag(keyw)
+     class_list(keyw, '\1\2')
    end
 end
 
@@ -193,6 +246,8 @@ class Command
       "COMPLETE_ALL" => :complete_all,
       "LAMBDA" => :lambda,
       "CLASS_LIST" => :class_list,
+      "CLASS_LIST_WITH_FLAG" => :class_list_with_flag,
+      "DISPLAY_ARGS" => :display_args,
       "DISPLAY_INFO" => :display_info}
       
    def read_next
@@ -201,6 +256,7 @@ class Command
       method = Command2Method[cmd]
       fail "unrecognised command: #{cmd}" if method.nil?
       send(method, param.strip)
+      STDOUT.flush
    end
 
    def try_completion(keyw)
@@ -217,6 +273,15 @@ class Command
 
    def class_list(keyw)
       STDOUT.puts @ri.class_list(keyw)
+   end
+
+   def class_list_with_flag(keyw)
+      STDOUT.puts @ri.class_list_with_flag(keyw)
+   end
+
+   def display_args(keyw)
+      @ri.display_args(keyw)
+      STDOUT.puts "RI_EMACS_END_OF_INFO"
    end
 
    def display_info(keyw)
@@ -242,6 +307,7 @@ if arg == "--test"
    puts "Test succeeded"
 else
    cmd = Command.new(RiEmacs.new(arg))
-   puts 'READY'
+   STDOUT.puts 'READY'
+   STDOUT.flush
    loop { cmd.read_next }
 end
