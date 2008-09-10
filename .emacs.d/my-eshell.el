@@ -15,7 +15,7 @@
      (require 'em-prompt)
      (require 'em-cmpl)
      (require 'esh-mode)
-     (load "em-term.el")
+     (require 'em-term)
 
      (setq eshell-cmpl-cycle-completions nil
            eshell-save-history-on-exit t
