@@ -55,8 +55,8 @@
        ;; TODO: should use VC so it works with more than just git
        ;; but VC doesn't return branch info for directories yet
        (let ((branch (shell-command-to-string "git branch")))
-         (string-match "^\\* \\(.*\\)" branch)
-         (match-string 1 branch)))
+         (if (string-match "^\\* \\(.*\\)" branch)
+             (match-string 1 branch))))
                                       
      (defun eshell-make-primary ()
        "Make the current buffer swap names with \"*eshell*\"."

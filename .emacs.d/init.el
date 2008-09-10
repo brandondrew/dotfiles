@@ -216,21 +216,36 @@
 ;;; TODO:
 ;;;
 
+;; ert.el
+;; - write the manual
+;; - port over mode-unit thingies
+
+;; magit.el
+;; - test cases
+
+;; ri-emacs
+;; - fix for RDoc 2
+;; - fix for emacs compiled from source
+
 ;; nxhtml-mode
-;; - set up launchpad
 ;; - load into ELPA
 ;; - bugfix: apply ruby-mode to chunks on first load
 
-;; finish documenting ruby-mode.el
-;; submit patched rcirc completion
-;; submit test runner using compile to inf-ruby.el
+;; ruby-mode.el
+;; - finish documentation
+;; - test cases
+;; - write failing test cases for bugs
+;; - add test runner using compile to inf-ruby.el
 
-;; unify statuses in twitter and jabber
+;; use git submodules in dotfiles project
+
+;; submit patched rcirc completion
+
 ;; have an auto-downloading init script you can curl and pipe to sh
 
-;; Make my face customizations stick around with other color themes.
-
 ;; Look into adding zeroconf-chat to jabber.el
+
+;; DBus should allow IRC/Jabber reconnect upon resume
 
 ;;; Minor
 
