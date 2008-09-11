@@ -16,12 +16,8 @@
   (interactive "MUrl: ")
   (switch-to-buffer (url-retrieve-synchronously url))
   (rename-buffer url t)
-  (funcall (intern
-            (completing-read "Major mode: "
-                             (mapcar (lambda (x)
-                                       (list (symbol-name x)))
-                                     (apropos-internal "-mode$"
-                                                       'commandp))))))
+  (cond ((search-forward "<?xml" nil t) (nxml-mode))
+        ((search-forward "<html" nil t) (nxhtml-mode))))
 
 (defun google-region (&optional flags)
   "Google the selected region."

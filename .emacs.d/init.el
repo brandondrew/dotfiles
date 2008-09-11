@@ -99,13 +99,6 @@
 (require 'css-mode)
 (require 'idle-highlight)
 
-(eval-after-load 'vc-annotate
-  '(progn
-     (require 'log-view)
-     (define-key log-view-mode-map (kbd "RET") 'log-view-find-revision)
-     (define-key vc-annotate-mode-map (kbd "RET")
-       'vc-annotate-find-revision-at-line)))
-
 (ignore-errors
   (load "elpa/package.el")
   (package-initialize))
@@ -121,6 +114,7 @@
 (require 'my-misc)
 (require 'my-hook-setup)
 (require 'my-lisp)
+(require 'my-vc)
 
 (eval-after-load 'ruby-mode '(require 'my-ruby))
 (eval-after-load 'javascript-mode '(require 'my-js))
