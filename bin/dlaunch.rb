@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
 
 # Get the standard list of executable files in your $PATH
+# TODO: save history, sort by usages
 @program_list = {}
 path_glob = ENV["PATH"].gsub(/,/, '\\,').tr(":",",")
 

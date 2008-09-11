@@ -65,7 +65,7 @@
 (xbindkey '(mod4 f) "firefox")
 (xbindkey '(mod4 s) "f-spot")
 (xbindkey '(mod4 c) "~/src/conkeror/conkeror -E 'default_pref(\"conkeror.rcfile\",\"/home/phil/.conkeror.d\")'")
-(xbindkey '(mod4 d) "ruby ~/bin/dlaunch.rb")
+(xbindkey '(mod4 space) "ruby ~/bin/dlaunch.rb")
 (xbindkey '(mod4 x) "xournal")
 (xbindkey '(mod4 t) "fetchmail")
 (xbindkey '(mod4 grave) "gnome-terminal -e \"screen -xRR\"")
