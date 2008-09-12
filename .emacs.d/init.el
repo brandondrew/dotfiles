@@ -82,6 +82,7 @@
 (autoload 'cheat "cheat" "" t)
 (autoload 'magit-status "magit" "" t)
 (autoload 'vivid-chalk "vivid-chalk" "" t)
+(autoload 'ri "ri-ruby" "" t)
 
 (require 'cl)
 (require 'saveplace)
@@ -221,11 +222,11 @@
 ;; - port over mode-unit thingies
 
 ;; magit.el
+;; - catch up w/ marius' changes
 ;; - test cases
 
 ;; ri-emacs
-;; - fix for RDoc 2
-;; - fix for emacs compiled from source
+;; - submit patches to bug tracker
 
 ;; nxhtml-mode
 ;; - load into ELPA

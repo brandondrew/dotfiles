@@ -10,7 +10,6 @@
 (require 'ruby-mode)
 (require 'ruby-electric)
 (require 'inf-ruby)
-(require 'ri-ruby)
 (require 'rcodetools)
 (require 'pcmpl-rake)
 
@@ -130,6 +129,7 @@
 (add-to-list 'completion-ignored-extensions ".rbc")
 
 (setq toggle-mapping-style 'ruby)
+(setq ri-ruby-script "/home/phil/.emacs.d/ri-emacs.rb")
 (setq inferior-ruby-first-prompt-pattern ">>"
       inferior-ruby-prompt-pattern ">>")
 
@@ -144,8 +144,6 @@
 (add-hook 'ruby-mode-hook (lambda () (ruby-electric-mode t)))
 (add-hook 'ruby-mode-hook 'my-coding-hook)
 (add-hook 'ruby-mode-hook 'pretty-lambdas)
-
-(setq ri-ruby-script (expand-file-name "~/.emacs.d/ri-emacs.rb"))
 
 (font-lock-add-keywords
  'ruby-mode

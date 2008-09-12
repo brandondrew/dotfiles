@@ -8,5 +8,4 @@ if [ -r ~/.java_profile ]; then
     source ~/.java_profile
 fi
 
-# This doesn't seem to do anything
-export CDPATH=~/src:~/work
+export CDPATH=.:~/src:~/work

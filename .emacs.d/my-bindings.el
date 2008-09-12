@@ -95,8 +95,11 @@
 (global-set-key  "\C-c\C-a" 'autotest-switch)
 (global-set-key (kbd "C-c x") 'elunit-explain-problem)
 
-(eval-after-load 'texinfo-mode
+(eval-after-load 'texinfo
   '(define-key texinfo-mode-map (kbd "C-x i") 'texinfo-view-info))
+
+(eval-after-load 'java-mode
+  '(define-key java-mode-map "\C-\M-h" 'backward-kill-word))
 
 (define-key isearch-mode-map (kbd "C-o") ;; occur easily inside isearch
   (lambda ()

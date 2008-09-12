@@ -15,11 +15,17 @@
      (require 'em-prompt)
      (require 'em-cmpl)
      (require 'esh-mode)
-     (load "em-term.el")
+     (require 'em-term)
 
-     (setq eshell-cmpl-cycle-completions nil)
-     (setq eshell-save-history-on-exit t)
-     (set-face-attribute 'eshell-prompt nil :foreground "DeepSkyBlue")
+     (setq eshell-cmpl-cycle-completions nil
+           eshell-save-history-on-exit t
+           eshell-highlight-prompt nil)
+     
+     (set-face-attribute 'eshell-prompt nil :foreground "turquoise1")
+
+     (defface eshell-branch-face
+       `((t (:foreground "DeepSkyBlue3")))
+       "Face for VC branch display.")
 
      (add-to-list 'eshell-visual-commands "ssh")
      ;; (add-to-list 'eshell-visual-commands "autotest")
@@ -46,9 +52,10 @@
 
      (setq eshell-prompt-function
            (lambda ()
-             (concat (or (eshell/branch) "") " "
-                     (eshell/pwd)
-                     (if (= (user-uid) 0) " # " " $ "))))
+             (concat (propertize (or (eshell/branch) "") 'face 'eshell-branch-face) " "
+                     (propertize (concat (eshell/pwd)
+                                         (if (= (user-uid) 0) " # " " $"))
+                                 'face 'eshell-prompt) " ")))
 
      (defun eshell/branch ()
        "Return the current git branch, if applicable."
@@ -57,7 +64,7 @@
        (let ((branch (shell-command-to-string "git branch")))
          (if (string-match "^\\* \\(.*\\)" branch)
              (match-string 1 branch))))
-                                      
+
      (defun eshell-make-primary ()
        "Make the current buffer swap names with \"*eshell*\"."
        (interactive)

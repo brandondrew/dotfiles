@@ -294,7 +294,6 @@ The variable ruby-indent-level controls the amount of indentation.
   (use-local-map ruby-mode-map)
   (setq mode-name "Ruby")
   (setq major-mode 'ruby-mode)
-
   (ruby-mode-variables)
 
   (set (make-local-variable 'imenu-create-index-function)
