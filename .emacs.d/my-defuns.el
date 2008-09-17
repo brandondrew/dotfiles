@@ -120,6 +120,11 @@
   "Why isn't this defined already?"
   (get-buffer-window (current-buffer)))
 
+(defun fullscreen ()
+      (interactive)
+      (set-frame-parameter nil 'fullscreen
+                           (if (frame-parameter nil 'fullscreen) nil 'fullboth)))
+
 (defun toggle-dedicated-window ()
   "Toggle the window-dedicated-p state of current window."
   (set-window-dedicated-p (current-window)

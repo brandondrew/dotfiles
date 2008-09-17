@@ -54,6 +54,7 @@
 
 (global-set-key (kbd "C-x M-k") (lambda () (interactive) (kill-buffer (current-buffer)) (delete-window)))
 (global-set-key (kbd "C-x d") (lambda () (interactive) (toggle-dedicated-window)))
+(global-set-key (kbd "C-c u") 'fullscreen)
 
 ;;; Lisp
 
