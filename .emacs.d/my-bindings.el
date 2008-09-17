@@ -29,7 +29,7 @@
 (global-set-key "\C-\M-s" 'isearch-forward)
 (global-set-key "\C-\M-r" 'isearch-backward)
 
-(global-set-key "\C-x\C-i" 'imenu)
+(global-set-key "\C-x\C-i" 'ido-goto-symbol)
 
 ;;; Buffer management
 
