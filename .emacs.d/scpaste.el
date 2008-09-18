@@ -128,6 +128,7 @@ You must have write-access to this directory via `scp'.")
     (kill-new full-url)
     (message "Pasted to %s (on kill ring)" full-url)))
 
+;;;### autoload
 (defun scpaste-region (name)
   "Paste the current region via `scpaste'."
   (interactive "MName: ")

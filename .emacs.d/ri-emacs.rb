@@ -203,7 +203,7 @@ class RiEmacs
       namespaces = namespaces.find_all { |n| n.full_name == desc.full_class_name }
       return false if namespaces.empty?
       klass = @ri_reader.get_class(namespaces[0])
-      @display.display_class_info(klass, @ri_reader)
+      @display.display_class_info(klass)
     end
 
     return true
