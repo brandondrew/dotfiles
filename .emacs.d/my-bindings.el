@@ -29,7 +29,7 @@
 (global-set-key "\C-\M-s" 'isearch-forward)
 (global-set-key "\C-\M-r" 'isearch-backward)
 
-(global-set-key "\C-x\C-i" 'imenu)
+(global-set-key "\C-x\C-i" 'ido-goto-symbol)
 
 ;;; Buffer management
 
@@ -54,6 +54,7 @@
 
 (global-set-key (kbd "C-x M-k") (lambda () (interactive) (kill-buffer (current-buffer)) (delete-window)))
 (global-set-key (kbd "C-x d") (lambda () (interactive) (toggle-dedicated-window)))
+(global-set-key (kbd "C-c u") 'fullscreen)
 
 ;;; Lisp
 

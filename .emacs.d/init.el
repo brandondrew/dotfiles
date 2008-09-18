@@ -232,6 +232,11 @@
 ;; - write failing test cases for bugs
 ;; - add test runner using compile to inf-ruby.el
 
+;; conkeror
+;; - C-k should kill buffers when in the switcher
+
+;; changing the font doesn't change the rendered frame size
+
 ;; use git submodules in dotfiles project
 
 ;; submit patched rcirc completion
