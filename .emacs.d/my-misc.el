@@ -63,6 +63,10 @@
 (defalias 'qrr 'query-replace-regexp)
 (random t)
 
+;; Hippie expand: at times perhaps too hip
+(delete 'try-expand-line hippie-expand-try-functions-list)
+(delete 'try-expand-list hippie-expand-try-functions-list)
+
 (setq emacs-wiki-name "PhilHagelberg"
       oddmuse-username "PhilHagelberg"
       oddmuse-wikis

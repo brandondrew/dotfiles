@@ -3,6 +3,9 @@
       jabber-username "phil"
       jabber-roster-show-bindings nil)
 
+(eval-after-load 'jabber
+  '(set-face-attribute 'jabber-title-large nil :height 1.5))
+
 (defun jabber-notify-message (from buffer text propsed-alert)
   (shell-command (concat "notify-send \"" propsed-alert "\"")))
 ;;;   (shell-command "ruby ~/bin/morselight.rb %s"
