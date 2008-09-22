@@ -136,8 +136,8 @@
 
 (eval-after-load 'diff-mode
   '(progn
-     (set-face-attribute 'diff-added nil :foreground "green4")
-     (set-face-attribute 'diff-removed nil :foreground "red3")))
+     (set-face-foreground 'diff-added "green4")
+     (set-face-foreground 'diff-removed "red3")))
 
 ;;; TODO: this may be insane, but it may be worth trying.
 ;;  (setq ido-execute-command-cache nil)
@@ -163,7 +163,7 @@
 
 (eval-after-load 'magit
   '(progn
-     (set-face-attribute 'magit-diff-add nil :foreground "green3")
-     (set-face-attribute 'magit-diff-del nil :foreground "red3")))
+     (set-face-foreground 'magit-diff-add "green3")
+     (set-face-foreground 'magit-diff-del "red3")))
 
 (provide 'my-misc)
