@@ -91,6 +91,8 @@
 (global-set-key (kbd "C-c j") (lambda () (interactive) (switch-or-start 'jabber-connect "*-jabber-*")))
 (global-set-key (kbd "C-c g") (lambda () (interactive) (switch-or-start 'gnus "*Group*")))
 (global-set-key (kbd "C-c t") (lambda () (interactive) (switch-or-start 'twittering-mode "*twittering*")))
+(global-set-key (kbd "C-c i") (lambda () (interactive) (switch-or-start (lambda () (rcirc-connect "irc.freenode.net"))
+                                                                   "*irc.freenode.net*")))
 (global-set-key (kbd "C-c J") 'jabber-send-presence)
 (global-set-key (kbd "C-x g") 'magit-status)
 (global-set-key  "\C-c\C-a" 'autotest-switch)
