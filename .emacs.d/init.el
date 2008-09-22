@@ -234,6 +234,9 @@
 
 ;; conkeror
 ;; - C-k should kill buffers when in the switcher
+;; - shouldn't have to M-x network-go-online to view localhost
+
+;; investigate file-name-cache
 
 ;; changing the font doesn't change the rendered frame size
 

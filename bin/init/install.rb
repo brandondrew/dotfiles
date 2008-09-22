@@ -15,6 +15,8 @@ if !system "apt-get install #{debs.join(' ')}"
   raise "Couldn't install packages"
 end
 
+system "apt-get remove app-install-data-commercial"
+
 # install rubygems
 if !File.exist?('/usr/bin/gem')
   system "wget http://rubyforge.org/frs/download.php/29548/rubygems-1.0.1.tgz"
