@@ -1,6 +1,6 @@
 --- 
 :benchmark: false
-gem: --no-rdoc
+gem: --no-rdoc --no-ri
 :sources: 
 - http://gems.rubyforge.org
 - http://gems.github.com

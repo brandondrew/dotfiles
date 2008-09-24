@@ -14,6 +14,7 @@
       '((?e (file . "~/.emacs.d/init.el"))
 	(?d (file . "~/.emacs.d"))
 	(?g (file . "~/.gnus.el"))
+        (?c (file . "~/.conkeror.js"))
 	(?r (file . "~/.emacs.d/my-registers.el"))
 	(?x (file . "~/.xbindkeys.scm"))))
 

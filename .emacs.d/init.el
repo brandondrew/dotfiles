@@ -53,7 +53,7 @@
 
 (add-to-list 'load-path "~/.emacs.d")
 (add-to-list 'load-path "~/.emacs.d/jabber")
-(add-to-list 'load-path "~/src/nxhtml")
+;; (add-to-list 'load-path "~/src/nxhtml")
 (add-to-list 'load-path "~/src/magit")
 (add-to-list 'load-path "~/src/ert")
 
@@ -69,8 +69,8 @@
         (update-directory-autoloads "~/.emacs.d/")))
   (load autoload-file))
 
-(autoload 'nxhtml-mode "autostart" "" t)
-(autoload 'nxml-mode "autostart" "" t)
+;; (autoload 'nxhtml-mode "autostart" "" t)
+;; (autoload 'nxml-mode "autostart" "" t)
 
 (autoload 'w3m "w3m-load" "" t)
 (autoload 'moz-minor-mode "moz" "Mozilla Minor and Inferior Mozilla Modes" t)
@@ -124,10 +124,10 @@
 ;; Well, these autoloads have to get invoked somehow.
 (add-to-list 'auto-mode-alist '("\\.rb$" . ruby-mode))
 (add-to-list 'auto-mode-alist '("Rakefile$" . ruby-mode))
-(add-to-list 'auto-mode-alist '("\\.js$" . javascript-mode))
-(add-to-list 'auto-mode-alist '("\\.xml$" . nxml-mode))
-(add-to-list 'auto-mode-alist '("\\.html$" . nxhtml-mode))
-(add-to-list 'auto-mode-alist '("\\.rhtml$" . nxhtml-mode))
+(add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
+;; (add-to-list 'auto-mode-alist '("\\.xml$" . nxml-mode))
+;; (add-to-list 'auto-mode-alist '("\\.html$" . nxhtml-mode))
+;; (add-to-list 'auto-mode-alist '("\\.rhtml$" . nxhtml-mode))
 (add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
 
 (setq system-specific-config (concat "~/.emacs.d/" system-name ".el"))
