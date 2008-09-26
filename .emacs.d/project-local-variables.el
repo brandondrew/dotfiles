@@ -1,4 +1,4 @@
-;;; project-local-variables.el --- Set project-local variables from a file.
+;;; project-local-variables.el --- set project-local variables from a file
 
 ;; Copyright (C) 2008 Ryan Davis and Phil Hagelberg
 
@@ -48,14 +48,18 @@
   "Like setq, but makes sym a local variable first."
   `(set (make-local-variable ',sym) ,val))
 
+;;;###autoload
 (defun plv-find-project-file (dir mode-name)
+  "Look up the project file in and above `dir'."
  (let ((f (expand-file-name (concat plv-project-file mode-name) dir))
        (parent (file-truename (expand-file-name ".." dir))))
    (cond ((string= dir parent) nil)
          ((file-exists-p f) f)
          (t (plv-find-project-file parent mode-name)))))
 
+;;;###autoload
 (defadvice hack-local-variables (before project-local-variables activate)
+  "Load the appropriate .emacs-project files for a file."
   (let* ((full-name (symbol-name major-mode))
          (mode-name (if (string-match "\\(.*\\)-mode$" full-name)
                         (match-string 1 full-name)
@@ -69,5 +73,4 @@
 (add-to-list 'auto-mode-alist '("^\.emacs-project" . emacs-lisp-mode))
 
 (provide 'project-local-variables)
-
 ;;; project-local-variables.el ends here

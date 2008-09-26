@@ -4,8 +4,6 @@ export JRUBY_HOME=/home/phil/bin/jruby-1.1.3
 export JAVA_OPTS="-client"
 export SAKE_UNSAFE="why-not"
 
-if [ -r ~/.java_profile ]; then
-    source ~/.java_profile
-fi
+source ~/.java_profile
 
 export CDPATH=.:~/src:~/work

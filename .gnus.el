@@ -74,6 +74,7 @@
         (any "Joel Watson" "friends")
 
         ;; misc
+        (from "VMWare" junk)
         (any "cron" junk)
         (any "Anacron" junk)
         (from "Inbox Archiver" junk)

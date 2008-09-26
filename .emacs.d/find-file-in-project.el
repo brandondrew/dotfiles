@@ -8,6 +8,7 @@
 ;; Created: 2008-03-18
 ;; Keywords: project, convenience
 ;; EmacsWiki: FindFileInProject
+;; Package-Requires: ((project-local-variables "0.2"))
 
 ;; This file is NOT part of GNU Emacs.
 
@@ -29,6 +30,8 @@
 ;; Boston, MA 02110-1301, USA.
 
 ;;; Commentary:
+
+;; This library depends on GNU find.
 
 ;; This file provides a method for quickly finding any file in a given
 ;; project. Projects are defined as per the `project-local-variables'
@@ -56,8 +59,6 @@
 
 ;; Recommended binding:
 ;; (global-set-key (kbd "C-x C-M-f") 'find-file-in-project)
-
-;; This library depends on GNU find.
 
 ;;; TODO:
 
@@ -106,7 +107,7 @@ directory they are found in so that they are unique."
   (setcar file-cons
           (concat (car file-cons) ": "
                   (cadr (reverse (split-string (cdr file-cons) "/"))))))
-
+;;;###autoload
 (defun find-file-in-project ()
   "Prompt with a completing list of all files in the project to find one.
 
@@ -115,13 +116,14 @@ an `.emacs-project' file. You can override this by locally
 setting the `ffip-project-root' variable."
   (interactive)
   (let* ((project-files (ffip-project-files))
-         (file (if (functionp 'ido-completing-read)
+         (file (if (and (boundp 'ido-mode) ido-mode)
                    (ido-completing-read "Find file in project: "
                                         (mapcar 'car project-files))
                  (completing-read "Find file in project: "
                                   (mapcar 'car project-files)))))
     (find-file (cdr (assoc file project-files)))))
 
+;;;###autoload
 (defun ffip-project-root (&optional dir)
   "Find the root of the project defined by presence of `.emacs-project'."
   (file-name-directory (plv-find-project-file default-directory "")))

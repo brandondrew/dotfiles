@@ -1,4 +1,4 @@
-;;; idle-highlight.el --- Highlight the word the point is on.
+;;; idle-highlight.el --- highlight the word the point is on
 
 ;; Copyright (C) 2008 Phil Hagelberg
 
@@ -30,10 +30,22 @@
 
 ;;; Commentary:
 
-;; Based on some snippets by fledermaus from #emacs channel.
+;; Based on some snippets by fledermaus from the #emacs channel.
 
 ;; M-x idle-highlight sets an idle timer that highlights all
 ;; occurences in the buffer of the word under the point.
+
+;; Enabling it in a hook is recommended. Example:
+;;
+;; (defun my-coding-hook ()
+;;   (make-local-variable 'column-number-mode)
+;;   (column-number-mode t)
+;;   (if window-system (hl-line-mode t))
+;;   (idle-highlight))
+;;
+;; (add-hook 'emacs-lisp-mode-hook 'my-coding-hook)
+;; (add-hook 'ruby-mode-hook 'my-coding-hook)
+;; (add-hook 'js2-mode-hook 'my-coding-hook)
 
 ;;; Code:
 
@@ -46,6 +58,7 @@
   "Timer to activate re-highlighting.")
 
 (defun idle-highlight-word-at-point ()
+  "Highlight the word under the point."
   (let* ((target-symbol (symbol-at-point))
          (target (symbol-name target-symbol)))
     (when idle-highlight-last-word
@@ -53,8 +66,8 @@
                                   (regexp-quote idle-highlight-last-word)
                                   "\\>")))
     (when (and idle-highlight-timer target target-symbol
+               ;; TODO: no need to highlight keywords like if
                (not (in-string-p)) (not (equal target "end")))
-      ;; TODO: check for faces we like with describe-text-properties
       (highlight-regexp (concat "\\<" (regexp-quote target) "\\>") 'region)
       (setq idle-highlight-last-word target))))
 
