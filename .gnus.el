@@ -38,7 +38,6 @@
         (to "emacs-on-rails" "emacs-rails")
         (to "obby-users@list.0x539.de" "obby-users")
         (any "conkeror" "conkeror")
-        (any "zenspider\\.com" "seattle.rb")
         (any "Nxhtml" "nxhtml")
         (any "mozlab" "mozlab")
         (any "emacs-rails" "emacs-rails")
@@ -47,6 +46,7 @@
         (any "bus-scheme" "bus-scheme")
         (any "ruby-core" "ruby-core")
         (any "ert-devs" "ert")
+        (any "zenspider\\.com" "seattle.rb")
 
         (to "phil@localhost" "feeds")
 

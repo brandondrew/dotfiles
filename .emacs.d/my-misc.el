@@ -86,21 +86,27 @@
       (setq ad-return-value "")
     ad-return-value))
 
-(setenv "PAGER" "cat")
 (setenv "EDITOR" "emacsclient")
 
 ;; don't clutter directories!
 (setq backup-directory-alist `(("." . ,(expand-file-name "~/.emacs.d/backups")))
       auto-save-default nil)
 
+(add-to-list 'auto-mode-alist '("COMMIT_EDITMSG$" . diff-mode))
 (add-to-list 'auto-mode-alist '("\\.ds$" . emacs-lisp-mode))
+(add-to-list 'auto-mode-alist '("\\.texinfo" . texinfo-mode))
+
+(add-to-list 'auto-mode-alist '("\\.css$" . css-mode))
+(add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
+(add-to-list 'auto-mode-alist '("\\.rb$" . ruby-mode))
+(add-to-list 'auto-mode-alist '("Rakefile$" . ruby-mode))
+(add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
+
 (add-to-list 'auto-mode-alist '("\\.xml$" . nxml-mode))
 (add-to-list 'auto-mode-alist '("\\.xsd$" . nxml-mode))
 (add-to-list 'auto-mode-alist '("\\.xsl$" . nxml-mode))
-(add-to-list 'auto-mode-alist '("\\.css$" . css-mode))
-(add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
-(add-to-list 'auto-mode-alist '("COMMIT_EDITMSG$" . diff-mode))
-(add-to-list 'auto-mode-alist '("\\.texinfo" . texinfo-mode))
+(add-to-list 'auto-mode-alist '("\\.html$" . nxhtml-mode))
+(add-to-list 'auto-mode-alist '("\\.rhtml$" . nxhtml-mode))
 
 ;; w3m
 (setq w3m-use-cookies t
