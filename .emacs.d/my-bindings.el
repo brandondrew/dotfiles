@@ -94,6 +94,7 @@
 (global-set-key (kbd "C-c i") (lambda () (interactive) (switch-or-start (lambda () (rcirc-connect "irc.freenode.net"))
                                                                    "*irc.freenode.net*")))
 (global-set-key (kbd "C-c J") 'jabber-send-presence)
+(global-set-key (kbd "C-c M-j") 'jabber-disconnect)
 (global-set-key (kbd "C-x g") 'magit-status)
 (global-set-key  "\C-c\C-a" 'autotest-switch)
 

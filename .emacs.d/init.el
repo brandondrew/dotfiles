@@ -53,7 +53,7 @@
 
 (add-to-list 'load-path "~/.emacs.d")
 (add-to-list 'load-path "~/.emacs.d/jabber")
-(add-to-list 'load-path "~/src/nxhtml")
+;; (add-to-list 'load-path "~/src/nxhtml")
 (add-to-list 'load-path "~/src/magit")
 (add-to-list 'load-path "~/src/ert")
 
@@ -69,8 +69,8 @@
         (update-directory-autoloads "~/.emacs.d/")))
   (load autoload-file))
 
-(autoload 'nxhtml-mode "autostart" "" t)
-(autoload 'nxml-mode "autostart" "" t)
+;; (autoload 'nxhtml-mode "autostart" "" t)
+;; (autoload 'nxml-mode "autostart" "" t)
 
 (autoload 'w3m "w3m-load" "" t)
 (autoload 'moz-minor-mode "moz" "Mozilla Minor and Inferior Mozilla Modes" t)

@@ -28,7 +28,7 @@ can_kill_last_buffer = false;
 
 register_user_stylesheet(
     "data:text/css,"+
-        escape("#minibuffer, tree.completions, .mode-line { font-family: Terminus; font-size: 12pt; }"));
+        escape("#minibuffer, tree.completions, .mode-line { font-family: Inconsolata; font-size: 12pt; }"));
 
 
 function killstyle () {
