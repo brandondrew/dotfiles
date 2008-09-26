@@ -38,7 +38,7 @@
 (global-set-key (kbd "C-c r") 'revert-buffer)
 (global-set-key "\C-c\C-t" 'toggle-buffer)
 (global-set-key (kbd "C-x C-M-f") 'find-file-in-project)
-(global-set-key (kbd "C-c f") 'recentf-ido-find-file)
+(global-set-key (kbd "C-x f") 'recentf-ido-find-file)
 (global-set-key (kbd "C-x C-p") 'find-file-at-point)
 (global-set-key (kbd "C-c y") 'bury-buffer)
 
@@ -65,15 +65,15 @@
 
 (global-set-key [menu] 'eshell)
 (global-set-key (kbd "C-x m") 'eshell)
-(global-set-key (kbd "C-x C-m") 'eshell)
+(global-set-key (kbd "C-x C-m") 'shell)
 (global-set-key (kbd "C-c m") 'eshell)
 (global-set-key (kbd "C-x M") (lambda () (interactive) (eshell t)))
 
 ;; Web
 
 (global-set-key (kbd "C-x w") 'w3m)
-(global-set-key "\C-xh" 'view-url)
-(global-set-key "\C-cT" 'twittering-update-status-interactive)
+(global-set-key (kbd "C-x h") 'view-url)
+(global-set-key (kbd "C-c S-T") 'twittering-update-status-interactive)
 (global-set-key (kbd "C-c o") 'google-region)
 
 ;;; Utility
@@ -96,7 +96,6 @@
 (global-set-key (kbd "C-c J") 'jabber-send-presence)
 (global-set-key (kbd "C-x g") 'magit-status)
 (global-set-key  "\C-c\C-a" 'autotest-switch)
-(global-set-key (kbd "C-c x") 'elunit-explain-problem)
 
 (eval-after-load 'texinfo
   '(define-key texinfo-mode-map (kbd "C-x i") 'texinfo-view-info))

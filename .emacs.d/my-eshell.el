@@ -16,6 +16,7 @@
      (require 'em-cmpl)
      (require 'esh-mode)
      (require 'em-term)
+     (setenv "PAGER" "cat")
 
      (setq eshell-cmpl-cycle-completions nil
            eshell-save-history-on-exit t
