@@ -20,7 +20,7 @@
                                nil)))))
 
 (font-lock-add-keywords
- 'ruby-mode
+ 'javascript-mode
  '(("\\<\\(FIX\\|TODO\\|FIXME\\|HACK\\|REFACTOR\\):"
     1 font-lock-warning-face t)))
 

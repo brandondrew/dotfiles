@@ -24,12 +24,22 @@ add_delicious_webjumps ("technomancy");
 
 url_remoting_fn = load_url_in_new_buffer;
 url_completion_use_history = true;
+url_completion_use_bookmarks = false;
 can_kill_last_buffer = false;
 
 register_user_stylesheet(
     "data:text/css,"+
         escape("#minibuffer, tree.completions, .mode-line { font-family: Inconsolata; font-size: 12pt; }"));
 
+interactive("toggle-stylesheets",
+            "Toggle whether conkeror uses style sheets (CSS) for the " +
+            "current buffer.  It is sometimes useful to turn off style " +
+            "sheets when the web site makes obnoxious choices.",
+            function(I) {
+  var s = I.buffer.document.styleSheets;
+  for (var i = 0; i < s.length; i++)
+    s[i].disabled = !s[i].disabled;
+});
 
 function killstyle () {
   var ss =

@@ -60,6 +60,7 @@
 (put 'narrow-to-region 'disabled nil)
 (put 'downcase-region 'disabled nil)
 (set-default 'indent-tabs-mode nil)
+(set-default 'indicate-empty-lines t)
 (defalias 'yes-or-no-p 'y-or-n-p)
 (defalias 'qrr 'query-replace-regexp)
 (random t)
@@ -107,6 +108,9 @@
 (add-to-list 'auto-mode-alist '("\\.xsl$" . nxml-mode))
 (add-to-list 'auto-mode-alist '("\\.html$" . nxhtml-mode))
 (add-to-list 'auto-mode-alist '("\\.rhtml$" . nxhtml-mode))
+
+;; Having some trouble with nxml-mode in current Emacs CVS
+(add-to-list 'auto-mode-alist '("\\.xml$" . xml-mode))
 
 ;; w3m
 (setq w3m-use-cookies t

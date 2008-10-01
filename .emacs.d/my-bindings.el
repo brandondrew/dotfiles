@@ -21,9 +21,6 @@
 
 ;;; Navigation
 
-(global-set-key "\M-g" 'goto-line)
-(global-set-key "\C-x\C-r" 'jump-to-register)
-
 (global-set-key "\C-s" 'isearch-forward-regexp)
 (global-set-key "\C-r" 'isearch-backward-regexp)
 (global-set-key "\C-\M-s" 'isearch-forward)
@@ -73,7 +70,7 @@
 
 (global-set-key (kbd "C-x w") 'w3m)
 (global-set-key (kbd "C-x h") 'view-url)
-(global-set-key (kbd "C-c S-T") 'twittering-update-status-interactive)
+(global-set-key (kbd "C-c M-t") 'twittering-update-status-interactive)
 (global-set-key (kbd "C-c o") 'google-region)
 
 ;;; Utility

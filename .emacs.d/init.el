@@ -122,9 +122,6 @@
 
 (setq system-specific-config (concat "~/.emacs.d/" system-name ".el"))
 
-;; Having some trouble with nxml-mode in current Emacs CVS
-(add-to-list 'auto-mode-alist '("\\.xml$" . xml-mode))
-
 (if (file-exists-p system-specific-config)
     (load system-specific-config))
 

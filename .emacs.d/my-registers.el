@@ -11,11 +11,12 @@
 ;;     registers (C-x C-r)
 
 (mapc (lambda (args) (apply #'set-register args))
-      '((?e (file . "~/.emacs.d/init.el"))
+      '((?i (file . "~/.emacs.d/init.el"))
 	(?d (file . "~/.emacs.d"))
 	(?g (file . "~/.gnus.el"))
         (?c (file . "~/.conkeror.js"))
 	(?r (file . "~/.emacs.d/my-registers.el"))
-	(?x (file . "~/.xbindkeys.scm"))))
+        (?b (file . "~/.emacs.d/my-bindings.el"))
+	(?x (file . "~/.xbindkeysrc.scm"))))
 
 (provide 'my-registers)
