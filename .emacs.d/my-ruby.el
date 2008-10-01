@@ -79,6 +79,7 @@
     (compile (concat ruby-test-program " -I:../lib " buffer-file-name))
     (toggle-buffer)))
 
+
 ;; find-file-at-point help
 
 (defun ruby-module-path (module)

@@ -1,6 +1,8 @@
-personal_ws-1.1 en 13 
+personal_ws-1.1 en 16 
 http
 Evrinid
+Debian
+Ubuntu
 rdoc
 Peepcode
 dotfiles
@@ -9,6 +11,7 @@ rubygems
 JRuby
 init
 precompiled
+Evri
 rubyist
 Hagelberg
 triaged

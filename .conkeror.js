@@ -41,11 +41,25 @@ interactive("toggle-stylesheets",
     s[i].disabled = !s[i].disabled;
 });
 
-function killstyle () {
-  var ss =
-  window_watcher.activeWindow.buffers.current.browser
-    .contentDocument.getElementsByTagName('style');
-   for (i = ss.length; i >= 0; i--) {
-     ss[i].parentNode.removeChild(ss[i]);
-   }
+// Thanks; _why!
+function resize_textarea_up(field) {
+   var h = field.offsetHeight;
+   if (h > 120)
+     field.style.height = (h - 60) + "px";
  }
+ function resize_textarea_down(field) {
+   field.style.height = (parseInt(field.offsetHeight) + 60) + "px";
+ }
+ interactive(
+   "resize-textarea-up",
+   "Resize a textarea to be smaller.",
+   function (I) { call_on_focused_field(I, resize_textarea_up); }
+ );
+ interactive(
+   "resize-textarea-down",
+   "Resize a textarea to be taller.",
+   function (I) { call_on_focused_field(I, resize_textarea_down); }
+ );
+
+ define_key(content_buffer_textarea_keymap, "C-up", "resize-textarea-up", $category = "Movement");
+ define_key(content_buffer_textarea_keymap, "C-down", "resize-textarea-down", $category = "Movement");

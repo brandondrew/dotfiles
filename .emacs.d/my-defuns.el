@@ -290,5 +290,6 @@
 
 (defalias 'ss 'server-start)
 (defalias 'pg 'sql-postgres)
+(defalias 'pacakge 'package-list-packages)
 
 (provide 'my-defuns)
