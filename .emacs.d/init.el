@@ -19,13 +19,13 @@
 ;; want to do, you probably shouldn't do it."
 ;; -Shawn Betts, Ratpoison FAQ
 
-;; I think of emacs as Shkembe Chorba. As one Bulgarian saying goes:
-;; 'Shkembe chorba is best when it's hot, peppery and someone praises it'.
+;; "I think of emacs as Shkembe Chorba. As one Bulgarian saying goes:
+;; 'Shkembe chorba is best when it's hot, peppery and someone praises it'."
 ;; -http://programming.reddit.com/info/uw44/comments/cuze4
 
-;; Lisp dialects [...] are wonderful provided you don't mind spending
+;; "Lisp dialects [...] are wonderful provided you don't mind spending
 ;; 20% of your time rejoicing in the beauty that is a dynamic language
-;; with uniform syntax and a real macro system.
+;; with uniform syntax and a real macro system."
 ;; - http://ratpoison.nongnu.org/inspiration.html
 
 ;;; On with the show:
@@ -143,6 +143,8 @@
 ;; M-x thumbs
 ;; M-x follow-mode
 ;; C-u C-SPC jump to mark ring
+;; C-r during query-replace for recursive edit
+;; C-M-c to close recursive edit
 
 ;;; Custom bindings
 ;; C-c \ align-regexp
