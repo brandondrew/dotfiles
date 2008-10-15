@@ -53,6 +53,8 @@
 (global-set-key (kbd "C-x d") (lambda () (interactive) (toggle-dedicated-window)))
 (global-set-key (kbd "C-c u") 'fullscreen)
 
+(windmove-default-keybindings) ;; Shift+direction
+
 ;;; Lisp
 
 (global-set-key (kbd "C-c s") 'my-eval-and-replace)
@@ -76,9 +78,6 @@
 ;;; Utility
 
 (global-set-key (kbd "C-c p") (lambda () (interactive) (message "%s" (point))))
-(global-set-key (kbd "C-c b") 'bookmark-jump)
-(global-set-key (kbd "C-c B") 'bookmark-set)
-(global-set-key (kbd "C-x i") 'imenu)
 (global-set-key [f1] 'menu-bar-mode)
 (global-set-key (kbd "C-h a") 'apropos)
 (global-set-key (kbd "C-h c") 'cheat)

@@ -17,68 +17,30 @@
   (add-to-list 'load-path "~/src/rinari")
   (require 'rinari))
 
-(defvar ruby-test-program "ruby"
-  "Program to use to run tests")
-
 ;;
 ;; Defuns
 ;;
 
 ;;;###autoload
-(defun rr ()
-  (interactive)
-  (run-ruby "irb"))
-
-;;;###autoload
-(defun rr1.9 ()
-  (interactive)
-  (run-ruby "irb1.9"))
-
-;;;###autoload
-(defun rbx ()
-  (interactive)
-  (run-ruby "~/src/rubinius/shotgun/rubinius"))
-
-;;;###autoload
-(defun rjr ()
-  (interactive)
-  (run-ruby "jruby -S irb")
-  (set (make-local-variable 'inferior-ruby-first-prompt-pattern)
-       "^irb(.*)[0-9:]+0> *")
-  (set (make-local-variable 'inferior-ruby-prompt-pattern)
-       "^\\(irb(.*)[0-9:]+[>*\"'] *\\)+"))
+(defun rr (&optional arg)
+  "Run a Ruby interactive shell session in a buffer."
+  (interactive "P")
+  (let ((impl (if (not arg)
+                  "mri"
+                (completing-read "Ruby Implementation: "
+                                 '("ruby" "jruby" "rubinius" "yarv")))))
+    (run-ruby (cdr (assoc impl '(("mri" . "irb")
+                                 ("jruby" . "jruby -S irb")
+                                 ("rubinius" . "rbx")
+                                 ("yarv" . "irb1.9")))))
+    (with-current-buffer "*ruby*"
+      (rename-buffer (format "*%s*" impl) t))))
 
 ;;;###autoload
 (defun rake (task)
   (interactive (list (completing-read "Rake (default: default): "
                                       (pcmpl-rake-tasks))))
   (shell-command-to-string (concat "rake " (if (= 0 (length task)) "default" task))))
-
-;;;###autoload
-(defun rdoc-browse-gems (gem)
-  (interactive "MGem: ")
-  (if (equal (shell-command-to-string "ps awx | grep \"gem [s]erver\"")
-             "")
-      (shell-command "gem server &"))
-  (w3m-browse-url "http://localhost:8808")
-  (ignore-errors
-    (search-forward-regexp (concat "^" gem ".*\[rdoc\]"))))
-
-(defun ruby-test-one ()
-  "Test the current ruby test (must be runable via ruby `buffer' --name `test')."
-  (interactive)
-  (let* ((funname (which-function))
-         (fn (and (string-match "#\\(.*\\)" funname) (match-string 1 funname))))
-    (compile (concat ruby-test-program " -I:../lib " buffer-file-name " --name " fn))))
-
-(defun ruby-test-file ()
-  (interactive)
-  (if (string-match "test.*\.rb$" buffer-file-name)
-      (compile (concat ruby-test-program " " buffer-file-name))
-    (toggle-buffer)
-    (compile (concat ruby-test-program " -I:../lib " buffer-file-name))
-    (toggle-buffer)))
-
 
 ;; find-file-at-point help
 

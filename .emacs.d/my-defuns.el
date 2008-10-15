@@ -11,13 +11,18 @@
 
 ;;; Network stuff
 
-(defun view-url (url)
+(require 'thingatpt)
+
+(defun view-url ()
   "Open a new buffer containing the contents of URL."
-  (interactive "MUrl: ")
-  (switch-to-buffer (url-retrieve-synchronously url))
-  (rename-buffer url t)
-  (cond ((search-forward "<?xml" nil t) (nxml-mode))
-        ((search-forward "<html" nil t) (nxhtml-mode))))
+  (interactive)
+  (let* ((default (thing-at-point-url-at-point))
+         (url (read-from-minibuffer "URL: " default)))
+    (switch-to-buffer (url-retrieve-synchronously url))
+    (rename-buffer url t)
+    ;; TODO: switch to nxml/nxhtml mode
+    (cond ((search-forward "<?xml" nil t) (xml-mode))
+          ((search-forward "<html" nil t) (html-mode)))))
 
 (defun google-region (&optional flags)
   "Google the selected region."
@@ -178,7 +183,7 @@
 (defun terminus () (interactive)
   (set-default-font
    "-xos4-terminus-medium-r-normal--14-140-72-72-c-80-iso8859-1"))
-(defun inconsolata () (interactive) (set-default-font "-unknown-Inconsolata-normal-normal-normal-*-*-*-*-*-m-0-*-*"))
+(defun inconsolata () (interactive) (set-default-font "-unknown-Inconsolata-normal-normal-normal-*-14-*-*-*-m-0-*-*"))
 (defun dvsm () (interactive) (set-default-font "-dejavu-dejavu sans mono-medium-r-normal--*-*-0-0--iso8859-1"))
 
 (defun ansi-region () (interactive)

@@ -90,8 +90,6 @@
 (require 'compile)
 (require 'which-func)
 (require 'cc-defs)
-(require 'project-local-variables)
-(require 'find-file-in-project)
 (require 'ffap)
 (require 'uniquify)
 (require 'ansi-color)
@@ -255,4 +253,3 @@
 ;; http://cedet.cvs.sourceforge.net/cedet/cedet/contrib/
 
 ;; make an emacs peepcode
-

@@ -9,14 +9,16 @@
 
 (require 'ansi-color) ;; has to be eval'd before load
 
-(eval-after-load 'eshell
+(eval-after-load 'esh-opt
+  ;; Can't eval-after-load eshell since calls provide at the top. eww.
   '(progn
      (require 'pcmpl-rake)
      (require 'em-prompt)
      (require 'em-cmpl)
-     (require 'esh-mode)
      (require 'em-term)
+     (require 'em-rebind)
      (setenv "PAGER" "cat")
+     (add-to-list 'eshell-modules-list 'eshell-rebind)
 
      (setq eshell-cmpl-cycle-completions nil
            eshell-save-history-on-exit t
@@ -41,15 +43,7 @@
        (ansi-color-apply-on-region eshell-last-output-start
 				   eshell-last-output-end))
 
-     (ignore-errors
-       (add-to-list 'eshell-output-filter-functions 'eshell-handle-ansi-color))
-
-     (defun eshell-maybe-bol ()
-       (interactive)
-       (let ((p (point)))
-	 (eshell-bol)
-	 (if (= p (point))
-	     (beginning-of-line))))
+     (add-to-list 'eshell-output-filter-functions 'eshell-handle-ansi-color)
 
      (setq eshell-prompt-function
            (lambda ()
@@ -78,9 +72,6 @@
            (rename-buffer old-name))
          (switch-to-buffer "*eshell*"))
   
-     (add-hook 'eshell-mode-hook
-	       '(lambda () (define-key eshell-mode-map "\C-a" 'eshell-maybe-bol)))
-
      (setq eshell-cmpl-dir-ignore "\\`\\(\\.\\.?\\|CVS\\|\\.svn\\)/\\'")))
 
 (provide 'my-eshell)

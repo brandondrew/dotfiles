@@ -34,17 +34,22 @@
 ;; This library depends on GNU find.
 
 ;; This file provides a method for quickly finding any file in a given
-;; project. Projects are defined as per the `project-local-variables'
-;; library, by the presence of a `.emacs-project' file in a directory.
+;; project. Projects are defined in two ways. If the
+;; `locate-dominating-file' function is bound, it assumes you are
+;; using Emacs 23, in which case you it will look for a
+;; `.dir-settings.el' file in an ancestor directory of the current
+;; file. Otherwise it uses the `project-local-variables' library,
+;; which looks for a `.emacs-project' file.
 
 ;; By default, it looks only for files whose names match
 ;; `ffip-regexp', but it's understood that that variable will be
 ;; overridden locally. This can be done either with a mode hook:
 
-;; (add-hook 'emacs-lisp-mode-hook (lambda (setl ffip-regexp ".*\\.el")))
+;; (add-hook 'emacs-lisp-mode-hook
+;;           (lambda (set (make-local-variable 'ffip-regexp) ".*\\.el")))
 
-;; or by setting it in your .emacs-project file, in which case it will
-;; get set locally by the project-local-variables library.
+;; or by setting it in your .emacs-project/.dir-settings.el file, in
+;; which case it will get set locally.
 
 ;; You can also be a bit more specific about what files you want to
 ;; find. For instance, in a Ruby on Rails project, you may be
@@ -64,10 +69,9 @@
 
 ;; Performance testing with large projects
 ;; Switch to using a hash table if it's too slow
+;; Add compatibility with BSD find (PDI; I can't virtualize OS X)
 
 ;;; Code:
-
-(require 'project-local-variables)
 
 (defvar ffip-regexp
   (concat ".*\\.\\(" (mapconcat (lambda (x) x) '("rb" "rhtml" "el") "\\|") "\\)")
@@ -102,6 +106,7 @@ directory they are found in so that they are unique."
                                                            ffip-regexp
                                                            "\" " ffip-find-options))))))
 
+;; TODO: Emacs has some built-in uniqueify functions; investigate using those.
 (defun ffip-uniqueify (file-cons)
   "Set the car of the argument to include the directory name plus the file name."
   (setcar file-cons
@@ -123,10 +128,20 @@ setting the `ffip-project-root' variable."
                                   (mapcar 'car project-files)))))
     (find-file (cdr (assoc file project-files)))))
 
-;;;###autoload
-(defun ffip-project-root (&optional dir)
-  "Find the root of the project defined by presence of `.emacs-project'."
-  (file-name-directory (plv-find-project-file default-directory "")))
+(defun ffip-project-root ()
+  "Return the root of the project.
+
+If `locate-dominating-file' is bound, it will use Emacs' built-in
+functionality; otherwise it will fall back on the definition from
+project-local-variables.el."
+  (let ((project-root
+         (if (functionp 'locate-dominating-file)
+             (locate-dominating-file default-directory "\\`\\.dir-settings\\.el\\'")
+           (require 'project-local-variables)
+           (plv-find-project-file default-directory ""))))
+    (if project-root
+        (file-name-directory project-root)
+      (message "No project was defined for the current file."))))
 
 (provide 'find-file-in-project)
 ;;; find-file-in-project.el ends here

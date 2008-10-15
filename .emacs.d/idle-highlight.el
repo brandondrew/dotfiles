@@ -35,7 +35,12 @@
 ;; M-x idle-highlight sets an idle timer that highlights all
 ;; occurences in the buffer of the word under the point.
 
-;; Enabling it in a hook is recommended. Example:
+;; Enabling it in a hook is recommended. But you don't want it enabled
+;; for all buffers, just programming ones.
+;;
+;; Example:
+;;
+;; (require 'idle-highlight)
 ;;
 ;; (defun my-coding-hook ()
 ;;   (make-local-variable 'column-number-mode)
@@ -71,6 +76,7 @@
       (highlight-regexp (concat "\\<" (regexp-quote target) "\\>") 'region)
       (setq idle-highlight-last-word target))))
 
+;;;###autoload
 (defun idle-highlight (&optional arg)
   "Toggle idle-highlighting."
   (interactive "P")

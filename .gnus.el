@@ -15,6 +15,7 @@
       smtpmail-smtp-server "mail.hagelb.org"
       smtpmail-default-smtp-server "mail.hagelb.org"
       send-mail-function 'smtpmail-send-it
+      gnus-gcc-mark-as-read t
       message-send-mail-function 'smtpmail-send-it
       smtpmail-smtp-service 587
       smtpmail-auth-credentials '(("mail.hagelb.org"
@@ -99,7 +100,8 @@
 ;; Unbind this key; it's annoying!
 (define-key gnus-summary-mode-map "o" (lambda () (interactive)))
 
-;; (add-hook 'message-mode-hook 'flyspell-mode)
+(add-hook 'message-mode-hook 'flyspell-mode)
+(add-hook 'gnus-article-mode-hook 'longlines-mode)
 
 (setq gnus-summary-line-format
       (concat
