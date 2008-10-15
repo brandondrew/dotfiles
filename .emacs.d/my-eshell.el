@@ -49,7 +49,7 @@
            (lambda ()
              (concat (propertize (or (eshell/branch) "") 'face 'eshell-branch-face) " "
                      (propertize (concat (eshell/pwd)
-                                         (if (= (user-uid) 0) " # " " $"))
+                                         (if (= (user-uid) 0) " ☢ " " ➤"))
                                  'face 'eshell-prompt) " ")))
 
      (defun eshell/branch ()
