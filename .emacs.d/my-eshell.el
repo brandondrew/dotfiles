@@ -16,7 +16,7 @@
      (require 'em-prompt)
      (require 'em-cmpl)
      (require 'em-term)
-     (require 'em-rebind)
+
      (setenv "PAGER" "cat")
      (add-to-list 'eshell-modules-list 'eshell-rebind)
 
@@ -45,11 +45,14 @@
 
      (add-to-list 'eshell-output-filter-functions 'eshell-handle-ansi-color)
 
+     (add-hook 'eshell-mode-hook
+	       '(lambda () (define-key eshell-mode-map "\C-a" 'eshell-maybe-bol)))
+
      (setq eshell-prompt-function
            (lambda ()
              (concat (propertize (or (eshell/branch) "") 'face 'eshell-branch-face) " "
                      (propertize (concat (eshell/pwd)
-                                         (if (= (user-uid) 0) " ☢ " " ➤"))
+                                         (if (= (user-uid) 0) " ☢ " " $"))
                                  'face 'eshell-prompt) " ")))
 
      (defun eshell/branch ()

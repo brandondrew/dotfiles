@@ -183,7 +183,11 @@
 (defun terminus () (interactive)
   (set-default-font
    "-xos4-terminus-medium-r-normal--14-140-72-72-c-80-iso8859-1"))
-(defun inconsolata () (interactive) (set-default-font "-unknown-Inconsolata-normal-normal-normal-*-14-*-*-*-m-0-*-*"))
+(defun terminus-large () (interactive)
+  (set-default-font
+   "-xos4-terminus-medium-r-normal--20-140-72-72-c-80-iso8859-1"))
+
+(defun inconsolata () (interactive) (set-default-font "-unknown-Inconsolata-normal-normal-normal-*-16-*-*-*-m-0-*-*"))
 (defun dvsm () (interactive) (set-default-font "-dejavu-dejavu sans mono-medium-r-normal--*-*-0-0--iso8859-1"))
 
 (defun ansi-region () (interactive)

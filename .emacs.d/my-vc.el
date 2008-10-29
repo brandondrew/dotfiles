@@ -19,10 +19,9 @@
 (defun my-vc-add-or-register ()
   "Register the file if it hasn't been registered, otherwise git add it."
   (interactive)
-  (if (not (vc-registered buffer-file-name))
-      (vc-register)
-    (shell-command (format "git add %s" buffer-file-name))
-    (message "Added.")))
+  (if (eq 'Git (vc-backend buffer-file-name))
+      (shell-command (format "git add %s" buffer-file-name))
+    (vc-register)))
 
 (global-set-key (kbd "C-x v i") 'my-vc-add-or-register)
 

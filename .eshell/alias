@@ -1,23 +1,23 @@
-alias jake JAVA_HOME=~/bin/jdk1.6.0_02/ ~/bin/jruby-1.1.2/bin/jruby -S rake
-alias xmlcurl curl -H Accept:text/xml $*
-alias gco git checkout $*
-alias gcm git commit -a -v
-alias gb git branch --color $*
-alias gst git status
-alias sagc gem search --remote $*
-alias sagd sudo gem source -u
-alias sagr sudo gem uninstall $*
-alias sagi sudo gem install $*
-alias saptd sudo apt-get update $*
-alias saptu sudo apt-get upgrade $*
-alias saptr sudo apt-get remove $*
-alias sapts apt-cache show $*
-alias saptc apt-cache search $*
-alias sapti sudo apt-get install $*
-alias grepp ps aux | grep $*
-alias l ls -a -l $*
-alias la ls -a $*
-alias ll ls -l $*
-alias lh ls -l -h $*
+alias nil  $*
 alias devlog tail -F log/development.log
-alias nil $*
+alias lh ls -l -h $*
+alias ll ls -l $*
+alias la ls -a $*
+alias l ls -a -l $*
+alias grepp ps aux | grep $*
+alias sapti sudo apt-get install $*
+alias saptc apt-cache search $*
+alias sapts apt-cache show $*
+alias saptr sudo apt-get remove $*
+alias saptu sudo apt-get upgrade $*
+alias saptd sudo apt-get update $*
+alias sagi sudo gem install $*
+alias sagr sudo gem uninstall $*
+alias sagd sudo gem source -u
+alias sagc gem search --remote $*
+alias gst git status
+alias gb git branch --color $*
+alias gcm git commit -a -v
+alias gco git checkout $*
+alias xmlcurl curl -H Accept:text/xml $*
+alias jake JAVA_HOME=~/bin/jdk1.6.0_02/ ~/bin/jruby-1.1.2/bin/jruby -S rake
