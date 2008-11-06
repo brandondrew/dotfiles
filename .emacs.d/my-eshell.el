@@ -18,7 +18,6 @@
      (require 'em-term)
 
      (setenv "PAGER" "cat")
-     (add-to-list 'eshell-modules-list 'eshell-rebind)
 
      (setq eshell-cmpl-cycle-completions nil
            eshell-save-history-on-exit t

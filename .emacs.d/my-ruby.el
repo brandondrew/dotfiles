@@ -62,7 +62,7 @@
 ;;
 
 (define-key ruby-mode-map "\C-\M-h" 'backward-kill-word)
-(define-key ruby-mode-map (kbd "RET") 'ruby-reindent-then-newline-and-indent)
+(define-key ruby-mode-map (kbd "RET") 'reindent-then-newline-and-indent)
 (define-key ruby-mode-map (kbd "C-c l") (lambda ()
                                           (interactive) (insert "lambda")))
 (define-key ruby-mode-map (kbd "C-\\") 'rct-complete-symbol)
@@ -134,9 +134,18 @@
 
 (add-hook 'ruby-mode-hook
           (lambda ()
-            (when (and buffer-file-name (file-writable-p buffer-file-name))
+            (when (and buffer-file-name
+                       (file-writable-p
+                        (file-name-directory buffer-file-name))
+                       (file-writable-p buffer-file-name))
               (local-set-key (kbd "C-c d")
                              'flymake-display-err-menu-for-current-line)
               (flymake-mode t))))
+
+(eval-after-load 'ruby-compilation
+  '(define-key ruby-compilation-minor-mode-map "q" (lambda ()
+                                                     (interactive)
+                                                     (kill-buffer (current-buffer))
+                                                     (delete-window))))
 
 (provide 'my-ruby)
