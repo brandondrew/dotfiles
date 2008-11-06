@@ -187,7 +187,15 @@
   (set-default-font
    "-xos4-terminus-medium-r-normal--20-140-72-72-c-80-iso8859-1"))
 
-(defun inconsolata () (interactive) (set-default-font "-unknown-Inconsolata-normal-normal-normal-*-16-*-*-*-m-0-*-*"))
+(defun inconsolata (size)
+  (interactive "p")
+  (set-default-font
+   (concat "-unknown-Inconsolata-normal-normal-normal-*-"
+           (if (stringp size) size
+             (if (= 1 size) "16"
+               (read-from-minibuffer "Size: ")))
+           "-*-*-*-m-0-*-*")))
+
 (defun dvsm () (interactive) (set-default-font "-dejavu-dejavu sans mono-medium-r-normal--*-*-0-0--iso8859-1"))
 
 (defun ansi-region () (interactive)

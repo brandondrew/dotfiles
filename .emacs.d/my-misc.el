@@ -77,16 +77,6 @@
       oddmuse-directory "~/.emacs.d/oddmuse"
       install-elisp-repository-directory "~/.emacs.d/")
 
-;; Sorry, I *really* don't care.
-(defvar twittering-spam-regex "\\(iphone\\|wwdc\\)"
-  "Tweets that match this regex will not get displayed")
-
-(defadvice twittering-format-status (after twittering-spam-block)
-  "Drop tweets that match twittering-spam-regex"
-  (if (string-match twittering-spam-regex ad-return-value)
-      (setq ad-return-value "")
-    ad-return-value))
-
 (setenv "EDITOR" "emacsclient")
 
 ;; don't clutter directories!
