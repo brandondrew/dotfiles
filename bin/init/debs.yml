@@ -19,7 +19,6 @@
 - f-spot
 - fakeroot
 - fetchmail
-- firefox-themes-ubuntu
 - gitk
 - git-core
 - git-cvs
@@ -31,20 +30,15 @@
 - gstreamer0.10-ffmpeg
 - gstreamer0.10-fluendo-mp3
 - gstreamer0.10-plugins-bad
-- gstreamer0.10-plugins-bad-multiverse
 - gstreamer0.10-plugins-ugly
-- gstreamer0.10-plugins-ugly-multiverse
 - htop
 - imagemagick
 - irb1.8
-- lame
 - libavahi-compat-libdnssd-dev
 - libavahi-compat-libdnssd1
 - libfaad2-0
 - libgnome2-ruby
 - libnotify-bin
-- liboft0
-- liboft-dev
 - libopenssl-ruby1.8
 - libpurple-bin
 - libquicktime1
@@ -53,7 +47,6 @@
 - mpc
 - mpd
 - mpg321
-- mplayer
 - namazu2
 - namazu2-index-tools
 - netcat
@@ -72,7 +65,6 @@
 - screen
 - service-discovery-applet
 - sloccount
-- snes9x-x
 - sqlite3
 - sshfs
 - subversion
@@ -86,9 +78,10 @@
 - unzip
 - w3m-img
 - wmctrl
-- wxvlc
+- vlc
 - xbindkeys
 - xfonts-terminus
 - xulrunner
 - youtube-dl
 - zile
+- zsnes
