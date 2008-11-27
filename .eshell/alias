@@ -1,5 +1,5 @@
 alias jake jruby -S rake
-alias nil $*
+alias nil  $*
 alias devlog tail -F log/development.log
 alias lh ls -l -h $*
 alias ll ls -l $*

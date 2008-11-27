@@ -16,6 +16,7 @@
      (require 'em-prompt)
      (require 'em-cmpl)
      (require 'em-term)
+
      (setenv "PAGER" "cat")
 
      (setq eshell-cmpl-cycle-completions nil
@@ -45,6 +46,7 @@
 
      (add-hook 'eshell-mode-hook
 	       '(lambda () (define-key eshell-mode-map "\C-a" 'eshell-bol)))
+
      (setq eshell-prompt-function
            (lambda ()
              (concat (propertize (or (eshell/branch) "") 'face 'eshell-branch-face) " "

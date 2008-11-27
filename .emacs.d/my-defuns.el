@@ -184,6 +184,10 @@
   (set-default-font
    "-xos4-terminus-medium-r-normal--14-140-72-72-c-80-iso8859-1"))
 
+(defun terminus-large () (interactive)
+  (set-default-font
+   "-xos4-terminus-medium-r-normal--20-140-72-72-c-80-iso8859-1"))
+
 (defun inconsolata (size)
   (interactive "p")
   (set-default-font
