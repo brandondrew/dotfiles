@@ -66,7 +66,7 @@
 (xbindkey '(mod4 s) "f-spot")
 (xbindkey '(mod4 c) "~/src/conkeror/conkeror")
 (xbindkey '(mod4 space) "ruby ~/bin/dlaunch.rb")
-(xbindkey '(mod4 p) "emacs -q -l ~/src/peepcode/dotfiles/init.el")
+(xbindkey '(mod4 k) "emacs -q -l ~/src/emacs-starter-kit/init.el")
 (xbindkey '(mod4 x) "xournal")
 (xbindkey '(mod4 g) "gmpc")
 (xbindkey '(mod4 t) "fetchmail")

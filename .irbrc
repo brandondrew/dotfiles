@@ -2,15 +2,20 @@
 
 require 'irb/completion'
 require 'rubygems'
-require 'wirble'
 require 'yaml'
 
 # start wirble (with color)
-Wirble.init
-# Wirble.colorize unless IRB.conf[:PROMPT_MODE] == :INF_RUBY
+begin
+  require 'wirble'
+  Wirble.init
+  # Wirble.colorize unless IRB.conf[:PROMPT_MODE] == :INF_RUBY
+rescue LoadError
+end
 
-def ri(obj)
-  puts "ri #{obj}"
+def profile
+  t = Time.now
+  yield
+  "Took #{Time.now - t} seconds."
 end
 
 # Inspecting really long strings causes inf-ruby to get really, really slow.

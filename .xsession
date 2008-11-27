@@ -5,4 +5,5 @@ unclutter -idle 0.5 &
 xbindkeys &
 conkeror -daemon &
 
+source ~/.profile
 exec gnome-session

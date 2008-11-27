@@ -3,9 +3,11 @@ export EDITOR="emacsclient"
 export JAVA_OPTS="-client"
 export SAKE_UNSAFE="why-not"
 
-export JAVA_HOME=$HOME/bin/jdk1.6.0_02
-export PATH=$JAVA_HOME/bin:$PATH
-export JRUBY_HOME=$HOME/bin/jruby-1.1.4
-export PATH=$PATH:$JRUBY_HOME/bin
-
 export CDPATH=.:~/src:~/work
+
+if [ -r $HOME/bin/jruby ]; then
+  export JAVA_HOME=$HOME/bin/jdk1.6.0_02
+  export PATH=$JAVA_HOME/bin:$PATH
+  export JRUBY_HOME=$HOME/bin/jruby
+  export PATH=$PATH:$JRUBY_HOME/bin
+fi

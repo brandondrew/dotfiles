@@ -19,6 +19,7 @@ interactive("tinyurl", "Create a TinyURL for the current URL",
 define_key(minibuffer_keymap, kbd("/", MOD_CTRL), "fill-domain");
 
 add_webjump("hub", "http://github.com/search?q=%s");
+add_webjump("twitter", "http://search.twitter.com/search?q=%s");
 add_webjump("wikipedia", "http://www.google.com/search?q=wikipedia+%s&btnI=I'm Feeling Lucky");
 add_delicious_webjumps ("technomancy");
 
