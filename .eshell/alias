@@ -1,3 +1,4 @@
+alias jake jruby -S rake
 alias nil  $*
 alias devlog tail -F log/development.log
 alias lh ls -l -h $*
@@ -20,4 +21,3 @@ alias gb git branch --color $*
 alias gcm git commit -a -v
 alias gco git checkout $*
 alias xmlcurl curl -H Accept:text/xml $*
-alias jake JAVA_HOME=~/bin/jdk1.6.0_02/ ~/bin/jruby-1.1.2/bin/jruby -S rake

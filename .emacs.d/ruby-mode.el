@@ -148,6 +148,7 @@ This should only be called after matching against `ruby-here-doc-end-re'."
     (define-key map "\M-\C-q" 'ruby-indent-exp)
     (define-key map "\t" 'ruby-indent-line)
     (define-key map "\C-c\C-e" 'ruby-insert-end)
+    (define-key map "\C-\M-h" 'backward-kill-word)
     (define-key map "\C-j" 'reindent-then-newline-and-indent)
     (define-key map "\C-m" 'newline)
     map)

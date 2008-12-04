@@ -1,10 +1,13 @@
 ---
+- builder
+- merb
+- rack
 - rake
 - hpricot
 - mongrel
 - rails
 - vlad
-- miniunit
+- minitest
 - rspec
 - rcov
 - wirble
@@ -25,3 +28,5 @@
 - twitter
 - net-mdns
 - twitter
+- github
+- xmpp4r
