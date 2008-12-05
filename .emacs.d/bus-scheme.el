@@ -4,7 +4,8 @@
 
 (defun bus ()
   (interactive)
-  (run-scheme "~/src/bus_scheme/bin/bus"))
+  (run-scheme "~/src/bus_scheme/bin/bus")
+  (if (functionp 'pretty-lambdas) (pretty-lambdas)))
 
 (font-lock-add-keywords 'scheme-mode
 			(list

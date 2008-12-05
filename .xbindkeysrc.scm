@@ -57,6 +57,8 @@
            '(F8 . "mpc toggle")
            '(F9 . "mpc prev")
            '(F10 . "mpc next")
+           ;; crashyness
+           '(F11 . "killall gnome-power-manager; gnome-power-manager")
            '(F12 . "vlc -f ~/documents/movies/misc/rick.flv"))) ;; tee hee
 
 ;;;; Other launchers
@@ -69,6 +71,8 @@
 (xbindkey '(mod4 k) "emacs -q -l ~/src/emacs-starter-kit/init.el")
 (xbindkey '(mod4 x) "xournal")
 (xbindkey '(mod4 g) "gmpc")
+(xbindkey '(mod4 b) "~/bin/dbook.rb")
+(xbindkey '(mod4 m) "nautilus ~/documents/movies")
 (xbindkey '(mod4 t) "fetchmail")
 (xbindkey '(mod4 grave) "gnome-terminal -e \"screen -xRR\"")
 

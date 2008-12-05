@@ -6,7 +6,6 @@ if [ `/usr/bin/whoami` != "root" ] ; then
 fi
 
 if [ ! -r /etc/apt/sources.list.orig ] ; then
-    # enable universe
     cp /etc/apt/sources.list /etc/apt/sources.list.orig
     # Enable all disabled sources
     sed -i -e "s/# deb/deb/g" /etc/apt/sources.list
@@ -23,12 +22,12 @@ if [ ! -r install.rb ] ; then
   # if we are running a bare go.sh
   cd ~
   git clone git@github.com:technomancy/dotfiles.git dotfiles
-  chown -R $USER dotfiles
+  chown -R phil dotfiles
   cd dotfiles/bin/init
 fi
 
 chattr +A / # don't write atimes
 ruby install.rb
-chown -R $USER $HOME
-sudo -u $USER ruby user-setup.rb # TODO: this breaks... huh?
+chown -R phil $HOME
+sudo -u phil ruby user-setup.rb # TODO: this breaks... huh?
 exit 0

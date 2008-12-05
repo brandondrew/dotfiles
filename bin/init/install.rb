@@ -32,4 +32,9 @@ system "gem install #{gems.join(' ')}"
 
 system "sed -i s/DisallowTCP=true/DisallowTCP=false/ /etc/gdm/gdm.conf" # gotta have my remote X!
 
+# MPD setup
+mpd_conf = File.read('/etc/mpd.conf')
+File.open('/etc/mpd.conf', 'w') { |fp| fp.puts mpd_conf.gsub("/var/lib/mpd/music", '/home/phil/music') }
+system "/etc/init.d/mpd restart; mpc update"
+
 roastbeefs.each { |beef| system "sudo -u $USER roastbeef install #{beef}" }

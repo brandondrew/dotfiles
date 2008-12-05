@@ -134,9 +134,18 @@
 
 (add-hook 'ruby-mode-hook
           (lambda ()
-            (when (and buffer-file-name (file-writable-p buffer-file-name))
+            (when (and buffer-file-name
+                       (file-writable-p
+                        (file-name-directory buffer-file-name))
+                       (file-writable-p buffer-file-name))
               (local-set-key (kbd "C-c d")
                              'flymake-display-err-menu-for-current-line)
               (flymake-mode t))))
+
+(eval-after-load 'ruby-compilation
+  '(define-key ruby-compilation-minor-mode-map "q" (lambda ()
+                                                     (interactive)
+                                                     (kill-buffer (current-buffer))
+                                                     (delete-window))))
 
 (provide 'my-ruby)
