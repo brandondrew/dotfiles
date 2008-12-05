@@ -4,7 +4,7 @@
 
 ;; Author: Phil Hagelberg <technomancy@gmail.com>
 ;; URL: http://www.emacswiki.org/cgi-bin/wiki/IdleHighlight
-;; Version: 1.0
+;; Version: 1.1
 ;; Created: 2008-05-13
 ;; Keywords: convenience
 ;; EmacsWiki: IdleHighlight
@@ -35,6 +35,9 @@
 ;; M-x idle-highlight sets an idle timer that highlights all
 ;; occurences in the buffer of the word under the point.
 
+;; By default it skips keywords, comments, etc. Turn off
+;; idle-highlight-skip-keywords to disable this behaviour.
+
 ;; Enabling it in a hook is recommended. But you don't want it enabled
 ;; for all buffers, just programming ones.
 ;;
@@ -62,6 +65,9 @@
 (defvar idle-highlight-timer nil
   "Timer to activate re-highlighting.")
 
+(defvar idle-highlight-skip-keywords t
+  "Don't highlight if the point is on a keyword, string, or comment.")
+
 (defun idle-highlight-word-at-point ()
   "Highlight the word under the point."
   (let* ((target-symbol (symbol-at-point))
@@ -71,10 +77,14 @@
                                   (regexp-quote idle-highlight-last-word)
                                   "\\>")))
     (when (and idle-highlight-timer target target-symbol
-               ;; TODO: no need to highlight keywords like if
-               (not (in-string-p)) (not (equal target "end")))
+               (not (idle-highlight-skip-word?)))
       (highlight-regexp (concat "\\<" (regexp-quote target) "\\>") 'region)
       (setq idle-highlight-last-word target))))
+
+(defun idle-highlight-skip-word? ()
+  (and idle-highlight-skip-keywords
+       ;; if it has a face, it's a keyword, string, comment, or some such.
+       (get-text-property (point) 'face)))
 
 ;;;###autoload
 (defun idle-highlight (&optional arg)
