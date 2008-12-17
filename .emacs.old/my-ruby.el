@@ -68,9 +68,6 @@
 (define-key ruby-mode-map (kbd "C-\\") 'rct-complete-symbol)
 (define-key ruby-mode-map (kbd "C-c M-t") 'ruby-test-file)
 (define-key ruby-mode-map (kbd "C-c C-M-t") 'ruby-test-one)
-(define-key ruby-mode-map (kbd "M-;") (lambda () (interactive)
-                                        (comment-dwim nil)
-                                        (indent-buffer)))
 
 (global-set-key (kbd "C-h r") 'ri)
 

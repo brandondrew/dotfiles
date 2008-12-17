@@ -106,7 +106,7 @@
 ;; Unbind this key; it's annoying!
 (define-key gnus-summary-mode-map "o" (lambda () (interactive)))
 
-(add-hook 'message-mode-hook (lambda () (flyspell-mode 1)))
+(add-hook 'message-mode-hook 'turn-on-flyspell)
 
 (setq gnus-summary-line-format
       (concat
