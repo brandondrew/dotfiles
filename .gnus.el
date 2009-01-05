@@ -39,6 +39,9 @@
         (to "emacs-on-rails" "emacs-rails")
         (to "obby-users@list.0x539.de" "obby-users")
         (any "conkeror" "conkeror")
+        (any "clojure" "clojure")
+        (any "compojure" "compojure")
+        (any "seafunc" "seafunc")
         (any "Nxhtml" "nxhtml")
         (any "mozlab" "mozlab")
         (any "emacs-rails" "emacs-rails")
@@ -101,7 +104,6 @@
 (define-key gnus-summary-mode-map "o" (lambda () (interactive)))
 
 (add-hook 'message-mode-hook 'flyspell-mode)
-(add-hook 'gnus-article-mode-hook 'longlines-mode)
 
 (setq gnus-summary-line-format
       (concat

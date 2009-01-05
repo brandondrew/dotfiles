@@ -3,6 +3,7 @@
 require 'irb/completion'
 require 'rubygems'
 require 'yaml'
+require 'pp'
 
 # start wirble (with color)
 begin
