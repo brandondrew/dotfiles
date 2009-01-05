@@ -1,0 +1,243 @@
+require 'java'
+
+require 'cpipe/final_checker'
+require 'cpipe/collector_factory'
+require 'cpipe/core_exts'
+
+module CPipe
+
+  class FilterFactory
+    import "com.evri.nid.base.ItemFilterChain"
+    import "com.evri.nid.base.ItemKeys"
+    import "com.evri.nid.base.ThreadPoolProcessor"
+    import "com.evri.nid.html.HTMLParserFilter"
+    import "com.evri.nid.http.HTTPKeys"
+    import "com.evri.nid.http.ContentDecoder"
+    import "com.evri.nid.http.ContentTypeFilter"
+    import "com.evri.nid.media.MediaKeys"
+    import "com.evri.nid.media.MediaSetFilter"
+    import "com.evri.nid.report.ReportPassedTerminal"
+    import "com.evri.nid.text.EIDFWriter"
+    import "com.evri.nid.text.EnglishStopWordClassifier"
+    import "com.evri.nid.text.FieldToTextNodeFilter"
+    import "com.evri.nid.text.ItemMinNLVFilter"
+    import "com.evri.nid.text.ItemTextNodeTreeFilter"
+    import "com.evri.nid.text.TextKeys"
+    import "com.evri.nid.text.TextNode"
+    import "com.evri.nid.text.TextNormFilter"
+    import "com.evri.nid.text.filter.MaxSentenceFilter"
+    import "com.evri.nid.text.filter.NLVCutFilter"
+    import "com.evri.nid.text.filter.NLVSimplifyFilter"
+    import "com.evri.nid.text.filter.NLValueFilter"
+    import "com.evri.nid.text.filter.RegionNormFilter"
+    import "com.evri.nid.text.filter.SentenceNormFilter"
+    import "com.evri.nid.text.filter.SentenceSplitFilter"
+
+    attr_accessor( :filter_threads, 
+                   :body_min_nlv, 
+                   :body_remove_nav_regions, 
+                   :body_min_words, 
+                   :filter_non_english,
+                   :use_content_stream )
+    
+    Mode = ItemTextNodeTreeFilter::Mode
+    TextType = TextNode::TextType
+
+    def initialize
+
+      # Number of threads to use for filter processing
+      @filter_threads = 1
+
+      # Minimum NLV heuristic for entire body? (0.0 disables)
+      @body_min_nlv = 0.0
+      
+      # Remove NAV regions (low NLV values)? 
+      @body_remove_nav_regions = false
+
+      # Minimum number of words (after NAV region removal) to allow in
+      # body (0 disables, though empty BODY's will still be rejected).
+      @body_min_words = 0
+
+      # Perform filtering of items that are predominately non-english?
+      @filter_non_english = true
+      
+      # Do image filtering? (Harmless if a MEDIA_SET isn't set.)
+      @filter_images = true
+
+      # Set true to use CONTENT_STREAM instead of CONTENT_BYTES
+      @use_content_stream = false
+    end
+    
+    # Creates and yields filter chain to block, closes after
+    # Returns a filter_report
+    def do_filter( filter_report = CollectorFactory.new )
+      chain = nil
+      chain = create_filter_chain( filter_report.create_collectors )
+      yield chain
+      filter_report
+    ensure
+      chain.close unless chain.nil?
+      filter_report.close unless filter_report.nil?
+    end
+    
+    # Returns a filter_chain which caller is responsible to close when
+    # done. Use do_filter block instead
+    def create_filter_chain( col = CollectorFactory.new.create_collectors )
+
+      filters = pre_filters
+
+      if @filter_threads == 1
+        filters = transform_filters + output_filters
+        filters << ReportPassedTerminal.new( col )
+      else
+        tfilters = transform_filters + output_filters
+        tfilters << ReportPassedTerminal.new( col )
+        tchain = ItemFilterChain.new( tfilters.to_jlist, col )
+        filters << ThreadPoolProcessor.new( tchain, 
+                                            @filter_threads * 1,
+                                            @filter_threads )
+      end
+      
+      ItemFilterChain.new( filters.to_jlist, col )
+    end
+
+    def pre_filters
+      []
+    end
+    
+    def transform_filters
+      filters = []
+      filters += pre_transform_filters
+      filters += parse_filters
+      filters += title_filters
+      filters += body_filters
+      filters += media_filters
+      filters += transform_check_filters
+      filters
+    end
+
+    def output_filters
+      writer = EIDFWriter.new
+      writer.write_nlvalue = true
+      [ writer ]
+    end
+    
+    def parse_filters
+      [ HTMLParserFilter.new( @use_content_stream ? 
+                              HTTPKeys::CONTENT_STREAM : 
+                              HTTPKeys::CONTENT_BYTES,
+                              TextKeys::BODY_TEXT_TREE, 
+                              true ) ] # extract title
+    end
+
+    def title_filters
+      tnode = TextNode.new
+      tnode.visible = false
+      tnode.text_type = TextType::TITLE
+
+      [ TextNormFilter.new( ItemKeys::TITLE ),
+
+        FieldToTextNodeFilter.new( ItemKeys::TITLE,
+                                   TextKeys::TITLE_TEXT_TREE,
+                                   tnode ),
+
+        ItemTextNodeTreeFilter.new( TextKeys::TITLE_TEXT_TREE, 
+                                    general_text_tree_filters.to_jlist ) ]
+    end
+    
+    def body_filters
+
+      # Apply general text filters plus the NLV filter
+      txt_filters = general_text_tree_filters 
+      txt_filters << nlv_filter
+
+      filters = []
+
+      filters << ItemTextNodeTreeFilter.new( TextKeys::BODY_TEXT_TREE, 
+                                             txt_filters.to_jlist )
+
+      # Apply min NLV page rejection
+      filters << ItemMinNLVFilter.new( TextKeys::BODY_TEXT_TREE, 
+                                       @body_min_nlv, 0 )
+
+      # Apply NLV heuristic simplification in any case, and cut filter 
+      # if requested
+      txt_filters = []
+      txt_filters << NLVCutFilter.new( 1.0 ) if @body_remove_nav_regions
+      txt_filters << NLVSimplifyFilter.new
+      filters << ItemTextNodeTreeFilter.new( TextKeys::BODY_TEXT_TREE,
+                                             txt_filters.to_jlist, 
+                                             Mode::BREADTH )
+      if @body_remove_nav_regions
+        # Renormalize region only needed if NLVCutFilter applied
+        filters << 
+          ItemTextNodeTreeFilter.new( TextKeys::BODY_TEXT_TREE,
+                                      [ RegionNormFilter.new ].to_jlist )
+      end
+
+      filters << ItemMinNLVFilter.new( TextKeys::BODY_TEXT_TREE, 
+                                       0.0, @body_min_words )
+
+      if @filter_non_english
+        filters << EnglishStopWordClassifier.new( TextKeys::BODY_TEXT_TREE )
+      end
+
+      filters
+
+    end
+
+    # Produce media:content/group ei:text from media:text and title.
+    def media_filters
+      if @filter_images
+        
+        # Normalize TITLE
+        # TITLE -> TITLE_TEXT_TREE (with norms)
+        mfilters = title_filters
+        
+        # Normalize MEDIA_TEXT
+        mfilters << TextNormFilter.new( MediaKeys::MEDIA_TEXT )
+        
+        # MEDIA_TEXT -> BODY_TEXT_TREE
+        tnode = TextNode.new
+        tnode.text_type = TextType::CAPTION
+        mfilters << FieldToTextNodeFilter.new( MediaKeys::MEDIA_TEXT,
+                                               TextKeys::BODY_TEXT_TREE,
+                                               tnode )
+        
+        # Sentence split, norm on BODY_TEXT_TREE
+        mfilters << 
+          ItemTextNodeTreeFilter.new( TextKeys::BODY_TEXT_TREE, 
+                                      general_text_tree_filters.to_jlist )
+        
+        # Above mfilters on each MEDIA_SET Item of container Item
+        [ MediaSetFilter.new( mfilters.to_jlist ) ]
+      else
+        [ ]
+      end
+    end
+
+    def transform_check_filters
+      [ FinalChecker.new ]
+    end
+
+    def nlv_filter
+      nlv = NLValueFilter.new
+      nlv.region_decay = 0.24
+      nlv.anchor_text_weight = 0.16
+      nlv
+    end
+
+    def pre_transform_filters
+      []
+    end
+
+    def general_text_tree_filters
+      [ SentenceSplitFilter.new,
+        SentenceNormFilter.new,
+        MaxSentenceFilter.new( 1024 ),
+        RegionNormFilter.new ]
+    end
+
+  end
+
+end

@@ -1,0 +1,31 @@
+--- 
+timestamp: Thu Dec 4 17:44:52 2008
+title: in which is announced a rather ambitious undertaking
+tags: "emacs projects"
+id: 119
+content: |-
+  <p>I've recently been trying to take advantage of
+    the <a href='/115'>recent upswing in interest in Emacs</a> by
+    working on things to help folks get started
+    easily. The <a href='http://github.com/technomancy/dotfiles'>personal
+    dotfiles</a> I've had up have been fairly useful mostly as an
+    example to which I can point folks mostly just for reference, but
+    I've started a new project called
+    the <a href='http://github.com/technomancy/emacs-starter-kit/'>Emacs
+    Starter Kit</a>, which is designed to be a base from which new
+    users can get going with minimal fuss. It's targeted towards
+    programmers of dynamic languages.</p>
+
+  <p>I've been using it as my main config for quite some time now, so
+    it's got all the libraries I need. If you're interested in trying
+    out with Emacs but don't know where to start, give this a shot. If
+    you're an old hand but are curious to pick up some new tricks, try
+    out the starter kit and let me know if it's missing some must-have
+    functionality that you're used to.</p>
+
+  <p>One of the key things I'm trying to do with the Starter Kit is to
+    get as many libraries into ELPA as I can. ELPA is the Emacs Lisp
+    Package Archive&mdash;it's basically an automated package manager
+    for Emacs libraries. Without ELPA, installing libraries is all
+    done by hand&mdash;only minorly cumbersome for simple libraries,
+    but a nightmare when dependencies are involved.

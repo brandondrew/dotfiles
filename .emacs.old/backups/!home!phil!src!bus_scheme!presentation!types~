@@ -1,0 +1,17 @@
+
+
+        Well, not quite.
+
+          You'll want to work with more than just numbers.
+
+
+          Strings are almost just like Ruby.
+            (double-quoted only, no interpolation.)
+
+          Symbols are just identifiers, but generally
+            you need to quote them.
+
+          :foo => (quote foo)
+          :foo => 'foo ;; Shorthand
+
+          Functions are lambda literals, similar to

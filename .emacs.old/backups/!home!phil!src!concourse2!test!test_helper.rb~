@@ -1,0 +1,29 @@
+require 'rubygems'
+require 'minitest/unit'
+require 'merb-core'
+
+FileUtils.cd(File.dirname(__FILE__) + '/../') # shouldn't need this?
+
+Merb.start_environment(:testing => true, :adapter => 'runner',
+                       :environment => ENV['MERB_ENV'] || 'test')
+
+DataMapper.auto_migrate!
+
+class MiniTest::Unit::TestCase
+  alias_method :assert_not_equal, :refute_equal
+
+  def assert_different(obj, method)
+    original_value = obj.send(method)
+    yield
+    assert_not_equal(original_value, obj.send(method))
+  end
+
+  def assert_not_different(obj, method)
+    original_value = obj.send(method)
+    yield
+    new_value = obj.send(method)
+    assert_equal(original_value, new_value)
+  end
+end
+
+MiniTest::Unit.autorun

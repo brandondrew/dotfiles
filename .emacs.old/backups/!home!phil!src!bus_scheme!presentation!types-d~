@@ -1,0 +1,17 @@
+
+
+        Not quite; you'll want more than just numbers.
+
+
+          Strings are almost just like Ruby.
+            (double-quoted only, no interpolation.)
+
+          Symbols are just identifiers, but generally
+            you need to quote them.
+
+              :foo => (quote foo)
+              :foo => 'foo ;; Shorthand
+
+          Functions are lambda literals, similar to Ruby's.
+
+              Proc.new {|a, b| a + b } => (lambda (a b) (+ a b))

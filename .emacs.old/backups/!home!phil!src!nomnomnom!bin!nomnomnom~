@@ -1,0 +1,3 @@
+#!/bin/sh
+
+java -cp lib/jdom.jar:lib/rome-1.0RC1.jar:lib/clojure.jar:lib/clojure-contrib.jar clojure.lang.Repl

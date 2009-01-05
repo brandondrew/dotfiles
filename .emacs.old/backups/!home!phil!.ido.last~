@@ -1,0 +1,350 @@
+;;; -*- coding: utf-8 -*-
+
+;; ----- ido-last-directory-list -----
+(
+ ("/home/phil/work/uconnect/" . "javascripts/")
+ ("/home/phil/src/roast-beef/" . "lib/")
+ ("/home/phil/src/emacs/" . ".git/")
+ ("/home/phil/src/clojure-contrib/src/clojure/contrib/" . "duck_streams/")
+ ("/home/phil/src/rubygems/lib/" . "rubygems/")
+ ("/home/phil/src/rubygems/" . "lib/")
+ ("/home/phil/src/magit/" . ".git/")
+ ("/home/phil/src/nomnomnom/lib/" . "fact/")
+ ("/home/phil/src/nomnomnom/test/" . "fixtures/")
+ ("/home/phil/src/clojure/src/clj/" . "clojure/")
+ ("/home/phil/src/clojure/src/" . "clj/")
+ ("/home/phil/src/clojure/" . "src/")
+ ("/home/phil/src/clojure-contrib/src/clojure/" . "contrib/")
+ ("/home/phil/src/clojure-contrib/src/" . "clojure/")
+ ("/home/phil/src/clojure-contrib/" . "src/")
+ ("/home/phil/src/compojure/test/compojure/" . "html/")
+ ("/home/phil/src/compojure/test/" . "compojure/")
+ ("/home/phil/src/concourse3/lib/compojure/" . "jetty/")
+ ("/home/phil/src/concourse3/lib/" . "compojure/")
+ ("/home/phil/src/concourse3/app/" . "concourse/")
+ ("/home/phil/src/concourse3/" . "lib/")
+ ("/home/" . "phil/")
+ ("/home/phil/src/bludgeon/" . "lib/")
+ ("/home/phil/src/compojure/lib/compojure/" . "file_utils/")
+ ("/home/phil/src/compojure/lib/" . "fact/")
+ ("/home/phil/src/compojure/" . "lib/")
+ ("/home/phil/work/feed_processor/lib/" . "feed_processor/")
+ ("/home/phil/work/feed_processor/" . "lib/")
+ ("/home/phil/work/" . "feed_processor/")
+ ("/home/phil/src/nomnomnom/" . "lib/")
+ ("/home/phil/src/emacs-starter-kit/" . ".git/")
+ ("/home/phil/src/clojure-mode/" . ".git/")
+ ("/home/phil/src/ruby/" . "misc/")
+ ("/home/phil/src/data_mapper/lib/" . "data_mapper/")
+ ("/home/phil/src/data_mapper/" . "lib/")
+ ("/home/phil/src/merb/" . ".git/")
+ ("/home/phil/src/merb-plugins/merb_test_unit/lib/" . "merb_test_unit/")
+ ("/home/phil/src/merb-plugins/merb_test_unit/" . "specs/")
+ ("/home/phil/src/merb-plugins/" . "merb_minitest/")
+ ("/usr/local/lib/ruby/gems/1.8/gems/rake-0.8.3/lib/" . "rake/")
+ ("/usr/local/lib/ruby/gems/1.8/gems/rake-0.8.3/" . "lib/")
+ ("/usr/local/lib/ruby/gems/1.8/gems/" . "rake-0.8.3/")
+ ("/usr/local/lib/ruby/gems/1.8/" . "gems/")
+ ("/usr/local/lib/ruby/gems/" . "1.8/")
+ ("/usr/local/lib/ruby/" . "gems/")
+ ("/home/phil/src/merb-plugins/merb_minitest/lib/" . "asserts/")
+ ("/home/phil/src/merb-plugins/merb_minitest/" . "test/")
+ ("/usr/lib/ruby/gems/1.8/gems/minitest-1.3.0/lib/" . "minitest/")
+ ("/usr/lib/ruby/gems/1.8/gems/minitest-1.3.0/" . "lib/")
+ ("/home/phil/src/blog/public/" . "i/")
+ ("/home/phil/src/blog/" . "templates/")
+ ("/home/phil/src/peepcode/" . "demonstrations/")
+ ("/home/phil/.gem/" . "ruby/")
+ ("/home/phil/src/bus_scheme/lib/bus_scheme/" . "scheme/")
+ ("/usr/lib/ruby/gems/1.8/gems/" . "minitest-1.3.0/")
+ ("/usr/lib/ruby/gems/1.8/" . "gems/")
+ ("/home/phil/src/bus_scheme/lib/" . "bus_scheme/")
+ ("/home/phil/src/rinari/" . "util/")
+ ("/usr/local/lib/site_ruby/1.8/" . "rubygems/")
+ ("/usr/local/lib/site_ruby/" . "1.8/")
+ ("/usr/local/lib/" . "ruby/")
+ ("/usr/local/" . "lib/")
+ ("/usr/lib/ruby/gems/" . "1.8/")
+ ("/usr/lib/ruby/" . "gems/")
+ ("/usr/" . "local/")
+ ("/" . "usr/")
+ ("/home/phil/src/bus_scheme/" . "presentation/")
+ ("/home/phil/src/" . "emacs-starter-kit/")
+ ("/home/phil/src/rubinius/" . ".git/")
+ ("/home/phil/bin/" . "init/")
+ ("/home/phil/" . ".emacs.d/")
+)
+
+;; ----- ido-work-directory-list -----
+(
+ "/home/phil/.emacs.d/"
+ "/home/phil/src/emacs-starter-kit/"
+ "/home/phil/src/bludgeon/lib/"
+ "/home/phil/"
+ "/home/phil/work/uconnect/javascripts/"
+ "/home/phil/work/uconnect/"
+ "/home/phil/src/roast-beef/lib/"
+ "/home/phil/src/peepcode/"
+ "/home/phil/src/blog/templates/"
+ "/home/phil/src/emacs/.git/"
+ "/home/phil/.roastbeef/"
+ "/home/phil/src/emacs/"
+ "/home/phil/src/blog/comments/"
+ "/home/phil/src/peepcode/demonstrations/"
+ "/home/phil/src/blog/posts/"
+ "/home/phil/src/emacs-starter-kit/elpa-to-submit/"
+ "/home/phil/src/emacs-starter-kit/.git/"
+ "/home/phil/src/peepcode/.git/"
+ "/home/phil/src/blog/public/"
+ "/home/phil/src/blog/"
+ "/home/phil/src/bludgeon/"
+ "/home/phil/src/blog/public/i/"
+ "/home/phil/src/nomnomnom/test/"
+ "/home/phil/src/clojure-contrib/src/clojure/contrib/"
+ "/home/phil/src/clojure-contrib/src/clojure/contrib/duck_streams/"
+ "/home/phil/src/clojure-contrib/src/clojure/contrib/test_is/"
+ "/home/phil/documents/"
+ "/home/phil/src/rubygems/lib/rubygems/"
+ "/home/phil/src/nomnomnom/lib/fact/"
+ "/home/phil/src/nomnomnom/lib/"
+ "/home/phil/src/nomnomnom/"
+ "/home/phil/src/clojurebot/"
+ "/home/phil/src/magit/.git/"
+ "/home/phil/src/"
+ "/home/phil/src/nomnomnom/test/fixtures/"
+ "/home/phil/bin/init/"
+ "/home/phil/src/compojure/lib/fact/"
+ "/home/phil/src/compojure/"
+ "/home/phil/src/nomnomnom/bin/"
+ "/home/phil/src/compojure/test/compojure/html/"
+ "/home/phil/src/compojure/script/"
+ "/home/phil/src/compojure/test/"
+ "/home/phil/src/clojure-mode/"
+ "/home/phil/src/clojure/"
+ "/home/phil/work/feed_processor/"
+ "/home/phil/src/concourse3/lib/compojure/jetty/"
+ "/home/phil/src/concourse3/lib/compojure/control/"
+ "/home/phil/src/concourse3/lib/fact/"
+ "/home/phil/work/feed_processor/lib/feed_processor/"
+ "/home/phil/work/feed_processor/lib/"
+)
+
+;; ----- ido-work-file-list -----
+(
+ "rcirc-color.el"
+ "starter-kit-defuns.el"
+ "init.el"
+ "loaddefs.el"
+ "starter-kit-lisp.el"
+ "bludgeon.rb"
+ "TODO"
+ "phil.el"
+ "dynabook.el"
+ ".gitignore"
+)
+
+;; ----- ido-dir-file-cache -----
+(
+ ("/home/phil/.emacs.d/" (18761 14647) "pastie.el" "loaddefs.el~" "my-vc.el" "my-defuns.el" "flymake-js/" "init.el" "xml-rpc.el" "my-bindings.el" "my-hook-setup.el" "moz.el" "my-rails.el" "all.el" "top-mode.el" "steersman.el" "auto-save-list/" "ri-emacs.rb" "#.newsrc-dribble#" "./" "jabber/" "tail.el" "install-elisp.el" "idle-highlight.el" "rinari/" "url/" "inf-ruby.el" "tramp" "places" "comint-util.el" "rest-api.el" "toggle.el" "javascript.el" "gist.el" "test-unit.el" "ri-ruby.el" ".emacs-project" "my-ruby.el" "my-misc.el" "lisppaste.el" "pcmpl-rake.el" "behave/" "my-registers.el" "typing.el" "my-eshell.el" "tmpl.el" "find-file-in-project.el" "test/" "scpaste.el" "my-lisp.el" "bus-scheme.el" ".nnmail-cache" "json.el" "backups/" "elunit.el" "test-unit-ruby.el" "rcodetools.el" "vivid-chalk.el" "Rakefile" "autotest.el" "oddmuse.el" "htmlize.el" "../" "comint-redirect.el" "regex-tool.el" "ebby.el" "elpa/" "my-rcirc.el" "yaml-mode.el" "rcirc-completion.el" "rcirc-color.el" "my-jabber.el" "ruby-mode.el" "vernacular-time.el" "loaddefs.el" "color-theme.el" "my-js.el" "ruby-electric.el" "zenburn.el" "flymake-js.el" "cheat.el" "gnus-namazu.el" "css-mode.el" "mode-unit.el" ".newsrc-dribble")
+
+ ("/home/phil/" (18761 15167) ".gitconfig" ".feeds.opml" ".git/" "genetic-programming-meets-tdd-small.mp4" ".recentf" ".gconfd/" ".gstreamer-0.10/" ".bash_history" "writing-code-that-doesnt-suck-small.mp4" ".pulse/" ".loki/" ".config/" ".update-manager-core/" ".gegl-0.0/" ".bashrc" ".ido.last" ".debtags/" ".clojure/" ".recently-used.xbel" ".wine/" ".wifi" "Mail/" ".newsrc.eld" ".gmpc/" ".eshell/" "documents/" ".fetchmail.pid" "what-all-rubyist-should-know-about-threads-small.mp4" ".gksu.lock" "08-sep-RichHickey_clojure.flv" ".xsession-errors" ".devilspie/" ".roastbeef/" "./" ".esd_auth" ".pulse-cookie" ".w3m/" ".gnome2/" ".subversion/" ".update-notifier/" ".aptitude/" ".Xauthority" ".profile" ".deusex" ".cxgames/" ".mozilla/" "peepcode-phil-hagelberg.pdf" ".conkerorrc" ".themes/" ".conkeror.mozdev.org/" ".sshconfig" ".m2/" ".covers/" ".gnus.el" ".nautilus/" ".gnome/" ".gnome2_private/" "testing-heresies-small.mp4" ".todo" ".gtk-bookmarks" ".autotest" "to upload/" ".gitignore" ".emacs-places" ".gimp-2.6/" ".lyx/" ".chars" "effective-and-creative-coding-help-from-cognitive-psychology-small.mp4" ".gconf/" "bin/" ".ICEauthority" ".mime.types" "ruby-arduino-development-physical-computing-for-everyone-small.mp4" ".cheat/" "News/" ".irb_history" ".local_profile" "src/" ".local/" ".cache/" ".evolution/" ".aspell.en.pws" ".hoerc" ".ruby_inline/" ".irbrc.compiled.rbc" ".gem/" ".wapi/" ".gemrc" ".deus2" ".usb-creator.log" ".rubyforge/" "../" ".gvfs/" "music/" ".fetchids" ".gconf.yml" ".screenrc" ".fetchmailrc" ".fonts/" ".sudo_as_admin_successful" ".dbus/" "using-git-in-ruby-applications-large.mp4" ".amazonmp3/" ".gnupg/" ".slime-history.eld" "work/" ".bash_logout" ".bash_profile" ".zile" ".dmrc" ".gitk" ".emacs.d/" ".purple/" ".irbrc" ".psql_history" ".Trash/" "gems/" ".newsrc" ".compiz/" ".fontconfig/" ".xsession" ".icons/" ".xbindkeysrc.scm" "rubyconf-summary" ".thumbnails/" ".ri/" ".ssh/" "Photos/")
+
+ ("/home/phil/src/emacs-starter-kit/" (18758 35122) "loaddefs.el~" ".git/" "init.el" "starter-kit-bindings.elc" "package.el" "starter-kit-bindings.el" "phil.el" "starter-kit-eshell.el" "./" "starter-kit-ruby.el" "starter-kit-defuns.elc" "starter-kit-registers.el" "starter-kit-defuns.el" "places" "#init.el#" "TODO" "starter-kit-elpa.el" "elpa-to-submit/" ".gitignore" "package.elc" "starter-kit-ruby.elc" "starter-kit-eshell.elc" "dynabook.el" "backups/" "README.markdown" "starter-kit-misc.el" "../" "starter-kit-lisp.el" ".#init.el" "elpa/" "starter-kit-misc.elc" "starter-kit-registers.elc" "starter-kit-js.el" "loaddefs.el" "COPYING")
+
+ ("/home/phil/src/peepcode/" (18758 34987) "geoff-notes.txt" ".git/" "outline.txt" "./" "peepcode-phil-hagelberg.pdf" ".gitignore" "cheatsheet" "peepcode-authorguide.pdf" "../" "advanced" "demonstrations/" "emacs-draft-1.mov")
+
+ ("/home/phil/src/" (18753 29112) "nomnomnom/" "clojure-contrib/" "purcell/" "emacs-starter-kit/" "bludgeon/" "merb/" "rack/" "rdoc/" "book_mdar/" "concourse3/" "mozrepl/" "peepcode/" "rails/" "gitjour/" "magit/" "clojure-extra/" "croquet/" "emacs/" "./" "people-rails/" "clojure/" "rinari/" "ruby/" "merb-plugins/" "conspire/" "jimweirich-emacs/" "nxhtml/" "rubinius/" "gist.el/" "blog/" "swank-clojure/" "spec/" "slime/" "clojure-mode/" "mousehole/" "tricksie/" "ruby-1.8.6/" "magit-marius/" "rfeedparser/" "conkeror/" "sake-tasks/" "seattlerb/" "data_mapper/" "hpricot/" "bus_slides.tar.gz" "perspective-el/" "git/" "roast-beef/" "mozrepl.xpi" "dnssd/" "concourse/" "html5lib/" "johnson/" "watcher_in_the_water/" "../" "people/" "elpa/" "concourse2/" "bus_scheme/" "ri-emacs/" "ert/" "merb-sample/" "ruby-grammar/" "compojure/" "merb-test-sample/" "ironruby/" "clojurebot/" "terracotta/" "mars/" "rubygems/" "augment/")
+
+ ("/home/phil/src/bludgeon/lib/" (18734 56859) "./" "bludgeon.rb" "../")
+
+ ("/home/phil/src/bludgeon/" (18756 5398) ".git/" "TAGS" "README.txt" "./" "History.txt" ".gitignore" "test/" "bin/" "Rakefile" "lib/" "../" "Manifest.txt" "bludgeon.gemspec")
+
+ ("/home/phil/src/emacs-starter-kit/.git/" (18755 6446) "HEAD" "network-cache" "ORIG_HEAD" "config" "./" "index" "magit-tmp" "description" "info/" "magit-log" "ignore-shas" "branches/" "FETCH_HEAD" "../" "COMMIT_EDITMSG" "refs/" "objects/" "logs/" "hooks/")
+
+ ("//" (18736 15349) "media/" "dev/" "tmp/" "etc/" "opt/" "root/" "initrd.img.old" "./" "mnt/" "var/" "usr/" "bin/" "initrd.img" "sys/" "home/" "lib/" "../" "lost+found/" "vmlinuz" "sbin/" "srv/" "vmlinuz.old" "proc/" "boot/" "cdrom/")
+
+ ("/home/phil/work/uconnect/javascripts/" (18755 1066) "facebox.js" "./" "uconnect.js" "../" "jquery.js" "jquery.random-insert.js" "jquery.shuffle.js")
+
+ ("/home/phil/work/uconnect/" (18755 14533) "uconnect.html" "images/" ".git/" "./" "stylesheets/" "todo" "server.rb" "../" "javascripts/")
+
+ ("/home/phil/src/roast-beef/lib/" (18699 40559) "roastbeef.rb" "./" "roastbeef/" "../")
+
+ ("/home/phil/src/roast-beef/" (18699 40559) "sources.yml" ".git/" "README.rdoc" "./" "History.txt" ".gitignore" "bin/" "Rakefile" "lib/" "../" "Manifest.txt" "COPYING")
+
+ ("/home/phil/src/blog/templates/" (18744 2716) "books.html.erb" "projects.html.erb" "colophon.html.erb" "./" "sidebar.erb" "footer.html.erb" "list.html.erb" "header.html.erb" "atom.erb" "../" "post.html.erb" "resume.html.erb")
+
+ ("/home/phil/src/emacs/.git/" (18746 8372) "HEAD" "ORIG_HEAD" "config" "./" "packed-refs" "index" "gitk.cache" "description" "info/" "branches/" "FETCH_HEAD" "../" "refs/" "objects/" "logs/" "hooks/")
+
+ ("/home/phil/.roastbeef/" (18703 15697) "sources.yml" "./" "../")
+
+ ("/home/phil/src/emacs/" (18715 29775) ".git/" "oldXMenu/" "INSTALL.CVS" "make-dist" "etc/" "configure.in" ".arch-inventory" "doc/" "move-if-change" "config.bat" "lwlib/" "./" "config.log" "autogen.sh" "lisp/" "config.guess" "configure" "update-subdirs" "INSTALL" "admin/" "config.sub" "info/" "README" "test/" "nextstep/" "msdos/" ".cvsignore" "BUGS" "m4/" "src/" "leim/" "config.status" "../" "install-sh" "Makefile" "mkinstalldirs" "Makefile.in" "vpath.sed" "ChangeLog" "nt/" "lib-src/" "COPYING")
+
+ ("/home/phil/src/blog/comments/" (18745 26411) "94.yml" "22.yml" "89.yml" "109.yml" "50.yml" "24.yml" "55.yml" "5.yml" "47.yml" "16.yml" "99.yml" "1.yml" "61.yml" "107.json~" "38.yml" "36.yml" "48.yml" "41.yml" "113.yml" "6.yml" "32.yml" "52.yml" "42.yml" "66.yml" "spam.yml~" "108.yml" "117.yml" "96.yml" "108.yml~" "116.yml" "100.yml" "./" "72.yml" "7.yml" "101.yml" "80.yml" "88.yml" "81.yml" "57.yml" "20.yml" "68.yml" "87.yml" "110.yml" "56.yml" "10.yml" "102.json~" "3.yml" "23.yml" "79.yml" "17.yml" "4.yml" "12.yml" "29.yml" "15.yml" "21.yml" "95.yml" "35.yml" "53.yml" "112.yml" "3.yml~" "18.yml" "91.yml" "64.yml" "13.yml" "90.yml" "45.yml" "118.yml" "76.yml" "9.yml" "54.yml" "85.yml" "34.yml" "65.yml" "2.yml" "84.yml" "59.yml" "106.yml" "102.yml" "103.yml" "spam.yml" "28.yml" "74.yml" "31.yml" "27.yml" "112.yml~" "119.yml" "115.yml" "11.yml" "97.yml" "51.yml" "63.yml" "82.yml" "../" "25.yml" "39.yml" "33.yml" "104.yml" "37.yml" "58.yml" "49.yml" "92.yml" "60.yml" "73.yml" "105.yml" "8.yml" "83.yml" "30.yml" "40.yml" "69.yml" "19.yml" "26.yml" ".yml~" "78.yml" "14.yml" "98.yml" "46.yml" "62.yml" "86.yml" "71.yml" "114.yml" "75.yml" "93.yml" "77.yml" "43.yml" "70.yml" "44.yml" "67.yml" "107.yml")
+
+ ("/home/phil/src/peepcode/demonstrations/" (18745 44570) "./" "log-rect" "../")
+
+ ("/home/phil/src/blog/posts/" (18745 26344) "94.yml" "22.yml" "89.yml" "109.yml" "50.yml" "24.yml" "55.yml" "5.yml" "47.yml" "16.yml" "99.yml" "1.yml" "61.yml" "38.yml" "36.yml" "48.yml" "41.yml" "113.yml" "6.yml" "32.yml" "52.yml" "42.yml" "66.yml" "108.yml" "117.yml" "96.yml" "116.yml" "100.yml" "./" "72.yml" "7.yml" "101.yml" "80.yml" "88.yml" "81.yml" "57.yml" "20.yml" "68.yml" "87.yml" "110.yml" "56.yml" "10.yml" "3.yml" "23.yml" "79.yml" "17.yml" "4.yml" "12.yml" "29.yml" "15.yml" "21.yml" "95.yml" "35.yml" "53.yml" "111.yml" "112.yml" "18.yml" "91.yml" "64.yml" "13.yml" "90.yml" "45.yml" "118.yml" "76.yml" "9.yml" "54.yml" "85.yml" "34.yml" "65.yml" "2.yml" "84.yml" "59.yml" "106.yml" "102.yml" "103.yml" "28.yml" "74.yml" "31.yml" "27.yml" "119.yml" "115.yml" "11.yml" "97.yml" "51.yml" "63.yml" "82.yml" "../" "25.yml" "39.yml" "33.yml" "104.yml" "37.yml" "58.yml" "49.yml" "92.yml" "60.yml" "73.yml" "105.yml" "8.yml" "83.yml" "30.yml" "40.yml" "69.yml" "19.yml" "26.yml" "78.yml" "14.yml" "98.yml" "46.yml" "62.yml" "86.yml" "71.yml" "114.yml" "75.yml" "93.yml" "77.yml" "43.yml" "70.yml" "44.yml" "107.yml")
+
+ ("/home/phil/src/emacs-starter-kit/elpa-to-submit/" (18744 1174) "xml-rpc.el" "markdown-mode.el" "./" "inf-ruby.el" "ruby-compilation.el" "gist.el" "lisppaste.el" "pcmpl-rake.el" "clojure-mode.el" "magit.el" "../" "ruby-mode.el" "color-theme.el" "zenburn.el" "cheat.el")
+
+ ("/home/phil/src/peepcode/.git/" (18745 24797) "HEAD" "ORIG_HEAD" "config" "./" "index" "magit-tmp" "description" "info/" "magit-log" "branches/" "FETCH_HEAD" "../" "COMMIT_EDITMSG" "refs/" "objects/" "logs/" "hooks/")
+
+ ("/home/phil/src/blog/" (18745 26627) "server" ".git/" "templates/" "./" "posts/" "public/" ".gitignore" "planet/" ".dir-settings.el" "Rakefile" "scheme/" "../" "comments/")
+
+ ("/home/phil/src/blog/public/" (18745 26582) "36.html" "115.html" "92.html" "94.html" "38.html" "109.html" ".htaccess" "17.html" "i/" "102.html" "effects.js" "113.html" "50.html" "63.html" "82.html" "26.html" "index.html" "79.html" "108.html" "65.html" "90.html" "13.html" "48.html" "37.html" "feed/" "88.html" "16.html" "58.html" "49.html" "85.html" "56.html" "110.html" "35.html" "30.html" "12.html" "46.html" "70.html" "89.html" "./" "34.html" "118.html" "59.html" "62.html" "11.html" "rubyconf.html" "87.html" "106.html" "9.html" "43.html" "53.html" "116.html" "117.html" "76.html" "97.html" "104.html" "3.html" "robots.txt" "71.html" "84.html" "103.html" "96.html" "2.html" "95.html" "44.html" ".html" "books.html" "107.html" "40.html" "77.html" "1.html" "39.html" "colophon.html" "55.html" "22.html" "24.html" "78.html" "45.html" "7.html" "33.html" "resume.html" "47.html" "105.html" "list.html" "code/" "32.html" "19.html" "31.html" "planet/" "74.html" "prototype.js" "6.html" "51.html" "80.html" "68.html" "99.html" "15.html" "42.html" "93.html" "29.html" "28.html" "72.html" "41.html" "misc/" "comment.cgi" "52.html" "../" "119.html" "10.html" "69.html" "57.html" "61.html" "5.html" "18.html" "jquery.js" "81.html" "73.html" "101.html" "21.html" "4.html" "114.html" "112.html" "14.html" "64.html" "111.html" "23.html" "86.html" "20.html" "83.html" "projects.html" "66.html" "75.html" "54.html" "8.html" "27.html" "60.html" "91.html" "98.html" "style.css" "25.html" "100.html")
+
+ ("/home/phil/src/blog/public/i/" (18745 25801) "main-old.png" "bg.xcf" "professorspudding.jpg" "demo2.jpg" "main.jpg" "railsday_hacks.jpg" "gobby.png" "emblem.jpg" "t-desk.jpg" "phil.png" "ihavethedumb.jpg" "ray.gif" "turtles1.png" "Screenshot.png" "camping.png" "planet.png" "thinkpad_full.jpg" "three.jpg" "rubyconf06.png" "main.png" "thinkpad_side.jpg" "rav.png" "tracking.png" "ypu2.jpg" "patents.png" "railsday.png" "dust.jpg" "technomancy.png" "./" "emacs.jpg" "shredder.gif" "emblem.png" "rubysworld.jpg" "icon-help.gif" "die_roboter.jpg" "caboose.png" "portrait.jpg" "mongrel_panel.png" "lol.png" "subway.png" "hello_bus.png" "samples/" "contact.jpg" "cake.jpg" "thinkpad.jpg" "roastbeef.png" "rats-cup.jpg" "t60p.png" "bg.png" "portland_boardwalk.jpg" "too_cool_sash.png" "main2.jpg" "multihead-rotate.jpg" "github_machine.jpg" "foot.png" "hoodwinkd.png" "icon-calendar.gif" "matz_and_friends.jpg" "turtles2.jpg" "snowing.jpg" "../" "feedIcon.png" "waterfall.jpg" "title.png" "concourse.png" "logo.jpg" "rats-close.jpg" "portland_street.jpg" "hazmat.jpg" "demo1.jpg" "deskbar.png" "f-spot.png" "t60p.jpg" "rails1.jpg" "top.png" "avi.jpg" "emacs.png" "joelonshark.jpg" "norbert.jpg" "bus_logos.png")
+
+ ("/home/phil/src/nomnomnom/test/" (18743 30360) "runner.sh" "test_nomnomnom.clj" "./" "fixtures/" "../" "vector")
+
+ ("/home/phil/src/clojure-contrib/src/clojure/contrib/duck_streams/" (18728 37998) "duck_streams.clj" "./" "../")
+
+ ("/home/phil/src/clojure-contrib/src/clojure/contrib/" (18743 10222) "lazy_xml.clj" "zip_filter/" "ns_utils.clj" "lazy_xml/" "duck_streams.clj" "javalog/" "str_utils.clj" "memoize.clj" "./" "miglayout.clj" "zip_filter.clj" "def.clj" "duck_streams/" "fcase.clj" "command_line.clj" "cond.clj" "miglayout/" "fcase/" "str_utils/" "import_static/" "trace.clj" "except.clj" "../" "test_clojure/" "pred.clj" "enum/" "lazy_seqs.clj" "javadoc.clj" "javalog.clj" "seq_utils.clj" "test_is.clj" "seq_utils/" "sql.clj" "test_is/" "trace/" "mmap.clj" "import_static.clj" "test_clojure.clj" "enum.clj" "sql/" "gen_interface.clj")
+
+ ("/home/phil/src/clojure-contrib/src/clojure/contrib/test_is/" (18731 10910) "./" "../" "test_is.clj")
+
+ ("/home/phil/documents/" (18742 51012) "eStmt_05_29_2008.pdf" "2490873008_a970a6df81_o.jpg" "Marathon2/" "eStmt_06_27_2008.pdf" "Caboose.vcf" "Technomancy.pdf" "technomancy.png" "./" "fha_disclosures.png" "ruby-to-clojure" "rosemary.jpg" "roms/" "games/" "geo/" "rubyconf-receipt.pdf" "2007 Taxes - Hagelberg P.pdf" "Pimsleur's Mandarin Chinese 1/" "Marathon EVIL/" "grid.xoj" "movies/" "technomancy-large-transparent.png" "Marathon Infinity/" "TechnomanyBack.pdf" "backups/" "Eternal/" "books/" "copyright-assign.txt" "1099-2007-phagelberg.pdf" "../" "headshot.jpg" "technomancy-large.png" "happy_noah.jpg" "the pod.jpg" "virt/" "gold_rock.xcf" "technomancy-background.png" "M1A1/" "ghost-n-friends.xoj" "2006 Hagelberg P Tax Return.pdf")
+
+ ("/home/phil/src/nomnomnom/lib/fact/" (18741 64829) "./" "fact.clj" "../")
+
+ ("/home/phil/src/rubygems/lib/rubygems/" (18742 405) "version.rb" "TAGS" "indexer.rb" "ext/" "config_file.rb" "remote_fetcher.rb" "install_update_options.rb" "builder.rb" "gem_path_searcher.rb" "./" "gem_openssl.rb" "require_paths_builder.rb" "installer.rb" "gem_runner.rb" "dependency_list.rb" "local_remote_options.rb" "rubygems_version.rb" "custom_require.rb" "test_utilities.rb" "format.rb" "command.rb" "validator.rb" "doc_manager.rb" "dependency_installer.rb" "platform.rb" "old_format.rb" "package.rb" "source_index.rb" "server.rb" "../" "timer.rb" "digest/" "commands/" "package/" "source_info_cache_entry.rb" "requirement.rb" "defaults.rb" "spec_fetcher.rb" "command_manager.rb" "version_option.rb" "security.rb" "source_info_cache.rb" "exceptions.rb" "ext.rb" "user_interaction.rb" "dependency.rb" "specification.rb" "uninstaller.rb")
+
+ ("/home/phil/src/rubygems/lib/" (18741 64488) "TAGS" "./" "rubygems.rb" "rbconfig/" "../" "ubygems.rb" "rubygems/")
+
+ ("/home/phil/src/rubygems/" (18741 64488) ".git/" "redist/" ".document" "TAGS" "doc/" "./" "TODO" ".autotest" ".gitignore" "README" "test/" "LICENSE.txt" "bin/" "Rakefile" "lib/" "setup.rb" "GPL.txt" "../" "pkgs/" "util/" "ChangeLog" "scripts/")
+
+ ("/home/phil/src/nomnomnom/lib/" (18741 58546) "./" "nomnomnom.clj" "../" "fact/")
+
+ ("/home/phil/src/clojurebot/" (18741 52383) ".git/" "./" "../" "clojurebot.clj")
+
+ ("/home/phil/src/magit/.git/" (18727 16582) "HEAD" "ORIG_HEAD" "config" "./" "index" "magit-tmp" "description" "info/" "magit-log" "branches/" "FETCH_HEAD" "../" "COMMIT_EDITMSG" "refs/" "objects/" "logs/" "hooks/")
+
+ ("/home/phil/src/magit/" (18723 5562) ".git/" "texinfo.tex" "50magit.el" "./" "autogen.sh" "Makefile.am" "configure.ac" "configure" "INSTALL" ".gitignore" "README" "aclocal.m4" "test/" "magit.el" "autom4te.cache/" "fdl.texi" "missing" "magit.texi" "debian/" "../" "install-sh" "mkinstalldirs" "NEWS" "Makefile.in" "ChangeLog" "AUTHORS" "COPYING")
+
+ ("/home/phil/bin/init/" (18737 32484) "gems.yml" "go.sh~" "rubygems-1.0.1/" "debs.yml" "./" "user-setup.rb" "README" "rubygems-1.0.1.tgz" "../" "roastbeefs.yml" "go.sh" "install.rb")
+
+ ("/home/phil/bin/" (18740 11706) "cxgames/" "watcher.rb" "deusex" "stats" "thinklight.rb" "mpc-choose" "mpc-notify" "caboose_graph.rb" "./" "morselight.rb" "mpc-pidgin" "pidgin-tools.rb" "rbx" "Starcraft Broodwar [1F0F84A6].iso" "media_sync.rb" "todo" "rotate" "jruby-1.1.5/" "pidgin-do.rb" "tablet_orientation_dpad.sh" "gconf.rb" "twitter-notify.rb" "lib/" "init/" "mpc-playlist" "../" "laptop_orientation_dpad.sh" "imageify.rb" "setup" "notify.rb" "mpc-random" "git-winner.sh" "steam" "dlaunch.rb" "install-crossover-games-7.1.2.sh")
+
+ ("/home/phil/src/nomnomnom/test/fixtures/" (18740 36670) "clojure.xml" "./" "technomancy.xml" "../")
+
+ ("/home/phil/src/compojure/test/compojure/html/" (18740 34010) "./" "../" "html.clj")
+
+ ("/home/phil/src/nomnomnom/bin/" (18740 26273) "nomnomnom" "./" "../")
+
+ ("/home/phil/src/nomnomnom/jars/" (18740 26240) "clojure-contrib.jar" "clojure.jar" "rome-1.0RC1.jar" "./" "jdom.jar" "../")
+
+ ("/home/phil/src/nomnomnom/" (18740 26218) "jars/" ".git/" "./" "test/" "bin/" "README.markdown" "lib/" "../")
+
+ ("/home/phil/src/slime/" (18740 9302) "swank-ecl.lisp" "swank.asd" ".git/" "slime.el" "metering.lisp" "hyperspec.el" "xref.lisp" "swank-sbcl.lisp" "doc/" "./" "swank.lisp" "swank-lispworks.lisp" "PROBLEMS" "swank-source-path-parser.lisp" "swank-source-file-cache.lisp" "README" "swank-clisp.lisp" "swank-loader.lisp" "swank-openmcl.lisp" "test-all.sh" ".cvsignore" "swank-allegro.lisp" "slime-autoloads.el" "contrib/" "../" "nregex.lisp" "swank-backend.lisp" "sbcl-pprint-patch.lisp" "swank-abcl.lisp" "NEWS" "swank-corman.lisp" "swank-gray.lisp" "swank-cmucl.lisp" "test.sh" "ChangeLog" "mkdist.sh" "swank-scl.lisp" "HACKING")
+
+ ("/home/phil/src/clojure/src/clj/clojure/" (18740 8169) "zip.clj" "parallel.clj" "xml.clj" "proxy.clj" "./" "set.clj" "core-print.clj" "genclass.clj" "core-proxy.clj" "inspector.clj" "../" "core.clj" "main.clj")
+
+ ("/home/phil/src/clojure/src/clj/" (18740 8169) "./" "clojure/" "../")
+
+ ("/home/phil/src/clojure/src/" (18727 870) "./" "clj/" "jvm/" "../")
+
+ ("/home/phil/src/clojure/" (18740 8169) ".git/" "clojure.jar" "target/" "classes/" "build.xml" "./" "CPL.TXT" "readme.txt" "clojure.iml" "clojure.markdown" "src/" "../" "pom.xml" "clojurebot.clj")
+
+ ("/home/phil/src/clojure-contrib/src/clojure/" (18728 37998) "./" "contrib/" "../")
+
+ ("/home/phil/src/clojure-contrib/src/" (18731 21642) "./" "clojure/" "../")
+
+ ("/home/phil/src/clojure-contrib/" (18733 62756) "clojure-contrib.jar" ".git/" "build.xml" "./" "CPL.TXT" "Revisions" "src/" "clojurescript/" "../")
+
+ ("/home/phil/src/compojure/script/" (18727 786) "./" "test" "run" "../" "repl")
+
+ ("/home/phil/src/compojure/test/compojure/" (18727 786) "./" "html/" "http/" "../")
+
+ ("/home/phil/src/compojure/test/" (18727 786) "./" "test.clj" "../" "compojure/")
+
+ ("/home/phil/src/compojure/lib/fact/" (18727 786) "./" "fact.clj" "../")
+
+ ("/home/phil/src/concourse3/lib/compojure/jetty/" (18729 57239) "jetty.clj" "./" "../")
+
+ ("/home/phil/src/concourse3/lib/compojure/control/" (18729 57239) "control.clj" "./" "../")
+
+ ("/home/phil/src/concourse3/lib/compojure/" (18729 57239) "control/" "./" "jetty/" "json/" "file_utils/" "str_utils/" "html/" "http/" "../" "parser/")
+
+ ("/home/phil/src/concourse3/lib/fact/" (18729 57239) "./" "fact.clj" "../")
+
+ ("/home/phil/src/concourse3/lib/" (18729 57239) "./" "../" "compojure/" "fact/")
+
+ ("/home/phil/src/concourse3/app/" (18731 21938) "./" "concourse/" "../")
+
+ ("/home/" (18699 38321) "./" "phil/" "../")
+
+ ("/home/phil/work/feed_processor/lib/feed_processor/" (18738 64694) "version.rb" "feed_parser.rb" "http.rb" "refresher.rb" "stream_branch_filter.rb" "fetch_filter.rb" "item.rb" "./" "arc_reader.rb" "feed_poll.rb" "redirect_handler.rb" "../" "dupe_detector.rb" "status_check_filter.rb" "ap_photo_filter.rb" "state_db_filters.rb" "feederator/" "exception.rb")
+
+ ("/home/phil/src/blog/planet/" (18699 40988) "./" "index.html.erb" "../" "config.yml")
+
+ ("/home/phil/src/blog/static/" (18734 61529) "./" "books.html" "../" "resume.yml.bak")
+
+ ("/home/phil/src/seattlerb/bludgeon/" (18734 60991) "README.txt" ".svn/" "./" "History.txt" ".gitignore" "test/" "bin/" "Rakefile" "lib/" "../" "Manifest.txt" "bludgeon.gemspec")
+
+ ("/home/phil/src/ruby/misc/" (18725 57578) "rubydb2x.el" "./" "inf-ruby.el" "ruby-style.el" "rubydb3x.el" "README" "../" "ruby-mode.el" "ruby-electric.el")
+
+ ("/home/phil/src/rinari/.git/" (18733 60258) "HEAD" "ORIG_HEAD" "config" "./" "index" "magit-tmp" "description" "info/" "magit-log" "branches/" "FETCH_HEAD" "../" "COMMIT_EDITMSG" "refs/" "objects/" "logs/" "hooks/")
+
+ ("/home/phil/src/clojure-mode/.git/" (18733 32847) "HEAD" "config" "./" "packed-refs" "index" "description" "info/" "branches/" "../" "refs/" "objects/" "logs/" "hooks/")
+
+ ("/home/phil/src/compojure/lib/compojure/file_utils/" (18727 785) "./" "file_utils.clj" "../")
+
+ ("/home/phil/src/compojure/lib/compojure/control/" (18728 62428) "control.clj" "./" "../")
+
+ ("/home/phil/src/compojure/lib/compojure/" (18727 786) "control/" "./" "jetty/" "json/" "file_utils/" "str_utils/" "html/" "http/" "../" "parser/")
+
+ ("/home/phil/src/compojure/lib/" (18727 786) "./" "../" "compojure/" "fact/")
+
+ ("/home/phil/src/compojure/" (18727 786) "jars/" ".git/" "app/" "LICENSE" "./" "script/" "public/" "test/" "README.markdown" "lib/" "../" "boot/")
+
+ ("/home/phil/work/feed_processor/lib/" (18727 25) "./" "feed_processor/" "feed_processor.rb" "../")
+
+ ("/home/phil/work/feed_processor/" (18727 523) ".git/" "README.txt" "./" "vendor/" "History.txt" "db/" ".gitignore" "test/" "bin/" ".dir-settings.el" "Rakefile" "lib/" "../" "Manifest.txt")
+
+ ("/home/phil/work/" (18726 64739) "state_db-0.6.0.gem" "feed_processor.tar" "cpipe-2.0.0.gem" "./" "feed_processor/" "../")
+
+ ("/home/phil/src/concourse3/app/concourse/" (18733 62150) "user.clj" "concourse.clj" "./" "gathering.clj" "views/" "session.clj" "../" "views.clj")
+
+ ("/home/phil/src/concourse3/" (18731 10745) "jars/" ".git/" "app/" "LICENSE" "./" "compojure.markdown" "script/" "public/" "test/" "README.markdown" "lib/" "../" "boot/")
+
+ ("/home/phil/src/rinari/util/" (18733 33746) "inf-ruby.el.~2d0eaa470ed481fc662ec9b1858bc645403b141f~" "jump/" "./" "inf-ruby.el" "ruby-compilation.el" "pcmpl-rake.el" "test/" "ruby-mode.el.~e397868d2cbad7e5f27f22f18c8967c6cb099aaa~" "../" "ruby-mode.el" "ruby-compilation-rspec.el")
+
+ ("/home/phil/src/rinari/" (18733 33746) ".git/" "doc/" "./" "TODO" ".gitignore" "README" "test/" "Rakefile" "rinari.el.~HEAD~" "../" "rinari-camps.el" "util/" "rinari.el" ".gitmodules" "rinari-merb.el")
+
+ ("/home/phil/src/clojure-mode/" (18728 54899) ".git/" "clojure-auto.el" "./" "paredit.el" "README" "clojure-mode.el" "clojure-paredit.el" "../")
+
+ ("/home/phil/src/ruby/" (18708 39725) "iseq.h" "newline.c" "template/" "vm_insnhelper.h" "safe.c" "array.c" "inits.c" "regenc.h" "vm_exec.c" "LEGAL" "util.c" "strftime.c" "gem_prelude.rb" ".document" "complex.c" "blockinlining.c" "main.c" "struct.c" "GNUmakefile" "vm_insnhelper.c" "ext/" "regsyntax.c" "id.h" "README.EXT" "configure.in" "vm_eval.c" "bootstraptest/" "range.c" "parse.h" "README.EXT.ja" "doc/" "instruby.rb" "eval_jump.c" ".svn/" "include/" "insns.def" "signal.c" "COPYING.ja" "revision.h" "config.log" "regint.h" "transcode.c" "gc.c" "sample/" ".ext/" "process.c" "lex.c.blt" "conf.out" "regparse.h" "config.guess" "compar.c" "enc/" "thread_win32.h" "configure" ".gdbinit" "gc.h" "string.c" "class.c" "regenc.c" "ToDo" "dln.h" "hash.c" "object.c" "spec/" "parse.c" "prelude.rb" "benchmark/" "regparse.c" "dmyext.c" "config.sub" "man/" "id.c" "io.c" "GPL" "README" "time.c" "dmyencoding.c" "test/" "cygwin/" "file.c" "bin/" "rational.c" "math.c" "README.ja" "regcomp.c" "yarvtest/" "autom4te.cache/" "runruby.rb" ".cvsignore" "transcode_data.h" "error.c" "missing/" "KNOWNBUGS.rb" "eval_error.c" "random.c" "mkconfig.rb" "lib/" "enum.c" "debug.h" "load.c" "variable.c" "common.mk" "goruby.c" "uncommon.mk" "config.status" "prelude.c" "numeric.c" "node.h" ".installed.list" "misc/" "re.c" "install-sh" "vm_dump.c" "st.c" "win32/" "encoding.c" "iseq.c" "ruby.c" "Makefile" "enc.mk" "lex.c" "eval.c" "dmydln.c" "cont.c" "dir.c" "parse.y" "version.c" "vm_core.h" "rubytest.rb" "thread_win32.c" "regexec.c" "LGPL" "proc.c" "thread_pthread.h" "defs/" "vm_exec.h" "bcc32/" "vm_opts.h" "Makefile.in" "vm.c" "config.status.lineno" "sprintf.c" "rbconfig.rb" "tool/" "thread_pthread.c" "pack.c" "ChangeLog" "marshal.c" "dln.c" "version.h" "compile.c" "eval_intern.h" "thread.c" "bignum.c" "debug.c" "miniprelude.c" "vm_method.c" "golf_prelude.rb" "enumerator.c" "COPYING" "ia64.s" "regerror.c" "../" "./")
+
+ ("/home/phil/src/data_mapper/lib/data_mapper/" (18717 47054) "database.rb" "embedded_value.rb" "property.rb" "validations.rb" "query.rb" "persistence.rb" ".svn/" "./" "callbacks.rb" "dependency_queue.rb" "support/" "attributes.rb" "identity_map.rb" "migration.rb" "auto_migrations.rb" "validatable_extensions/" "validations/" "associations/" "../" "context.rb" "is/" "adapters/" "base.rb" "types/" "associations.rb")
+
+ ("/home/phil/src/data_mapper/lib/" (18699 40544) ".svn/" "./" "data_mapper/" "data_mapper.rb" "../")
+
+ ("/home/phil/src/data_mapper/" (18699 40544) "environment.rb" "performance.rb" ".svn/" "example.rb" "./" "MIT-LICENSE" "QUICKLINKS" "spec/" "README" "FAQ" "all" "tasks/" "PERFORMANCE" "profile_data_mapper.rb" "lib/" "../" "plugins/" "CHANGELOG" "rakefile.rb" "log/")
+
+ ("/home/phil/src/merb/.git/" (18717 44130) "HEAD" "config" "./" "packed-refs" "index" "description" "info/" "branches/" "../" "refs/" "objects/" "logs/" "hooks/")
+
+ ("/home/phil/src/merb/" (18717 4439) "merb-mailer/" ".git/" "merb/" "merb-gen/" "merb-core/" "LICENSE" "rake_helpers.rb" "./" "merb-haml/" "merb-action-args/" "merb-cache/" "TODO" ".gitignore" "merb-assets/" "README" "merb-param-protection/" "merb-auth/" "Rakefile" "merb-slices/" "../" "merb_datamapper/" "merb-helpers/" "CHANGELOG" "merb-exceptions/")
+
+ ("/home/phil/src/merb/merb-gen/" (18717 4439) "LICENSE" "./" "TODO" "spec/" ".gitignore" "README" "bin/" "Rakefile" "lib/" "../")
+
+ ("/home/phil/src/merb/merb-gen/lib/" (18717 4439) "merb-gen/" "./" "merb-gen.rb" "../" "generators/")
+
+ ("/home/phil/src/merb/merb-gen/lib/generators/" (18717 44126) "controller.rb" "resource.rb" "merb/" "templates/" "helper.rb" "./" "model.rb" "resource_controller.rb" "session_migration.rb" "migration.rb" "part_controller.rb" "../" "layout.rb" "merb_plugin.rb")
+
+ ("/home/phil/src/merb/merb-core/spec10/public/webrat/test_app/gems/gems/rspec-1.1.11/spec/spec/interop/test/unit/" (18717 44105) "testcase_spec.rb" "./" "test_unit_spec_helper.rb" "testsuite_adapter_spec.rb" "../" "spec_spec.rb" "resources/")
+
+ ("/home/phil/src/merb-plugins/merb_minitest/test/" (18717 4002) "test_helper.rb" "./" "../")
+
+ ("/home/phil/src/merb-plugins/merb_minitest/lib/asserts/" (18717 3481) "hpricot_asserts.rb" "./" "controller_asserts.rb" "../")
+
+ ("/home/phil/src/merb-plugins/merb_test_unit/specs/" (18717 3094) "./" "hpricot_asserts_spec.rb" "../" "controller_asserts_spec.rb" "spec_helper.rb")
+
+ ("/home/phil/src/merb-plugins/merb_test_unit/lib/merb_test_unit/" (18717 3915) "./" "../" "merbtasks.rb")
+
+ ("/home/phil/src/merb-plugins/merb_test_unit/lib/" (18717 3094) "./" "asserts/" "merb_test_unit.rb" "../" "merb_test_unit/")
+
+ ("/home/phil/src/merb-plugins/merb_test_unit/" (18717 3094) "LICENSE" "./" "TODO" "README" "Rakefile" "lib/" "../" "specs/")
+)
+
+;; ----- ido-unc-hosts-cache -----
+t

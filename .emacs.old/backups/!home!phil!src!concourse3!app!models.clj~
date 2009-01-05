@@ -1,0 +1,19 @@
+(ns concourse
+  (:use (compojure html http)))
+
+;; Models
+
+(defstruct user
+  :email :password)
+
+(defstruct gathering
+  :name :description :length
+
+  :chosen_time
+  :earliest_time :latest_time
+
+  :initiator :attendees)
+
+(def *users* (ref {}))
+(def *gatherings* (ref []))
+(def *current-user*)

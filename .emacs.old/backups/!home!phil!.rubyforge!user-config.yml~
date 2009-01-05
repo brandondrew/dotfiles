@@ -1,0 +1,6 @@
+--- 
+uri: http://rubyforge.org
+is_private: false
+username: username
+cookie_jar: /home/phil/.rubyforge/cookie.dat
+password: password

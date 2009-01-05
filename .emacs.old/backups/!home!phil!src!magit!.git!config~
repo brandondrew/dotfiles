@@ -1,0 +1,17 @@
+[core]
+	repositoryformatversion = 0
+	filemode = true
+	bare = false
+	logallrefupdates = true
+[remote "origin"]
+	url = git@github.com:technomancy/magit.git
+	fetch = +refs/heads/*:refs/remotes/origin/*
+[branch "master"]
+	remote = origin
+	merge = refs/heads/master
+[remote "marius"]
+	url = http://zagadka.vm.bytemark.co.uk/git/magit.git
+	fetch = +refs/heads/*:refs/remotes/marius/*
+[remote "johnw"]
+	url = git://github.com/jwiegley/magit.git
+	fetch = +refs/heads/*:refs/remotes/johnw/*

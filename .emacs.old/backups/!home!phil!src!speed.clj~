@@ -1,0 +1,2 @@
+(defn sum-to [n]
+  (reduce + (range 1 (inc n))))

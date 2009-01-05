@@ -1,0 +1,1 @@
+((nil . ((after-save-hook . (blog-render-post))))

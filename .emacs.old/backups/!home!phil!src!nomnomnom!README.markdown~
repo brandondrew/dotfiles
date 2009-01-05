@@ -1,0 +1,6 @@
+# nomnomnom
+
+This is a tool to process feeds.
+
+Underneath it uses the Rome feed parser, which is pretty lenient in
+terms of invalid RSS or Atom, but barfs pretty hard on malformed XML.

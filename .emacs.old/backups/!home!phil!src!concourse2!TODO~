@@ -1,0 +1,4 @@
+* validates_is_confirmed <= (how) does this work?
+* User.each {} <= does this use a cursor or what?
+* How do generators tie into plugins like merb_test_unit?
+  Looks like while you need a merb_minitest gem, you also need to touch a ton of other places?

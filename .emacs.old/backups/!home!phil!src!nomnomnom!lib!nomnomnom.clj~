@@ -1,0 +1,49 @@
+(add-classpath "file:///home/phil/src/nomnomnom/lib/jdom.jar")
+(add-classpath "file:///home/phil/src/nomnomnom/lib/rome-1.0RC1.jar")
+(add-classpath "file:///home/phil/src/nomnomnom/lib/clojure-contrib.jar")
+
+(ns nomnomnom
+  (:import (com.sun.syndication.feed.synd SyndFeed)
+           (com.sun.syndication.io SyndFeedInput
+                                   XmlReader)
+           (java.net URL)))
+
+(use 'clojure.contrib.duck-streams)
+
+(defstruct post :title :author :date :contents
+           :feed-name :feed-url)
+
+(def parser (SyndFeedInput.))
+(def feeds ["http://technomancy.us/feed/atom.xml"
+            "http://feeds.feedburner.com/HacketyOrg"
+            "http://ejohn.org/index.rdf"
+            "http://feeds.feedburner.com/github"
+            "http://www.intertwingly.net/blog/index.atom"])
+
+(defn get-post [entry feed]
+  (println "getting post")
+  (struct post (.getTitle entry)
+          (.getAuthor entry)
+          (.getPublishedDate entry)
+          (.getValue (or (.getDescription entry)
+                         (first (.getContents entry))))
+          (.getTitle feed)
+          (.getUri feed)))
+
+(defn get-posts [feed-url]
+  (let [feed (.build parser (XmlReader. (.openStream (URL. feed-url))))]
+    (map #(get-post % feed) (.getEntries feed))))
+
+;; JRuby version: SyndFeedInput.new.build(XmlReader.new(url.open_stream))
+
+(map #(println (:title %)) (get-posts "http://technomancy.us/feed/atom.xml"))
+
+(defn fetch [feeds posts]
+  (if (empty? feeds)
+    [feeds posts]
+    (fetch (rest feeds)
+           (conj posts (get-posts (first feeds))))))
+
+;; (sort (fetch feeds)
+;;       ;; This won't work.
+;;       #(> (:pubdate %1) (:pubdate %2)))

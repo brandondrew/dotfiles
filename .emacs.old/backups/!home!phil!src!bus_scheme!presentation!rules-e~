@@ -1,0 +1,12 @@
+
+
+        How's that work then?
+
+          It's simple: the first element is the function
+
+             ...and the rest are the arguments.
+
+
+        Each argument is evaluated before being passed:
+
+           ... and that's practically it!

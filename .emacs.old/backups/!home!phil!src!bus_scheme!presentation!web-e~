@@ -1,0 +1,12 @@
+
+
+        Web-ish Things?
+
+          You bet!
+
+
+        For really interesting apps you need the power of lambda.
+
+          (defresource "/time" 
+            (lambda (env) 
+              (send (now) (quote to_s))))

@@ -1,0 +1,9 @@
+require 'benchmark'
+
+def sum_to(n)
+  [1 .. n].inject {|x, memo| x + memo }
+end
+
+Benchmark.bm(5) do |x|
+  x.report('sum-to') { sum_to 10000 }
+end

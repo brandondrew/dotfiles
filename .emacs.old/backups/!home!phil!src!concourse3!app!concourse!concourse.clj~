@@ -1,0 +1,33 @@
+(ns concourse
+  (:use (compojure html http)))
+
+;; Controllers
+
+(defn dashboard
+  "A listing of all gatherings, initated and invited."
+  [] (dashboard-view invited-to initiated))  
+
+;; Routes
+
+(defservlet concourse-servlet
+  (GET "/"               (ensure-login (dashboard)))
+
+  (GET "/new"            (ensure-login (new-gathering-form))) ;; TODO
+  (POST "/new"           (ensure-login (new-gathering))) ;; TODO
+
+  (GET "/edit/:id"       (ensure-login (edit-gathering-form))) ;; TODO
+  (PUT "/edit/:id"       (ensure-login (edit-gathering))) ;; TODO
+
+  (GET "/invitation/:id" (ensure-login (edit-invitation-form))) ;; TODO
+  (PUT "/invitation/:id" (ensure-login (edit-invitation))) ;; TODO
+
+  (GET "/login"          (login-form)) ;; TODO
+  (POST "/login"         (login)) ;; TODO
+  (GET "/logout"         (ensure-login (logout-form))) ;; TODO
+  (POST "/logout"        (ensure-login (logout))) ;; TODO
+  (GET "/signup"         (signup-form)) ;; TODO
+  (POST "/signup"        (signup)) ;; TODO
+
+  (ANY "*"               (page-not-found)))
+
+;; TODO: nicer way to specify which pages require login

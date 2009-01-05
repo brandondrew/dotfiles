@@ -1,0 +1,7 @@
+$LOAD_PATH << File.dirname(__FILE__)
+require 'test_helper'
+require 'test_helper_web'
+require 'open-uri'
+
+class TestWebLambda < Test::Unit::TestCase
+end

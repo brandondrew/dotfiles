@@ -1,0 +1,5 @@
+#!/bin/bash
+
+knock dfgate.hypertextsolutions.net 6010:tcp 6100:tcp 6001:tcp
+echo "Connecting..."
+ssh -D 8080 dfgate.hypertextsolutions.net

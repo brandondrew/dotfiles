@@ -1,0 +1,759 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xml:lang="en-US" xmlns="http://www.w3.org/2005/Atom">
+  <title>Technomancy</title>
+  <id>tag:technomancy.us,2007:blog/</id>
+  <link href="http://technomancy.us/feed/atom" rel="self" type="application/atom+xml"/>
+  <link href="http://technomancy.us/" rel="alternate" type="text/html"/>
+  <updated>2008-11-27T11:10:08Z</updated>
+
+  
+  <entry xml:base="http://technomancy.us">
+    <author><name>Phil Hagelberg</name></author>
+    <id>tag:technomancy.us,2007:in%20which%20a%20hypothetical%20death%20occurs%20in%20order%20that%20a%20real%20one%20may%20be%20avoided</id>
+    <published>2008-11-27T11:10:32Z</published>
+    <updated>2008-11-27T11:10:32Z</updated>
+
+    <link href="http://technomancy.us/118" rel="alternate" type="text/html"/>
+    <title>in which a hypothetical death occurs in order that a real one may be avoided</title>
+    <content type="html">
+      &lt;p&gt;Say you're writing some Ruby code, and you come across a library
+  that deserves consideration. It looks like it might come in handy,
+  but you're not sure if it justifies the additional complexity it
+  brings with it. You're wondering how heavy-weight it is.&lt;/p&gt;
+
+&lt;p&gt;When pondering such things, it can be helpful to come at it from
+  a tactile perspective. Sure, there are tools
+  like &lt;a href='http://ruby.sadi.st/Flog.html'&gt;flog&lt;/a&gt;
+  and &lt;a href='http://saikuro.rubyforge.org'&gt;saikuro&lt;/a&gt; that can
+  give you all kinds of numbers about a piece of code, but sometimes
+  you just want to know, &quot;What would this code be like if I printed
+  it all out and picked it up?&quot; You can imagine the smell of freshly
+  printed pages and think to yourself, &quot;How would it feel to heft it
+  from hand to hand?&quot; or &quot;Would I be able to bludgeon someone to
+  death with it?&quot;&lt;/p&gt;
+
+&lt;p&gt;I can't help you with the first two questions, but I wrote a library
+  specially designed to answer the last:&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;a href='http://github.com/technomancy/bludgeon'&gt;Bludgeon&lt;/a&gt;
+  is a tool which will tell you if a given library is so large that
+  you could bludgeon someone to death with a printout of
+  it.&lt;/blockquote&gt;
+
+&lt;p&gt;Usage is simple:&lt;/p&gt;
+
+&lt;pre&gt;$ bludgeon git://github.com/dchelimsky/rspec.git
+== rspec (git://github.com/dchelimsky/rspec.git)
+  Lines: 38698
+  Pages: 773
+You could bludgeon someone to death with a printout.&lt;/pre&gt;
+
+&lt;p&gt;It's just a &lt;kbd&gt;sudo gem install bludgeon&lt;/kbd&gt; away. I'm not
+  saying you should never use a library that's big enough to be
+  deadly, I'm just saying you should &lt;i&gt;know&lt;/i&gt;.&lt;/p&gt;
+    </content>
+  </entry>
+  
+  <entry xml:base="http://technomancy.us">
+    <author><name>Phil Hagelberg</name></author>
+    <id>tag:technomancy.us,2007:rubyconf%20the%20eighth</id>
+    <published>2008-11-10T15:24:03Z</published>
+    <updated>2008-11-10T15:24:03Z</updated>
+
+    <link href="http://technomancy.us/117" rel="alternate" type="text/html"/>
+    <title>rubyconf the eighth</title>
+    <content type="html">
+      &lt;p&gt;I'm back in Seattle after an excellent RubyConf in Orlando,
+  FL. These events are always a treat, and this year's was no
+  exception. &lt;a href='/96'&gt;Last year&lt;/a&gt; the dominant theme was
+  alternate implementations, and this time around it has become an
+  ingrained assumption rather than something that needed to be
+  stated. Distributed version control has also graduated to
+  something that can practically be taken for granted&amp;mdash;at least
+  half the slide sets
+  referenced &lt;a href='http://github.com'&gt;github&lt;/a&gt;
+  repositories.&lt;/p&gt;
+
+&lt;a href=&quot;http://www.flickr.com/photos/technomancy/3015637388/&quot;
+   title=&quot;img_2850.jpg by Technomancy, on Flickr&quot;&gt;
+  &lt;img src=&quot;http://farm4.static.flickr.com/3277/3015637388_fb48da9faa_m.jpg&quot;
+       width=&quot;240&quot; height=&quot;180&quot; alt=&quot;Omni Hotel&quot; align='right' /&gt;&lt;/a&gt;
+
+&lt;p&gt;But the big theme for the year was concurrency. A number of talks
+  were given on the topic of going distributed, map/reduce-type
+  strategies, how to deal with threads/fibers, etc. Particularly
+  interesting
+  was &lt;a href='http://pragdave.blogs.pragprog.com/pragdave/'&gt;Dave
+  Thomas's&lt;/a&gt; keynote. To encourage new developments, he said, we
+  should spin off forks of the language (not necessarily the
+  implementation) where incompatible changes can be experimented
+  with freely without worrying about cluttering up mainline
+  Ruby. Parallelism and reducing the number of built-in (and hence
+  inextensible) mechanisms were the main directions he suggested. I
+  like the idea, but such a project would be able to attract more
+  contributors if it were based on Rubinius instead of MRI or YARV,
+  so it may be best to wait until that's closer to completion. The
+  talk
+  on &lt;a href='http://www.espace.com.eg/neverblock/blog/2008/09/04/neverblock-instant-scaling-for-your-rails-apps/'&gt;NeverBlock&lt;/a&gt;
+  was also very interesting; they seem to have a way to harness the
+  benefits of an event-driven approach without the twisty execution
+  flow logic that regular EventMachine requires.&lt;/p&gt;
+
+&lt;p&gt;My personal favourite talk
+  was &lt;a href='http://geeksomnia.com'&gt;John Barnette&lt;/a&gt;
+  and &lt;a href='http://tenderlovemaking.com'&gt;Aaron Patterson&lt;/a&gt;'s
+  talk on &lt;a href='http://github.com/jbarnette/johnson'&gt;Johnson&lt;/a&gt;,
+  the Ruby/Javascript bridge. They turned the hilarity gauge way up,
+  but the actual code is extremely impressive. Being able to hop
+  between languages like Johnson allows could have some interesting
+  implications that no one has yet thought of.&lt;/p&gt;
+
+&lt;a href='http://flickr.com/photos/68498640@N00/3018641584/'&gt;&lt;img src='http://farm4.static.flickr.com/3211/3018641584_855e4abf20_m_d.jpg'
+alt='Seattle.rb' title='We will light you on fire' align='left'
+/&gt;&lt;/a&gt;
+
+&lt;p&gt;As I &lt;a href='/116'&gt;mentioned earlier&lt;/a&gt;, the Seattle Ruby Group
+  presented a bunch of our projects near the end of the
+  conference. I got to introduce Bus Scheme in ten minutes, so it
+  was a very cursory look. Aaron performed a &quot;historical
+  re-enactment&quot; of the group's history that had to be seen to be
+  appreciated.&lt;/p&gt;
+
+&lt;p&gt;As usual, a lot of code was written during the conference. One of
+  the things that I got to help with was the addition of support for
+  prerelease versions in Rubygems. The lack of such support has been
+  shown to be particularly annoying with the impending release of
+  Rails 2.2, since they are using 2.2.0 as a prerelease version
+  number and calling 2.2.1 their first stable 2.2 release. It'd be
+  better if Rubygems allowed 2.2.0.a to be treated specially as a
+  prerelease version that would be superceded by a later real
+  release, and that's
+  what &lt;a href='http://blog.hasmanythrough.com'&gt;Josh
+  Susser&lt;/a&gt;, &lt;a href='http://blog.livollmers.net'&gt;Alex Vollmer&lt;/a&gt;,
+  and myself worked on. I'll post more about this when it's
+  complete.&lt;/p&gt;
+
+&lt;p&gt;Lots of thanks are due to the &lt;a href='http://rubycentral.org'&gt;
+  RubyCentral team&lt;/a&gt; who are somehow able to consistently pull off
+  these amazing events. I'm also really looking forward to
+  Confreaks posting the videos of the conference so I can catch the
+  talks I missed; thanks guys!&lt;/a&gt;
+    </content>
+  </entry>
+  
+  <entry xml:base="http://technomancy.us">
+    <author><name>Phil Hagelberg</name></author>
+    <id>tag:technomancy.us,2007:in%20which%20a%20scheme%20will%20be%20expounded%20upon</id>
+    <published>2008-10-26T20:31:51Z</published>
+    <updated>2008-10-26T20:31:51Z</updated>
+
+    <link href="http://technomancy.us/116" rel="alternate" type="text/html"/>
+    <title>in which a scheme will be expounded upon</title>
+    <content type="html">
+      &lt;p&gt;So it turns out &lt;a href='http://rubyconf.org/talks/74'&gt;the Seattle.rb talk&lt;/a&gt; that was proposed half-in-jest got accepted for RubyConf 08. The talk is called &quot;Seattle.rb Rules&quot;, and will feature a number of prestigious members discussing their projects that they work on at hack night. I've got about ten minutes to fill up for my part, and according to the proposal I'll be speaking on the following:&lt;/p&gt;
+&lt;blockquote&gt;Phil Hagelberg will talk about &lt;a href='http://bus-scheme.rubyforge.org'&gt;Bus Scheme&lt;/a&gt;, which is a Scheme implementation that is implemented (mostly) on the bus. Phil will explore what it's like to implement an interpreter in Ruby and what kinds of things Bus Scheme could be used for.&lt;/blockquote&gt;
+&lt;p&gt;I'm thinking I may end up talking about something else though. Ideas include &quot;Enough Lisp so that you won't make a Fool of yourself when the Subject comes up at Parties&quot; and &quot;First-class Syntax Modifications: the Final Step Ruby could take to catch up to Lisp&quot;.&lt;/p&gt;
+&lt;p&gt;Any other ideas? What would the average Rubyist want to know about Bus Scheme? &lt;strike&gt;Leave a comment if you've got something to say.&lt;/strike&gt;&lt;/p&gt;
+&lt;p&gt;&lt;b&gt;Update&lt;/b&gt;: Just finished the talk; went pretty well. The other speakers were awesome as well; be sure to catch it on Confreaks when the video goes up. My slides are &lt;a href='/misc/bus_slides.tar.gz'&gt;available for download&lt;/a&gt;.&lt;/p&gt;
+    </content>
+  </entry>
+  
+  <entry xml:base="http://technomancy.us">
+    <author><name>Phil Hagelberg</name></author>
+    <id>tag:technomancy.us,2007:in%20which%20a%20subject%20is%20attempted%20to%20be%20approached%20objectively,%20though%20such%20a%20thing%20is%20actually%20impossible</id>
+    <published>2008-10-24T17:19:01Z</published>
+    <updated>2008-10-24T17:19:01Z</updated>
+
+    <link href="http://technomancy.us/115" rel="alternate" type="text/html"/>
+    <title>in which a subject is attempted to be approached objectively, though such a thing is actually impossible</title>
+    <content type="html">
+      &lt;p&gt;In the past few weeks an odd trend has come across my radar: I've
+  seen
+  &lt;a href='http://twitter.com/technoweenie/status/972740768'&gt;a&lt;/a&gt;
+  &lt;a href='http://www.al3x.net/2008/10/on-flight-to-old-text-editors.html'&gt;number&lt;/a&gt;
+  of &lt;a href='http://twitter.com/gilesgoatboy/status/954572275'&gt;hardcore&lt;/a&gt; &lt;a href='http://livollmers.net/index.php/2008/10/06/back-to-myemacs/'&gt;Mac&lt;/a&gt; &lt;a href='http://github.com/defunkt/emacs/tree/master'&gt;geeks&lt;/a&gt;
+  &lt;a href='http://weblog.jamisbuck.org/2008/10/10/coming-home-to-vim'&gt;experiment&lt;/a&gt;
+  with the classic editors, and I've seen others who wonder why
+  people would give up the comfort of a &quot;modern program&quot; for them. I
+  hesitate to write on the topic because posts that do so often up
+  as flame-bait, but it actually sounds like some folks are
+  genuinely curious and want to learn rather than just repeat the
+  same holy wars of the past, so I will try to stay in the same
+  frame of mind.&lt;/p&gt;
+
+&lt;a href='http://m.assetbar.com/achewood/uua3cZ7cb'&gt;
+  &lt;img src='/i/ray.gif' alt='ray' title='smug' align='right' /&gt;&lt;/a&gt;
+
+&lt;p&gt;One of the complaints you see leveled over and over is that Emacs
+  on OS X doesn't feel &quot;Mac-like&quot;. This is asserted as if it's a
+  tragic shortcoming of Emacs, and the person stating it never
+  specifies what advantages would arise if it were &quot;fixed&quot;; it's
+  assumed to be obvious. This usually comes across as cultural
+  elitism, but I don't think that's the intent, any more than Ray
+  Smuckles intends to offend the Russian people when he
+  &lt;a href='http://raysmuckles.blogspot.com/2005_06_01_archive.html'&gt;observes
+  that the Cyrillic alphabet &quot;looks like they commissioned a
+  smartass to make fun of our letters,&quot;&lt;/a&gt;&amp;mdash;he's
+  just &lt;a href='http://m.assetbar.com/achewood/uua5HJJnB'&gt;being
+  Ray&lt;/a&gt;. That is to say, there are some deeply-held assumptions at
+  work here that are never questioned. It's pretty easy to explain
+  why a buffer list is more effective than a tabbed interface, (an
+  explanation is given below) but I've never heard the reasoning why
+  supposedly a modal file open dialog box is better for text files
+  than reading a location unobtrusively from the minibuffer. It's
+  always just set forth as something the user will grudgingly put up
+  with, even though it has many advantages over what they're used
+  to.&lt;/p&gt;
+
+&lt;p&gt;I agree that there are some advantages to a standardized set of
+  conventions for user interfaces that apply across a whole
+  operating system. Lowering the number of context switches involved
+  in day-to-day usage is a definite win. But the problem with
+  standards like these is that they can turn restrictive. If
+  something comes along that is objectively better and the standard
+  doesn't allow for it, the standard is acting as a hindrance.&lt;/p&gt;
+
+&lt;h3&gt;Conventions Compared&lt;/h3&gt;
+
+&lt;p&gt;The most obvious example is to compare the modern convention of
+  multi-document tab-switching to the buffer-switching mechanisms
+  you see in Emacs. Once you start opening a significant number of
+  tabs, the number of documents you can open and see at the same
+  time is limited by the width of your screen. For Firefox on this
+  machine, the number is twelve[&lt;a href='#115-1'&gt;1&lt;/a&gt;] when it's
+  running full-screen. Even if you can see every document, the title
+  of each will need to be sharply truncated to fit on the small
+  visible tab, making it harder to identify a tab without switching
+  to it. To find the tab you want, you need to just press
+  control-pageup over and over again.&lt;/p&gt;
+
+&lt;p&gt;When the &lt;code&gt;ido&lt;/code&gt; buffer switcher that comes with Emacs
+  is invoked, it shows a limited number of targets to switch to,
+  just like the tab system. So far the only difference is that the
+  buffers are in order of when they were used last, so it's much
+  more likely that the one you want is at the front of the list. But
+  the big win is that you can just start typing a few letters, and
+  the list will narrow down to only the options that match what
+  you've typed. So once you invoke the buffer switcher it rarely
+  takes more than five keystrokes to find what you want even when
+  you have a large list of open buffers, whereas with tabs you'd
+  have to search linearly for your target.&lt;/p&gt;
+
+&lt;p&gt;With predictable frequency we get folks dropping by the #emacs
+  freenode channel asking things like &quot;can I get a tabbed interface
+  in Emacs?&quot;, and the answer is always &quot;of course you can, but you
+  don't want to; try this instead&quot;. This probably comes off as
+  cultural elitism too when the enquirer insists that he really does
+  want a tab bar, but I think the motivation is more &quot;we don't
+  want to spend the time explaining in painstaking detail the
+  advantages of this way to someone who doesn't want to listen&quot; than
+  &quot;we don't need the likes of you around here&quot;.&lt;/p&gt;
+
+&lt;p&gt;The other big under-appreciated advantage is the capability to
+  redefine or add functionality on the fly. I'm fairly sure this
+  can't really be understood until you try
+  it[&lt;a href='#115-2'&gt;2&lt;/a&gt;], but the thought of going back to apps
+  that don't allow self-modification is usually met with a
+  grimace.&lt;/p&gt;
+
+&lt;h3&gt;In Action&lt;/h3&gt;
+
+&lt;p&gt;Take the example of the version control interface. It's got a bit
+  of historic baggage, being designed around a single-file-at-a-time
+  mindset encouraged by the version control systems of yore. It's
+  recently been rewritten to work better with multiple files at a
+  time, but since it provides a uniform interface over all the
+  different backends it supports, I noticed a problem with working
+  with git repositories. When you add a file to the repository, it
+  checks to make sure it hasn't been registered yet. This is pretty
+  reasonable with most VCSes, but with git re-registering a file is
+  a common operation when you want to add a single change to the
+  staging area.&lt;/p&gt;
+
+&lt;p&gt;If you didn't have the ability to modify functionality on the
+  fly, you'd probably just bite the context-switching bullet and
+  drop into the shell for this (or worse, just quit using git's
+  ability to build up a patch chunk by chunk and just commit with
+  the &quot;-a&quot; option) since it doesn't seem like it's worth fixing. But
+  it's really trivial to fix in Emacs:&lt;/p&gt;
+
+  &lt;pre class='code'&gt;
+&lt;span class=&quot;paren&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;keyword&quot;&gt;defun&lt;/span&gt; &lt;span class=&quot;function-name&quot;&gt;my-vc-add-or-register&lt;/span&gt; &lt;span class=&quot;paren&quot;&gt;()&lt;/span&gt;
+  &lt;span class=&quot;doc&quot;&gt;&quot;Register the file if it hasn't been registered, otherwise git add it.&quot;&lt;/span&gt;
+  &lt;span class=&quot;paren&quot;&gt;(&lt;/span&gt;interactive&lt;span class=&quot;paren&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;paren&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;keyword&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;paren&quot;&gt;(&lt;/span&gt;eq 'Git &lt;span class=&quot;paren&quot;&gt;(&lt;/span&gt;vc-backend buffer-file-name&lt;span class=&quot;paren&quot;&gt;))&lt;/span&gt;
+      &lt;span class=&quot;paren&quot;&gt;(&lt;/span&gt;vc-git-register buffer-file-name&lt;span class=&quot;paren&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;paren&quot;&gt;(&lt;/span&gt;vc-register&lt;span class=&quot;paren&quot;&gt;)))&lt;/span&gt;
+
+&lt;span class=&quot;paren&quot;&gt;(&lt;/span&gt;global-set-key &lt;span class=&quot;paren&quot;&gt;(&lt;/span&gt;kbd &lt;span class=&quot;string&quot;&gt;&quot;C-x v i&quot;&lt;/span&gt;&lt;span class=&quot;paren&quot;&gt;)&lt;/span&gt; 'my-vc-add-or-register&lt;span class=&quot;paren&quot;&gt;)&lt;/span&gt;
+&lt;/pre&gt;
+
+&lt;p&gt;This took less than two minutes to write, and I was actually able
+  to use the functionality I just wrote to add the change to my
+  dotfiles repository instantly[&lt;a href='#115-3'&gt;3&lt;/a&gt;],
+  bootstrapping-style.&lt;/p&gt;
+
+&lt;p&gt;If you have to use some tacked-on &quot;plugin mechanism&quot; to customize
+  it, then you’re going to be limited at the very least by the
+  imagination of the author of the plugin mechanism; only the things
+  he thought you would want to do with it are doable. But if you’re
+  using the exact same tools as the original authors were using to
+  write the program in the first place, you can bet they put all
+  their effort into making that a seamless, powerful experience, and
+  you'll be able to access things on an entirely new level.&lt;/p&gt;
+
+&lt;h3&gt;However&lt;/h3&gt;
+
+&lt;p&gt;I don't want to say that there aren't any problems with the
+  system I use. The default key bindings are more an accident of
+  history without much advantage from the more standard
+  conventions. The &lt;tt&gt;M-x customize&lt;/tt&gt; interface is frankly
+  pretty embarrassing and comes across as an attempt to shield users
+  from the act of writing and reading code, but this is easy to
+  avoid. The lack of concurrency is a very real problem,
+  though &lt;a href='http://article.gmane.org/gmane.emacs.devel/96339'&gt;not
+  one that's going unnoticed&lt;/a&gt; by the
+  developers.[&lt;a href='#115-4'&gt;4&lt;/a&gt;] The rendering engine is very
+  text-centric; it's hard to get it display other things. But these
+  are problems that people are working together to address, and it's
+  remarkable how approachable some of them are to someone who knows
+  a little elisp. And the capability to examine and change running
+  code on the fly makes them much easier to deal with.&lt;/p&gt;
+
+&lt;div class='footnotes'&gt;
+  &lt;p&gt;[&lt;a name='115-1'&gt;1&lt;/a&gt;] - Perhaps this is intentional; keeping
+    too many tabs open at a time in Firefox can cause performance
+    issues. But that's another issue entirely.&lt;/p&gt;
+  &lt;p&gt;[&lt;a name='115-2'&gt;2&lt;/a&gt;] - The ex-Smalltalkers never have a hard
+    time understanding it.&lt;/p&gt;
+  &lt;p&gt;[&lt;a name='115-3'&gt;3&lt;/a&gt;] - Of course, it doesn't stop here; the
+    decent thing to do
+    is &lt;a href='http://article.gmane.org/gmane.emacs.devel/104793'&gt;send
+    the fix upstream&lt;/a&gt;. Unfortunately there's a feature-freeze
+    right now, so this specific feature will probably have to wait
+    for the next release.&lt;/p&gt;
+  &lt;p&gt;[&lt;a name='115-4'&gt;4&lt;/a&gt;] - The &lt;code&gt;lexbind&lt;/code&gt; branch of
+    development provides optional lexical binding, the current lack
+    thereof being the greatest hindrance towards adding concurrency
+    features. The current plan is to merge it and add coroutines
+    after the release of version 23 in December.&lt;/p&gt;
+&lt;/div&gt;
+    </content>
+  </entry>
+  
+  <entry xml:base="http://technomancy.us">
+    <author><name>Phil Hagelberg</name></author>
+    <id>tag:technomancy.us,2007:exceptional%20confusion</id>
+    <published>2008-09-23T10:07:01Z</published>
+    <updated>2008-09-23T10:07:01Z</updated>
+
+    <link href="http://technomancy.us/114" rel="alternate" type="text/html"/>
+    <title>exceptional confusion</title>
+    <content type="html">
+      &lt;p&gt;So I've noticed there seems to be a fair amount of confusion in
+the Ruby world about exception hierarchies. A number of libraries I
+use happen to use them in ways that cause problems&amp;mdash;usually in
+ways that surface at the worst possible times near the end of long
+batch operations. So here's a little primer to refresh your memory
+and hopefully save some of &lt;i&gt;my&lt;/i&gt; sanity if I ever use one of
+your gems.&lt;/p&gt;
+
+&lt;p&gt;&lt;tt&gt;Exception&lt;/tt&gt; is the root class for the whole exception
+  hierarchy. I see a lot of code that subclasses &lt;tt&gt;Exception&lt;/tt&gt;
+  for regular non-fatal exceptions. It's not obvious, but this is
+  really not how it's meant to be used. Imagine you are building a
+  restful interface. The following code will bring down the
+  application:&lt;/p&gt;
+
+&lt;pre class='code'&gt;
+&lt;span class='comment-delimiter'&gt;# &lt;/span&gt;&lt;span class='comment'&gt;This is wrong! Inherit from StandardError.&lt;/span&gt;
+&lt;span class='keyword'&gt;class&lt;/span&gt; &lt;span class='type'&gt;GetSomeRest&lt;/span&gt; &amp;lt; &lt;span class='type'&gt;Exception&lt;/span&gt;; &lt;span class='keyword'&gt;end&lt;/span&gt;
+
+&lt;span class='keyword'&gt;begin&lt;/span&gt;
+  &lt;span class='keyword'&gt;if&lt;/span&gt; (7 .. 11).include? &lt;span class='type'&gt;Time&lt;/span&gt;.now.hour
+    perform_restful_operation
+  &lt;span class='keyword'&gt;else&lt;/span&gt;
+    &lt;span class='keyword'&gt;raise&lt;/span&gt; &lt;span class='type'&gt;GetSomeRest&lt;/span&gt;
+  &lt;span class='keyword'&gt;end&lt;/span&gt;
+&lt;span class='keyword'&gt;rescue&lt;/span&gt;
+  puts &lt;span class='string'&gt;'You really should not stay up so late.'&lt;/span&gt;
+&lt;span class='keyword'&gt;end&lt;/span&gt;
+&lt;/pre&gt;
+
+&lt;p&gt;This is because &lt;tt&gt;rescue&lt;/tt&gt; will only capture errors that
+  descend from &lt;tt&gt;StandardError&lt;/tt&gt; by default. We should be
+  subclassing &lt;tt&gt;StandardError&lt;/tt&gt; here, as well as for anything
+  else that's non-fatal. Save &lt;tt&gt;Exception&lt;/tt&gt; subclasses for very
+  serious things. Running out of memory should raise an
+  &lt;tt&gt;Exception&lt;/tt&gt;. When a user presses control-c, it raises
+  &lt;tt&gt;Interrupt&lt;/tt&gt;, which is descended directly from
+  &lt;tt&gt;Exception&lt;/tt&gt; rather than &lt;tt&gt;StandardError&lt;/tt&gt;. Sending a
+  Unix kill signal to a process does the same thing. If you rescue
+  &lt;tt&gt;Exception&lt;/tt&gt; or &lt;tt&gt;Interrupt&lt;/tt&gt;, then you have to resort
+  to &lt;tt&gt;kill -9&lt;/tt&gt; to stop your application externally, leaving
+  it with no chance to clean up after yourself.&lt;/p&gt;
+
+&lt;p&gt;Unfortunately, we live in an imperfect world, and we have to deal
+with libraries that misuse the exception hierarchy. The first thing
+you should do when you encounter one of these misuses is submit a
+patch to the offending library. (You could even include a link to
+this post.) But it's not always possible to get it fixed, so here's
+the workaround I've been using:&lt;/p&gt;
+
+&lt;pre class='code'&gt;
+&lt;span class='keyword'&gt;begin&lt;/span&gt;
+  perform_possibly_problematic_process
+&lt;span class='keyword'&gt;rescue&lt;/span&gt; &lt;span class='type'&gt;Exception&lt;/span&gt; =&amp;gt; e
+  &lt;span class='keyword'&gt;raise&lt;/span&gt; e &lt;span class='keyword'&gt;unless&lt;/span&gt; e.is_a? &lt;span class='type'&gt;StandardError&lt;/span&gt; &lt;span class='keyword'&gt;or&lt;/span&gt; e.is_a? &lt;span class='type'&gt;GetSomeRest&lt;/span&gt;
+  &lt;span class='variable-name'&gt;@log&lt;/span&gt;.warn e.message &lt;span class='comment-delimiter'&gt;# &lt;/span&gt;&lt;span class='comment'&gt;or whatever
+&lt;/span&gt;&lt;span class='keyword'&gt;end&lt;/span&gt;
+&lt;/pre&gt;
+
+&lt;p&gt;If you're not sure of all the problematic &lt;tt&gt;Exception&lt;/tt&gt;s a
+piece of code could raise, you could just rescue &lt;tt&gt;Exception&lt;/tt&gt;
+and re-raise &lt;tt&gt;e&lt;/tt&gt; if it's an &lt;tt&gt;Interrupt&lt;/tt&gt;, but this
+might swallow some other legitimate serious problems, so it's best
+to be specific.&lt;/p&gt;
+
+&lt;p&gt;Tell your friends to use Ruby's exception hierarchy as it was
+intended! &lt;b&gt;Update&lt;/b&gt;: Don't feel bad if you didn't know this,
+apparently even the Lucky Stiff himself has &lt;a href='http://github.com/technomancy/hpricot/commit/3f14969ccc862fde26e7fcdc072b01f4fc4b9146'&gt;fallen into this trap&lt;/a&gt;.&lt;/p&gt;
+    </content>
+  </entry>
+  
+  <entry xml:base="http://technomancy.us">
+    <author><name>Phil Hagelberg</name></author>
+    <id>tag:technomancy.us,2007:in%20which%20another%20mode%20of%20collaboration%20is%20set%20forth</id>
+    <published>2008-07-30T12:34:15Z</published>
+    <updated>2008-07-30T12:34:15Z</updated>
+
+    <link href="http://technomancy.us/113" rel="alternate" type="text/html"/>
+    <title>in which another mode of collaboration is set forth</title>
+    <content type="html">
+      &lt;p&gt;When Giles &lt;a href='http://gilesbowkett.blogspot.com/2008/06/how-i-got-started-programming.html'&gt;tagged me&lt;/a&gt; with one of these blog memes that's been going around, I couldn't bring myself to continue its progression since I generally don't find them all that interesting&amp;mdash;it takes a remarkable writer to make a good post out of one, but a remarkable writer probably could have found something interesting to write about without the meme, while with a less-than-remarkable writer I'd find a the regular fare (usually a post about code) more interesting than a biographical sketch.&lt;/p&gt;
+&lt;p&gt;However, one question in the bunch did stand out to me: &lt;em&gt;what's the most fun you've had programming&lt;/em&gt;? In May of 2006, I wrote &lt;a href='/45'&gt;a collaborative editing client for Emacs&lt;/a&gt; called &lt;a href='http://github.com/technomancy/dotfiles/tree/master/.emacs.d/ebby.el'&gt;Ebby&lt;/a&gt; in three days. This was my first nontrivial lisp program, and it was really a rush to dive into the language/environment and come up with something useful so quickly. Ebby was actually a client for the existing &lt;a href='http://gobby.0x539.de/trac/'&gt;Obby protocol&lt;/a&gt; which happened to have no documentation at the time, so I spent a lot of time in &lt;tt&gt;ettercap&lt;/tt&gt; analyzing traffic in between banging out lisp functions.&lt;/p&gt;
+&lt;img src='/i/gobby.png' alt='gobby' title='gobby' align='left' /&gt;
+&lt;p&gt;While I had loads of fun working on Ebby, one vital feature kept eluding me. Since I was the only one using Ebby at that point, I was never able to trigger conflicting edits. Because of this I never saw the complicated mechanisms in the Obby protocol for dealing with conflicts. Later someone from the Obby team explained it to me, and I started implementing it. But it greatly complicated the code since much more state had to be kept client-side so that conflicting changes could be rolled back and reapplied on top of the new edits received from the server. While I was working on this, the Obby team announced they were eventually going to move to an XMPP-based protocol that would share virtually no code with the existing implementation, so I dropped my efforts to fix Ebby. It still worked quite well with version 0.3 as long as you were on a low-latency connection, since that kept the likelihood of conflicts low.&lt;/p&gt;
+&lt;img src='/i/subway.png' alt='all aboard the git subway'  title='all aboard the git subway' align='right' /&gt;
+&lt;p&gt;Fast-forward to September or so of last year. I was just learning about &lt;tt&gt;git&lt;/tt&gt; and how its rebase operation works. I got the strangest feeling of d&amp;eacute;javu about this until I realized it was the same rollback-and-reapply operation that I had tried to add to Ebby. I knew at some point I would want to revisit Ebby, so I filed this little tidbit away.&lt;/p&gt;
+&lt;p&gt;Later still at Railsconf '08 a few of the git-addicted hackers got together to write &lt;a href='http://rubyforge.org/projects/gitjour'&gt;gitjour&lt;/a&gt;, a tool to share git repositories locally via ZeroConf networking. Once I found out about this, it was really just a matter of putting the pieces together before a collaborative editing tool was born out of it.&lt;/p&gt;
+&lt;p&gt;&lt;b&gt;Conspire&lt;/b&gt; is that tool. It builds a realtime repository synchronization platform on top of gitjour and then provides editor support on top of that so your edits are automatically committed, rebased, and refreshed with of the state of the network's conspiracy session.&lt;/p&gt;
+&lt;p&gt;As always with new software, there are a number of caveats:&lt;/p&gt; &lt;ul&gt; &lt;li&gt;&lt;b&gt;Conflict resolution is more or less untested&lt;/b&gt;. Once again I find myself in the position of sole conspirator, so it's hard to simulate conflicting edits.&lt;/li&gt; &lt;li&gt;&lt;b&gt;Emacs is the only editor currently supported&lt;/b&gt;, naturally. But should not be hard to add support for your favourite editor, so give it a go.&lt;/li&gt; &lt;li&gt;&lt;b&gt;Installation depends on an unreleased gem&lt;/b&gt;, but if you install the conspire gem from github (after &lt;tt&gt;sudo apt-get install libavahi-compat-libdnssd-dev&lt;/tt&gt; on Debian-based systems) it will pull in my custom up-to-date versions of the dependencies.&lt;/li&gt; &lt;li&gt;&lt;b&gt;Conspiracy sessions are currently LAN-only&lt;/b&gt;, no Internet support or NAT-tunneling.&lt;/li&gt; &lt;li&gt;&lt;b&gt;I have &lt;i&gt;no idea&lt;/i&gt; how it will scale beyond two conspirators&lt;/b&gt;. The synchronization interval parameters could use some tweaking, to be sure, and it would be great if it could auto-adjust them based on network latency and number of conspirators.&lt;/li&gt; &lt;/ul&gt;
+&lt;p&gt;It currently lives at &lt;a href='http://github.com/technomancy/conspire'&gt; http://github.com/technomancy/conspire&lt;/a&gt;. As always, patches are warmly welcomed. Give it a shot: &lt;tt&gt;sudo gem install conspire --source=http://gems.github.com&lt;/tt&gt;&lt;/p&gt;
+    </content>
+  </entry>
+  
+  <entry xml:base="http://technomancy.us">
+    <author><name>Phil Hagelberg</name></author>
+    <id>tag:technomancy.us,2007:in%20which%20more%20is%20done%20with%20less</id>
+    <published>2008-06-30T23:58:00Z</published>
+    <updated>2008-06-30T23:58:00Z</updated>
+
+    <link href="http://technomancy.us/112" rel="alternate" type="text/html"/>
+    <title>in which more is done with less</title>
+    <content type="html">
+      &lt;p&gt;I've been &lt;a href='http://diveintomark.org/archives/2008/06/21/minimalism'&gt;inspired&lt;/a&gt;  to take a more minimalist approach with the design of this site.&lt;/p&gt;
+&lt;p&gt;Most obvious is the reduction of &lt;a href='http://tomayko.com/writings/administrative-debris'&gt;administrative debris&lt;/a&gt;, though I think the new typographical choices also improve readability. There were things in the old design that I added because &quot;all blogs need them&quot; that in retrospect feel superfluous. As a bonus, the site is far easier to read in non-graphical user agents.&lt;/p&gt;
+&lt;p&gt;I was suprised how well I like the all-in-one &lt;a href='/list'&gt;archive page&lt;/a&gt; that Pilgrim suggests, though I will probably like it more once it gets broken up by month. It also needs to be more discoverable. I still haven't figured out if I'm going to add back in a search box or blogroll somehow, but I'll definitely be putting the comment form back up soon.&lt;/p&gt;
+&lt;p&gt;One thing I wanted to add that didn't make it into the design is a photo of myself. It seems vain, but after attending a few conferences and noticing how easy it was to recognize other people who do the same and &lt;a href='http://twitter.com/gilesgoatboy/statuses/825666128'&gt;going unrecognized myself&lt;/a&gt;, it made me realize that facial-recognition is pretty valuable. Still, I hate to sully the purity of this textual layout.&lt;/p&gt;
+&lt;p&gt;On a related note, I added in those nifty &lt;tt&gt;&amp;lt;link rel=&quot;next/prev&quot; [...]&amp;gt;&lt;/tt&gt; tags into the header of each page. Unfortunately if you're using Firefox you'll need &lt;a href='https://addons.mozilla.org/en-US/firefox/addon/2933'&gt;an extension&lt;/a&gt; to make use of them, but &lt;a href='http://conkeror.org'&gt;Conkeror&lt;/a&gt;'s got support built in bound to a double-press of the square bracket keys. It's remarkable what a difference little bits of extra metadata can make once you've got them integrated into your browsing habits.&lt;/p&gt;
+&lt;p&gt;&lt;b&gt;Update&lt;/b&gt;: tried browsing the site in Firefox for a while without the prev/next links in chrome... it's a pain. So I added in hyperlinks for now. But it wouldn't hurt to &lt;a href='https://bugzilla.mozilla.org/show_bug.cgi?id=291340'&gt;petition browser creators&lt;/a&gt; to expose this juicy bit of metadata instead of just throwing it away.&lt;/p&gt;
+    </content>
+  </entry>
+  
+  <entry xml:base="http://technomancy.us">
+    <author><name>Phil Hagelberg</name></author>
+    <id>tag:technomancy.us,2007:in%20which%20the%20cake%20is%20found%20to%20be%20delicious%20and%20moist</id>
+    <published>2008-06-25T08:56:00Z</published>
+    <updated>2008-06-25T08:56:00Z</updated>
+
+    <link href="http://technomancy.us/111" rel="alternate" type="text/html"/>
+    <title>in which the cake is found to be delicious and moist</title>
+    <content type="html">
+      &lt;blockquote style='font-style: italic'&gt;Now these points of data make a beautiful line&lt;br /&gt; And we're [launching] beta; we're releasing on time.&lt;/blockquote&gt;
+&lt;p&gt;Well, it's official: I've been working the past year at Evri, and &lt;a href='http://blog.evri.com/index.php/2008/06/24/little-room/'&gt;we've just launched&lt;/a&gt;. Basically the system leverages natural language parsing to create a rich data graph of all the concepts on the Web that we can get our hands on. I could go into more detail, but the official post linked above does a great job of that. It's pretty cool to browse around and see the article recommendations for a given entity. Unfortunately the visualization aspect requires the Flash plugin, so if you don't want to put up with the insane crashes, UI glitches, and performance issues that come along with installing that plugin then you miss out on that goodness. Hopefully Gnash will be able to run it soon.&lt;/p&gt;
+&lt;img src='/i/cake.jpg' alt='the cake: not a lie' align='right' /&gt;
+&lt;p&gt;Anyway, it's great to have something public and at the same time useful, especially after the how my &lt;a href='http://paxtel.com/faq.php'&gt;last&lt;/a&gt; &lt;a href='http://ujive.com/beta/welcome'&gt;few&lt;/a&gt; &lt;a href='http://www.circlebuilder.com/restricted_beta'&gt;jobs&lt;/a&gt; have fared. My role in the system has been in content gathering rather than the core parsing system. It's been interesting mostly simply because I haven't had to work with data sets in the bajilli-byte range before, and you run into a whole new set of challenges dealing with that kind of thing.&lt;/p&gt;
+&lt;p&gt;I've also been able to use and contribute to a number of free software packages, which has been a big plus. This is the first time a work project has really pushed development of new features in another library rather than just responding to bug fixes, so it's been great to get involved with the hacker community on work time.&lt;/p&gt;
+&lt;p&gt;Anyway, give it a look; poke around; kick the tires. I bet you'll find something interesting.&lt;/p&gt;
+    </content>
+  </entry>
+  
+  <entry xml:base="http://technomancy.us">
+    <author><name>Phil Hagelberg</name></author>
+    <id>tag:technomancy.us,2007:in%20which%20the%20events%20of%20and%20surrounding%20cabooseconf%20are%20recapitulated</id>
+    <published>2008-06-04T09:32:42Z</published>
+    <updated>2008-06-04T09:32:42Z</updated>
+
+    <link href="http://technomancy.us/110" rel="alternate" type="text/html"/>
+    <title>in which the events of and surrounding cabooseconf are recapitulated</title>
+    <content type="html">
+      &lt;p&gt;Over the weekend I spent some time with thousands of geeks in Portland as RailsConf was held at the Oregon Convention Center. While I always enjoy these kinds of events immensely, I usually have just as much fun with the socializing aspect as I do with the actual conference material. So this year I decided just to head over to &lt;a href='http://conference.caboose.org'&gt;CabooseConf&lt;/a&gt;  and only attend the &amp;quot;hallway track&amp;quot; at the main event.&lt;/p&gt;
+&lt;img src='http://technomancy.us/i/portland_boardwalk.jpg' alt='portland skyline'  align='left' /&gt;
+&lt;p&gt;As usual, Portland was the ideal host city for the conference. It's beautifully green in a way that makes it simply refreshing to walk through. The convenience of getting around would have been better for me personally if I had thought to book a hotel closer to the Max line, but no US city that I've been to does visitor-friendly better than Portland. It came as a major disappointment to hear that it might head to the wastelands of Nevada next year&amp;mdash;yuck.&lt;/p&gt;
+&lt;p&gt;CabooseConf was a really low-key string of hackfests put on by the folks at &lt;a href='http://entp.com'&gt;ENTP&lt;/a&gt;. Even if it didn't seem too lively at first glance, the room kept humming with a quiet energy of hackers working on big ideas. Getting that many bright people together is bound to spark all the right kinds of conversations.&lt;/p&gt;
+&lt;p&gt;I greatly enjoyed finally getting to meet &lt;a href='http://blog.jdhuntington.com'&gt;JD&lt;/a&gt;, the other main Bus Scheme contributor and welcoming the enthusiastic &lt;a href='http://6brand.com/'&gt;Jack Danger Canty&lt;/a&gt; to the team. I had hoped to start adding support for macros to Bus Scheme, but the work I started in that direction revealed some weaknesses deep in the implementation. The code has much more internal consistency now (we changed a huge amount of code over from using Arrays to internally represent code to using Lists) and is pretty solid. Jack has actually deployed &lt;a href='http://jackcanty.com/'&gt;the first Bus Scheme web app in the wild&lt;/a&gt; as his home page, which is a noteworthy milestone. I've begun support for macros but am still a ways away from getting that totally ready. Scheme macros are fairly different from Common Lisp or Elisp's version, so it's taken some learning.&lt;/p&gt;
+&lt;p&gt;If you've read anything about RailsConf this year, you've doubtless heard a lot of people excited about MagLev, a new upcoming Ruby implementation. Since I didn't go to any of the talks I didn't see the demo, but I've &lt;a href='http://headius.blogspot.com/2008/06/maglev.html'&gt;read enough&lt;/a&gt; to be skeptical. I know for a fact that the world of Smalltalk has a lot of amazing technology around it that would really benefit Rubyists. But the way people go on about MagLev like it's going to solve everyone's problems with its 60x performance boost is really short-sighted. The obvious bit is that they haven't given anyone any reason to think they've got a system that supports Ruby's object model and execution semantics on anything other than a very superficial level. It's easy to optimize microbenchmarks to get 60x speed boosts like MagLev claims if you don't allow for the dynamicity of Ruby, and MagLev has so far made no claims towards being able to run (let alone pass) any of the Ruby specs.&lt;/p&gt;
+&lt;p&gt;But this is really just a side-effect of the real problem: There is absolutely no transparency into the development cycle of MagLev. We're seeing a group of engineers who are grounded in a 1980's mindset of &amp;quot;let's demo this technology we're working on to a bunch of potential customers&amp;quot; rather than entering into the Ruby community and approaching us as a group of hackers. We don't value slick demos and impressive statistics; &lt;b&gt;we value code&lt;/b&gt; and code alone. We have learned the mistakes of single-vendor reliance, some of us by observation and some of us by painful experience. Even Sun learned that people won't put up with it. No&amp;mdash;even &lt;i&gt;Microsoft&lt;/i&gt; isn't daring to suggest that you use a Ruby implementation that ties you into their proprietary software stack.&lt;/p&gt;
+&lt;img src='http://technomancy.us/i/github_machine.jpg' alt='pay to github' /&gt;
+&lt;p&gt;The really crazy thing about the whole issue is that it reveals an idea that somehow it's difficult to make money with a really excellent piece of free software. It blows my mind that people still think this in AD 2008. People will trip over themselves to get a good place in line to throw buckets of cash at you if you can provide them with an open-source software stack that comes anywhere near the 8x-60x speedup that MagLev has implied is possible. It grows even more obvious when you think about the fact that the other big win with MagLev is the OODB, something that very few Rubyists have any idea how to deal with. And Gemstone has the expertise needed to port our Rails applications from this hacky object-relational mapping model to their vastly more elegant and scalable paradigm. It would be hard for them &lt;i&gt;not&lt;/i&gt; to make money in a situation where MagLev came under a reasonable Free license.&lt;/p&gt;
+    </content>
+  </entry>
+  
+  <entry xml:base="http://technomancy.us">
+    <author><name>Phil Hagelberg</name></author>
+    <id>tag:technomancy.us,2007:in%20which%20light%20is%20shed%20upon%20some%20previously%20unexplored%20frontiers</id>
+    <published>2008-05-13T23:31:01Z</published>
+    <updated>2008-05-13T23:31:01Z</updated>
+
+    <link href="http://technomancy.us/109" rel="alternate" type="text/html"/>
+    <title>in which light is shed upon some previously unexplored frontiers</title>
+    <content type="html">
+      &lt;p&gt;So I've been working on modularizing a big project at work. The REST API for this one project needs to be used in multiple places, so
+I've taken it out of the Rails app and spun it off into its own server
+using &lt;a href='http://rack.rubyforge.org'&gt;Rack&lt;/a&gt;. Rack is a library
+that abstracts away the gory details of HTTP and gives you a nice
+object-oriented wrapper for it, allowing you to plug it into multiple
+different backends. It's great for accelerating development on your
+simple lightweight services that wouldn't otherwise justify a Merb or
+Rails application. Ezra gives &lt;a
+href='http://brainspl.at/articles/2008/02/16/so-merb-core-is-built-on-rack-you-say-why-should-i-care'&gt;a
+good explanation of why you might be interested in Rack&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Anyhow, I was able to put this together fairly quickly by hooking
+up libxml, ActiveRecord, and Rack. (If I were doing it again I'd use
+&lt;a
+href='http://github.com/codahale/faster-builder/tree/master'&gt;faster-builder&lt;/a&gt;,
+which I found out about a few hours after I started the project, but
+whatever.) But this particular project must be able to support
+ridiculously large XML responses that could be larger than 4GB. On a
+32-bit machine this is... well... problematic. The solution, of
+course, is to stream the response back to the client as it's
+generated so it doesn't have to all be in memory at once.&lt;/p&gt;
+
+&lt;p&gt;Unfortunately the only Ruby support for HTTP streaming I was able
+to find by searching the web is about streaming static files. I was
+getting pretty discouraged until Ezra mentioned that Merb bundles a
+patched version of Rack that allows streaming of programmatic
+content.&lt;/p&gt;
+
+&lt;p&gt;Sure enough, Merb's changes to Rack &lt;a
+href='http://technomancy.us/code/streaming_quine.rb'&gt;do the
+trick&lt;/a&gt;:&lt;/p&gt;
+
+&lt;pre class='code'&gt;require &lt;span class='string'&gt;'rubygems'&lt;/span&gt;
+require &lt;span class='string'&gt;'rack/response'&lt;/span&gt;
+require &lt;span class='string'&gt;'rack/handler/mongrel'&lt;/span&gt;
+
+&lt;span class='comment-delimiter'&gt;# &lt;/span&gt;&lt;span class='comment'&gt;Launches an HTTP server on http://localhost:9999/N that streams its own code N times
+&lt;/span&gt;&lt;span class='type'&gt;Rack&lt;/span&gt;::&lt;span class='type'&gt;Handler&lt;/span&gt;::&lt;span class='type'&gt;Mongrel&lt;/span&gt;.run(&lt;span class='type'&gt;Proc&lt;/span&gt;.new &lt;span class='keyword'&gt;do&lt;/span&gt; |env|
+                             [200, {}, &lt;span class='type'&gt;Proc&lt;/span&gt;.new &lt;span class='keyword'&gt;do&lt;/span&gt; |response|
+                                response.send_status_no_connection_close(&lt;span class='string'&gt;''&lt;/span&gt;)
+                                response.send_header
+                                env[&lt;span class='string'&gt;'PATH_INFO'&lt;/span&gt;][/(\d+)/].to_i.times &lt;span class='keyword'&gt;do&lt;/span&gt;
+                                  response.write &lt;span class='type'&gt;File&lt;/span&gt;.read(__FILE__) + &lt;span class='string'&gt;'\n'&lt;/span&gt;; sleep 1
+                                &lt;span class='keyword'&gt;end&lt;/span&gt;
+                                response.write &lt;span class='string'&gt;'\r\n\r\n'&lt;/span&gt;
+                              &lt;span class='keyword'&gt;end&lt;/span&gt;]
+                           &lt;span class='keyword'&gt;end&lt;/span&gt;, :&lt;span class='type'&gt;Port&lt;/span&gt; =&amp;gt; 9999)
+&lt;/pre&gt;
+
+&lt;p&gt;I check the streaming with curl; if it's properly streamed the &lt;tt&gt;%
+Received&lt;/tt&gt; will climb slowly instead of jumping at once to 100:&lt;/p&gt;
+
+&lt;pre class='code'&gt;$ curl http://localhost:9999/7 &gt; /dev/null
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100  5310    0  5310    0     0    755      0 --:--:--  0:00:07 --:--:--   796&lt;/pre&gt;
+
+&lt;p&gt;It's not clear to me why this functionality isn't in the standard
+Rack distribution. Merb seems to be Rack's biggest user, so the fact
+that they have to bundle their own patched version seemes quite
+odd. Anyway, if you need HTTP streaming outside Merb, you can use my
+&lt;a href='http://technomancy.us/code/rack-0.3.0.gem'&gt;version of
+Rack&lt;/a&gt;. I haven't been able to get the gem served by Github;
+unreproducible remote problems in the gem build process are very
+opaque and give no feedback. Will look into this later.&lt;/p&gt;
+
+&lt;p&gt;I'm going to try to get the changes into the mainline rack, but if
+Merb hasn't been able to get it accepted this may not actually
+happen. The meat of the patch is three lines, but I've got a bunch
+of other stuff that allows the project to actually build as a gem;
+the source as I found it was not in a working state. (Who knew there
+were people out there who haven't yet discovered &lt;a
+href='http://blog.zenspider.com/2006/09/farmer-ted-uses-hoe-to-beat-ra.html'&gt;hoe&lt;/a&gt;?)&lt;/p&gt;
+
+&lt;p&gt;&lt;b&gt;Update&lt;/b&gt;: It sounds like the streaming stuff hasn't been
+accepted upstream because it only works with Mongrel, and the whole
+point of Rack is to provide a consistent interface across many
+different web servers. I may try to port the streaming functionality
+to other servers so it can become part of the official spec.&lt;/p&gt;
+
+&lt;p&gt;Much thanks to Ezra for the fix. I was starting to lose hope that
+I'd even be able to even pull this off without resorting to
+low-level Mongrel invocations. Even though the fix is available in
+Merb, it's not really very clear how to use it, so I thought this
+post would save other people from going through the same crazy hoops
+I had to.&lt;/p&gt;
+    </content>
+  </entry>
+  
+  <entry xml:base="http://technomancy.us">
+    <author><name>Phil Hagelberg</name></author>
+    <id>tag:technomancy.us,2007:concerning%20a%20number%20of%20tools</id>
+    <published>2008-01-04T23:47:28Z</published>
+    <updated>2008-01-04T23:47:28Z</updated>
+
+    <link href="http://technomancy.us/108" rel="alternate" type="text/html"/>
+    <title>concerning a number of tools</title>
+    <content type="html">
+      &lt;p&gt;Today's post is going to consist of a roundup of a bunch of small tools that may not deserve their own post but are still quite useful in their own way with a short bonus round at the end for a micro-project I cooked up yesterday. Perhaps I'll throw in a preview of another in-progress project if I don't forget by the time I'm done writing this post.&lt;/p&gt;
+&lt;p&gt;To start with: any self-respecting prog'er needs to bind keystrokes to execute commands. [&lt;a href='#fn108'&gt;1&lt;/a&gt;] The truly hardcore can simply bind keys within Emacs with the &lt;tt&gt;global-set-key&lt;/tt&gt; function and leave it at that. The rest of us, however, must venture outside the warm embrace of Emacs from time to time and would understandably be irked to find our carefully-bound key strokes void of bindings. Are we then doomed to set up bindings in our window managers that will not outlast our committment to that WM? Are we not to know the peace of mind that comes with storing all such settings in text files under revision control?&lt;/p&gt;
+&lt;p&gt;The answer to the above questions will already be guessed by the astute reader as 'no'. The solution to the problem raised above is &lt;a href='http://hocwp.free.fr/xbindkeys'&gt;xbindkeys&lt;/a&gt;, a small yet indispensable utility for binding keystrokes to commands. As a small bonus it embeds the GNU Guile Scheme interpreter, so configuration may be written in that most blissful of formats, the S-expression.&lt;/p&gt;
+&lt;p&gt;Something else I use every day but don't interact with much directly is &lt;a href='http://musicpd.org'&gt;mpd&lt;/a&gt;, the Music Player D&amp;aelig;mon. Music players traditionally fall into either the multi-window playlist-management style popularized by Winamp and XMMS or the Soundjam-inspired full-library style. &lt;tt&gt;mpd&lt;/tt&gt; takes a third approach: it deals only with the cataloging and playing of music, leaving the user-interface up to a number of third-party &lt;a href='http://musicpd.org/clients'&gt;clients&lt;/a&gt;. This makes it trivial to remotely control your music without resorting to hacks like VNC or X-forwarding. There are your regular Ryhthmbox-style GTK GUIs to it, but Web frontends and the &lt;tt&gt;mpc&lt;/tt&gt; command-line client are both quite easy to set up and use. It's also trivial to tie &lt;tt&gt;mpc&lt;/tt&gt; into other tools as mentioned below.&lt;/p&gt;
+&lt;p&gt;Another small tool that I've recently come to appreciate is &lt;a href='http://www.suckless.org/wiki/tools/xlib'&gt;dmenu&lt;/a&gt;. I find this overlooked tool indispensible in another facet of the venerable art of providing Emacs' functionality outside Emacs&amp;mdash;specifically &lt;tt&gt;ido-mode&lt;/tt&gt;'s autocompleting matcher. &lt;tt&gt;dmenu&lt;/tt&gt; was originally written to work with the plan9-inspired &lt;a href='http://redhanded.hobix.com/inspect/aFewWmii3Hacks.html'&gt;wmii&lt;/a&gt; window manager popularized in the Ruby community by Mauricion Fernandez and _why the lucky stiff, but in true UNIX^H^H^H^Hplan9 fashion is totally usable on its own.&lt;/p&gt;
+&lt;p&gt;The basic idea is that you pipe it a list of many options and it narrows the list of options as you type, providing instant feedback. wmii uses it to great effect as a launcher, but I've found it most useful as a minimalist instant-feedback &lt;a href='http://git.caboo.se/?p=technomancy.git;a=blob;f=bin/mpc-choose'&gt;frontend to mpd&lt;/a&gt;. But the program launcher from wmii is &lt;a href='http://git.caboo.se/?p=technomancy.git;a=blob;f=bin/dlaunch.rb'&gt;easily ported&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Lastly, &lt;a href='http://p.hagelb.org'&gt;SCPaste&lt;/a&gt; is a tool that I envisioned as I was falling asleep earlier this week. I implemented it mostly on the bus the next day. The idea is to reimplement services such as &lt;a href='http://paste.lisp.org'&gt;lisppaste&lt;/a&gt; or &lt;a href='http://rafb.net'&gt;rafb&lt;/a&gt;, but instead of creating its own interface for creating new posts and syntax-highlighting, it leverages existing solutions: &lt;tt&gt;scp&lt;/tt&gt; and GNU Emacs' &lt;tt&gt;font-lock&lt;/tt&gt;. It simply makes two assumptions: you have an SSH account on a publicly-accessible HTTP server, and you're going to paste things that Emacs already knows how to highlight. Given these entirely reasonable constraints, a paste service ends up being about sixty lines of code.&lt;/p&gt;
+&lt;p&gt;Oh, I almost forgot the sneak preview: &lt;a href='http://github.com/technomancy/rdoc_texinfo/tree/master'&gt;behold RDoc Texinfo&lt;/a&gt;. Soon you will no longer have to deal with the silliness of Ruby having its own reimplementation of &lt;tt&gt;man&lt;/tt&gt; and &lt;tt&gt;info&lt;/tt&gt; but will be able to read your documentation from the comfort of your fast, hyperlinked Info reader. Stay tuned!&lt;/p&gt;
+&lt;hr /&gt;
+&lt;p&gt;[&lt;a name='fn108'&gt;1&lt;/a&gt;] - This does not hold for people (I'm told they exist) who use the mouse for absolutely everything. These people, however, may only rarely qualify as &amp;quot;self-respecting prog'ers&amp;quot;.&lt;/p&gt;
+
+    </content>
+  </entry>
+  
+  <entry xml:base="http://technomancy.us">
+    <author><name>Phil Hagelberg</name></author>
+    <id>tag:technomancy.us,2007:new%20project</id>
+    <published>2008-04-01T08:50:09Z</published>
+    <updated>2008-04-01T08:50:09Z</updated>
+
+    <link href="http://technomancy.us/107" rel="alternate" type="text/html"/>
+    <title>new project</title>
+    <content type="html">
+      &lt;p&gt;By looking at my commit logs it will be clear that I haven't really done much with &lt;a href='http://bus-scheme.rubyforge.org'&gt;Bus Scheme&lt;/a&gt; recently. I was having a lot of fun with the project early on, but as of late my enthusiasm has abated. I could chalk it up to the fact that Scheme is such a simple language that I'm running out of things to do. But I think the real problem is that it's too easy. Where's the glory to be had in a Scheme interpreter? The entire spec only runs about fifty pages, and it's been done before! The urge for a challenge is sadly left unmet. Plus as is common knowledge, nobody actually uses Scheme in the real world. [&lt;a href='#fn107'&gt;*&lt;/a&gt;] It just wasn't working out for me in spite of myself.&lt;/p&gt;
+&lt;p&gt;With that in mind I am determined I shouldn't have these problem on my next project. I'd like to announce the launch of &lt;a href='file:///dev/null'&gt;Unicycle Java&lt;/a&gt;:&lt;/p&gt;
+&lt;blockquote&gt;Unicycle Java is an implementation of the Java Programming Language&amp;trade;, but implemented while riding a unicycle. Note that at all the implementation of Unicycle Java must be written while riding a unicycle. Documentation, tests, and administrivia may be accomplished elsewhere, but all actual implementation code is strictly unicycle-driven. Unicycle Java is an Enterprise-grade[&lt;a href='#fn107b'&gt;**&lt;/a&gt;] piece of software, suitable for highly scalable, performant, demanding deployments.&lt;/blockquote&gt;
+&lt;p&gt;There isn't any code that's ready to be made public yet, but we will be sure to post progress on here as it approaches a usable state. The first task will be to procure a unicycle, so please &lt;a href='/contact'&gt;send a message&lt;/a&gt; if you have any leads in this direction.&lt;/p&gt;
+&lt;p&gt;&lt;b&gt;FAQ&lt;/b&gt;&lt;/p&gt;
+&lt;dl&gt; &lt;dt&gt;How will you write code while riding a unicycle?&lt;/dt&gt; &lt;dd&gt;We haven't figured out all the details of how this will work, but we are looking into getting a kind of laptop-harness. Luckily unlike bicycles, unicycles do not require use of the hands, so typing is actually somewhat feasible.&lt;/dd&gt; &lt;dt&gt;What about type safety?&lt;/dt&gt; &lt;dd&gt;Always wear a helmet.&lt;dd&gt; &lt;dt&gt;Will Unicycle Java have closures?&lt;/dt&gt; &lt;dd&gt;Of course! Unicycle Java is a powerful modern programming language, not a toy like BASIC.&lt;/dd&gt; &lt;dt&gt;Is Unicycle Java going to make stability a priority?&lt;/dt&gt; &lt;dd&gt;Since unicycles are by nature not very stable, it would be virtually impossible to do this. We believe this is simply one of the costs of unicycle-driven development. However,  Unicycle Java comes with a remarkable new technology called JavaLids that will keep things safe in the event of a systems crash.&lt;/dd&gt; &lt;dt&gt;Will it be possible to run Unicycle Java in the same  environments as Bus Scheme?&lt;/dt&gt; &lt;dd&gt;Do not by any means attempt to try this. Riding a unicycle in the bus lane is foolhardy and dangerous.&lt;/dd&gt; &lt;/dl&gt;
+&lt;p&gt;Unicycle Java is an important part of a balanced breakfast.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;p&gt;[&lt;a name='fn107'&gt;*&lt;/a&gt;] - It's been theorized that all the parentheses get clogged in the Tubes due to their elongated nature. XML's angle brackets are acceptable as long as they get oriented pointy-end first before transmission, but since parentheses are round and slippery this is much more difficult.&lt;/p&gt;
+&lt;p&gt;[&lt;a name='fn107b'&gt;**&lt;/a&gt;] - Not really. Get over yourself.&lt;/p&gt; 
+    </content>
+  </entry>
+  
+  <entry xml:base="http://technomancy.us">
+    <author><name>Phil Hagelberg</name></author>
+    <id>tag:technomancy.us,2007:in%20which%20a%20newly%20shaven%20yak%20is%20presented</id>
+    <published>2008-03-14T22:04:56Z</published>
+    <updated>2008-03-14T22:04:56Z</updated>
+
+    <link href="http://technomancy.us/106" rel="alternate" type="text/html"/>
+    <title>in which a newly shaven yak is presented</title>
+    <content type="html">
+      &lt;p&gt;So it turns out I find myself installing on fresh systems an awful lot. I'm tempted by &lt;a href='http://www.ubuntu.com/testing/hardy/alpha6'&gt;Alpha Ubuntu releases&lt;/a&gt; even when I know I should probably just wait an extra month for the final release. With these releases happening every six months, I've got the reinstall process down to an exact science. Some of it is pretty obvious&amp;mdash;I've been &lt;a href='http://git.caboo.se/?p=technomancy.git;a=tree'&gt;keeping my dotfiles in version control&lt;/a&gt; since 2005, which mitigates a lot of pain. Then there's the  &lt;a href='http://git.caboo.se/?p=technomancy.git;a=tree;f=bin/init'&gt;init scripts&lt;/a&gt; I've written for getting my regular set of apt-get and gem packages installed.&lt;/p&gt;
+&lt;p&gt;This was pretty handy for as much as it did. I could get a decent system up and running with about seven commands from a fresh install. But it left a bit to be desired for a few programs. For instance, I've basically got to have the latest version of GNU Emacs. Call it an addiction, but packaged versions get old quickly. The version of git that comes with Ubuntu 7.10 is a bit old and doesn't have the &lt;tt&gt;stash&lt;/tt&gt; command, which is six kinds of useful. The latest GNU Screen from CVS has an excellent vertical-split feature that Emacs has gotten me so accustomed to. And what setup is complete without Rubinius, which hasn't even made it into any package management system? The list goes on...&lt;/p&gt;
+&lt;a href='http://achewood.com/index.php?date=01162004'&gt;&lt;img src='/i/roastbeef.png' alt='roast beef' align='right' /&gt;&lt;/a&gt;
+&lt;p&gt;So here we have a bit of a situation. I could add lines to my init script that check out each individual source tree. But each one has a slightly different installation process. GNU Emacs has you run &lt;tt&gt;make bootstrap&lt;/tt&gt; in between the configure and make commands. Screen makes you cd into a &lt;tt&gt;src&lt;/tt&gt; directory before you can configure. Who has time to remember all this? And then the biggest problem with installing stuff from source is that there's no automated way to get the latest version of the programs you have installed.&lt;/p&gt;
+&lt;p&gt;So I know it wasn't really a burning need, but I put together a tool to help the situation.&lt;/p&gt;
+&lt;blockquote&gt;uh ok so roast beef is some kind of package manager that is for bleeding-edge programs. so basically it does not have its own repositories. instead it just will download source from the upstream repository and will do all the necessary steps to install. you get things that are as fresh as possible. i am talking about really &lt;a href='http://www.achewood.com/index.php?date=05082002'&gt;fresh like your eggs and milk&lt;/a&gt;.&lt;/blockquote&gt;
+&lt;p&gt;&lt;a href='http://roastbeef.rubyforge.org'&gt;Roast Beef&lt;/a&gt; is named after a character in the splendid  &lt;a href='http://achewood.com'&gt;Achewood&lt;/a&gt; comic strip. All documentation, comments, and output text is written in his voice. He also has &lt;a href='http://rbeef.blogspot.com'&gt;a blog&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;To get started: &lt;tt&gt;sudo gem install roastbeef&lt;/tt&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;b&gt;Usage:&lt;/b&gt;&lt;/p&gt;
+&lt;ul&gt; &lt;li&gt;roastbeef install package&lt;/li&gt; &lt;li&gt;roastbeef update&lt;/li&gt; &lt;li&gt;roastbeef upgrade&lt;/li&gt; &lt;li&gt;roastbeef remove package&lt;/li&gt; &lt;li&gt;roastbeef show package&lt;/li&gt; &lt;li&gt;roastbeef search term&lt;/li&gt; &lt;/ul&gt;
+&lt;p&gt;&lt;b&gt;Caveats:&lt;/b&gt;&lt;/p&gt;
+&lt;ul&gt; &lt;li&gt;We're talking about code that installs bleeding-edge software, so expect breakage. I haven't figured out a good way to run automated tests for it, so I'm not as confident about the reliability of the code, even though it is fairly few lines of code. (currently around 170 with a flog score of 245.)&lt;/li&gt;
+&lt;li&gt;Some packages have a hefty amount of prerequisites. Right now these get installed via apt-get if the sources list gives enough details about them. I would like to have it use macports, portage, yum, and other dependency tracking systems on other OSes, but I don't have the resources or inclination to do this. Patches welcome.&lt;/li&gt;
+&lt;li&gt;There aren't many packages in the &lt;a href='http://github.com/technomancy/roast-beef/tree/master/sources.yml'&gt;source listing&lt;/a&gt; yet. Feel free to contribute metadata about your favourite programs that you like to install from source.&lt;/li&gt;
+&lt;li&gt;A lot of packages don't have any automatic removal process when they get installed from source. Right now roastbeef will warn you about such packages, but it's no fun to have to have to remove a program by hand.&lt;/li&gt;
+&lt;li&gt;It's entirely possible this kind of tool is useful only to me; not everyone installs as much crazy crap as I do. If that's the case please ignore this; I'm really OK with that.&lt;/li&gt; &lt;/ul&gt;
+&lt;p&gt;If it sounds interesting to you, &lt;a href='http://github.com/technomancy/roast-beef/tree/master'&gt;fork it on github&lt;/a&gt;. I've still got some invites if anyone wants to contribute.&lt;/p&gt;
+    </content>
+  </entry>
+  
+  <entry xml:base="http://technomancy.us">
+    <author><name>Phil Hagelberg</name></author>
+    <id>tag:technomancy.us,2007:in%20which%20the%20benefits%20of%20contribution%20are%20discussed</id>
+    <published>2008-03-02T14:11:01Z</published>
+    <updated>2008-03-02T14:11:01Z</updated>
+
+    <link href="http://technomancy.us/105" rel="alternate" type="text/html"/>
+    <title>in which the benefits of contribution are discussed</title>
+    <content type="html">
+      &lt;p&gt;Well, it seems now that &lt;a href='http://tomayko.com/weblog/2008/02/26/github-is-myspace-for-hackers'&gt;everyone&lt;/a&gt; &lt;a href='http://daniel.collectiveidea.com/blog/2008/2/9/on-git-github'&gt;is&lt;/a&gt; &lt;a href='http://www.robbyonrails.com/articles/2008/03/01/launch-your-own-rubyurl'&gt;blogging&lt;/a&gt; &lt;a href='http://log.emmanuelebassi.net/archives/2008/03/the-laws-have-changed/'&gt;about&lt;/a&gt; &lt;a href='http://github.com'&gt;Github&lt;/a&gt;. I was originally a bit reluctant to come forth singing its praises since it's clearly not free software... I didn't want to convince my friends to do the work of moving their projects over to this new still-in-private-beta site when there was really no guarantee that the system would continue to be appropriate for them in the future. A number of things have since caused my concerns to abate:&lt;/p&gt;
+&lt;p&gt;Firstly, Chris and Tom are fairly high-profile in the Ruby community. They've got a reputation to maintain, so I think they'll do all they can to make their service work well. Since Chris does &lt;a href='http://errfree.com'&gt;consulting work&lt;/a&gt;, having a reputation for delivering awesome software is great for business.&lt;/p&gt;
+&lt;p&gt;But even in a worst case scenario where GitHub somehow became no longer appropriate for the projects I work on, the extremely distributed nature of Git makes it so there is very little lock-in compared to other services. With most free email services it's a huge hassle to move to another provider. Even with a relatively open service like &lt;a href='http://flickr.com/photos/technomnacy'&gt;Flickr&lt;/a&gt;, it would still be a lot of work to move your data off to another provider. But with Git, all that amounts to naught. The whole point of Git is that it allows anyone to come along, run &lt;tt&gt;git clone&lt;/tt&gt;, and easily create a complete copy of your repository and its history.&lt;/p&gt;
+&lt;p&gt;But right now all this is a moot point: they have announced that &lt;a href='http://github.com/blog/11-github--free-for-open-source'&gt;GitHub will remain gratis for Free Software projects&lt;/a&gt; within a reasonable size. This is great news and makes me feel much better about promoting the service.&lt;/p&gt;
+&lt;p&gt;So what's so great about GitHub? Well as you may have read elsewhere, Git is a very powerful piece of version control software that enables a much wider variety of workflow than traditional systems. The biggest legitimate complaint that's been levelled against it is that it can be a bit difficult to learn. While GitHub doesn't alleviate this entirely, it definitely makes the distributed concepts easier to pick up.&lt;/p&gt;
+&lt;p&gt;But the most interesting new development GitHub brings to the table is discussed by Ryan Tomayko in his blog entry titled &lt;a href='http://tomayko.com/weblog/2008/02/26/github-is-myspace-for-hackers'&gt;My Kind of Social Software&lt;/a&gt;. The development process encouraged by Git implicitly creates a kind of social graph with hackers as nodes and clones/pushes as edges. GitHub makes this social graph explicit. My take on this is that marking someone as a &quot;friend&quot; as we see it in Facebook and other social networking systems has very little in common with friendships in real life, since &quot;friendships&quot; in Facebook require no effort to create or maintain. They live and die at the click of a button, which means that friendship information has very little value, since it's so cheap to create. GitHub's social networking embraces the hacker notion that &lt;i&gt;code is all that matters&lt;/i&gt;. If you tell GitHub to fork or watch a project, it will mark that, and that could be interpreted as you &quot;friending&quot; someone or joining a group. But unless you contribute back to the project, it's all moot. Anyone can see from a glance at your profile page that you forked this repository a few months ago and haven't done anything with it since. But if you are a frequent committer, that will be obvious too. The weight of connections between nodes becomes much more interesting as it can be measured by the weight of the contributions produced.&lt;/p&gt;
+&lt;p&gt;And this seamless participation is really what being a hacker is all about. The easier it is to give back to a project you use, the more we'll see valuable cross-polination start to spring up in places we haven't before. This isn't about enabling any one thing that formerly wasn't possible; it's about greasing the wheels and grinding away the rough corners in the processes of participation.&lt;/p&gt;
+&lt;p&gt;On a seemingly unrelated note, Richard Stallman is in the process of handing off official maintainership of the GNU Emacs project to Stefan Monnier and Chong Yidong. Emacs is one of the oldest extant free software projects. Though the core of Emacs suffers from high &lt;a href='http://www.gnu.org/licenses/why-assign.html'&gt;barriers&lt;/a&gt; to &lt;a href='http://technomancy.us/misc/fsf-assign.pdf'&gt;contribution&lt;/a&gt;, the community espouses a &lt;a href='http://emacswiki.org'&gt;infectuous spirit of sharing&lt;/a&gt; that helps overcome this. Part of that is simply a byproduct of how easy sharing is in Emacs the language&amp;mdash;simply dropping a file in your source directory and requiring it is all it takes. Part of that is because it often takes only &lt;a href='http://technomancy.us/45'&gt;a very little amount of Lisp code&lt;/a&gt; to get truly useful things to happen. But I have a feeling this is driven by deeper cultural reasons: the truth is that Richard Stallman is just plain obsessed with contribution. Witness the &lt;a href='http://lists.gnu.org/archive/html/emacs-devel/'&gt;emacs-devel mailing list&lt;/a&gt;:&lt;/p&gt;
+&lt;div style='margin-left: 3em; width: 75%;'&gt; &lt;p&gt;&lt;i&gt;I'm just another emacs-user lurking for a chance to say thank you to it's creator and (future) maintainers.&lt;/i&gt;&lt;/p&gt;
+&lt;p&gt;How about thanking us by helping?  You could pick something in etc/TODO and implement it.&lt;/p&gt; &lt;p&gt;&lt;a href='http://article.gmane.org/gmane.emacs.devel/90384'&gt;http://article.gmane.org/gmane.emacs.devel/90384&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;i&gt;What a revolution ! Thank you very much for all you have done on GNU Emacs and for the free software in general!&lt;/i&gt;&lt;/p&gt;
+&lt;p&gt;The best way to thank us is to join in and help. You are already doing that -- so thank you, too.&lt;/p&gt; &lt;p&gt;&lt;a href='http://article.gmane.org/gmane.emacs.devel/90293'&gt;http://article.gmane.org/gmane.emacs.devel/90293&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;i&gt;There is a lot of work to be done on Emacs.  Would you like to help?&lt;/i&gt;&lt;/p&gt;
+&lt;p&gt;How about looking at etc/TODO in the latest sources, and implementing one of the projects there?&lt;/p&gt; &lt;p&gt;&lt;a href='http://article.gmane.org/gmane.emacs.devel/90305'&gt;http://article.gmane.org/gmane.emacs.devel/90305&lt;/a&gt;&lt;/p&gt; &lt;/div&gt;
+&lt;p&gt;Keep in mind that the context of these posts in a thread in which he's announced he will no longer be the maintainer and people are thanking him for his 32 years of maintainership. But he won't accept the limelight; he constantly throws the focus back on the project and the code and the community. Say what you will about his methods and his tact, but you can't deny that he cares more than anything about getting people involved in the community and fostering an environment in which everyone is a contributor. And in the end, this attitude is the reason I consider writing software something that's worth doing.&lt;/p&gt;
+&lt;p&gt;Tying it all back together, I should mention that GitHub is still a closed beta. If you want an invitation, I've got five of them to hand out, but I will only send one to people who are genuinely interested in contributing to a project that's hosted there. Whether it's &lt;a href='http://github.com/technomancy/bus-scheme/tree/master'&gt;one&lt;/a&gt; &lt;a href='http://github.com/technomancy/augment/tree/master'&gt;of&lt;/a&gt; &lt;a href='http://github.com/technomancy/jspec/tree/master'&gt;mine&lt;/a&gt; or not is irrelevant. &lt;a href='http://technomancy.us/contact'&gt;Let me know&lt;/a&gt; and, I can hook you up.&lt;/p&gt;
+    </content>
+  </entry>
+  
+  <entry xml:base="http://technomancy.us">
+    <author><name>Phil Hagelberg</name></author>
+    <id>tag:technomancy.us,2007:getting%20started%20with%20bus%20scheme</id>
+    <published>2008-02-18T10:36:59Z</published>
+    <updated>2008-02-18T10:36:59Z</updated>
+
+    <link href="http://technomancy.us/104" rel="alternate" type="text/html"/>
+    <title>getting started with bus scheme</title>
+    <content type="html">
+       &lt;p&gt;So a number of folks have asked me how they should get started with Bus Scheme.[&lt;a href='#fn1'&gt;1&lt;/a&gt;]. I've mostly just said silly things like, &quot;Umm... good question. Maybe read/watch &lt;a href='http://mitpress.mit.edu/sicp/'&gt;SICP&lt;/a&gt;?&quot;, which is silly because it doesn't have much to do with the &lt;i&gt;Bus&lt;/i&gt; part of Bus Scheme, not because &lt;i&gt;The Structure and Interpretation of Computer Programs&lt;/i&gt; is silly.&lt;/p&gt;
+&lt;p&gt;There's a poster in &lt;a href='http://www.powells.com/'&gt;my favourite bookstore&lt;/a&gt; that has Dante's &lt;i&gt;Comedy&lt;/i&gt;, the &lt;i&gt;Iliad&lt;/i&gt;, and a few other classics captioned with something like &quot;Might as well start them now; you're going to have to read them eventually anyway.&quot; I hold the same notion regarding SICP and perhaps &lt;i&gt;The Little Schemer&lt;/i&gt;, but I could see how it'd be helpful to have an introduction to Scheme from a Rubyist's perspective since reading a book like that can be large-ish mental investment.&lt;/p&gt;
+&lt;p&gt;Scheme is a programming language directly descended from Lisp. It's most often compared to Common Lisp, which is in some senses its big brother. Scheme is usually considered less &quot;kitchen-sink&quot;-ish than Common Lisp in that it only defines an extremely clean small core language and allows developers to extend it seamlessly to do what they need. In the words of the creators of Scheme:&lt;/p&gt;
+&lt;blockquote&gt; Programming languages should be designed not by piling feature on top of feature, but by removing the weaknesses and restrictions that make additional features appear necessary.	     &lt;/blockquote&gt;
+&lt;p&gt;(As a potential student of Scheme, you should be encouraged by this notion as it directly translates into fewer concepts to learn.)&lt;/p&gt;
+&lt;p&gt;Ruby draws a lot of its heritage from Scheme, though Matz does not share the idea that a language should be limited to a very small number of core axioms from which everything else can be defined. [&lt;a href='#fn2'&gt;2&lt;/a&gt;] Destructive method names ending in &quot;!&quot; and predicates ending in &quot;?&quot; were inspired by Scheme. Matz himself has even lightheartedly referred to Ruby as &quot;MatzLisp&quot;. So this is a language that at the core should not feel too foreign to a Rubyist, even if the syntax looks quite different.&lt;/p&gt;
+&lt;p&gt;Let's dive in. &lt;tt&gt;sudo gem install bus-scheme&lt;/tt&gt; if you haven't got it installed. Go ahead and launch Bus Scheme with the &lt;tt&gt;bus&lt;/tt&gt; executable. Like &lt;tt&gt;irb&lt;/tt&gt;, it drops you into a REPL, or Read-Eval-Print Loop. Scheme programs are made up of &lt;b&gt;expressions&lt;/b&gt;. When you enter expressions into the REPL, they get evaluated and their value is shown. There are only a few simple rules for how expressions get evaluated that we'll address below. Feel free to experiment with entering expressions and seeing what gets returned.&lt;/p&gt;
+&lt;p&gt;The simplest expressions are just &lt;b&gt;atoms&lt;/b&gt;, which are simple &quot;indivisible&quot; values, like symbols, numeric values, and strings. Some atoms evaluate to themselves just like in Ruby, so entering &lt;tt&gt;12&lt;/tt&gt; into the REPL returns (and echoes) 12. &lt;tt&gt;&quot;foo&quot;&lt;/tt&gt; works the same way. Symbols are a little different. Ruby uses a colon before the symbol's name, but in Scheme you refer to a symbol just using its name. So &lt;tt&gt;baz&lt;/tt&gt; refers to the symbol with the name &quot;baz&quot;. But if you enter &lt;tt&gt;baz&lt;/tt&gt; into the REPL, Bus Scheme complains:&lt;/p&gt;
+&lt;pre class='code'&gt;&amp;gt; baz&lt;br /&gt;Error: Undefined symbol: baz&lt;/pre&gt;
+&lt;p&gt;This is because symbols aren't considered &lt;b&gt;literals&lt;/b&gt;; that is, they don't evaluate to themselves like they do in Ruby. When Bus Scheme encounters a symbol in this context, it treats it as a variable and tries to return the value that's bound to it, which doesn't work when it's not bound. So let's see what happens with a symbol that already has a value bound to it:&lt;/p&gt;
+&lt;pre class='code'&gt;&amp;gt; +&lt;br /&gt; #&amp;lt;Proc:0xb7c4b2a8@./bin/../lib/primitives.rb:16&amp;gt;&lt;/pre&gt;
+&lt;p&gt;This is the way Bus Scheme represents a built-in (primitive) &lt;b&gt;function&lt;/b&gt;. In Scheme, functions are first-class values, so you can bind them to variables, like you can with the &lt;tt&gt;lambda&lt;/tt&gt; keyword in Ruby. But in Scheme this the primary way you refer to functions when you want to call them or pass them to other functions.&lt;/p&gt;
+&lt;p&gt;Speaking of calling functions, it works something like this:&lt;/p&gt;
+&lt;pre class='code'&gt;&amp;gt; (+ 3 4)&lt;br /&gt; 7&lt;/pre&gt;
+&lt;p&gt;This is a &lt;b&gt;list&lt;/b&gt;, which is Scheme's compound expression. This list is made up of three elements, in this case all atoms: the symbol &lt;tt&gt;+&lt;/tt&gt;, the number 3, and the number 4. In normal contexts, when Scheme sees a list it treats it as a function call. First the first item in the list is evaluated, which evaluates to a Ruby Proc object. Then each of the remaining list elements are evaluated. Since they're all literals here, they evaluate to themselves. Then the arguments get passed to the function. Behind the scenes, this translates rougly into &lt;tt&gt;Proc.new{|*args| args.sum}.call(3, 4)&lt;/tt&gt;. Let's see something a bit more complicated:&lt;/p&gt;
+&lt;pre class='code'&gt;&amp;gt; (+ (+ 1 2) (+ 3 4))&lt;br /&gt; 10&lt;/pre&gt;
+&lt;p&gt;In this case, the first &lt;tt&gt;+&lt;/tt&gt; gets evaluated, and Bus Scheme sees that it's a function. So it looks at its arguments: &lt;tt&gt;(+ 1 2)&lt;/tt&gt; gets evaluated to 3, and &lt;tt&gt;(+ 3 4)&lt;/tt&gt; gets evaluated to 7. Then those two arguments get passed to &lt;tt&gt;+&lt;/tt&gt; and the result becomes the value of the whole expression. &lt;/p&gt;
+&lt;p&gt;That's the basics of how program execution happens, but you won't get far without having a few more functions under your belt. Here are a some to get you rolling:&lt;/p&gt;
+&lt;dl&gt; &lt;dt&gt;+, -, *, and /&lt;/dt&gt; &lt;dd&gt;You've been introduced to + above, but I'm sure you recognize your other old friends from grade-school days. + and * support any number of arguments, but - and / take two. In regular Scheme these all only work for numerical types, but Bus Scheme borrows Ruby's methods and lets you pass strings and other objects to + and *.&lt;/dd&gt;
+&lt;dt&gt;&amp;lt;, &amp;gt;, and =&lt;/dt&gt; &lt;dd&gt;These are comparison functions. They work like they do in any language, but in Scheme you invoke them as &lt;tt&gt;(&amp;gt; 3 7)&lt;/tt&gt; etc. Again, Bus Scheme uses Ruby's underlying methods, so you can pass strings and other objects in, unlike in regular Scheme.&lt;/dd&gt;
+&lt;dt&gt;list&lt;/dt&gt; &lt;dd&gt;If you want a list of numbers, you may think you get this by entering &lt;tt&gt;(1 2 3)&lt;/tt&gt;. The problem with this is that in normal contexts it gets treated like a function call, and it will complain that 1 is not a function. What you can do instead is &lt;tt&gt;(list 1 2 3)&lt;/tt&gt;, which evaluates to (1 2 3).&lt;/dd&gt;
+&lt;dt&gt;map&lt;/dt&gt; &lt;dd&gt;This works like Ruby's map, but it's a free-standing function instead of a method. So instead of &lt;tt&gt;[1, 2, 3].map {|x| x + 3}&lt;/tt&gt; you would do &lt;tt&gt;(map (lambda (x) (+ x 3)) (list 1 2 3)&lt;/tt&gt;, which would return &lt;tt&gt;(4 5 6)&lt;/tt&gt;.&lt;/dd&gt;
+&lt;dt&gt;substring&lt;/dt&gt; &lt;dd&gt;Bus Scheme's &lt;tt&gt;(substring &quot;foobar&quot; 3 5)&lt;/tt&gt; translates into &lt;tt&gt;&quot;foobar&quot;[3 .. 5]&lt;/tt&gt; in Ruby.&lt;/dd&gt;
+&lt;dt&gt;if&lt;/dt&gt; &lt;dd&gt;The most basic conditional is &lt;tt&gt;if&lt;/tt&gt;. Use it like this: &lt;tt&gt;(if x &quot;x is true&quot; &quot;x is false&quot;)&lt;/tt&gt;. &lt;tt&gt;if&lt;/tt&gt; evaluates its first argument, which in this case is x. If it evaluates to a true value [&lt;a href='#fn3'&gt;3&lt;/a&gt;] then its second argument gets evaluated and returned. If it's false then the remaining arguments (if any) are evaluated and the last one is returned.[&lt;a href='#fn4'&gt;4&lt;/a&gt;]&lt;/dd&gt; &lt;/dl&gt;
+&lt;p&gt;Well, that's enough for now. You may not know enough to be dangerous, but I hope you know enough to explore. Tune in next time when I uncover the true Secrets of Lisp&amp;trade; by explaining &lt;tt&gt;cons&lt;/tt&gt;, &lt;tt&gt;lambda&lt;/tt&gt;, and special forms.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;p&gt;&lt;a name='fn1'&gt;1&lt;/a&gt; - I didn't say it was a large number.&lt;/p&gt;
+&lt;p&gt;&lt;a name='fn2'&gt;2&lt;/a&gt; - I imagine this causes &lt;a href='http://blog.fallingsnow.net'&gt;Evan&lt;/a&gt; and &lt;a href='http://headius.blogspot.com/'&gt;Charles&lt;/a&gt; some varying amounts of distress.&lt;/p&gt;
+&lt;p&gt;&lt;a name='fn3'&gt;3&lt;/a&gt; - In Scheme every value is true except &lt;tt&gt;#f&lt;/tt&gt;, which is equivalent to Ruby's &lt;tt&gt;false&lt;/tt&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;a name='fn4'&gt;4&lt;/a&gt; - Observant readers will note that this does not follow the evaluation rule for functions given above which states that every argument is evaluated before the function is called. This is because &lt;tt&gt;if&lt;/tt&gt; is not technically a function, but rather a &lt;b&gt;special form&lt;/b&gt;, and different rules apply for the evaluation of a special form's arguments. There's more to this than I can cover in this article, but these rules allow for great syntactic flexibility.&lt;/p&gt; 
+    </content>
+  </entry>
+  
+  <entry xml:base="http://technomancy.us">
+    <author><name>Phil Hagelberg</name></author>
+    <id>tag:technomancy.us,2007:lame%20logos</id>
+    <published>2008-02-17T19:42:31Z</published>
+    <updated>2008-02-17T19:42:31Z</updated>
+
+    <link href="http://technomancy.us/103" rel="alternate" type="text/html"/>
+    <title>lame logos</title>
+    <content type="html">
+       &lt;p&gt;I've just been doodling a bit:&lt;/p&gt; &lt;img src='/i/bus_logos.png' alt='lame bus scheme logos' /&gt;
+&lt;p&gt;I've got a quick &quot;getting started with Bus Scheme&quot; tutorial in the works which I should have posted soon. Three day weekends for the win.&lt;/p&gt;
+    </content>
+  </entry>
+  
+</feed>

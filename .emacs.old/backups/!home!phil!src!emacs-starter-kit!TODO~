@@ -1,0 +1,44 @@
+TODO:
+
+Start my own ELPA server
+Add bleeding-edge package support to elpa
+
+look up http://www.emacswiki.org/cgi-bin/emacs-en/CommandLogMode
+
+libraries to include:
+* color-theme (zenburn + vivid chalk)
+* htmlize
+
+to add to elpa:
+* idle-highlight (sent)
+* ruby-mode (notify ruby-core)
+* inf-ruby
+* ruby-electric
+
+* cheat (notify defunkt)
+* gist
+* scpaste
+* magit
+* yaml (make rinari require it)
+
+* nxhtml
+* rinari
+* jabber (need to contact maintainers)
+
+already in elpa; install by default:
+* js2-mode
+* css (included by nxhtml?)
+* ert
+
+maybe include:
+* ruby-compilation
+* install-elisp/oddmuse?
+* lisppaste
+* pastie
+* pcmpl-rake
+* pg
+
+to write/finish:
+* mublog
+* ri
+* submit ruby fixes to flymake

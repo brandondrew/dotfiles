@@ -1,0 +1,14 @@
+
+
+        Lambdas are closures.
+
+          This means they have access to variables in the
+            scope in which they were defined.
+
+          This is just like Ruby blocks, folks:
+
+            def gimme_adder(x = 1, y = 2)
+              Proc.new { x + y + z }
+            end
+
+            gimme_adder.call(3) # => 6

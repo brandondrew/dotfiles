@@ -1,0 +1,5 @@
+(require 'ruby-compilation)
+
+
+
+(provide 'ruby-compilation-rspec)

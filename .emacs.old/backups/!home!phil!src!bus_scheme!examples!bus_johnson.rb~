@@ -1,0 +1,50 @@
+require 'rubygems'
+require 'bus_scheme'
+require 'johnson'
+
+module BusJohnson
+  MODES = ['bs', 'js', 'rb']
+  @mode = MODES.first
+
+  @johnson = Johnson::Runtime.new
+
+  def self.repl
+    loop do
+      puts begin
+             input = Readline.readline(@mode + '> ')
+             exit if input.nil? # only Ctrl-D produces nil here it seems
+             ' => ' + tri_eval(input)
+           rescue Interrupt
+             'Type "(quit)" or press Ctrl-D to leave Bus Scheme.'
+           rescue StandardError => e
+             "Problems! " +
+               "#{e.class}: #{e}\n#{e.backtrace.join("\n")}"
+           end
+    end
+  end
+
+  def self.tri_eval(input)
+    if MODES.include?(input)
+      @mode = input
+      "Switching to #{@mode}..."
+    else
+      send(@mode, input).inspect
+    end
+  end
+
+  def self.bs(input)
+    BusScheme.eval_string(input)
+  end
+
+  def self.js(input)
+    @johnson.evaluate(input)
+  end
+
+  def self.rb(input)
+    eval(input)
+  end
+end
+
+if __FILE__ == $0
+  BusJohnson.repl
+end

@@ -1,0 +1,15 @@
+
+
+    Fundamentals of Metaprogramming:
+
+        CODE   is   DATA.
+
+
+      But that's ugly!
+
+        Because Ruby's syntax is not optimized for it.
+
+  [:def, :rest, [:if [[:self, :length], :==, 1],
+                 [:return, nil],
+                 :else,
+                 [:self, :[], 1, [:self, :length]]]]

@@ -1,0 +1,11 @@
+[core]
+	repositoryformatversion = 0
+	filemode = true
+	bare = false
+	logallrefupdates = true
+[remote "pdp10"]
+	url = pdp10.local:src/peepcode
+	fetch = +refs/heads/*:refs/remotes/pdp10/*
+[remote "dreamhost"]
+	url = philhag@hagelb.org:p.hagelb.org/peepcode.git
+	fetch = +refs/heads/*:refs/remotes/dreamhost/*

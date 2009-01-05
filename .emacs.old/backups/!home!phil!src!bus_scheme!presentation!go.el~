@@ -1,0 +1,2 @@
+(defun presentation-face ()
+  (set-default-font "-unknown-Inconsolata-normal-normal-normal-*-26-*-*-*-m-0-*-*")

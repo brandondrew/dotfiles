@@ -1,0 +1,15 @@
+(ns concourse
+  (:use (compojure html http)))
+
+;; View stuff
+
+(defn layout
+  "A function to generate the standard outline of a HTML page."
+  [title & body]
+  (html
+    (doctype :html5)
+    [:html
+      [:head
+        [:title title]]
+      [:body
+        body]]))

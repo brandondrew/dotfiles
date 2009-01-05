@@ -1,0 +1,21 @@
+--- 
+timestamp: Mon Nov 10 08:47:03 2008
+title: rubyconf the eighth
+tags: ruby, rubyconf
+id: 117
+content: |-
+  <p>I'm back in Seattle after an excellent RubyConf in Orlando,
+    FL. These events are always a treat, and this year's was no
+    exception. <a href='/96'>Last year</a> the dominant theme was
+    alternate implementations, and this time around it has become an
+    ingrained assumption rather than something that needs to be
+    stated. Distributed version control has also graduated to
+    something that can practically be taken for granted&mdash;at least
+    half the slide sets referenced github repositories.</p>
+  <p>But the big theme for the year was concurrency. [...]</p>
+  <p>My personal favourite talk
+    was <a href='http://geeksomnia.com'>John Barnette</a>
+    and <a href='http://tenderlovemaking.com'>Aaron Patterson</a>'s
+    talk on <a href='http://github.com/jbarnette/johnson'>Johnson</a>,
+    the Ruby/Javascript bridge.</p>
+  <p>Pragdave...</p>

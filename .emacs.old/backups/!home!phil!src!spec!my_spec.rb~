@@ -1,0 +1,12 @@
+require 'rubygems'
+require 'rspec'
+
+describe "A simple addition" do
+  it "should add correctly" do
+    (2+2).should == 4
+  end
+
+  it "should add negative numbers" do
+    (2 + -3).should == -1
+  end
+end

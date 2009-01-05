@@ -1,0 +1,22 @@
+;; Helper functions
+
+(defn current-user-invited-to?
+  "Was the current user invited to this gathering?"
+  [gathering]
+  (includes? *current-user*
+             (:attendees gathering)))
+
+(defn current-user-initiated?
+  "Did the current user initiate this gathering?"
+  [gathering]
+  (= (:initiator gathering) *current-user*))
+
+
+;; Session functions
+
+(defmacro ensure-login
+  "Run the body if the user is logged in, otherwise send them to the login form."
+  [& body]
+  `(if (logged-in?)
+     ~@body
+     (redirect-to "/login")))

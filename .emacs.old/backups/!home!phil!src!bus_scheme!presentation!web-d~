@@ -1,0 +1,16 @@
+
+
+        Web-ish Things?
+
+          You bet!
+
+
+        Lists are just trees. Where do we use trees?
+
+
+        (defresource "/real-html"
+          '(html (head (title "Internetexperts Anonymous"))
+             (body
+               (h2 "Welcome, Internetexperts!")
+               (p "Take a look around the " 
+                 (href "/a-path-i-suppose" "site")))))

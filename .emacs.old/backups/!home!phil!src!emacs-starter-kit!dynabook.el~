@@ -1,0 +1,43 @@
+(defun evri-knock ()
+  (interactive)
+  (shell-command "knock dfgate.hypertextsolutions.net 6010:tcp 6100:tcp 6001:tcp"))
+
+(setq jabber-username "phil"
+      jabber-server "hagelb.org"
+      jabber-password "AElenaB")
+
+(setq rcirc-authinfo '(("freenode" NickServ "technomancy" "technomancy")
+                       ("freenode" ChanServ "#caboose" "lolrus")))
+
+(defun inconsolata (size)
+  (interactive "p")
+  (set-default-font
+   (concat "-unknown-Inconsolata-normal-normal-normal-*-"
+           (if (stringp size) size
+             (if (= 1 size) "16"
+               (read-from-minibuffer "Size: ")))
+           "-*-*-*-m-0-*-*")))
+
+;;; Clojure
+
+(add-to-list 'load-path "~/src/slime")
+(add-to-list 'load-path "~/src/swank-clojure")
+
+(require 'swank-clojure-autoload)
+(require 'swank-clojure)
+(autoload 'slime "slime" "" t)
+
+(swank-clojure-config
+ (setq swank-clojure-jar-path "~/src/clojure/clojure.jar"))
+
+(autoload 'clojure-mode "clojure-mode" "" t)
+(add-to-list 'auto-mode-alist '("\\.clj$" . clojure-mode))
+
+(add-hook 'clojure-mode-hook 'clojure-pretty-lambdas)
+
+(defun clojure-pretty-lambdas ()
+  (font-lock-add-keywords
+   nil `(("(\\(fn\\>\\)"
+          (0 (progn (compose-region (match-beginning 1) (match-end 1)
+                                    ,(make-char 'greek-iso8859-7 107))
+                    nil))))))

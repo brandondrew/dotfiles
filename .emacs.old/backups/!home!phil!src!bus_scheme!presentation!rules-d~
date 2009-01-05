@@ -1,0 +1,16 @@
+
+
+        How's that work then?
+
+          It's simple: the first element is the function
+
+             ...and the rest are the arguments.
+
+
+        Each argument is evaluated before being passed:
+
+         (+ 1 2 (* 3 2) (+ (- 4 2) 1))
+
+         (+ 1 2    6    (+ (- 4 2) 1))
+
+         (+ 1 2    6          3      )

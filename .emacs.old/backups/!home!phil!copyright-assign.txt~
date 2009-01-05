@@ -1,0 +1,177 @@
+One way all of you can assign copyright to the Foundation is if each
+of you signs a copy of the assignment contract below.
+
+In addition, for each of you, if you are employed to do programming
+(even at a university), or have made an agreement with your employer
+or school saying it owns programs you write, then you and we need a
+signed piece of paper from your employer or school, disclaiming rights
+to the program.
+
+The disclaimer should be signed by a vice president or general manager
+of the company.  If you can't get at them, anyone else authorized to
+license software produced there will do.  Here is a sample wording:
+
+ Digital Stimulation Corporation hereby disclaims all copyright interest
+ in the program "seduce" (a program to direct assemblers to make passes
+ at compilers under GNU Emacs) written partly by Hugh Heffner,
+ including both the present version and his/her future changes and
+ enhancements to it.  We do not consider it or them as a work made
+ for hire for us.
+
+
+ Digital Stimulation Corporation affirms that it has no other
+ intellectual property interest that would undermine this release,
+ and will do nothing to undermine it in the future.
+
+ <signature of Ty Coon>, 1 April 1987
+ Ty Coon, President of Vice, Digital Stimulation Corp.
+
+(If your employer says they do have an intellectual property claim
+that could conflict with the use of the program, then please put me in
+touch with a suitable representative of the company, so that we can
+negotiate what to do about it.)
+
+The description of what the program does is just to make it clearer
+what the disclaimer covers.
+
+IMPORTANT: When you talk to your employer, *no matter what
+instructions they have given you*, don't fail to show them the sample
+disclaimer above, or a disclaimer with the details filled in for your
+specific case.  Companies are usually willing to sign a disclaimer
+without any fuss.  If you make your request less specific, you may
+open Pandora's box and cause a long and unnecessary delay.
+
+Below is the assignment contract that we usually use.  You would need
+to print it out, sign it, and snail it to:
+
+Richard Stallman
+77 Mass Ave rm 32-381
+Cambridge MA 02139
+USA
+
+Please try to print the whole first page below on a single piece of
+paper.  If it doesn't fit on one printed page, put it on two sides of
+a single piece of paper.
+
+Don't forget to put down the date when you sign!  Spell out the month
+name--don't use a number for the month.  Dates using a number for the
+month are ambiguous; 2/8/95 means one thing in the US and another in
+Europe.
+
+Snail a copy of the employer's disclaimer as well.
+
+Please send me email about what you decide to do.  If you have any
+questions, or would like something to be changed, ask rms@gnu.org via email.
+                            ASSIGNMENT
+
+  For good and valuable consideration, receipt of which we acknowledge,
+we, Yukihiro Matsumoto and Nobuyoshi Nakada, hereby transfer to the Free
+Software Foundation, Inc.  (the "Foundation") our entire right, title, and
+interest (including all rights under copyright) in our computer program
+ruby-mode.el (the "Program"), subject to the conditions below.  The work
+hereby assigned shall further include any future changes and/or
+enhancements hereafter made by us.
+
+  Upon thirty days' prior written notice(s), the Foundation agrees to
+grant to any one or more, or all, of us non-exclusive rights to use the
+Program as we see fit; (and the Foundation's rights shall otherwise
+continue unchanged).
+
+  For the purposes of this contract, a work "based on the Program"
+means any work that in whole or in part incorporates or is derived
+from all or part of the Program.
+
+  The Foundation promises that all distribution of the Program, or of any
+work "based on the Program", that takes place under the control of the
+Foundation or its agents or assignees, shall be on terms that explicitly
+and perpetually permit anyone possessing a copy of the work to which the
+terms apply, and possessing accurate notice of these terms, to redistribute
+copies of the work to anyone on the same terms.  These terms shall not
+restrict which members of the public copies may be distributed to.  These
+terms shall not require a member of the public to pay any royalty to the
+Foundation or to anyone else for any permitted use of the work they apply
+to, or to communicate with the Foundation or its agents in any way either
+when redistribution is performed or on any other occasion.
+
+  The Foundation promises that any program "based on the Program" offered
+to the public by the Foundation or its agents or assignees shall be offered
+in the form of machine-readable source code, in addition to any other forms
+of the Foundation's choosing.  However, the Foundation is free to choose at
+its convenience the media of distribution for machine-readable source
+code.
+
+  The Foundation promises to give or send to any one or more, or all, of
+us, upon reasonable prior notice and payment of a fee or fees, each no more
+than twenty times the cost of the necessary materials and postage, a copy
+of any or all of the works "based on the Program" that it offers to the
+public or that it has offered within the past six months, or that it
+distributed for the first time within the past six months.  For works that
+are programs, the machine-readable source code shall be included.  Our
+request(s) shall detail whether we wish to receive all such works or
+specific works.  Our choices of works to request may affect the cost and
+therefore the fee(s).
+
+  We hereby agree that if we have or acquire, or any one of us has or
+acquires, hereafter any patent or interface copyright or other intellectual
+property interest dominating the Program (or use of the same), such
+dominating interest will not be used to undermine the effect of this
+assignment, i.e. the Foundation and the general public will be licensed to
+use, in the Program and its derivative works, without royalty or
+limitation, the subject matter of the dominating interest.  This license
+provision will be binding on our respective heirs, assignees, or other
+successors to the dominating interest, as well as on each of us.
+
+  We hereby represent and warrant that we are the sole copyright holders
+for the Program and that we have the right and power to enter into this
+contract.  We hereby indemnify and hold harmless the Foundation, its
+officers, employees, and agents against any and all claims, actions or
+damages (including attorney's reasonable fees) asserted by or paid to any
+party on account of a breach or alleged breach of the foregoing warranty.
+We make no other express or implied warranty (including without limitation,
+in this disclaimer of warranty, any warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE).
+
+ The Foundation reserves the right to refrain from distribution of the
+Program, at its discretion, for any reason at any time.  If the Foundation
+refrains from distribution, we will nonetheless be able to distribute the
+Program by affixing to it copyright notices and copying permission notices
+in the name of the Foundation, in a manner that the Foundation will
+direct--or by exercising our right to request unlimited nonexclusive rights
+as described above.
+
+  This assignment is executed in multiple counterparts, each of which is
+binding on the respective signer(s) even if other counterparts are delayed.
+However, the Foundation will not begin distribution of the Program until it
+has received counterparts signed by all of us.  If the Foundation does not
+receive counterparts with signatures of all of us, within six months of
+receiving the first counterpart, then this assignment is entirely void and
+all rights revert to us.
+
+  This assignment is deemed made in Massachusetts.
+
+
+Agreed:  [signature and date of each person signing this copy]
+
+
+
+
+The assignment is accepted subject to the above conditions.  Thank you.
+For the Free Software Foundation,
+
+Richard Stallman, President
+
+Please write down the answers to these questions, and snail this page
+with your assignment.
+
+
+For the copyright registration, please answer these questions
+for *each* person who is signing this copy.
+
+   [What country are you a citizen of?]
+
+   [What year were you born?]
+
+   [What is your email address?]
+
+   [What is your snail address?
+    This is so we can snail a copy back to you.]

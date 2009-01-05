@@ -1,0 +1,16 @@
+
+
+        To attach a value to an identifer... 
+
+          Use define!
+
+
+
+        Since code is data, function definitions are just
+          binding a function literal to an identifer:
+
+          (define fib (lambda (x)
+	      (if (< x 3)
+		  1
+		  (+ (fib (- x 1))
+		     (fib (- x 2))))))

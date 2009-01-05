@@ -1,0 +1,13 @@
+pick af75c77 Made version.rb prerelease-aware. Thanks Josh Susser!
+pick 7b49ff9 If a gem is a prerelease, it should require rubygems > 1.3.1.
+
+# Rebase f8d3445..7b49ff9 onto f8d3445
+#
+# Commands:
+#  p, pick = use commit
+#  e, edit = use commit, but stop for amending
+#  s, squash = use commit, but meld into previous commit
+#
+# If you remove a line here THAT COMMIT WILL BE LOST.
+# However, if you remove everything, the rebase will be aborted.
+#

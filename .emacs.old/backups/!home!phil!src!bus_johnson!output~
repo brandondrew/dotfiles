@@ -1,0 +1,13 @@
+master ~/src/bus_johnson $ ruby bus_johnson.rb
+bs> js
+js> f = function (x, y) { return x + y }; f(2, 2);
+4
+js> bs
+Switching to bs...
+bs> ((lambda (x y) (+ x y)) 2 2)
+4
+bs> rb
+Switching to rb...
+rb> Proc.new {|x, y| x + y}.call(2, 2)
+4
+rb> 

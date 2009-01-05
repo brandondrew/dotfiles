@@ -1,0 +1,493 @@
+;;; loaddefs.el --- automatically extracted autoloads
+;;
+;;; Code:
+
+
+;;;### (autoloads (all) "all" "all.el" (18699 47803))
+;;; Generated autoloads from all.el
+
+(autoload 'all "all" "\
+Show all lines in the current buffer containing a match for REGEXP.
+
+If a match spreads across multiple lines, all those lines are shown.
+
+Each line is displayed with NLINES lines before and after, or -NLINES
+before if NLINES is negative.
+NLINES defaults to `list-matching-lines-default-context-lines'.
+Interactively it is the prefix arg.
+
+The lines are shown in a buffer named `*All*'.
+Any changes made in that buffer will be propagated to this buffer.
+
+\(fn REGEXP &optional NLINES)" t nil)
+
+;;;***
+
+;;;### (autoloads (autotest) "autotest" "autotest.el" (18699 47803))
+;;; Generated autoloads from autotest.el
+
+(autoload 'autotest "autotest" "\
+Fire up an instance of autotest in its own buffer with shell bindings and compile-mode highlighting and linking.
+
+\(fn)" t nil)
+
+;;;***
+
+;;;### (autoloads (comint-redirect-results-list-from-process comint-redirect-results-list
+;;;;;;  comint-redirect-send-command-to-process comint-redirect-send-command)
+;;;;;;  "comint-redirect" "comint-redirect.el" (18699 47803))
+;;; Generated autoloads from comint-redirect.el
+
+(autoload 'comint-redirect-send-command "comint-redirect" "\
+Send COMMAND to process in current buffer, with output to OUTPUT-BUFFER.
+With prefix arg, echo output in process buffer.
+
+If NO-DISPLAY is non-nil, do not show the output buffer.
+
+\(fn COMMAND OUTPUT-BUFFER ECHO &optional NO-DISPLAY)" t nil)
+
+(autoload 'comint-redirect-send-command-to-process "comint-redirect" "\
+Send COMMAND to PROCESS, with output to OUTPUT-BUFFER.
+With prefix arg, echo output in process buffer.
+
+If NO-DISPLAY is non-nil, do not show the output buffer.
+
+\(fn COMMAND OUTPUT-BUFFER PROCESS ECHO &optional NO-DISPLAY)" t nil)
+
+(autoload 'comint-redirect-results-list "comint-redirect" "\
+Send COMMAND to current process.
+Return a list of expressions in the output which match REGEXP.
+REGEXP-GROUP is the regular expression group in REGEXP to use.
+
+\(fn COMMAND REGEXP REGEXP-GROUP)" nil nil)
+
+(autoload 'comint-redirect-results-list-from-process "comint-redirect" "\
+Send COMMAND to PROCESS.
+Return a list of expressions in the output which match REGEXP.
+REGEXP-GROUP is the regular expression group in REGEXP to use.
+
+\(fn PROCESS COMMAND REGEXP REGEXP-GROUP)" nil nil)
+
+;;;***
+
+;;;### (autoloads (css-mode) "css-mode" "css-mode.el" (18699 47803))
+;;; Generated autoloads from css-mode.el
+
+(autoload 'css-mode "css-mode" "\
+Major mode for editing CSS files
+
+\(fn)" t nil)
+
+;;;***
+
+;;;### (autoloads (find-file-in-project) "find-file-in-project" "find-file-in-project.el"
+;;;;;;  (18699 47803))
+;;; Generated autoloads from find-file-in-project.el
+
+(autoload 'find-file-in-project "find-file-in-project" "\
+Prompt with a completing list of all files in the project to find one.
+
+The project's scope is defined as the first directory containing
+an `.emacs-project' file. You can override this by locally
+setting the `ffip-project-root' variable.
+
+\(fn)" t nil)
+
+;;;***
+
+;;;### (autoloads (gist-fetch gist-buffer gist-region) "gist" "gist.el"
+;;;;;;  (18699 47803))
+;;; Generated autoloads from gist.el
+
+(autoload 'gist-region "gist" "\
+Post the current region as a new paste at gist.github.com
+Copies the URL into the kill ring.
+
+\(fn BEGIN END)" t nil)
+
+(autoload 'gist-buffer "gist" "\
+Post the current buffer as a new paste at gist.github.com.
+Copies the URL into the kill ring.
+
+\(fn)" t nil)
+
+(autoload 'gist-fetch "gist" "\
+Fetches a Gist and inserts it into a new buffer
+If the Gist already exists in a buffer, switches to it
+
+\(fn ID)" t nil)
+
+;;;***
+
+;;;### (autoloads (gnus-namazu-insinuate gnus-namazu-stop-update
+;;;;;;  gnus-namazu-update-all-indices gnus-namazu-update-index gnus-namazu-create-index
+;;;;;;  gnus-namazu-search) "gnus-namazu" "gnus-namazu.el" (18699
+;;;;;;  47803))
+;;; Generated autoloads from gnus-namazu.el
+
+(autoload 'gnus-namazu-search "gnus-namazu" "\
+Search QUERY through GROUPS with Namazu,
+and make a virtual group contains its results.
+
+\(fn GROUPS QUERY)" t nil)
+
+(autoload 'gnus-namazu-create-index "gnus-namazu" "\
+Create index under DIRECTORY.
+
+\(fn DIRECTORY &optional TARGET-DIRECTORIES FORCE)" t nil)
+
+(autoload 'gnus-namazu-update-index "gnus-namazu" "\
+Update the index under the DIRECTORY.
+
+\(fn DIRECTORY &optional FORCE)" t nil)
+
+(autoload 'gnus-namazu-update-all-indices "gnus-namazu" "\
+Update all indices which is set to `gnus-namazu-index-directories'.
+
+\(fn &optional FORCE)" t nil)
+
+(autoload 'gnus-namazu-stop-update "gnus-namazu" "\
+Stop the running indexer of Namazu.
+
+\(fn)" t nil)
+
+(autoload 'gnus-namazu-insinuate "gnus-namazu" "\
+Not documented
+
+\(fn)" nil nil)
+
+;;;***
+
+;;;### (autoloads (htmlize-many-files-dired htmlize-many-files htmlize-file
+;;;;;;  htmlize-region htmlize-buffer) "htmlize" "htmlize.el" (18699
+;;;;;;  47803))
+;;; Generated autoloads from htmlize.el
+
+(autoload 'htmlize-buffer "htmlize" "\
+Convert BUFFER to HTML, preserving colors and decorations.
+
+The generated HTML is available in a new buffer, which is returned.
+When invoked interactively, the new buffer is selected in the current
+window.  The title of the generated document will be set to the buffer's
+file name or, if that's not available, to the buffer's name.
+
+Note that htmlize doesn't fontify your buffers, it only uses the
+decorations that are already present.  If you don't set up font-lock or
+something else to fontify your buffers, the resulting HTML will be
+plain.  Likewise, if you don't like the choice of colors, fix the mode
+that created them, or simply alter the faces it uses.
+
+\(fn &optional BUFFER)" t nil)
+
+(autoload 'htmlize-region "htmlize" "\
+Convert the region to HTML, preserving colors and decorations.
+See `htmlize-buffer' for details.
+
+\(fn BEG END)" t nil)
+
+(autoload 'htmlize-file "htmlize" "\
+Load FILE, fontify it, convert it to HTML, and save the result.
+
+Contents of FILE are inserted into a temporary buffer, whose major mode
+is set with `normal-mode' as appropriate for the file type.  The buffer
+is subsequently fontified with `font-lock' and converted to HTML.  Note
+that, unlike `htmlize-buffer', this function explicitly turns on
+font-lock.  If a form of highlighting other than font-lock is desired,
+please use `htmlize-buffer' directly on buffers so highlighted.
+
+Buffers currently visiting FILE are unaffected by this function.  The
+function does not change current buffer or move the point.
+
+If TARGET is specified and names a directory, the resulting file will be
+saved there instead of to FILE's directory.  If TARGET is specified and
+does not name a directory, it will be used as output file name.
+
+\(fn FILE &optional TARGET)" t nil)
+
+(autoload 'htmlize-many-files "htmlize" "\
+Convert FILES to HTML and save the corresponding HTML versions.
+
+FILES should be a list of file names to convert.  This function calls
+`htmlize-file' on each file; see that function for details.  When
+invoked interactively, you are prompted for a list of files to convert,
+terminated with RET.
+
+If TARGET-DIRECTORY is specified, the HTML files will be saved to that
+directory.  Normally, each HTML file is saved to the directory of the
+corresponding source file.
+
+\(fn FILES &optional TARGET-DIRECTORY)" t nil)
+
+(autoload 'htmlize-many-files-dired "htmlize" "\
+HTMLize dired-marked files.
+
+\(fn ARG &optional TARGET-DIRECTORY)" t nil)
+
+;;;***
+
+;;;### (autoloads (idle-highlight) "idle-highlight" "idle-highlight.el"
+;;;;;;  (18699 47803))
+;;; Generated autoloads from idle-highlight.el
+
+(autoload 'idle-highlight "idle-highlight" "\
+Toggle idle-highlighting.
+
+\(fn &optional ARG)" t nil)
+
+;;;***
+
+;;;### (autoloads (dired-install-elisp-from-emacswiki install-elisp-from-emacswiki
+;;;;;;  install-elisp) "install-elisp" "install-elisp.el" (18699
+;;;;;;  47803))
+;;; Generated autoloads from install-elisp.el
+
+(autoload 'install-elisp "install-elisp" "\
+Retrieve Emacs Lisp program from URL and save and byte-compile and load.
+If optional FILENAME is supplied, save URL as FILENAME, otherwise URL's basename.
+
+\(fn URL &optional FILENAME)" t nil)
+
+(autoload 'install-elisp-from-emacswiki "install-elisp" "\
+Install Emacs Lisp program from the EmacsWiki.
+
+\(fn FILENAME)" t nil)
+
+(autoload 'dired-install-elisp-from-emacswiki "install-elisp" "\
+Upgrade the current Emacs Lisp program from the EmacsWiki.
+
+\(fn &optional FILENAME)" t nil)
+
+;;;***
+
+;;;### (autoloads (javascript-mode) "javascript" "javascript.el"
+;;;;;;  (18699 47803))
+;;; Generated autoloads from javascript.el
+
+(autoload 'javascript-mode "javascript" "\
+Major mode for editing JavaScript source text.
+
+Key bindings:
+
+\\{javascript-mode-map}
+
+\(fn)" t nil)
+
+;;;***
+
+;;;### (autoloads (rails-console) "my-rails" "my-rails.el" (18699
+;;;;;;  47803))
+;;; Generated autoloads from my-rails.el
+
+(autoload 'rails-console "my-rails" "\
+Not documented
+
+\(fn)" t nil)
+
+;;;***
+
+;;;### (autoloads (rake rr) "my-ruby" "my-ruby.el" (18717 43306))
+;;; Generated autoloads from my-ruby.el
+
+(autoload 'rr "my-ruby" "\
+Run a Ruby interactive shell session in a buffer.
+
+\(fn &optional ARG)" t nil)
+
+(autoload 'rake "my-ruby" "\
+Not documented
+
+\(fn TASK)" t nil)
+
+;;;***
+
+;;;### (autoloads (oddmuse-kill-url oddmuse-browse-this-page oddmuse-browse-page
+;;;;;;  emacswiki-post oddmuse-insert-pagename oddmuse-revert oddmuse-post
+;;;;;;  oddmuse-follow oddmuse-edit oddmuse-toggle-minor) "oddmuse"
+;;;;;;  "oddmuse.el" (18699 47803))
+;;; Generated autoloads from oddmuse.el
+
+(autoload 'oddmuse-toggle-minor "oddmuse" "\
+Toggle minor mode state.
+
+\(fn &optional ARG)" t nil)
+
+(autoload 'oddmuse-edit "oddmuse" "\
+Edit a page on a wiki.
+WIKI is the name of the wiki as defined in `oddmuse-wikis',
+PAGENAME is the pagename of the page you want to edit.
+Use a prefix argument to force a reload of the page.
+
+\(fn WIKI PAGENAME)" t nil)
+
+(autoload 'oddmuse-follow "oddmuse" "\
+Figure out what page we need to visit
+and call `oddmuse-edit' on it.
+
+\(fn ARG)" t nil)
+
+(autoload 'oddmuse-post "oddmuse" "\
+Post the current buffer to the current wiki.
+The current wiki is taken from `oddmuse-wiki'.
+
+\(fn SUMMARY)" t nil)
+
+(autoload 'oddmuse-revert "oddmuse" "\
+Revert this oddmuse page.
+
+\(fn)" t nil)
+
+(autoload 'oddmuse-insert-pagename "oddmuse" "\
+Insert a PAGENAME of current wiki with completion.
+
+\(fn PAGENAME)" t nil)
+
+(autoload 'emacswiki-post "oddmuse" "\
+Post the current buffer to the EmacsWiki.
+If this command is invoked interactively: with prefix argument, prompts pagename,
+otherwise set pagename as basename of `buffer-file-name'.
+
+This command is intended to post current EmacsLisp program easily.
+
+\(fn &optional PAGENAME SUMMARY)" t nil)
+
+(autoload 'oddmuse-browse-page "oddmuse" "\
+Ask a WWW browser to load an oddmuse page.
+WIKI is the name of the wiki as defined in `oddmuse-wikis',
+PAGENAME is the pagename of the page you want to browse.
+
+\(fn WIKI PAGENAME)" t nil)
+
+(autoload 'oddmuse-browse-this-page "oddmuse" "\
+Ask a WWW browser to load current oddmuse page.
+
+\(fn)" t nil)
+
+(autoload 'oddmuse-kill-url "oddmuse" "\
+Make the URL of current oddmuse page the latest kill in the kill ring.
+
+\(fn)" t nil)
+
+;;;***
+
+;;;### (autoloads (pastie-region) "pastie" "pastie.el" (18699 47803))
+;;; Generated autoloads from pastie.el
+
+(autoload 'pastie-region "pastie" "\
+Post the current region as a new paste at pastie.caboo.se.
+Copies the URL into the kill ring.
+
+\(fn BEGIN END)" t nil)
+
+;;;***
+
+;;;### (autoloads (pcomplete/rake) "pcmpl-rake" "pcmpl-rake.el" (18699
+;;;;;;  47803))
+;;; Generated autoloads from pcmpl-rake.el
+
+(autoload 'pcomplete/rake "pcmpl-rake" "\
+Completion rules for the `ssh' command.
+
+\(fn)" nil nil)
+
+;;;***
+
+;;;### (autoloads (ri) "ri-ruby" "ri-ruby.el" (18699 47803))
+;;; Generated autoloads from ri-ruby.el
+
+(autoload 'ri "ri-ruby" "\
+Execute `ri'.
+
+\(fn KEYW &optional CLASS)" t nil)
+
+;;;***
+
+;;;### (autoloads (ruby-mode) "ruby-mode" "ruby-mode.el" (18699 47803))
+;;; Generated autoloads from ruby-mode.el
+
+(autoload 'ruby-mode "ruby-mode" "\
+Major mode for editing Ruby scripts.
+\\[ruby-indent-line] properly indents subexpressions of multi-line
+class, module, def, if, while, for, do, and case statements, taking
+nesting into account.
+
+The variable ruby-indent-level controls the amount of indentation.
+\\{ruby-mode-map}
+
+\(fn)" t nil)
+
+(add-to-list 'auto-mode-alist '("\\.rb$" . ruby-mode))
+
+(add-to-list 'interpreter-mode-alist '("ruby" . ruby-mode))
+
+;;;***
+
+;;;### (autoloads (scpaste) "scpaste" "scpaste.el" (18699 47803))
+;;; Generated autoloads from scpaste.el
+
+(autoload 'scpaste "scpaste" "\
+Paste the current buffer via `scp' to `scpaste-http-destination'.
+
+\(fn ORIGINAL-NAME)" t nil)
+
+;;;***
+
+;;;### (autoloads (color-theme-vivid-chalk) "vivid-chalk" "vivid-chalk.el"
+;;;;;;  (18699 47803))
+;;; Generated autoloads from vivid-chalk.el
+
+(autoload 'color-theme-vivid-chalk "vivid-chalk" "\
+Based on Vivid Chalk, a vim port of Vibrant Ink.
+Modified by Phil Hagelberg to fix minor garishness.
+
+\(fn)" t nil)
+
+(defalias 'vivid-chalk 'color-theme-vivid-chalk)
+
+;;;***
+
+;;;### (autoloads (yaml-mode) "yaml-mode" "yaml-mode.el" (18699 47803))
+;;; Generated autoloads from yaml-mode.el
+
+(autoload 'yaml-mode "yaml-mode" "\
+Simple mode to edit YAML.
+
+\\{yaml-mode-map}
+
+\(fn)" t nil)
+
+;;;***
+
+;;;### (autoloads (color-theme-zenburn) "zenburn" "zenburn.el" (18699
+;;;;;;  47803))
+;;; Generated autoloads from zenburn.el
+
+(autoload 'color-theme-zenburn "zenburn" "\
+Just some alien fruit salad to keep you in the zone.
+
+\(fn)" t nil)
+
+(defalias 'zenburn #'color-theme-zenburn)
+
+;;;***
+
+;;;### (autoloads nil nil ("bus-scheme.el" "cheat.el" "color-theme.el"
+;;;;;;  "comint-util.el" "ebby.el" "elunit.el" "flymake-js.el" "inf-ruby.el"
+;;;;;;  "init.el" "json.el" "lisppaste.el" "mode-unit.el" "moz.el"
+;;;;;;  "my-bindings.el" "my-defuns.el" "my-eshell.el" "my-hook-setup.el"
+;;;;;;  "my-jabber.el" "my-js.el" "my-lisp.el" "my-misc.el" "my-rcirc.el"
+;;;;;;  "my-registers.el" "my-vc.el" "rcirc-color.el" "rcirc-completion.el"
+;;;;;;  "rcodetools.el" "regex-tool.el" "rest-api.el" "ruby-electric.el"
+;;;;;;  "steersman.el" "tail.el" "test-unit-ruby.el" "test-unit.el"
+;;;;;;  "tmpl.el" "toggle.el" "top-mode.el" "typing.el" "vernacular-time.el"
+;;;;;;  "xml-rpc.el") (18724 20729 101270))
+
+;;;***
+
+(provide 'loaddefs)
+;; Local Variables:
+;; version-control: never
+;; no-byte-compile: t
+;; no-update-autoloads: t
+;; coding: utf-8
+;; End:
+;;; loaddefs.el ends here

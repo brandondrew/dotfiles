@@ -1,0 +1,16 @@
+
+
+    Fundamentals of Metaprogramming:
+
+        CODE   is   DATA.
+
+
+     The structure of a program is a list:
+
+  def rest
+    if self.length == 1
+      return nil
+    else
+      self[1, self.length]
+    end
+  end

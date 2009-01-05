@@ -1,0 +1,443 @@
+HTTP/1.0 200 OK
+Date: Mon, 01 Dec 2008 00:13:11 GMT
+Server: Apache
+X-FB-Host: app75
+Last-Modified: Mon, 01 Dec 2008 00:08:36 GMT
+ETag: Yms23mlbFLEK5h5v+m+cyDYkxS8
+P3P: CP="ALL DSP COR NID CUR OUR NOR"
+Connection: close
+Content-Type: text/xml;charset=utf-8
+
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet href="http://feeds.feedburner.com/~d/styles/atom10full.xsl" type="text/xsl" media="screen"?><?xml-stylesheet href="http://feeds.feedburner.com/~d/styles/itemcontent.css" type="text/css" media="screen"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en-US">
+  <id>tag:github.com,2008:/blog</id>
+  <link type="text/html" rel="alternate" href="http://github.com/blog" />
+  
+  <title>The GitHub Blog</title>
+  <updated>2008-11-29T12:58:14-08:00</updated>
+  <link rel="self" href="http://feeds.feedburner.com/github" type="application/atom+xml" /><entry>
+    <id>tag:github.com,2008:Post/245</id>
+    <published>2008-11-29T12:53:48-08:00</published>
+    <updated>2008-11-29T12:58:14-08:00</updated>
+    <link type="text/html" rel="alternate" href="http://github.com/blog/245-using-git-in-ruby-applications" />
+    <title>Using Git in Ruby Applications</title>
+    <content type="html">&lt;p&gt;At the beginning of this month, I gave a talk at &lt;a href="http://rubyconf.org"&gt;RubyConf&lt;/a&gt; in Florida about using Git in Ruby applications.  It basically goes over some of the strengths of using Git as a filesystem and proposes some example applications you could write using Git as your data backend instead of a normal filesystem or simple database.&lt;/p&gt;
+
+
+&lt;embed src='http://rubyconf2008.confreaks.com/player.swf' height='200' width='500' allowscriptaccess='always' allowfullscreen='true' flashvars='file=http%3A%2F%2Frubyconf2008.confreaks.com%2Fvideos%2Fusing-git-in-ruby-applications-small.mp4&amp;#38;image=images%2Fusing-git-in-ruby-applications-preview.jpg&amp;#38;plugins=viral-1'/&gt;
+
+	&lt;p&gt;It assumes a little bit of Git knowledge, but the idea was to show a slightly different way of thinking about Git itself.  The major downside here is that Confreaks seems to have synced the slides about 7 seconds ahead of the video, which means you get a nice preview of what&amp;#8217;s to come.  However, at the times I flip through slides quickly, the sync problem makes it a bit difficult to follow.  Oh well.  Let me know if you find it useful.  If you want it higher res, Confreaks has the video up &lt;a href="http://rubyconf2008.confreaks.com/using-git-in-ruby-applications.html"&gt;here&lt;/a&gt;.&lt;/p&gt;
+
+
+	&lt;p&gt;(btw, since I&amp;#8217;ve gotten this a few times now &amp;#8211; the &amp;#8216;tree&amp;#8217; command is a pretty common Linux command that prints out a directory structure nicely)&lt;/p&gt;</content>
+    <author>
+      <name>schacon</name>
+      <email>schacon@gmail.com</email>
+    </author>
+  </entry>
+  <entry>
+    <id>tag:github.com,2008:Post/244</id>
+    <published>2008-11-27T22:50:00-08:00</published>
+    <updated>2008-11-28T15:57:17-08:00</updated>
+    <link type="text/html" rel="alternate" href="http://github.com/blog/244-pushes" />
+    <title>Pushes!</title>
+    <content type="html">&lt;p&gt;You&amp;#8217;ll no longer see a flood of commit events in your dashboard. Instead? Push events.&lt;/p&gt;
+
+
+&lt;div align="center"&gt;
+&lt;img src="http://img.skitch.com/20081128-nn8spw31jmy5xh1f38rs2fnc3p.png" alt="" /&gt;
+&lt;/div&gt;
+
+&lt;div align="center"&gt;
+&lt;img src="http://img.skitch.com/20081128-cpnb8648hsarmi127kiku7djux.png" alt="" /&gt;
+&lt;/div&gt;
+
+	&lt;p&gt;Commit events will still appear on your profile and in all your &lt;span class="caps"&gt;RSS&lt;/span&gt; feeds for now. We will be &lt;strong&gt;removing commit events&lt;/strong&gt; from &lt;span class="caps"&gt;RSS&lt;/span&gt; feeds in three weeks, on &lt;strong&gt;December 18th&lt;/strong&gt;.  We&amp;#8217;ll post more about the new format soon.&lt;/p&gt;
+
+
+	&lt;p&gt;&lt;strong&gt;Update&lt;/strong&gt; Pushes with single commits now show the commit. We also fixed the wycats bug.&lt;/p&gt;
+
+
+&lt;div align="center"&gt;
+&lt;img src="http://img.skitch.com/20081128-fy6x7k76rcrd3sawr76qbsaf29.png" alt="" /&gt;
+&lt;/div&gt;</content>
+    <author>
+      <name>defunkt</name>
+      <email>chris@ozmm.org</email>
+    </author>
+  </entry>
+  <entry>
+    <id>tag:github.com,2008:Post/243</id>
+    <published>2008-11-27T15:15:56-08:00</published>
+    <updated>2008-11-27T16:28:12-08:00</updated>
+    <link type="text/html" rel="alternate" href="http://github.com/blog/243-maintenance-videos" />
+    <title>Maintenance Videos</title>
+    <content type="html">&lt;p&gt;We&amp;#8217;ve had the same pool of YouTube videos on our maintenance page
+since we launched. Time to add some more.&lt;/p&gt;
+
+
+&lt;div align="center"&gt;
+&lt;img src="http://img.skitch.com/20081127-qe9u61dkb52gea5wjyrijqxjsd.png" alt="" /&gt;
+&lt;/div&gt;
+
+	&lt;p&gt;Got a favorite YouTube video? Post the url and we&amp;#8217;ll add it to the
+maint page (shown when doing database migrations, upgrades, physical
+maintenance, and, uh, downtime).&lt;/p&gt;
+
+
+	&lt;p&gt;We&amp;#8217;ll also be adding some more helpful links to the page and turning off that damned autoplay!&lt;/p&gt;</content>
+    <author>
+      <name>defunkt</name>
+      <email>chris@ozmm.org</email>
+    </author>
+  </entry>
+  <entry>
+    <id>tag:github.com,2008:Post/242</id>
+    <published>2008-11-26T15:59:37-08:00</published>
+    <updated>2008-11-26T16:01:42-08:00</updated>
+    <link type="text/html" rel="alternate" href="http://github.com/blog/242-github-userscript" />
+    <title>GitHub Userscript</title>
+    <content type="html">&lt;p&gt;Stephen Celis&amp;#8217; &lt;a href="http://github.com/stephencelis/githubbub"&gt;GitHubbub&lt;/a&gt; is a &lt;a href="http://fluidapp.com/"&gt;Fluid&lt;/a&gt; user-script which automatically updates your news feed and Growls you when updates come in. Pretty damn cool.&lt;/p&gt;
+
+
+&lt;div align="center"&gt;
+&lt;a href="http://github.com/stephencelis/githubbub"&gt;
+&lt;img src="http://img.skitch.com/20081126-r8yjieksieqexf4d1df7x6dth8.png" alt="" /&gt;
+&lt;/a&gt;
+&lt;/div&gt;
+
+	&lt;p&gt;(And personally I loved the &lt;a href="http://github.com/rmm5t/github-media/raw/master/octocat_stroked.png"&gt;transparent stroked octocat&lt;/a&gt; icon for Fluid.)&lt;/p&gt;</content>
+    <author>
+      <name>defunkt</name>
+      <email>chris@ozmm.org</email>
+    </author>
+  </entry>
+  <entry>
+    <id>tag:github.com,2008:Post/241</id>
+    <published>2008-11-26T11:05:45-08:00</published>
+    <updated>2008-11-26T11:07:25-08:00</updated>
+    <link type="text/html" rel="alternate" href="http://github.com/blog/241-let-me-google-that-for-you" />
+    <title>Let Me Google That For You</title>
+    <content type="html">&lt;p&gt;Okay, it&amp;#8217;s official: &lt;a href="http://letmegooglethatforyou.com"&gt;let me google that for you&lt;/a&gt; is the new &lt;span class="caps"&gt;RTFM&lt;/span&gt;.&lt;/p&gt;
+
+
+	&lt;p&gt;Someone on your team asks where to download solr. &lt;a href="http://letmegooglethatforyou.com/?q=download+solr"&gt;Let me google that for you&lt;/a&gt;.&lt;/p&gt;
+
+
+	&lt;p&gt;Your friend wants to know the first man in space. &lt;a href="http://letmegooglethatforyou.com/?q=first+man+in+space"&gt;Let me google that for you&lt;/a&gt;.&lt;/p&gt;
+
+
+	&lt;p&gt;Your boss is trying to find the best place to host code. &lt;a href="http://github.com/"&gt;Let me google that for you&lt;/a&gt;.&lt;/p&gt;
+
+
+	&lt;p&gt;Best of all, the code is open source and hosted &lt;a href="http://github.com/coderifous/lmgtfy"&gt;right here&lt;/a&gt;.&lt;/p&gt;</content>
+    <author>
+      <name>defunkt</name>
+      <email>chris@ozmm.org</email>
+    </author>
+  </entry>
+  <entry>
+    <id>tag:github.com,2008:Post/240</id>
+    <published>2008-11-26T10:35:53-08:00</published>
+    <updated>2008-11-26T10:35:59-08:00</updated>
+    <link type="text/html" rel="alternate" href="http://github.com/blog/240-developing-with-submodules" />
+    <title>Developing with Submodules</title>
+    <content type="html">&lt;p&gt;Lately I&amp;#8217;ve been working with submodules &amp;#8211; specifically developing plugins / libraries as submodules within a separate project. Turns out, they&amp;#8217;re pretty cool.&lt;/p&gt;
+
+
+	&lt;p&gt;I&amp;#8217;ve written a short guide, &lt;a href="http://github.com/guides/developing-with-submodules"&gt;Developing with Submodules&lt;/a&gt;, explaining my workflow.&lt;/p&gt;</content>
+    <author>
+      <name>defunkt</name>
+      <email>chris@ozmm.org</email>
+    </author>
+  </entry>
+  <entry>
+    <id>tag:github.com,2008:Post/239</id>
+    <published>2008-11-24T17:49:12-08:00</published>
+    <updated>2008-11-24T17:50:17-08:00</updated>
+    <link type="text/html" rel="alternate" href="http://github.com/blog/239-ironruby-on-github" />
+    <title>IronRuby on GitHub</title>
+    <content type="html">&lt;p&gt;Microsoft&amp;#8217;s &lt;a href="http://www.ironruby.net/"&gt;IronRuby&lt;/a&gt; is &lt;a href="http://rubyforge.org/pipermail/ironruby-core/2008-November/003250.html"&gt;moving to GitHub&lt;/a&gt;.&lt;/p&gt;
+
+
+&lt;div align="center"&gt;
+&lt;a href="http://github.com/ironruby/ironruby"&gt;
+&lt;img src="http://img.skitch.com/20081125-xugx44mr4yrqcgpxc3kw2nejew.png" alt="" /&gt;
+&lt;/a&gt;
+&lt;/div&gt;
+
+	&lt;p&gt;They&amp;#8217;ve already been here &lt;a href="http://github.com/ironruby"&gt;for a while&lt;/a&gt;, but now the main repository is officially moving.&lt;/p&gt;
+
+
+	&lt;p&gt;IronRuby joins &lt;a href="http://github.com/evanphx/rubinius"&gt;Rubinius&lt;/a&gt; and &lt;a href="http://github.com/search?q=vm"&gt;dozens of other language implementations&lt;/a&gt;. Welcome, guys!&lt;/p&gt;</content>
+    <author>
+      <name>defunkt</name>
+      <email>chris@ozmm.org</email>
+    </author>
+  </entry>
+  <entry>
+    <id>tag:github.com,2008:Post/238</id>
+    <published>2008-11-23T10:25:35-08:00</published>
+    <updated>2008-11-23T21:04:01-08:00</updated>
+    <link type="text/html" rel="alternate" href="http://github.com/blog/238-github-rebase-5" />
+    <title>GitHub Rebase #5</title>
+    <content type="html">&lt;p&gt;I&amp;#8217;ve done some serious work towards generating more accurate statistics this week. If you&amp;#8217;re interested in how the graphs are made, check out my &lt;a href="http://github.com/qrush/rebase"&gt;rebase project&lt;/a&gt;. I&amp;#8217;m going to be consistently pulling stats from Sunday 00:00 &lt;span class="caps"&gt;UTC&lt;/span&gt; to Saturday 23:59 &lt;span class="caps"&gt;UTC&lt;/span&gt; for now on (instead of doing it ad-hoc).&lt;/p&gt;
+
+
+	&lt;h3&gt;Stats Breakdown&lt;/h3&gt;
+
+
+	&lt;p&gt;&lt;img src="http://chart.apis.google.com/chart?chl=commit:+20133|watch:+5087|follow:+1516|gist:+1397|create:+1301|fork:+890|commitcomment:+442|wiki:+426|member:+339|guide:+17&amp;#38;cht=p3&amp;#38;chs=530x220&amp;#38;chco=336699&amp;#38;chd=s:9PEEDCBBBA&amp;#38;chtt=GitHub+Rebase+%E2%80%94+Total+Events+%E2%80%94+11-16-2008+to+11-22-2008&amp;#38;chf=bg,s,f0f0f0" alt="" /&gt;
+&lt;img src="http://chart.apis.google.com/chart?chxl=0:|11-16|11-17|11-18|11-19|11-20|11-21|11-22&amp;#38;cht=lc&amp;#38;chs=530x375&amp;#38;chdl=commit|commitcomment|create|follow|fork|gist|guide|member|watch|wiki&amp;#38;chd=s:HHGHIGFEDEEEFFELLQLKOLQIIGEGGLUHNPKFEIOIKNMINLNLQHOGHJJEEGHHJHIHPNK9OQKKHIIGKHIDGGHGGKIRQLMMNNLKHLHFHLFGFEGEHQIHLKKLNKOIHHHHENJEHHEMJKNKRMLLHKJJOKHFFLGIGFGGFHGGIIFFKKKG,AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAABAAAABAAAAAAAAAABABAAAAAAAAAAAAAAAAAAAAAAABBAABBABAAAAAAAAAAAAABABAAAAABAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAABBAAAAAABABAA,AAAAAAAAAAAAAAAAAAAAAACAAAABBABAAADBAABAAABBBBBCBBBAAABAACAAAABAAACCCAAABBAAAAAAABAAACABABBBBBBAAAAAAAAAAAAABABABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAABABAAAAABA,AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,AAAAABAAAAAAAAABAAAAAAAAAAAAAAABAAAABAAABAABBAAABABAAAAAAAAAAAABABBAABAAAAAAAAAAAAABAABBBBBBAAAAAAAAAAAAAABBAAABBBBAAAAAAAAAAABAAABBABBBBAAAAAAAAAAAAAAAAAAAABAAAAA,AAAAAAAAAAAAA,AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAABAAAAAA,BBBCBBBBABCBABBBCBBBCCCBCCCBBDDDBDDCCCDCDCCEDDDDDCCBBBCCCDDCBCDDEFDDDDCCCCBBCCBBCDCBCDDCDBDDCDECBDBBBBACABBADBCDDCCBDCDDDCCBCBBCFCCDDCFDECDCDCCBBBBACACCBBBBABCBCBBCCCCB,AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&amp;#38;chxr=1,0,3607&amp;#38;chco=000000,ff0000,00ff00,0000ff,ffff00,3cb371,ff00ff,ff9900,ffff99,993399&amp;#38;chtt=GitHub+Rebase+%E2%80%94+Events+Breakdown+%E2%80%94+11-16-2008+to+11-22-2008&amp;#38;chxs=0,4183c4,9,1|1,4183c4,9,1&amp;#38;chf=bg,s,f0f0f0&amp;#38;chm=B,bbccd9,0,0,0&amp;#38;chxt=x,y" alt="" /&gt;&lt;/p&gt;
+
+
+	&lt;h3&gt;Notable Projects&lt;/h3&gt;
+
+
+	&lt;ul&gt;
+	&lt;li&gt;&lt;strong&gt;&lt;a href="http://github.com/JonGretar/couchdbx/tree/master"&gt;couchdbx&lt;/a&gt;&lt;/strong&gt; This is a native &lt;span class="caps"&gt;OSX&lt;/span&gt; client for &lt;a href="http://couchdb.org"&gt;CouchDB&lt;/a&gt; that helps with starting/stopping the service and pulling the admin interface up for it (called Futon. awesome name). This is a fork of the project that lives mainly on &lt;a href="http://couchprojects.googlecode.com/svn/trunk/unofficial-binary-releases/CouchDBX/"&gt;Google Code&lt;/a&gt;. If you&amp;#8217;re using CouchDB on &lt;span class="caps"&gt;OSX&lt;/span&gt;, definitely check this out.&lt;/li&gt;
+	&lt;/ul&gt;
+
+
+	&lt;ul&gt;
+	&lt;li&gt;&lt;strong&gt;&lt;a href="http://github.com/tylerbutler/xna-games/tree/master"&gt;xna-games&lt;/a&gt;&lt;/strong&gt; Finding example code for &lt;a href="http://creators.xna.com/en-US/"&gt;&lt;span class="caps"&gt;XNA&lt;/span&gt; game development&lt;/a&gt; in C# was always a bit of a pain, but lo and behold, plenty exists here. (&lt;a href="http://github.com/search?q=xna"&gt;and even more here!&lt;/a&gt;). This repository hosts a few separate games along with a few toolkit projects to help out. A decent starting point for those who want to play around with &lt;span class="caps"&gt;XNA&lt;/span&gt; on GitHub.&lt;/li&gt;
+	&lt;/ul&gt;
+
+
+	&lt;ul&gt;
+	&lt;li&gt;&lt;strong&gt;&lt;a href="http://github.com/kig/filezoo/tree/master"&gt;filezoo&lt;/a&gt;&lt;/strong&gt; Visualizing filesystems has always been a tough task, but filezoo seeks to make it fun, fast, and easy to use. It uses &lt;a href="http://mono-project.com"&gt;Mono&lt;/a&gt;, &lt;a href="http://cairo-graphics.org"&gt;Cairo&lt;/a&gt;, and &lt;a href="http://www.mono-project.com/GtkSharp"&gt;Gtk#&lt;/a&gt; and &lt;a href="http://1.bp.blogspot.com/_yZA36-WQFmM/SShPky8PW_I/AAAAAAAAAc8/MPvazJv1L6Q/s1600-h/thumb_proto.jpg"&gt;looks pretty neat&lt;/a&gt;. Also, &lt;a href="http://github.com/kig"&gt;the author&lt;/a&gt; is keeping track of his work and even posting sketches of his thought process on his &lt;a href="http://fhtr.blogspot.com/"&gt;blog&lt;/a&gt;. Open source development at its best: open, free, and damn cool.&lt;/li&gt;
+	&lt;/ul&gt;
+
+
+	&lt;h3&gt;Hardcore Forkers&lt;/h3&gt;
+
+
+	&lt;ul&gt;
+	&lt;li&gt;&lt;strong&gt;&lt;a href="http://github.com/jflam"&gt;jflam&lt;/a&gt; John Lam&lt;/strong&gt; is the leader of the &lt;a href="http://ironruby.net"&gt;IronRuby project over at Microsoft&lt;/a&gt;, which is the .NET implementation of Ruby. He&amp;#8217;s very active on GitHub, and he actually had the most forks out of any user this week! He&amp;#8217;s also a contributor to the &lt;a href="http://github.com/rubyspec/rubyspec"&gt;rubyspec project&lt;/a&gt;, which is &lt;em&gt;the&lt;/em&gt; way of determining the behavior for the Ruby language and is used across other VM projects as well.&lt;/li&gt;
+	&lt;/ul&gt;
+
+
+	&lt;ul&gt;
+	&lt;li&gt;&lt;strong&gt;&lt;a href="http://github.com/drf"&gt;drf&lt;/a&gt; Dario Freddi&lt;/strong&gt; has been up to a ridiculous amount of commits this week. (nearly 700!) He&amp;#8217;s the brains behind the &lt;a href="http://www.kde-apps.org/content/show.php/PowerDevil?content=85078"&gt;PowerDevil&lt;/a&gt; application on &lt;span class="caps"&gt;KDE&lt;/span&gt;, which finely tunes your laptop&amp;#8217;s power usage to squeak out a few more minutes when you&amp;#8217;re far away from a power outlet. This week he&amp;#8217;s been hard at work on a &lt;a href="http://github.com/drf/shaman1/tree/master"&gt;few&lt;/a&gt; &lt;a href="http://github.com/drf/aqpm/tree/master"&gt;tools&lt;/a&gt; for package distribution on &lt;a href="http://www.archlinux.org/"&gt;Arch Linux&lt;/a&gt;.&lt;/li&gt;
+	&lt;/ul&gt;
+
+
+	&lt;ul&gt;
+	&lt;li&gt;&lt;strong&gt;&lt;a href="http://github.com/umonkey"&gt;umonkey&lt;/a&gt; Justin Forest&lt;/strong&gt;&amp;#8217;s project &lt;a href="http://github.com/umonkey/molinos-cms"&gt;molinos-cms&lt;/a&gt; has been featured on the column before for its huge amount of commits, and this time I had to figure out what all of the activity was about. It&amp;#8217;s a &lt;span class="caps"&gt;PHP&lt;/span&gt; based &lt;span class="caps"&gt;CMS&lt;/span&gt; that seems to be based in Russian, and plenty of work is being done on it. Check out their &lt;a href="http://translate.google.com/translate?u=http%3A%2F%2Fblog.cms.molinos.ru%2F&amp;#38;hl=en&amp;#38;ie=UTF-8&amp;#38;sl=ru&amp;#38;tl=en"&gt;translated blog&lt;/a&gt; for screenshots, features, and more information about what he&amp;#8217;s been up to. Hopefully they&amp;#8217;ll get some fluent English contributors soon as well.&lt;/li&gt;
+	&lt;/ul&gt;</content>
+    <author>
+      <name>qrush</name>
+      <email>nick@quaran.to</email>
+    </author>
+  </entry>
+  <entry>
+    <id>tag:github.com,2008:Post/237</id>
+    <published>2008-11-20T16:05:03-08:00</published>
+    <updated>2008-11-20T16:05:23-08:00</updated>
+    <link type="text/html" rel="alternate" href="http://github.com/blog/237-basic-auth-post-receives" />
+    <title>Basic Auth Post-Receives</title>
+    <content type="html">&lt;p&gt;Want to make sure your post-receive hook only gets called by GitHub? Post-receive URLs now support &lt;span class="caps"&gt;HTTP&lt;/span&gt; basic auth.&lt;/p&gt;
+
+
+&lt;div align="center"&gt;
+&lt;img src="http://img.skitch.com/20081121-fjhqqw6nmxxc42hq1ugpwyma33.png" alt="" /&gt;
+&lt;/div&gt;</content>
+    <author>
+      <name>defunkt</name>
+      <email>chris@ozmm.org</email>
+    </author>
+  </entry>
+  <entry>
+    <id>tag:github.com,2008:Post/236</id>
+    <published>2008-11-19T16:44:48-08:00</published>
+    <updated>2008-11-20T14:58:58-08:00</updated>
+    <link type="text/html" rel="alternate" href="http://github.com/blog/236-support-no-longer-a-pain-in-our-ass" />
+    <title>Support, no longer a pain in our ass</title>
+    <content type="html">&lt;p&gt;Now don&amp;#8217;t get me wrong, I&amp;#8217;m not saying you guys are a pain in the ass.  We love our users.  Didn&amp;#8217;t you get the box of chocolates we sent you?  Blasted post office&amp;#8230;&lt;/p&gt;
+
+
+	&lt;p&gt;The pain has been how we&amp;#8217;ve handled support.  We&amp;#8217;ve tried to give you many ways to get help, perhaps too many.  None of them have been as easy to use as we would like.  So today we&amp;#8217;re going to set things right.  Today we&amp;#8217;re launching &lt;a href="http://support.github.com/"&gt;support.github.com&lt;/a&gt;, powered by &lt;a href="http://entp.com/"&gt;entp&amp;#8217;s&lt;/a&gt; new app, &lt;a href="http://tenderapp.com/"&gt;Tender&lt;/a&gt;&lt;/p&gt;
+
+
+&lt;div align="center"&gt;
+&lt;a href="http://support.github.com"&gt;
+&lt;img src="http://img.skitch.com/20081120-qbyxwgt7iitmn4arkekg594y7p.png" alt="" /&gt;
+&lt;/a&gt;
+&lt;/div&gt;
+
+	&lt;h3&gt;But, why?&lt;/h3&gt;
+
+
+	&lt;p&gt;Over the past weeks we&amp;#8217;ve identified these major problems with support:&lt;/p&gt;
+
+
+	&lt;ul&gt;
+	&lt;li&gt;&lt;b&gt;Too many options&lt;/b&gt; &amp;#8211; So you have an issue, where do you report it?  The Google group? &lt;span class="caps"&gt;IRC&lt;/span&gt;? Lighthouse? Should you email support@github.com?  What if it&amp;#8217;s an account issue or a private repo?  You don&amp;#8217;t want that out in the open.  Which place do you go for the fastest response?&lt;/li&gt;
+		&lt;li&gt;&lt;b&gt;Too many steps&lt;/b&gt; &amp;#8211; If you go to the group or Lighthouse, you have to make an account.  To get to &lt;span class="caps"&gt;IRC&lt;/span&gt; you have to install a client, log in, and hunt down someone who is paying attention to the channel.  For email you have to launch up your client and fire off a message.  It shouldn&amp;#8217;t take this much effort!&lt;/li&gt;
+		&lt;li&gt;&lt;b&gt;Snowball effect in Lighthouse&lt;/b&gt; &amp;#8211; Many users have submitted their ideas and issues to Lighthouse.  We want to hear from you, but the massive number of tickets in Lighthouse has become unmanageable.  The things we want to add and need to fix get lost in the flood of tickets.  Most days we receive more new tickets than we close in a week!  This is not good for us or for you.&lt;/li&gt;
+	&lt;/ul&gt;
+
+
+	&lt;p&gt;The first step in making support better was taken about a week ago.  We added a &lt;a href="http://github.com/contact"&gt;contact form&lt;/a&gt;, a fast, one-step means of contacting support.  Support requests nearly doubled.  Quick and simple access to help, just what we wanted.&lt;/p&gt;
+
+
+	&lt;p&gt;However, there are tons of helpful people in the Google group and on &lt;span class="caps"&gt;IRC&lt;/span&gt; that can help too.  This form doesn&amp;#8217;t put you in contact with them.  The solution to this comes from the wonderful people at entp, the same people that made Lighthouse.  They saw the same issues we saw, and they created Tender as a solution.  Tender disguises  
+itself as a discussion forum, but it&amp;#8217;s much more than that.  Issues can be opened without logging in, they can be made private at any time (so only GitHub staff and the submitter can view them), and users can help each other out.  On our side of things, we have fast access to all outstanding issues and we can link Tender reports to Lighthouse tickets.  In short, it gives users a one-stop shop for all their support needs, and it frees Lighthouse up to do what it&amp;#8217;s intended to do, track the things we need to get done.&lt;/p&gt;
+
+
+	&lt;p&gt;The public Lighthouse tracker has been made read-only, we will be migrating tickets into the private tracker as we see fit.  support@github.com will of course remain active, but will likely be forwarded into Tender sometime in the future.  The Google group will remain open for general discussions, but we ask that support issues be directed to Tender instead.&lt;/p&gt;</content>
+    <author>
+      <name>tekkub</name>
+      <email>tekkub@gmail.com</email>
+    </author>
+  </entry>
+  <entry>
+    <id>tag:github.com,2008:Post/235</id>
+    <published>2008-11-19T13:04:40-08:00</published>
+    <updated>2008-11-19T13:04:44-08:00</updated>
+    <link type="text/html" rel="alternate" href="http://github.com/blog/235-fork-you-sighting-prorubyconf" />
+    <title>Fork You Sighting: ProRubyConf</title>
+    <content type="html">&lt;div align="center"&gt;
+&lt;a href="http://flickr.com/photos/sd/3043609709/in/set-72157609355648746/"&gt;
+&lt;img src="http://img.skitch.com/20081119-e3pmgcj4nh5fkenhf5kuub7jix.jpg" alt="" /&gt;
+&lt;/a&gt;
+&lt;/div&gt;</content>
+    <author>
+      <name>defunkt</name>
+      <email>chris@ozmm.org</email>
+    </author>
+  </entry>
+  <entry>
+    <id>tag:github.com,2008:Post/234</id>
+    <published>2008-11-19T12:42:00-08:00</published>
+    <updated>2008-11-19T12:43:30-08:00</updated>
+    <link type="text/html" rel="alternate" href="http://github.com/blog/234-gist-vim-and-gist-el" />
+    <title>Gist.vim and Gist.el</title>
+    <content type="html">&lt;p&gt;Vim user? Emacs &lt;a href="http://www.dina.dk/~abraham/religion/"&gt;true believer&lt;/a&gt;? Don&amp;#8217;t feel left out &amp;#8211; we&amp;#8217;ve got Gist support for you too!&lt;/p&gt;
+
+
+&lt;div align="center"&gt;
+&lt;a href="http://www.vim.org/scripts/script.php?script_id=2423"&gt;
+&lt;img src="http://img.skitch.com/20081119-f5n84dhtq8sje8se8wncbbd95n.png" alt="" /&gt;
+&lt;/a&gt;
+&lt;a href="http://github.com/defunkt/gist.el"&gt;
+&lt;img src="http://img.skitch.com/20081119-d18w7fgs7a2wgxrqcaabdmp2xq.png" alt="" /&gt;
+&lt;/a&gt;
+&lt;/div&gt;
+
+	&lt;p&gt;Vim users can grab &lt;a href="http://www.vim.org/scripts/script.php?script_id=2423"&gt;Gist.vim&lt;/a&gt; (&lt;a href="http://github.com/mattn/gist-vim"&gt;GitHub repo&lt;/a&gt;) while Emacsers will enjoy &lt;a href="http://github.com/defunkt/gist.el"&gt;gist.el&lt;/a&gt; (which I maintain).&lt;/p&gt;
+
+
+	&lt;p&gt;In Vim: &lt;code&gt;:Gist&lt;/code&gt;&lt;/p&gt;
+
+
+	&lt;p&gt;In Emacs: &lt;code&gt;M-x gist-buffer&lt;/code&gt;&lt;/p&gt;
+
+
+	&lt;p&gt;They both support Gisting selected text, private Gists, and will tie your Gists to your GitHub account (assuming you followed the &lt;strong&gt;Global Git Config&lt;/strong&gt; instructions on your &lt;a href="https://github.com/account"&gt;account page&lt;/a&gt;).&lt;/p&gt;</content>
+    <author>
+      <name>defunkt</name>
+      <email>chris@ozmm.org</email>
+    </author>
+  </entry>
+  <entry>
+    <id>tag:github.com,2008:Post/233</id>
+    <published>2008-11-19T11:55:35-08:00</published>
+    <updated>2008-11-19T12:28:54-08:00</updated>
+    <link type="text/html" rel="alternate" href="http://github.com/blog/233-gist-support-for-textmate" />
+    <title>Gist Support for TextMate</title>
+    <content type="html">&lt;p&gt;&lt;a href="http://github.com/gtcaz"&gt;gtcaz&lt;/a&gt; has begun improving the Gist support in &lt;a href="http://github.com/drnic"&gt;drnic&amp;#8217;s&lt;/a&gt; &lt;a href="http://github.com/gtcaz/github-tmbundle"&gt;GitHub TextMate Bundle&lt;/a&gt;&lt;/p&gt;
+
+
+&lt;div align="center"&gt;
+&lt;a href="http://github.com/gtcaz/github-tmbundle"&gt;
+&lt;img src="http://img.skitch.com/20081119-1ynia896jyke1h5e6css5hqbeg.png" alt="" /&gt;
+&lt;/a&gt;
+&lt;/div&gt;
+
+	&lt;p&gt;The Gist support was originally written by &lt;a href="http://github.com/mattmatt"&gt;mattmatt&lt;/a&gt;.  It uses &lt;a href="http://github.com/defunkt/gist/tree/master"&gt;gist.rb&lt;/a&gt; and supports authentication out of the box &amp;#8211; when you make a Gist, it&amp;#8217;ll be tied to your GitHub account (assuming you followed the &lt;strong&gt;Global Git Config&lt;/strong&gt; instructions on your &lt;a href="https://github.com/account"&gt;account page&lt;/a&gt;). It also can detect and set the Gist&amp;#8217;s language, based on your current TextMate.&lt;/p&gt;
+
+
+	&lt;p&gt;Installation is simple:&lt;/p&gt;
+
+
+&lt;pre&gt;
+cd ~/"Library/Application Support/TextMate/Bundles/" 
+git clone git://github.com/gtcaz/github-tmbundle.git "GitHub.tmbundle" 
+osascript -e 'tell app "TextMate" to reload bundles'
+&lt;/pre&gt;
+
+	&lt;p&gt;&lt;strong&gt;Update:&lt;/strong&gt; Whoops, mattmatt wrote the Gist support. Updated post.&lt;/p&gt;</content>
+    <author>
+      <name>defunkt</name>
+      <email>chris@ozmm.org</email>
+    </author>
+  </entry>
+  <entry>
+    <id>tag:github.com,2008:Post/232</id>
+    <published>2008-11-18T14:41:35-08:00</published>
+    <updated>2008-11-18T14:42:08-08:00</updated>
+    <link type="text/html" rel="alternate" href="http://github.com/blog/232-github-and-eclipse" />
+    <title>GitHub and Eclipse</title>
+    <content type="html">&lt;p&gt;Using Eclipse? Interested in GitHub integration? You may be in luck with &lt;a href="http://freshmeat.net/projects/jgit/"&gt;EGit&lt;/a&gt; and &lt;a href="http://github.com/guides/a-dummy-using-egit-with-github"&gt;this GitHub Guide&lt;/a&gt; by &lt;a href="http://github.com/PEZ"&gt;&lt;span class="caps"&gt;PEZ&lt;/span&gt;&lt;/a&gt;.&lt;/p&gt;
+
+
+&lt;div align="center"&gt;
+&lt;a href="http://github.com/guides/a-dummy-using-egit-with-github"&gt;
+&lt;img src="http://img.skitch.com/20081118-c1yj9m7356w3qxyuyqcaaqg1c2.png" alt="" /&gt;
+&lt;/a&gt;
+&lt;/div&gt;
+
+	&lt;p&gt;If you can help improve the guide, please do!&lt;/p&gt;</content>
+    <author>
+      <name>defunkt</name>
+      <email>chris@ozmm.org</email>
+    </author>
+  </entry>
+  <entry>
+    <id>tag:github.com,2008:Post/231</id>
+    <published>2008-11-18T14:30:49-08:00</published>
+    <updated>2008-11-18T14:33:15-08:00</updated>
+    <link type="text/html" rel="alternate" href="http://github.com/blog/231-more-github-gem-goodies" />
+    <title>More GitHub Gem Goodies</title>
+    <content type="html">&lt;p&gt;You can now pass &lt;code&gt;--learn&lt;/code&gt; to any GitHub gem command to see the &lt;code&gt;git&lt;/code&gt; operations being run under the covers.&lt;/p&gt;
+
+
+	&lt;p&gt;Hot off the presses:&lt;/p&gt;
+
+
+&lt;noscript&gt;&lt;pre&gt;
+$ gh fetch schacon --learn
+Fetching schacon/master
+== git fetch schacon master:refs/remotes/schacon/master
+== git update-ref refs/heads/schacon/master refs/remotes/schacon/master
+== git checkout schacon/master
+warning: refname 'schacon/master' is ambiguous.
+Switched to branch "schacon/master" 
+$ gh fetch_all schacon --learn
+== git fetch schacon
+$ gh clone schacon/grit --learn
+== git config --get github.user
+== git clone git://github.com/schacon/grit.git
+Initialized empty Git repository in /Users/chris/Projects/github-gem/grit/.git/
+remote: Counting objects: 3369, done.
+remote: Compressing objects: 100% (2107/2107), done.
+remote: Total 3369 (delta 1229), reused 3355 (delta 1216)
+Receiving objects: 100% (3369/3369), 1.80 MiB | 140 KiB/s, done.
+Resolving deltas: 100% (1229/1229), done.
+&lt;/pre&gt;&lt;/noscript&gt;
+&lt;script src="http://gist.github.com/26311.js"&gt;&lt;/script&gt;
+
+	&lt;p&gt;As always:&lt;/p&gt;
+
+
+	&lt;p&gt;&lt;code&gt;$ gem install defunkt-github&lt;/code&gt;&lt;/p&gt;
+
+
+	&lt;p&gt;Want to contribute? Dive into the &lt;a href="http://github.com/defunkt/github-gem/tree/master/commands"&gt;commands&lt;/a&gt; and join the &lt;a href="http://github.com/defunkt/github-gem/blame/master%2Fcommands%2Fcommands.rb"&gt;long list of contributors&lt;/a&gt;.&lt;/p&gt;</content>
+    <author>
+      <name>defunkt</name>
+      <email>chris@ozmm.org</email>
+    </author>
+  </entry>
+</feed>

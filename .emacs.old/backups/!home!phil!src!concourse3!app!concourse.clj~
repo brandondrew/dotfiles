@@ -1,0 +1,28 @@
+(ns concourse
+  (:use (compojure html
+                   http)))
+
+;; Models
+
+(defstruct user
+  :email :password)
+
+(defstruct meeting
+  :name :description :length
+
+  :chosen_day :chosen_hour
+  :earliest_day :earliest_hour :latest_day :latest_hour
+
+  :initiator :attendees)
+
+;; View stuff
+(defn layout
+  "A function to generate the standard outline of a HTML page."
+  [title & body]
+  (html
+    (doctype :html5)
+    [:html
+      [:head
+        [:title title]]
+      [:body
+        body]]))
