@@ -73,9 +73,9 @@
 
 ;;; Code:
 
-(defvar ffip-regexp
-  (concat ".*\\.\\(" (mapconcat (lambda (x) x) '("rb" "rhtml" "el") "\\|") "\\)")
-  "Regexp of things to look for when using find-file-in-project.")
+(defvar ffip-patterns
+  '("*.rb" "*.html" "*.el" "*.js" "*.rhtml")
+  "List of patterns to look for with find-file-in-project.")
 
 (defvar ffip-find-options
   ""
@@ -100,11 +100,11 @@ directory they are found in so that they are unique."
                   (ffip-uniqueify file-cons))
                 (add-to-list 'file-alist file-cons)
                 file-cons))
-            (split-string (shell-command-to-string (concat "find " (or ffip-project-root
-                                                                       (ffip-project-root))
-                                                           " -type f -regex \""
-                                                           ffip-regexp
-                                                           "\" " ffip-find-options))))))
+            (split-string (shell-command-to-string
+                           (format "find %s -type f %s %s"
+                                   (or ffip-project-root (ffip-project-root))
+                                   (ffip-join-patterns)
+                                   ffip-find-options))))))
 
 ;; TODO: Emacs has some built-in uniqueify functions; investigate using those.
 (defun ffip-uniqueify (file-cons)
@@ -112,6 +112,12 @@ directory they are found in so that they are unique."
   (setcar file-cons
           (concat (car file-cons) ": "
                   (cadr (reverse (split-string (cdr file-cons) "/"))))))
+
+(defun ffip-join-patterns ()
+  "Turn `ffip-paterns' into a string that `find' can use."
+  (mapconcat (lambda (pat) (format "-name \"%s\"" pat))
+             ffip-patterns " -or "))
+
 ;;;###autoload
 (defun find-file-in-project ()
   "Prompt with a completing list of all files in the project to find one.
@@ -136,7 +142,7 @@ functionality; otherwise it will fall back on the definition from
 project-local-variables.el."
   (let ((project-root
          (if (functionp 'locate-dominating-file)
-             (locate-dominating-file default-directory "\\`\\.dir-settings\\.el\\'")
+             (locate-dominating-file default-directory ".dir-settings.el")
            (require 'project-local-variables)
            (plv-find-project-file default-directory ""))))
     (if project-root
