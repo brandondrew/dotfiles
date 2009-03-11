@@ -11,16 +11,17 @@
 (setq gnus-ignored-from-addresses "Phil Hagelberg")
 
 ;; Now with SSL!
-(setq smtpmail-starttls-credentials '(("mail.hagelb.org" 587 nil nil))
-      smtpmail-smtp-server "mail.hagelb.org"
-      smtpmail-default-smtp-server "mail.hagelb.org"
+(setq smtpmail-starttls-credentials '(("mail.technomancy.us" 587 nil nil))
+      smtpmail-smtp-server "mail.technomancy.us"
+      smtpmail-default-smtp-server "mail.technomancy.us"
       send-mail-function 'smtpmail-send-it
       gnus-gcc-mark-as-read t
       message-send-mail-function 'smtpmail-send-it
       smtpmail-smtp-service 587
-      smtpmail-auth-credentials '(("mail.hagelb.org"
+      starttls-extra-arguments '("--insecure")
+      smtpmail-auth-credentials '(("mail.technomancy.us"
                                    587
-                                   "m7139145" ;; throwaway send-only account
+                                   "send@technomancy.us" ;; throwaway send-only account
                                    "testyy")))
 
 (setq message-kill-buffer-on-exit t)
@@ -49,6 +50,7 @@
         (any "emacs-devel" "emacs-devel")
         (any "bus-scheme" "bus-scheme")
         (any "ruby-core" "ruby-core")
+        (to "magit" "magit")
         (any "ert-devs" "ert")
         (any "zenspider\\.com" "seattle.rb")
 
@@ -64,6 +66,7 @@
         (any "John Gaitan" "xpoint")
         (from ".*crosspoint.*" "xpoint")
         (from "hudsonite" "xpoint")
+        (to "parishgroup2@googlegroups\.com" "parish")
 
         (any "zacchaeus-bounces" junk)
         (any "zacchaeus.*" "friends")
@@ -103,7 +106,7 @@
 ;; Unbind this key; it's annoying!
 (define-key gnus-summary-mode-map "o" (lambda () (interactive)))
 
-(add-hook 'message-mode-hook 'flyspell-mode)
+(add-hook 'message-mode-hook (lambda () (flyspell-mode 1)))
 
 (setq gnus-summary-line-format
       (concat

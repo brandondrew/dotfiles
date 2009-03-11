@@ -31,13 +31,13 @@
 
 ;;; Commentary:
 
-;; This library depends on GNU find.
+;; This library depends on the `find' Unix command.
 
 ;; This file provides a method for quickly finding any file in a given
 ;; project. Projects are defined in two ways. If the
 ;; `locate-dominating-file' function is bound, it assumes you are
 ;; using Emacs 23, in which case you it will look for a
-;; `.dir-settings.el' file in an ancestor directory of the current
+;; `.dir-locals.el' file in an ancestor directory of the current
 ;; file. Otherwise it uses the `project-local-variables' library,
 ;; which looks for a `.emacs-project' file.
 
@@ -48,7 +48,7 @@
 ;; (add-hook 'emacs-lisp-mode-hook
 ;;           (lambda (set (make-local-variable 'ffip-regexp) ".*\\.el")))
 
-;; or by setting it in your .emacs-project/.dir-settings.el file, in
+;; or by setting it in your .emacs-project/.dir-locals.el file, in
 ;; which case it will get set locally.
 
 ;; You can also be a bit more specific about what files you want to
@@ -142,7 +142,7 @@ functionality; otherwise it will fall back on the definition from
 project-local-variables.el."
   (let ((project-root
          (if (functionp 'locate-dominating-file)
-             (locate-dominating-file default-directory ".dir-settings.el")
+             (locate-dominating-file default-directory ".dir-locals.el")
            (require 'project-local-variables)
            (plv-find-project-file default-directory ""))))
     (if project-root

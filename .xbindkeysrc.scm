@@ -58,7 +58,8 @@
            '(F9 . "mpc prev")
            '(F10 . "mpc next")
            ;; crashyness
-           '(F11 . "killall gnome-power-manager; gnome-power-manager")
+           '((mod4 F10) . "killall synergyc; synergyc pdp10.local")
+           '((mod4 F11) . "killall gnome-power-manager; gnome-power-manager")
            '((mod4 F12) . "vlc -f ~/documents/movies/misc/rick.flv"))) ;; tee hee
 
 ;;;; Other launchers
