@@ -70,6 +70,9 @@
 (defvar steersman-master nil
   "Jabber user allowed to control the steersman.")
 
+(defvar steersman-stack nil
+  "A stack of strings you can push to.")
+
 ;;; Core functions
 
 (defun steersman-reply (mess &optional to)
@@ -77,26 +80,32 @@
 
 (defun steersman-message (from buffer text proposed-alert)
   "Respond to a Jabber message from the master."
-  (if (equal steersman-master (jabber-jid-user from))
+  (if t ;;(equal steersman-master (jabber-jid-user from))
     (if steersman-activated
         (cond ((functionp (intern (concat "steersman-" text)))
                (funcall (intern (concat "steersman-" text))))
-              ((string-match "^(.*)" text)
-               (steersman-reply (pp (eval (read text)))))
-              ((string-match "^$" text)
-               (steersman-reply (shell-command-to-string (substring text 1))))
+              ;; ((string-match "^(.*)" text)
+              ;;  (steersman-reply (pp (eval (read text)))))
+              ;; ((string-match "^$" text)
+              ;;  (steersman-reply (shell-command-to-string (substring text 1))))
               ((string-match "^!" text)
                (steersman-reply (format "Yes master! I *will* %s right away!"
-                                        (substring text 1))))
-              (t (steersman-reply (doctor-reply text))))
+                                        (substring text 1))) from)
+              ((string-match "^push \\(.*\\)" text)
+               (push (match-string 1 text) steersman-stack)
+               (steersman-reply "Pushed!") from)
+              ((string-match "^pop$" text)
+               (steersman-reply (pop steersman-stack) from))
+              (t (steersman-reply (doctor-reply text) from)))
 
       (if (not (equal text steersman-password))
-          (steersman-reply "Zzzzz...")
+          (steersman-reply "Zzzzz..." from)
         (setq steersman-activated t)
         (steersman-reply
-         "Awakening. Your command, master?")))
+         "Awakening. Your command, master?" from)))
     (steersman-reply "Begone." from)))
 
+(setq jabber-alert-message-hooks nil) ;; don't want notification
 (add-hook 'jabber-alert-message-hooks 'steersman-message)
 
 ;;; Commands

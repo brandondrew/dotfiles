@@ -69,5 +69,12 @@ interactive(
 define_key(content_buffer_textarea_keymap, "C-up", "resize-textarea-up", $category = "Movement");
 define_key(content_buffer_textarea_keymap, "C-down", "resize-textarea-down", $category = "Movement");
 
-// Conkeror
-Components.classes['@hyperstruct.net/mozlab/mozrepl;1'].getService(Components.interfaces.nsIMozRepl).start(4242);
+require("page-modes/google-search-results.js");
+
+// MozRepl
+if ('@hyperstruct.net/mozlab/mozrepl;1' in Cc) {
+  var mozrepl = Cc['@hyperstruct.net/mozlab/mozrepl;1']
+    .getService(Ci.nsIMozRepl);
+  if (! mozrepl.isActive())
+    mozrepl.start(4242);
+}
