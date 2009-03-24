@@ -8,8 +8,7 @@ itself.
 
 TODO:
 - add multiverse repository
-- get gnome-terminal to not show menubar
+- get gnome-terminal to not show menubar (through gconf?)
 - sync music, movies, books, photos from another machine
 - panel config
 - lists in gconf.yml to support ctrl:nocaps
-- tell mpd.conf to look in ~/music

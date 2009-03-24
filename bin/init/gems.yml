@@ -7,7 +7,6 @@
 - rails
 - vlad
 - minitest
-- rcov
 - wirble
 - flog
 - tattle
@@ -18,8 +17,7 @@
 - ZenTest
 - json
 - roastbeef
-- heckle
 - twitter
-- github
+- defunkt-github
 - xmpp4r
 - SuperCaller

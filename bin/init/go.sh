@@ -11,23 +11,37 @@ if [ ! -r /etc/apt/sources.list.orig ] ; then
     sed -i -e "s/# deb/deb/g" /etc/apt/sources.list
     # We don't want backports though
     sed -i -e "s/^.*backports.*$//g" /etc/apt/sources.list
+    # no thanks, cdrom
     sed -i -e "s/^.*cdrom.*$//g" /etc/apt/sources.list
+
     apt-get update
 fi
 
-# get the minimum
-apt-get install git-core ruby ruby1.8 zile
+# Fie upon and hence with you!
+apt-get remove app-install-data-commercial
 
-if [ ! -r install.rb ] ; then
-  # if we are running a bare go.sh
-  cd ~
-  git clone git@github.com:technomancy/dotfiles.git dotfiles
-  chown -R phil dotfiles
-  cd dotfiles/bin/init
-fi
+# get the minimum to bootstrap
+apt-get install git-core git-svn zile build-essential
+apt-get build-dep ruby-full emacs-snapshot w3m-el
+mkdir ~/src
 
-chattr +A / # don't write atimes
-ruby install.rb
+svn co http://svn.ruby-lang.org/repos/ruby/branches/ruby_1_8_6/ ~/src/ruby1.8
+cd ~/src/ruby1.8 && autoconf && ./configure && make && make install
+
+# Gems! from trunk, because we're crazy.
+git svn clone svn+ssh://rubyforge.org/var/svn/rubygems ~/src/rubygems
+ruby ~/src/rubygems/setup.rb
+
+# gotta have my remote X!
+sed -i s/DisallowTCP=true/DisallowTCP=false/ /etc/gdm/gdm.conf
+
+# don't write atimes
+chattr +A /
+
+# help out MPD a bit
+mkdir -p /var/lib/mpd
+ln -s ~/music /var/lib/mpd/music
+
 chown -R phil $HOME
 sudo -u phil ruby user-setup.rb # TODO: this breaks... huh?
 exit 0

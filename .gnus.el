@@ -57,7 +57,6 @@
         (to "phil@localhost" "feeds")
 
         ;; personal
-        (any "alisha\\.e\\.hagelberg@biola\\.edu" "alisha")
         (from "agelberg" - "Alisha" "family")
         (from "Broach" "family")
 

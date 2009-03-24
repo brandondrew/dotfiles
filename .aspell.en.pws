@@ -1,8 +1,7 @@
-personal_ws-1.1 en 33 
+personal_ws-1.1 en 37 
 multiplayer
 http
 clojure
-Clojure
 Eval
 REPL
 IRB
@@ -11,14 +10,19 @@ Debian
 IRC
 Ubuntu
 Elisp
+technomancy
 Compojure
+Erlang
 wikipedia
+résumé
 rdoc
-peepcode
 PeepCode
-Peepcode
+peepcode
+classpath
 dotfiles
 Clojure's
+prerelease
+runtime
 codebase
 rubygems
 JRuby
