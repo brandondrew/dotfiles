@@ -1,7 +1,10 @@
 --- 
-:benchmark: false
+:verbose: true
 gem: --no-rdoc --development --format-executable
+:bulk_threshold: 1000
+:benchmark: false
 :sources: 
 - http://gems.rubyforge.org
 - http://gems.github.com
-:backtrace: false
+- http://gems.opscode.com
+:backtrace: true

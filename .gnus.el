@@ -53,6 +53,7 @@
         (to "magit" "magit")
         (any "ert-devs" "ert")
         (any "zenspider\\.com" "seattle.rb")
+        (from "github" "github")
 
         (to "phil@localhost" "feeds")
 
