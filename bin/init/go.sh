@@ -5,6 +5,14 @@ if [ `/usr/bin/whoami` != "root" ] ; then
     exit 1
 fi
 
+# if we are running a bare go.sh
+if [ ! -r README ] ; then
+    apt-get install git-core
+    git clone git@github.com:technomancy/dotfiles.git ~/dotfiles
+    chown -R phil ~/dotfiles
+    exec ~/dotfiles/bin/init/go.sh
+fi
+
 if [ ! -r /etc/apt/sources.list.orig ] ; then
     cp /etc/apt/sources.list /etc/apt/sources.list.orig
     # Enable all disabled sources
@@ -42,6 +50,11 @@ chattr +A /
 mkdir -p /var/lib/mpd
 ln -s ~/music /var/lib/mpd/music
 
-chown -R phil $HOME
-sudo -u phil ruby user-setup.rb # TODO: this breaks... huh?
+# Chef!
+gem sources -a http://gems.opscode.com
+gem install rake chef ohai
+chef-solo -c `(dirname $0)`/solo.rb
+
+# TODO: run init recipe
+# TODO: run client recipe if applicable
 exit 0

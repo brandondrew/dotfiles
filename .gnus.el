@@ -46,7 +46,7 @@
         (any "Nxhtml" "nxhtml")
         (any "mozlab" "mozlab")
         (any "emacs-rails" "emacs-rails")
-        (to "rubygems-developers" "gems")
+        (to "gems-developers" "gems")
         (any "emacs-devel" "emacs-devel")
         (any "bus-scheme" "bus-scheme")
         (any "ruby-core" "ruby-core")
