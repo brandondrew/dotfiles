@@ -1,5 +1,5 @@
 (if (or (matches (window_name) "Firefox")
-        (matches (window_name) "Gran Paradiso")
+        (matches (window_name) "Shiretoko")
         (matches (application_name) "macs")
         (matches (application_name) "gmpc")
         (matches (application_name) "conkeror")

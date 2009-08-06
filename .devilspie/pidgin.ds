@@ -1,4 +1,0 @@
-(if (matches (application_name) "pidgin")
-    (begin
-     (above)
-     (wintype "normal")))

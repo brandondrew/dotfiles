@@ -1,7 +1,3 @@
-/apps/epiphany/general/:
-  homepage: about:blank
-/apps/epiphany/general/:
-  allow_popups: false
 /apps/gnome-terminal/:
   global/:
     use_menu_accelerators: false
@@ -9,14 +5,9 @@
 /apps/metacity/:
   general/:
     num_workspaces: 6
-    theme: Glossy
-  keybinding_commands/:
-    command_3: /home/phil/bin/rotate
-    command_4: cellwriter
+    theme: Clearlooks
   global_keybindings/:
     panel_run_dialog: <Alt>space
-    run_command_3: XF86RotateWindows
-    run_command_4: XF86Launch1
     switch_to_workspace_1: <Control>1
     switch_to_workspace_2: <Control>2
     switch_to_workspace_3: <Control>3
@@ -24,21 +15,9 @@
     switch_to_workspace_5: <Control>5
     switch_to_workspace_6: <Control>6
   window_keybindings/:
-    toggle_above: <Alt>Home
-    toggle_on_all_workspaces: <Alt>End
     maximize_vertically: <Super>Page_Up
     maximize_horizontally: <Super>Page_Down
     toggle_maximized: <Alt>F10
-    switch_to_workspace_up: <Alt>bracketleft
-    switch_to_workspace_down: <Alt>bracketright
-    move_to_workspace_1: <Control><Alt>1
-    move_to_workspace_2: <Control><Alt>2
-    move_to_workspace_3: <Control><Alt>3
-    move_to_workspace_4: <Control><Alt>4
-    move_to_workspace_5: <Control><Alt>5
-    move_to_workspace_6: <Control><Alt>6
-    switch_to_workspace_right: <Control><Alt>right
-    switch_to_workspace_left: <Control><Alt>left
     move_to_corner_nw: <Super>1
     move_to_corner_ne: <Super>2
     move_to_corner_se: <Super>o
@@ -52,17 +31,11 @@
     always_use_location_entry: false
     desktop_is_home_dir: true
     no_ubuntu_spatial: true
-/apps/notification-daemon/:
-  theme: standard
 /desktop/gnome/:
   font_rendering/:
     antialiasing: greyscale
-    dpi: 85.0
-    hinting: full
+    hinting: medium
   interface/:
     can_change_accels: true
     toolbar_style: icons
     gtk_key_theme: Emacs
-# this needs to be a list
-#  peripherals/keyboard/kbd/:
-#    options: ctrl:nocaps

@@ -1,8 +1,11 @@
-personal_ws-1.1 en 37 
+personal_ws-1.1 en 44 
 multiplayer
+paredit
+Paredit
 http
 clojure
 Eval
+javascript
 REPL
 IRB
 Evrinid
@@ -22,6 +25,7 @@ classpath
 dotfiles
 Clojure's
 prerelease
+TODO
 runtime
 codebase
 rubygems
@@ -31,8 +35,11 @@ init
 Freenode
 precompiled
 rubyist
+parens
+refactorings
 Hagelberg
 triaged
 screencast
+namespaces
 clj
-refactorings
+paren

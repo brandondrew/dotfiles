@@ -1,7 +1,6 @@
-// -*- Mode: js2 -*-
+// -*- Mode: espresso -*-
 
-// TODO:
-// * fix indentation in js2-mode
+// TODO:// * fix indentation in js2-mode
 // * get mozrepl working
 
 interactive("fill-domain", "Fill the minibuffer with the current domain.",
@@ -20,9 +19,16 @@ interactive("tinyurl", "Create a TinyURL for the current URL",
                 encodeURIComponent(I.window.content.location.href);
 });
 
+interactive("instapaper", "Add current page to instapaper",
+           function(I) {
+             var d=document,w=window,e=w.getSelection,k=d.getSelection,x=d.selection,s=(e?e():(k)?k():(x?x.createRange().text:0)),f='http://www.instapaper.com/b',l=d.location,e=encodeURIComponent,p='?v=4&k=AID0XqXcLEdQ&u='+e(l.href) +'&t='+e(d.title) +'&s='+e(s),u=f+p;try{if(!/^(.*\.)?instapaper([^.]*)?$/.test(l.host))throw(0);iptstbt();}catch(z){a =function(){if(!w.open(u,'t','toolbar=0,resizable=0,status=1,width=250,height=150'))l.href=u;};if(/Firefox/.test(navigator.userAgent))setTimeout(a,0);else a();}
+           });
+
 define_webjump("hub", "http://github.com/search?q=%s");
 define_webjump("twitter", "http://search.twitter.com/search?q=%s");
 define_webjump("wikipedia", "http://www.google.com/search?q=wikipedia+%s&btnI=I'm Feeling Lucky");
+define_webjump("mvn", "http://mvnrepository.com/search.html?query=%s");
+
 add_delicious_webjumps ("technomancy");
 
 key_bindings_ignore_capslock = true;
@@ -35,6 +41,14 @@ download_buffer_automatic_open_target = OPEN_NEW_BUFFER_BACKGROUND;
 register_user_stylesheet(
   "data:text/css,"+
     escape("#minibuffer, tree.completions, .mode-line { font-family: Inconsolata; font-size: 12pt; }"));
+
+// register_user_stylesheet(
+//     "data:text/css," +
+//         escape ("@-moz-document url-prefix(https://github.com/) .topsearch input { width: 10em; }"));
+
+register_user_stylesheet(
+    "data:text/css," +
+        escape (".topsearch input { width: 2em; };"));
 
 interactive("toggle-stylesheets",
             "Toggle whether conkeror uses style sheets (CSS) for the " +
@@ -71,10 +85,4 @@ define_key(content_buffer_textarea_keymap, "C-down", "resize-textarea-down", $ca
 
 require("page-modes/google-search-results.js");
 
-// MozRepl
-if ('@hyperstruct.net/mozlab/mozrepl;1' in Cc) {
-  var mozrepl = Cc['@hyperstruct.net/mozlab/mozrepl;1']
-    .getService(Ci.nsIMozRepl);
-  if (! mozrepl.isActive())
-    mozrepl.start(4242);
-}
+user_pref('extensions.mozrepl.autoStart', true);

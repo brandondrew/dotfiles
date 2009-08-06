@@ -50,11 +50,4 @@ chattr +A /
 mkdir -p /var/lib/mpd
 ln -s ~/music /var/lib/mpd/music
 
-# Chef!
-gem sources -a http://gems.opscode.com
-gem install rake chef ohai
-chef-solo -c `(dirname $0)`/solo.rb
-
-# TODO: run init recipe
-# TODO: run client recipe if applicable
 exit 0

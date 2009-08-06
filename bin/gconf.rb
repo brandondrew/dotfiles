@@ -1,17 +1,43 @@
-#!/usr/bin/env ruby
-
-require 'gconf2'
+# -*- coding: utf-8 -*-
 require 'yaml'
 
-# TODO: rewrite this as a lambda using the Y-combinator. =)
-def conf_set(hash, path = '')
-  hash.each do |key, value|
-    if value.is_a?(Hash)
-      value.each{ |v| conf_set(value, path + key)}
-    else
-      GConf::Client.default[path + key] = value
-    end
+# gconf settings
+
+class Hash
+  def gconf(path = '')
+    each { |key, value| value.gconf(path + key) }
   end
 end
 
-conf_set YAML.load(File.read("/home/phil/.gconf.yml"))
+class Object
+  def gconf(path, type)
+    system("gconftool-2 --set \"#{path}\" --type #{type} \"#{self}\"")
+  end
+end
+
+class String
+  def gconf(path)
+    super(path, 'string')
+  end
+end
+
+class Fixnum
+  def gconf(path)
+    super(path, 'int')
+  end
+end
+
+# Seriously, Ruby? No common superclass between true and false? What's wrong with you‽
+class TrueClass
+  def gconf(path)
+    super(path, 'bool')
+  end
+end
+
+class FalseClass
+  def gconf(path)
+    super(path, 'bool')
+  end
+end
+
+YAML.load(File.read(File.expand_path("~/.gconf.yml"))).gconf if __FILE__ == $0

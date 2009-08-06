@@ -36,6 +36,8 @@
 (setq nnmail-split-fancy
       '(|
         ;; code
+        (from "unfuddle" "unfuddle")
+        (to "phil@sonian" "sonian")
         (to "ruby_emacs_dev@yahoogroups\\.com" "emacs-rails")
         (to "emacs-on-rails" "emacs-rails")
         (to "obby-users@list.0x539.de" "obby-users")
@@ -46,12 +48,18 @@
         (any "Nxhtml" "nxhtml")
         (any "mozlab" "mozlab")
         (any "emacs-rails" "emacs-rails")
-        (to "gems-developers" "gems")
+        (any "gems.*forge" "gems")
+        (to "rubygems-developers@rubyforge.org" "gems")
         (any "emacs-devel" "emacs-devel")
         (any "bus-scheme" "bus-scheme")
         (any "ruby-core" "ruby-core")
+        (from "@amazon\.com" "amazon")
         (to "magit" "magit")
         (any "ert-devs" "ert")
+        (any "solr" "solr")
+        (any "couchapp" "couchapp")
+        (any "katta" "katta")
+        (any "tika" "tika")
         (any "zenspider\\.com" "seattle.rb")
         (from "github" "github")
 
@@ -67,6 +75,7 @@
         (from ".*crosspoint.*" "xpoint")
         (from "hudsonite" "xpoint")
         (to "parishgroup2@googlegroups\.com" "parish")
+        (to "cplparishgroups@googlegroups\.com" "parish")
 
         (any "zacchaeus-bounces" junk)
         (any "zacchaeus.*" "friends")
@@ -88,15 +97,16 @@
         (any "Meridius" junk)
         (any "Paris Hilton" junk)
         (any "cartographer" junk)
-        (any "Fyreball" junk)
+        (from "Joanne Neumann" junk)
         (any "ocruby" junk)
         (any "CNN Alerts" junk)
         (any "ALM Expo 2008" junk)
+        (from "Dianne Des Rochers" junk)
         "inbox"))
 
 (setq mail-sources '((file :path "/var/mail/phil")))
 
-(setq imap-ssl-program "/usr/bin/openssl s_client -ssl3 -connect %s:%p")
+(setq imap-ssl-program "openssl s_client -ssl3 -connect %s:%p")
 (setq gnus-agent-expire-days 0)
 (setq gnus-agent-enable-expiration 'DISABLE)
 
@@ -118,24 +128,10 @@
        "%*%{%B%} %s%)"
        "\n"))
 
-(when (require 'nnir nil t)
-  (setq nnir-search-engine 'namazu)
-  (setq nnir-namazu-index-directory
-        (expand-file-name "~/.namazu"))
-  (setq nnir-namazu-remove-prefix
-        (expand-file-name "~/Mail/"))
-  (setq nnir-mail-backend (nth 0 gnus-secondary-select-methods)))
-
 (add-hook 'gnus-group-mode-hook 'gnus-topic-mode)
 (setq gnus-use-full-window nil)
 
 (mailcap-add "image/jpeg" "display")
-
-;; (setq gnus-buffer-configuration
-;;       '((group (vertical 1.0 (group 1.0 point)))
-;;      (summary (vertical 1.0 (summary 1.0 point)))
-;;      (article (horizontal 1.0 (summary 1.0 point)
-;;                         (article 80)))))
 
 (if (file-exists-p system-specific-config)
     (load system-specific-config))

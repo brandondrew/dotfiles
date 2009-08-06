@@ -65,17 +65,19 @@
 ;;;; Other launchers
 
 (xbindkey '(mod4 e) "emacs")
+(xbindkey '(mod4 i) "emacs -e \"(irc)\"")
 (xbindkey '(mod4 f) "firefox")
 (xbindkey '(mod4 s) "f-spot")
-(xbindkey '(mod4 c) "~/src/conkeror/conkeror")
+(xbindkey '(mod4 c) "xulrunner-1.9.1 -app ~/src/js/conkeror/application.ini")
 (xbindkey '(mod4 space) "ruby ~/bin/dlaunch.rb")
-(xbindkey '(mod4 k) "emacs -q -l ~/src/emacs-starter-kit/init.el")
 (xbindkey '(mod4 x) "xournal")
 (xbindkey '(mod4 g) "gmpc")
 (xbindkey '(mod4 b) "~/bin/dbook.rb")
 (xbindkey '(mod4 k) "nautilus ~/documents/books")
 (xbindkey '(mod4 m) "nautilus ~/documents/movies")
+(xbindkey '(mod4 n) "nautilus ~/")
 (xbindkey '(mod4 t) "fetchmail")
+(xbindkey '(mod4 l) "java -jar ~/src/jvm/luke-0.9.2.jar")
 (xbindkey '(mod4 grave) "gnome-terminal -e \"screen -xRR\"")
 
 ;;;; Tablet-specific stuff
