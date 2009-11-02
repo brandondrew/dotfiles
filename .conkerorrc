@@ -84,5 +84,9 @@ define_key(content_buffer_textarea_keymap, "C-up", "resize-textarea-up", $catego
 define_key(content_buffer_textarea_keymap, "C-down", "resize-textarea-down", $category = "Movement");
 
 require("page-modes/google-search-results.js");
+auto_mode_list.push([build_url_regex($domain = /google\.com/),
+                     google_search_results_mode]);
 
 user_pref('extensions.mozrepl.autoStart', true);
+
+xkcd_add_title = true;

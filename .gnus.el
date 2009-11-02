@@ -1,4 +1,5 @@
 
+
 (setq gnus-select-method '(nnnil ""))
 (setq gnus-secondary-select-methods '((nnml ""
                                             (nnml-directory "~/Mail"))))
@@ -38,10 +39,13 @@
         ;; code
         (from "unfuddle" "unfuddle")
         (to "phil@sonian" "sonian")
+        (from "sonian\.net" "sonian")
         (to "ruby_emacs_dev@yahoogroups\\.com" "emacs-rails")
         (to "emacs-on-rails" "emacs-rails")
         (to "obby-users@list.0x539.de" "obby-users")
         (any "conkeror" "conkeror")
+        (any "swank-clojure" "swank-clojure")
+        (any "clojure-dev" "clojure-dev")
         (any "clojure" "clojure")
         (any "compojure" "compojure")
         (any "seafunc" "seafunc")
@@ -55,13 +59,17 @@
         (any "ruby-core" "ruby-core")
         (from "@amazon\.com" "amazon")
         (to "magit" "magit")
+        (to "rudel" "rudel")
         (any "ert-devs" "ert")
         (any "solr" "solr")
         (any "couchapp" "couchapp")
         (any "katta" "katta")
         (any "tika" "tika")
         (any "zenspider\\.com" "seattle.rb")
+        (to "incanter" "incanter")
+        (to "clj-processing" "clj-processing")
         (from "github" "github")
+        (from "Phil Hagelberg.*jira@oss.101tec.com" junk)
 
         (to "phil@localhost" "feeds")
 
@@ -73,6 +81,7 @@
         (any "Edward Volz" "xpoint")
         (any "John Gaitan" "xpoint")
         (from ".*crosspoint.*" "xpoint")
+        (to "cp-parish-group" "xpoint")
         (from "hudsonite" "xpoint")
         (to "parishgroup2@googlegroups\.com" "parish")
         (to "cplparishgroups@googlegroups\.com" "parish")
@@ -127,6 +136,9 @@
        "%{|%}"
        "%*%{%B%} %s%)"
        "\n"))
+
+(setq gnus-parameters '((".*" (banner . iphone)))) (setq gnus-article-banner-alist '((iphone . "\\(^Sent from my iPhone$\\)")))
+
 
 (add-hook 'gnus-group-mode-hook 'gnus-topic-mode)
 (setq gnus-use-full-window nil)

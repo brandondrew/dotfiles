@@ -29,15 +29,15 @@ fi
 apt-get remove app-install-data-commercial
 
 # get the minimum to bootstrap
-apt-get install git-core git-svn zile build-essential
-apt-get build-dep ruby-full emacs-snapshot w3m-el
+apt-get install git-core git-svn zile build-essential bison subversion autoconf
+apt-get build-dep ruby-full emacs-snapshot w3m-el libruby1.8
 mkdir ~/src
 
 svn co http://svn.ruby-lang.org/repos/ruby/branches/ruby_1_8_6/ ~/src/ruby1.8
 cd ~/src/ruby1.8 && autoconf && ./configure && make && make install
 
 # Gems! from trunk, because we're crazy.
-git svn clone svn+ssh://rubyforge.org/var/svn/rubygems ~/src/rubygems
+git svn clone svn+ssh://technomancy@rubyforge.org/var/svn/rubygems/trunk ~/src/rubygems
 ruby ~/src/rubygems/setup.rb
 
 # gotta have my remote X!
@@ -46,8 +46,6 @@ sed -i s/DisallowTCP=true/DisallowTCP=false/ /etc/gdm/gdm.conf
 # don't write atimes
 chattr +A /
 
-# help out MPD a bit
-mkdir -p /var/lib/mpd
-ln -s ~/music /var/lib/mpd/music
+chown -R phil ~
 
 exit 0

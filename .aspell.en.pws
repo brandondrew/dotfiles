@@ -1,7 +1,6 @@
 personal_ws-1.1 en 44 
 multiplayer
 paredit
-Paredit
 http
 clojure
 Eval
@@ -19,8 +18,8 @@ Erlang
 wikipedia
 résumé
 rdoc
-PeepCode
 peepcode
+PeepCode
 classpath
 dotfiles
 Clojure's
@@ -36,10 +35,11 @@ Freenode
 precompiled
 rubyist
 parens
-refactorings
+sharded
 Hagelberg
 triaged
 screencast
 namespaces
 clj
 paren
+refactorings

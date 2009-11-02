@@ -1,0 +1,4 @@
+(if (or (matches (window_name) "macs")
+        (matches (window_name) "terminal")
+        (matches (window_name) "rxvt"))
+  (maximize_vertically))

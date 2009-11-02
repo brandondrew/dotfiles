@@ -4,4 +4,3 @@ export EDITOR="emacsclient"
 export CDPATH=.:$HOME/src:$HOME/src/clj:$HOME/src/elisp:$HOME/src/ruby:$HOME/work
 export JAVA_HOME=/usr/lib/jvm/java-6-openjdk/
 
-export PATH=$PATH:$HOME/src/jvm/katta/bin:$HOME/src/jvm/hadoop-0.19.1/bin

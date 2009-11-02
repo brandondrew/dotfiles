@@ -13,8 +13,6 @@
 - libavahi-compat-libdnssd1
 - libxml2-dev
 - libsqlite3-dev
-- mpc
-- mpd
 - netcat
 - nmap
 - openssh-server
@@ -30,3 +28,4 @@
 - openjdk-6-jdk
 - gnutls-bin
 - mercurial
+- s3cmd

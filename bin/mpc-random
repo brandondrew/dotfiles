@@ -1,7 +1,0 @@
-#!/usr/bin/env ruby
-
-`mpc clear`
-dir = `find ~/music -type d | cut -c 18-`.split("\n").sort_by{ rand }.first
-`mpc add "#{dir}"`
-`notify-send "#{dir}"`
-`mpc play`

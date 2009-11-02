@@ -1,3 +1,0 @@
-#!/bin/bash
-
-purple-remote "setstatus?status=available&message=`mpc | head -n 1`"
