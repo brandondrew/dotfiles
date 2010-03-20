@@ -2,11 +2,11 @@ startup_message off
 defscrollback 3000
 msgwait 1
 nethack on
-bind s # remove the flow control garbage
+# bind s # remove the flow control garbage
 
 escape ^Zz
 
-bindkey -d -k kb stuff "\010"
+# bindkey -d -k kb stuff "\010"
 
 shelltitle '@|'
 hardstatus alwayslastline '%-Lw%{= BW}%50>%n%f* %t%{-}%+Lw%<'

@@ -7,9 +7,8 @@ xbindkeys &
 xrdb -merge ~/.Xdefaults
 source ~/.profile
 
-xmodmap -e "remove Lock = Caps_Lock"
-xmodmap -e "keysym Caps_Lock = Control_L"
-xmodmap -e "add Control = Control_L"
+setxkbmap -option ctrl:nocaps
+gnome-do &
 
 exec gnome-session
 

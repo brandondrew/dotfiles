@@ -4,7 +4,7 @@
 
 ;; Author: Phil Hagelberg <technomancy@gmail.com>
 ;; URL: http://www.emacswiki.org/cgi-bin/wiki/IdleHighlight
-;; Version: 1.1
+;; Version: 1.0
 ;; Created: 2008-05-13
 ;; Keywords: convenience
 ;; EmacsWiki: IdleHighlight
@@ -35,15 +35,10 @@
 ;; M-x idle-highlight sets an idle timer that highlights all
 ;; occurences in the buffer of the word under the point.
 
-;; By default it skips keywords, comments, etc. Turn off
-;; idle-highlight-skip-keywords to disable this behaviour.
-
 ;; Enabling it in a hook is recommended. But you don't want it enabled
 ;; for all buffers, just programming ones.
 ;;
 ;; Example:
-;;
-;; (require 'idle-highlight)
 ;;
 ;; (defun my-coding-hook ()
 ;;   (make-local-variable 'column-number-mode)
@@ -59,45 +54,49 @@
 
 (require 'thingatpt)
 
+
+(defgroup idle-highlight nil
+ "Highlight other occurrences of the word at point."
+ :group 'faces)
+
+(defface idle-highlight
+ '((t (:inherit region)))
+ "Face used to highlight other occurrences of the word at point."
+ :group 'idle-highlight)
+
 (defvar idle-highlight-last-word nil
-  "Last word to be idle-highlighted.")
+ "Last word to be idle-highlighted.")
 
 (defvar idle-highlight-timer nil
-  "Timer to activate re-highlighting.")
-
-(defvar idle-highlight-skip-keywords t
-  "Don't highlight if the point is on a keyword, string, or comment.")
+ "Timer to activate re-highlighting.")
 
 (defun idle-highlight-word-at-point ()
-  "Highlight the word under the point."
-  (let* ((target-symbol (symbol-at-point))
-         (target (symbol-name target-symbol)))
-    (when idle-highlight-last-word
-      (unhighlight-regexp (concat "\\<"
-                                  (regexp-quote idle-highlight-last-word)
-                                  "\\>")))
-    (when (and idle-highlight-timer target target-symbol
-               (not (idle-highlight-skip-word?)))
-      (highlight-regexp (concat "\\<" (regexp-quote target) "\\>") 'region)
-      (setq idle-highlight-last-word target))))
-
-(defun idle-highlight-skip-word? ()
-  (and idle-highlight-skip-keywords
-       ;; if it has a face, it's a keyword, string, comment, or some such.
-       (get-text-property (point) 'face)))
+ "Highlight the word under the point."
+ (let* ((target-symbol (symbol-at-point))
+        (target (symbol-name target-symbol)))
+   (when idle-highlight-last-word
+     (unhighlight-regexp (concat "\\<"
+                                 (regexp-quote idle-highlight-last-word)
+                                 "\\>")))
+   (when (and idle-highlight-timer target target-symbol
+              ;; TODO: no need to highlight keywords like if
+              (not (in-string-p)) (not (equal target "end")))
+     (highlight-regexp (concat "\\<" (regexp-quote target) "\\>")
+'idle-highlight)
+     (setq idle-highlight-last-word target))))
 
 ;;;###autoload
 (defun idle-highlight (&optional arg)
-  "Toggle idle-highlighting."
-  (interactive "P")
-  (if (and (boundp 'idle-highlight-timer)
-           idle-highlight-timer)
-      (progn
-        (cancel-timer idle-highlight-timer)
-        (setq idle-highlight-timer nil))
-    (set (make-local-variable 'idle-highlight-last-word) nil)
-    (set (make-local-variable 'idle-highlight-timer)
-         (run-with-idle-timer 0.5 :repeat 'idle-highlight-word-at-point))))
+ "Toggle idle-highlighting."
+ (interactive "P")
+ (if (and (boundp 'idle-highlight-timer)
+          idle-highlight-timer)
+     (progn
+       (cancel-timer idle-highlight-timer)
+       (setq idle-highlight-timer nil))
+   (set (make-local-variable 'idle-highlight-last-word) nil)
+   (set (make-local-variable 'idle-highlight-timer)
+        (run-with-idle-timer 0.5 :repeat 'idle-highlight-word-at-point))))
 
 (provide 'idle-highlight)
 ;;; idle-highlight.el ends here

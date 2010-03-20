@@ -25,9 +25,9 @@ interactive("instapaper", "Add current page to instapaper",
            });
 
 define_webjump("hub", "http://github.com/search?q=%s");
-define_webjump("twitter", "http://search.twitter.com/search?q=%s");
+define_webjump("twitter", "http://twitter.com/#search?q=%s");
 define_webjump("wikipedia", "http://www.google.com/search?q=wikipedia+%s&btnI=I'm Feeling Lucky");
-define_webjump("mvn", "http://mvnrepository.com/search.html?query=%s");
+define_webjump("mvn", "http://jarvana.com/jarvana/search?search_type=project&project=%s");
 
 add_delicious_webjumps ("technomancy");
 

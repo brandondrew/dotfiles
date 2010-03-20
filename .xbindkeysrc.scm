@@ -50,26 +50,23 @@
 ;;;; Music functions
 
 (map (lambda (binding) (xbindkey (car binding) (cdr binding)))
-     (list '(F5 . "~/bin/mpc-notify")
-           '((Control F5) . "~/bin/mpc-playlist")
-           '(F6 . "~/bin/mpc-random")
-           '(F7 . "~/bin/mpc-choose")
+     (list '(F5 . "~/bin/music-notify")
+           '((Control F5) . "~/bin/music-playlist")
+           '(F6 . "~/bin/music-random")
+           '(F7 . "~/bin/music-choose")
            '(F8 . "mpc toggle")
            '(F9 . "mpc prev")
            '(F10 . "mpc next")
-           ;; crashyness
-           '((mod4 F10) . "killall synergyc; synergyc pdp10.local")
-           '((mod4 F11) . "killall gnome-power-manager; gnome-power-manager")
            '((mod4 F12) . "vlc -f ~/documents/movies/misc/rick.flv"))) ;; tee hee
 
 ;;;; Other launchers
 
+(xbindkey '(mod1 space) "gnome-do")
+
 (xbindkey '(mod4 e) "emacs")
-(xbindkey '(mod4 i) "emacs -e \"(irc)\"")
 (xbindkey '(mod4 f) "firefox")
 (xbindkey '(mod4 s) "f-spot")
 (xbindkey '(mod4 c) "xulrunner-1.9.1 -app ~/src/conkeror/application.ini")
-(xbindkey '(mod4 space) "ruby ~/bin/dlaunch.rb")
 (xbindkey '(mod4 x) "xournal")
 (xbindkey '(mod4 g) "gmpc")
 (xbindkey '(mod4 b) "~/bin/dbook.rb")
@@ -77,9 +74,9 @@
 (xbindkey '(mod4 m) "nautilus ~/documents/movies")
 (xbindkey '(mod4 n) "nautilus ~/")
 (xbindkey '(mod4 t) "fetchmail")
-(xbindkey '(mod4 p) "~/bin/puyo")
 (xbindkey '(mod4 l) "java -jar ~/src/jvm/luke-0.9.2.jar")
 (xbindkey '(mod4 grave) "gnome-terminal -e \"screen -xRR\"")
+(xbindkey '(mod4 shift grave) "gnome-terminal")
 
 ;;;; Tablet-specific stuff
 

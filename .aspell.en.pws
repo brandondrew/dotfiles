@@ -1,9 +1,10 @@
-personal_ws-1.1 en 44 
+personal_ws-1.1 en 46 
 multiplayer
 paredit
 http
 clojure
 Eval
+lucene
 javascript
 REPL
 IRB
@@ -18,8 +19,8 @@ Erlang
 wikipedia
 résumé
 rdoc
-peepcode
 PeepCode
+peepcode
 classpath
 dotfiles
 Clojure's
@@ -43,3 +44,4 @@ namespaces
 clj
 paren
 refactorings
+Solr

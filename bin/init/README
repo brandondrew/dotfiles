@@ -12,3 +12,10 @@ TODO:
 - sync music, movies, books, photos from another machine
 - panel config
 - lists in gconf.yml to support ctrl:nocaps
+
+/usr/share/xsessions/user.desktop:
+
+[Desktop Entry]
+Name=Xsession
+Comment=This runs ~/.xsession
+Exec=/etc/X11/Xsession

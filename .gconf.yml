@@ -4,16 +4,16 @@
     use_mnemonics: false
 /apps/metacity/:
   general/:
-    num_workspaces: 6
+    num_workspaces: 7
     theme: Clearlooks
   global_keybindings/:
-    panel_run_dialog: <Alt>space
     switch_to_workspace_1: <Control>1
     switch_to_workspace_2: <Control>2
     switch_to_workspace_3: <Control>3
     switch_to_workspace_4: <Control>4
     switch_to_workspace_5: <Control>5
     switch_to_workspace_6: <Control>6
+    switch_to_workspace_7: <Control>7
   window_keybindings/:
     maximize_vertically: <Super>Page_Up
     maximize_horizontally: <Super>Page_Down
